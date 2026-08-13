@@ -34,6 +34,16 @@ random-singleton oracle calculation proves
 that hash isolation plus an arbitrary one-shot joint POVM still needs
 `Omega(sqrt(D))` queries for constant phase advantage.  That lower bound is
 restricted to the oracle model and leaves explicit arithmetic circuits open.
+The common-label loss is construction-specific, not an information-theoretic
+limit.  A fixed-block random-code calculation proves that a collective PGM on
+`12*n` raw samples decodes the complete secret with error
+`O(1/log n)+2^(-Omega(n))` under the repository's marginal fault bounds.  The
+statement is averaged over the iid-uniform public labels and uniform over
+every low-weight fixed fault pattern and arbitrary fixed faulty bits;
+excessive patterns are charged by Markov.  The PGM is a dense polar measurement
+with exponentially many error-labelled columns, and no polynomial
+implementation is supplied.  Thus the new result strengthens the existence
+side while leaving the algorithmic verdict unchanged.
 
 ## Lean formalization targets
 

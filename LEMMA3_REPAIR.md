@@ -537,15 +537,47 @@ success erases the two half-turn branches to identical garbage without the
 earlier projection loss.  Both solver calls run on both branches, so arbitrary
 solver outputs, seeds, and bounded workspaces are common garbage.  Random
 correction fibres contain enough preimages information-theoretically, but no
-polynomial find-one algorithm is known here at exact density one.  Adapting the
-construction to unknown fixed faulty coordinates is also open; the direct
-common-label overlap in the paper's noisy regime can lose
+polynomial find-one algorithm is known here at exact density one.  Adapting
+the explicit two-pool/common-label construction to unknown fixed faulty
+coordinates remains open; its direct common-label overlap in the paper's
+noisy regime can lose
 `2^(-Theta(n/log n))`.  Hash isolation does not remove the underlying inversion
 issue: in the corresponding
 random-singleton oracle model, constant one-shot phase advantage requires
 `Omega(sqrt(D))` queries even for an arbitrary joint POVM.  This is an
 oracle-model barrier rather than an unconditional arithmetic lower bound; see
 [`LEMMA3_HALF_TURN_ERASER.md`](LEMMA3_HALF_TURN_ERASER.md).
+
+The fault-overlap loss above is specific to the explicit one-match/two-pool
+construction.  It is not a limit on the trace distance of the complete raw
+state.  A separate random-code Gram calculation on a fixed block of `q=c*n`
+raw samples introduces the ideal phase codewords
+
+```text
+|psi_d^Y> = 2^(-q/2) * sum_x omega^(d*f_Y(x)) |x>
+```
+
+and every low-weight error `Z^e|psi_d^Y>`.  Error words are exactly orthogonal
+for one fixed `d`, while codewords belonging to different secrets have
+expected squared overlap `2^(-q)`.  The resulting PGM separates the whole
+coherent low-weight-error subspaces.  In the repository's fixed-basis fault
+model, an arbitrary pattern of at most `r` faulty coordinates with arbitrary
+fixed bits lies entirely in the corresponding weight-`r` error subspace.
+Combining the Gram bound with the marginal fault estimate gives, for `c=12`
+and `r=floor(q/32)`,
+
+```text
+P_error <= 32/(c'*log n) + 2^(-2.59*n+O(1)).
+```
+
+This decodes the complete secret information-theoretically, without fault
+flags and without assuming independent fault locations, averaged over the
+iid-uniform public-`Y` marginal.  It acts on a fixed raw block before the
+adaptive `A(D)` selection and therefore bypasses rather than proves the
+paper's Lemma 3.  Its synthesis matrix has exponentially many columns, and the
+current proof supplies no polynomial circuit for the polar measurement.  The
+new result removes an information-theoretic concern but does not change the
+polynomial-algorithm verdict.
 
 This verdict is deliberately narrower than a countertheorem to every possible
 reading of the two sentences called Lemma 3, and it is not a lower bound for

@@ -74,8 +74,13 @@ of exactly `n` bits suffice; solver success is squared but remains
 inverse-polynomial.  Random fibres contain enough representations
 information-theoretically, but no polynomial finder is known here.  In the
 paper's noisy regime, unknown fixed faulty coordinates can further reduce the
-two branch-label overlap by
-`2^(-Theta(n/log n))`; the fault-free construction has not removed that loss.
+two branch-label overlap of this explicit construction by
+`2^(-Theta(n/log n))`.  That loss is not information-theoretic: a collective
+PGM on `12*n` preselected raw samples decodes the complete secret with error
+`O(1/log n)+2^(-Omega(n))` under the repository's marginal fault assumptions,
+averaged over the iid-uniform public labels and uniformly over all low-weight
+fixed fault patterns and arbitrary fixed faulty bits.  No polynomial
+implementation of this dense PGM is known.
 This verdict does not claim that either isolated sentence of Lemma 3 is false
 in every interpretation, or that a polynomial DCP algorithm is impossible.
 

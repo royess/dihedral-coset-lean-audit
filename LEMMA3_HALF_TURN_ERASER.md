@@ -29,8 +29,14 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   no polynomial finder is known;
 - an independent or fixed-size random fault law permitted by the paper's
   marginal bounds causes a `2^(-Theta(n/log n))` common-label loss in this
-  construction, so a positive noisy result still needs a new collective
-  fault-aware eraser.
+  particular construction;
+- that single-matching loss is not information-theoretic: a collective PGM on
+  a fixed block of `12*n` raw samples separates the complete secret-labelled
+  subspaces with error `O(1/log n) + 2^(-Omega(n))` under the repository's
+  marginal fault assumptions, even for correlated fault locations and
+  arbitrary fixed faulty bits.  The PGM is an existence theorem, not a
+  polynomial circuit, so a positive efficient result still needs a new
+  collective fault-aware decoder.
 
 ## Fibre formulation
 
@@ -1058,9 +1064,235 @@ This is a barrier for fault-oblivious single-match, sparse-move, and
 polynomial-list families, not a lower bound for arbitrary collective quantum
 channels.  The precise escape hatch is a collective fault-aware eraser that
 implicitly aligns exponentially many compatible relations, or explicit fault
-flags.  No such decoder is known; the original first-zero construction was a
-candidate collective mechanism, but the spectral analysis shows that its
-retained mass is dominated by secret-independent diagonal modes.
+flags.  No polynomial implementation of such a decoder is known; the original
+first-zero construction was a candidate collective mechanism, but the
+spectral analysis shows that its retained mass is dominated by
+secret-independent diagonal modes.
+
+## A robust collective PGM for fixed fault environments
+
+The preceding `2^(-F)` loss belongs to the explicit common-label matching
+construction.  It is not a loss of distinguishability of the full quantum
+state.  A direct random-code argument shows that an optimal collective
+measurement can aggregate exponentially many fault-compatible relations.
+
+Fix a block of `q` raw Fourier-labelled samples and condition on their public
+labels
+
+```text
+Y = (Y_1,...,Y_q),       Y_i uniform in Z_N.
+```
+
+The ideal phase codeword for secret `d` is
+
+```text
+|psi_d^Y>
+  = 2^(-q/2) * sum_(x in {0,1}^q) omega^(d*f_Y(x)) |x>
+  = tensor_i (|0> + omega^(d*Y_i)|1>) / sqrt(2).
+```
+
+For an error word `e in {0,1}^q`, put
+
+```text
+|phi_(d,e)^Y> = Z^e |psi_d^Y>.
+```
+
+Two overlap identities are exact.  For one fixed `d`, states indexed by
+different `e` are orthogonal.  For `d != d'`, independence and uniformity of
+the public labels give
+
+```text
+E_Y |<phi_(d,e)^Y | phi_(d',e')^Y>|^2 = 2^(-q).
+```
+
+Indeed, if `a=e xor e'`, the overlap factors as
+
+```text
+product_i (1 + (-1)^(a_i) * omega^((d'-d)*Y_i)) / 2,
+```
+
+and the expected squared magnitude of each factor is exactly `1/2` for every
+nonzero `d'-d in Z_N`.
+
+Let
+
+```text
+E_r = {e : HammingWeight(e) <= r},
+L_r = |E_r|,
+U_d(Y) = span {|phi_(d,e)^Y> : e in E_r}.
+```
+
+Form the synthesis matrix `V_Y` whose columns are all `N*L_r` codewords, and
+write `G_Y=V_Y^dagger*V_Y`.  Its diagonal `d`-blocks are identity, so
+
+```text
+E_Y ||G_Y-I||_F^2
+  = N*(N-1)*L_r^2*2^(-q)
+  <= B_r,
+
+B_r = N^2*L_r^2/2^q.
+```
+
+For any `0 < alpha < 1`, Markov's inequality and
+`||.||_op <= ||.||_F` imply
+
+```text
+Pr_Y[||G_Y-I||_op > alpha] <= B_r/alpha^2.
+```
+
+On the complementary event, the polar/pretty-good-measurement isometry
+
+```text
+W_Y = V_Y * G_Y^(-1/2)
+```
+
+has orthonormal columns, and
+
+```text
+||G_Y^(1/2)-I||_op
+  <= alpha/(1+sqrt(1-alpha))
+  <= alpha.
+```
+
+It follows that, for every secret `d` and every normalized coherent state in
+the whole subspace `U_d(Y)`, the probability that this PGM outputs a different
+secret is at most `alpha^2`.  This is a uniform subspace guarantee, not an
+average over a classical error word.
+
+The repository's computational-basis fault model fits these subspaces
+exactly.  If `F` is a fixed set of `f<=r` faulty coordinates and `b` is an
+arbitrary fixed Boolean assignment on `F`, then, up to a unit global phase,
+
+```text
+tensor_(i notin F) |+_(d*Y_i)> * tensor_(i in F) |b_i>
+  = 2^(-f/2)
+      * sum_(e subseteq F) (-1)^(b dot e) Z^e |psi_d^Y>.
+```
+
+Thus every such fixed-environment state lies in `U_d(Y)`, without revealing
+the fault locations to the measurement.  The same conclusion holds for
+arbitrary classical mixtures and correlations of these fault environments.
+
+Now assume only the repository's marginal bound
+
+```text
+Pr[i is faulty] <= delta.
+```
+
+For a preselected block of `q` coordinates, `E[|F|] <= delta*q`.  Choose a
+fixed `tau in (delta,1/2)` and `r=floor(tau*q)`.  Markov gives
+
+```text
+Pr[|F|>r] <= delta/tau.
+```
+
+Since `L_r <= 2^(q*h_2(tau))`, taking `q=c*n` yields
+
+```text
+B_r <= 2^([2-c+2*c*h_2(tau)]*n).
+```
+
+Assuming `B_r<1`, set `alpha=B_r^(1/4)`.  Combining excessive faults,
+atypical public labels, and the conditional PGM error gives
+
+```text
+P_error <= delta/tau + 2*sqrt(B_r).
+```
+
+For `c=12`, once `delta<1/32`, one may take `tau=1/32`.  Since
+`h_2(1/32) approximately 0.2006`, this specializes to
+
+```text
+P_error <= 32*delta + 2^(-2.59*n+O(1)).
+```
+
+At `delta=1/(c'*log n)`, the error tends to zero.  The measurement actually
+decodes the complete secret `d`, so its parity error is no larger.  The bound
+is averaged over the iid-uniform public-`Y` marginal.  Correlations among
+fault locations and fixed faulty values are allowed; what is essential is
+that the public labels retain that iid-uniform marginal.  The result uses a
+fixed raw sample block before the paper's adaptive choice of `A(D)`; it is an
+alternative collective decoder, not a validation of the first-zero circuit.
+
+### Why this does not yet give an efficient decoder
+
+The codebook has
+
+```text
+N*L_r = 2^(n+q*h_2(tau)+o(q))
+```
+
+columns.  The proof constructs its PGM through a dense polar factor and does
+not supply a succinct implementation.  The apparent conflict with the
+single-relation fault bound is resolved as follows: a one-edge decoder pays
+for one relation avoiding all faults, whereas the PGM coherently aggregates
+exponentially many relations.
+
+In the simpler iid averaged-fault model with uniformly averaged faulty basis
+bits (equivalently, local replacement by `I/2`), write
+`lambda=1-delta` and let `rho_d^Y` be the resulting product density matrix.
+If `rho_even` and `rho_odd` are the uniform even- and odd-secret mixtures,
+their difference has the exact matrix elements
+
+```text
+<x|rho_even-rho_odd|x'>
+  = 2^(1-q) * lambda^HammingDistance(x,x')
+```
+
+when `f_Y(x)-f_Y(x')=H`, and zero otherwise.  The optimal observable is
+therefore the sign of a weighted all-relations half-turn matrix, rather than
+a sparse matching.
+
+Its Hilbert--Schmidt norm obeys
+
+```text
+E_Y Tr((rho_even-rho_odd)^2)
+  = (4/N) * (((1+lambda^2)/2)^q - 2^(-q)).
+```
+
+In the successful regime its trace norm can be close to `2` while its
+Hilbert--Schmidt norm is exponentially small.  Markov's inequality makes the
+latter statement pointwise for all but a controlled fraction of public-label
+vectors, simultaneously with the Gram-good event.  For any cutoff `zeta>0`,
+the trace carried by singular values at least `zeta` is at most
+
+```text
+||rho_even-rho_odd||_2^2 / zeta.
+```
+
+Consequently, for an `O(1)`-normalized block encoding of this parity operator,
+the standard QSVT sign-polynomial route misses essentially all useful trace if
+it resolves only inverse-polynomial singular values.  More explicitly, for an
+odd degree-`D` polynomial `p` bounded by one on `[-1,1]`, Markov's polynomial
+inequality gives `|p(s)|<=D^2*|s|`, and hence
+
+```text
+|Tr(Delta_Y * p(Delta_Y))| <= D^2 * ||Delta_Y||_2^2.
+```
+
+For typical public labels the right-hand side is negligible for polynomial
+`D`.  Constant Helstrom bias through this direct polynomial functional
+calculus therefore needs exponential degree.  This is a scoped statement
+about that normalized block-encoding/QSVT route, not a lower bound against
+every block encoding or arithmetic collective circuit.
+
+Independent small-pool parity extraction also cannot replace the dense PGM.
+For one clean block of `m` public labels, the even/odd mixtures have matrix
+difference
+
+```text
+<x|sigma_even-sigma_odd|x'> = 2^(1-m)
+```
+
+exactly on half-turn pairs and zero elsewhere.  If the block contains no such
+pair, the two ensembles are identical.  Random labels contain any half-turn
+pair with probability at most `2^(2*m)/N`.  Hence pools of
+`m=O(log^2 n)` coordinates carry exactly zero local parity information with
+probability `1-2^(-n+O(log^2 n))`, even though such pools would contain few
+faults.  This rules out decoding each small pool independently and taking a
+majority.  It does not rule out an adaptive or product measurement whose
+outcomes first narrow the full-secret posterior and are then correlated
+globally; such a construction would be another genuinely global decoder.
 
 ## Relation to known DCP algorithms
 
