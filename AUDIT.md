@@ -50,6 +50,19 @@ singular values are `Theta(N^(-1/2))`, giving a route-specific
 `Theta(sqrt(N))` constant-accuracy cost, up to approximation logarithms.  Thus
 the new result strengthens the existence
 side while leaving the algorithmic verdict unchanged.
+The exact dyadic frame recurrence reaches the same boundary: its direct
+realization needs coherent access to the preceding full fibre-support
+projector, which a bare two-outcome parity measurement does not supply, and
+direct expansion doubles the orbit branches per modulus bit.  In the iid
+averaged/dephasing model, passive `X`
+measurements give a complementary positive result--`O(n)` samples identify
+`{d,-d}`, hence the target parity--but the direct FFT decoder costs
+`O(N log N)`.  The chosen-query sparse-Fourier and hidden-number methods
+examined here do not directly instantiate on this one-pass random sample set.
+Ordinary pairwise/list collimation retains its subexponential resource law and
+suffers an additional explicit-relation survival loss in permitted
+hidden-fault models.  None of these statements is an unrestricted circuit
+lower bound.
 
 ## Lean formalization targets
 

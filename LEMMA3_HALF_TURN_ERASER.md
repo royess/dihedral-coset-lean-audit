@@ -1304,6 +1304,100 @@ error states.  A direct arithmetic implementation of only these parity polars
 could conceivably be weaker than the full decoder, but no such implementation
 is presently known.
 
+### An exact dyadic recursion, and why it does not close on parity
+
+The power-of-two modulus admits an exact Cooley--Tukey-style recursion.  It is
+useful because it identifies precisely what a bit-by-bit implementation would
+have to provide.  Put `M_k=2^k`, let `f_k` denote the subset sum modulo `M_k`,
+and define
+
+```text
+U_k|x> = exp(2*pi*i*f_k(x)/M_k)|x>,
+|psi_j^(k)> = U_k^j |+>^(tensor q),
+W_k = sum_(j in Z_(M_k)) |psi_j^(k)><j|,
+B_k = W_k/sqrt(M_k).
+```
+
+Under the reversible relabelling `j=2*a+b`, `b in {0,1}`, and after grouping
+the columns by `b`, one has exactly
+
+```text
+W_k = [W_(k-1), U_k W_(k-1)],
+B_k = (1/sqrt(2))*[B_(k-1), U_k B_(k-1)].
+```
+
+Consequently, for the unnormalized frame and signed frame
+
+```text
+P_k = W_k W_k^dagger,
+K_k = W_k Z_b W_k^dagger,
+```
+
+the recurrences are
+
+```text
+P_k = P_(k-1) + U_k P_(k-1) U_k^dagger,
+K_k = P_(k-1) - U_k P_(k-1) U_k^dagger.
+```
+
+The normalization matters.  `P_k` is not generally a projector.  If
+`eta_t^(k)` is the size of the residue-`t` fibre modulo `M_k`, then
+
+```text
+P_k = sum_t (M_k*eta_t^(k)/2^q) |F_t^(k)><F_t^(k)|.
+```
+
+Its support projector is instead
+
+```text
+Q_k = sum_(t : eta_t^(k)>0) |F_t^(k)><F_t^(k)|.
+```
+
+High density can make `P_k` close to `Q_k` on the occupied support, but does
+not make either operator free to implement.  To see the exact half-turn
+content, fix one coarse residue `r mod M_(k-1)`.  Write
+
+```text
+a = eta_r^(k),
+b = eta_(r+M_(k-1))^(k),
+|C_r> = sqrt(a/(a+b))|F_r> + sqrt(b/(a+b))|F_(r+M_(k-1))>.
+```
+
+Up to a common phase, `U_k` changes the plus sign in `|C_r>` to a minus sign.
+Therefore the restriction of
+
+```text
+Q_(k-1) - U_k Q_(k-1) U_k^dagger
+```
+
+to this two-fibre plane is exactly
+
+```text
+(2*sqrt(a*b)/(a+b))
+  * (|F_r><F_(r+M_(k-1))| + h.c.).
+```
+
+Its sign is the desired half-turn swap whenever both child fibres are
+nonempty.  This is a genuine positive structural identity: the final parity
+operator can be obtained from the preceding **full support projector**.
+
+It is not, however, a recursion using only a bare preceding parity
+measurement.  With the canonical partial-sign convention `sign(0)=0`, the
+square of a fully specified coherent `sign(K_(k-1))` can recover its paired
+support.  A two-outcome measurement, however, does not specify a coherent
+canonical action on the kernel and does not by itself furnish the required
+`Q_(k-1)` oracle.  In the direct recursive-frame or support-reflection
+realization, forming the next support uses both `Q_(k-1)` and its
+`U_k`-conjugate, so the number of branches
+doubles at every level.  Expanding the recursion produces `M_k=2^k` orbit
+terms.  Keeping them as the normalized synthesis `B_k` instead exposes the
+target with amplitude `M_k^(-1/2)`, and amplitude amplification costs
+`sqrt(M_k)`.  Thus this natural dyadic realization reproduces either linear
+orbit expansion or the existing square-root amplification scale; it does not
+give a polynomial recursion.  This conclusion is restricted to these
+frame/support-projector access models and is not a lower bound for an
+unrelated arithmetic parity circuit.
+
 ### Why this does not yet give an efficient decoder
 
 The codebook has
@@ -1384,6 +1478,59 @@ majority.  It does not rule out an adaptive or product measurement whose
 outcomes first narrow the full-secret posterior and are then correlated
 globally; such a construction would be another genuinely global decoder.
 
+There is nevertheless a simple positive result for passive single-qubit
+measurements.  In the iid uniformly averaged/dephasing model, measure every
+phase qubit in the `X` basis and write the outcome as `S_i in {+1,-1}`.  Then
+
+```text
+Pr[S_i=s | Y_i=y,d]
+  = (1+s*lambda*cos(2*pi*d*y/N))/2.
+```
+
+For every candidate frequency `k`, define the correlation score
+
+```text
+T_k = sum_i S_i*cos(2*pi*k*Y_i/N).
+```
+
+Character orthogonality gives the exact expectations
+
+```text
+E[T_k]/q = (lambda/2)
+  * (1_(k=d) + 1_(k=-d)),
+```
+
+with the coincident cases `d=0,N/2` having mean `lambda`.  Hoeffding's
+inequality followed by a union bound shows that
+
+```text
+q >= (32/lambda^2)*ln(2*N/eta)
+```
+
+samples suffice to identify the unordered pair `{d,-d}` with error at most
+`eta`.  Because `N` is even, `d` and `-d mod N` have the same parity.  Thus
+only `O((n+log(1/eta))/lambda^2)` passive samples are information-theoretically
+enough for the target bit.
+
+The evident decoder is still exponential-time: evaluating all `T_k` by a
+length-`N` FFT costs `O(N*log N)` time and `O(N)` memory.  This is not an
+ordinary sparse-Fourier algorithm with a standard sublinear implementation.
+The chosen-query sparse-FFT procedures examined here choose or randomly
+access structured time-domain locations used by their filters; here the
+algorithm receives a one-pass set of uncontrollable random locations and one
+Bernoulli observation at each.
+Almost all locations are distinct when `q=poly(n)`, and a prescribed spacing
+or repeated location occurs with probability only `O(q^2/N)`.  One-bit hidden
+number algorithms likewise assume oracle access to chosen multipliers (and,
+in the relevant advice-based result, a prescribed universal query schedule),
+not these passive cosine samples.  Loading the observed examples into a
+natural normalized quantum sparse vector and Fourier transforming gives
+target probability only of order `q/N` when label collisions are negligible,
+returning to exponential repetition or square-root amplification.  No
+polynomial passive decoder was found.  The exact result is therefore an
+`O(n)` sample upper bound together with an open computational heavy-character
+problem, not a hardness theorem.
+
 A related exact barrier applies to bounded-degree processing of passive
 single-qubit `X` measurements.  In the iid uniformly averaged/dephasing model,
 write the outcome as `S_i in {+1,-1}`.  For `T` of size `j`,
@@ -1421,6 +1568,52 @@ multilinear degree can be large.  Higher-degree processing must implicitly
 aggregate dense signed subset-sum relations, which is precisely what the
 collective PGM does.
 
+Pairwise Kuperberg-style collimation does aggregate relations, but the usual
+resource law remains subexponential and the hidden faults make explicit
+relations less robust.  In a clean binary sieve, combining two length-`L`
+lists while eliminating `m` low multiplier bits leaves expected length about
+
+```text
+L' = L^2/2^m.
+```
+
+Keeping `L'` comparable to `L` requires `L` of order `2^m`.  Each level gains
+about `m` bits and doubles the number of leaves, so a height-`n` label costs
+about `2^(n/m)` leaves while the table costs `2^m`.  Balancing the two at
+`m` of order `sqrt(n)` recovers the familiar `2^(Theta(sqrt(n)))` scale rather
+than a polynomial algorithm.
+
+For a fixed-size uniformly random fault set of density
+`delta=Theta(1/log n)`, which is permitted by the marginal model, an explicit
+coherence between paths whose difference has Hamming weight `w` survives only
+when the difference avoids every faulty coordinate.  Its exact probability is
+
+```text
+choose(q-w,f)/choose(q,f)
+  <= (1-delta)^w
+  <= exp(-delta*w).
+```
+
+For `q=c*n` iid-uniform modular labels, a union bound gives
+
+```text
+Pr[there is a signed half-turn relation of support at most w]
+  <= N^(-1) * sum_(j<=w) 2^j*choose(q,j).
+```
+
+At `c=12`, this is exponentially small for every fixed support fraction below
+the root `alpha approximately 0.10838` of
+`alpha+12*h_2(alpha/12)=1`.  Thus a standard no-reuse two-state or
+polynomial-list sieve operating on this `q=c*n` block must use linear-support
+terminal relations with overwhelming probability.  For a fixed relation, or
+a polynomial family chosen independently of the hidden fault set, each such
+explicit coherence incurs `exp(-Omega(n/log n))` survival in this allowed
+fault model, and polynomial repetition cannot compensate.  This is a barrier
+for those pairwise/list collimation and explicit path-reindexing models, not
+for fault-adaptive algorithms or arbitrary collective measurements.  It does
+not contradict the robust-PGM guarantee, which aggregates the full relation
+space rather than requiring one preselected surviving edge.
+
 ## Relation to known DCP algorithms
 
 The subset-sum connection is not accidental.  Bacon--Childs--van Dam identify
@@ -1436,6 +1629,13 @@ substantive algorithmic primitive rather than bookkeeping:
 - [Solving Medium-Density Subset Sum Problems in Expected Polynomial Time](https://crypto.ethz.ch/publications/FlaPrz05.html)
 - [Random Modular Subset Sum](https://eccc.weizmann.ac.il/eccc-reports/2005/TR05-007/index.html)
 - [Fast algorithm for quantum polar decomposition, pretty-good measurements, and the Procrustes problem](https://arxiv.org/abs/2106.07634)
+
+The passive-measurement comparison uses a different access model from the
+chosen-query sparse-Fourier and hidden-number results below:
+
+- [Sparse Fourier Transform in Any Constant Dimension with Nearly-Optimal Sample Complexity in Sublinear Time](https://arxiv.org/abs/1604.00845)
+- [A Sublinear Algorithm of Sparse Fourier Transform for Nonequispaced Data](https://arxiv.org/abs/math/0502357)
+- [Solving Hidden Number Problem with One Bit Oracle and Advice](https://doi.org/10.1007/978-3-642-03356-8_20)
 
 There is a complete subexponential fallback for DCP: the Kuperberg/Regev
 family of sieves runs in subexponential time, with variants trading time and

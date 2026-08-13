@@ -86,6 +86,17 @@ label but leaves, in each residue block, the polar transform of a
 fibre-restricted Walsh matrix.  At constant accuracy, the natural
 projected-unitary/QSVT realization of that remaining transform still has
 `Theta(sqrt(N))` cost, up to approximation logarithms.
+An exact dyadic recursion reaches the same boundary in the natural frame
+model: its direct realization needs coherent access to the preceding full
+fibre-support projector, which a bare two-outcome parity measurement does not
+supply, and expanding that projector doubles the orbit branches at each bit.
+In the iid averaged/dephasing model, a complementary route measures
+every raw qubit in `X`; `O(n)` passive samples then identify `{d,-d}`
+statistically, but the evident correlation/FFT decoder scans all `N=2^n`
+frequencies and no polynomial passive decoder was found.  Pairwise
+Kuperberg-style collimation remains subexponential and its
+explicit terminal relations are further suppressed by allowed hidden-fault
+models.  These are scoped route failures, not a general lower bound.
 This verdict does not claim that either isolated sentence of Lemma 3 is false
 in every interpretation, or that a polynomial DCP algorithm is impossible.
 

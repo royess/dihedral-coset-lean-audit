@@ -586,6 +586,23 @@ up to approximation logarithms, in that access model.  This is not an
 unrestricted circuit lower bound; a direct parity-only arithmetic transform
 remains logically open.
 
+Three further realizations make that opening narrower without closing it.
+First, the exact power-of-two frame recursion writes the next signed frame as
+the difference of the preceding full frame and its phase conjugate.  Its sign
+needs the preceding fibre-support projector, which a bare preceding parity
+measurement does not provide; direct recursion doubles the orbit branches at
+every bit.  Second, measuring each raw phase qubit in `X` in the iid
+averaged/dephasing model produces passive noisy cosine samples.  A correlation
+test identifies `{d,-d}` with `O(n)` samples, but evaluating it by FFT costs
+`O(N log N)` and no polynomial-time decoder for the passive one-bit sample
+model was found.
+Third, pairwise Kuperberg-style collimation retains the usual
+`2^(Theta(sqrt(n)))` clean resource balance, while explicit linear-support
+relations, when fixed or drawn from a polynomial family independently of the
+hidden fault set, survive permitted hidden-fault models only with
+superpolynomially small probability.  These are family-specific barriers;
+they do not rule out a new collective arithmetic parity circuit.
+
 This verdict is deliberately narrower than a countertheorem to every possible
 reading of the two sentences called Lemma 3, and it is not a lower bound for
 all DCP algorithms.  It says that the repository currently contains neither a
