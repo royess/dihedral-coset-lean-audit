@@ -42,7 +42,13 @@ statement is averaged over the iid-uniform public labels and uniform over
 every low-weight fixed fault pattern and arbitrary fixed faulty bits;
 excessive patterns are charged by Markov.  The PGM is a dense polar measurement
 with exponentially many error-labelled columns, and no polynomial
-implementation is supplied.  Thus the new result strengthens the existence
+implementation is supplied.  Fourier transformation of the cyclic secret
+label gives an exact direct sum of fibre-restricted Walsh polar transforms;
+the irrep label is easy, while the exponentially large subset-sum multiplicity
+space remains.  In the natural projected-unitary/QSVT realization the block
+singular values are `Theta(N^(-1/2))`, giving a route-specific
+`Theta(sqrt(N))` constant-accuracy cost, up to approximation logarithms.  Thus
+the new result strengthens the existence
 side while leaving the algorithmic verdict unchanged.
 
 ## Lean formalization targets

@@ -80,7 +80,12 @@ PGM on `12*n` preselected raw samples decodes the complete secret with error
 `O(1/log n)+2^(-Omega(n))` under the repository's marginal fault assumptions,
 averaged over the iid-uniform public labels and uniformly over all low-weight
 fixed fault patterns and arbitrary fixed faulty bits.  No polynomial
-implementation of this dense PGM is known.
+implementation of this dense PGM is known.  An exact covariance reduction
+shows why the obvious QFT does not finish the job: it removes the cyclic secret
+label but leaves, in each residue block, the polar transform of a
+fibre-restricted Walsh matrix.  At constant accuracy, the natural
+projected-unitary/QSVT realization of that remaining transform still has
+`Theta(sqrt(N))` cost, up to approximation logarithms.
 This verdict does not claim that either isolated sentence of Lemma 3 is false
 in every interpretation, or that a polynomial DCP algorithm is impossible.
 

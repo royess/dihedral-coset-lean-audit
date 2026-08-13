@@ -1214,6 +1214,96 @@ that the public labels retain that iid-uniform marginal.  The result uses a
 fixed raw sample block before the paper's adaptive choice of `A(D)`; it is an
 alternative collective decoder, not a validation of the first-zero circuit.
 
+### Exact group-covariant normal form
+
+The cyclic symmetry of the code can be used completely, but it does not remove
+the computational bottleneck.  Define
+
+```text
+U_Y|x> = omega^(f_Y(x))|x>,
+|phi_(d,e)> = U_Y^d H^(tensor q)|e>,
+E_r = {e : HammingWeight(e)<=r}.
+```
+
+Let `V` be the synthesis map `V|d,e>=|phi_(d,e)>`, let `J_E` embed the
+`E_r` label space into the `q`-qubit computational basis, and let `Pi_t`
+project onto the subset-sum fibre `f_Y(x)=t`.  Fourier transforming only the
+secret label gives the exact identity
+
+```text
+V(F_N^dagger tensor I)|t,e>
+  = sqrt(N) * Pi_t H^(tensor q) J_E|e>.
+```
+
+Consequently the Gram matrix and the PGM polar factor split into `N`
+independent residue blocks.  If
+
+```text
+D_t := Pi_t H^(tensor q) J_E,
+```
+
+then the `t`-block of the Gram matrix is `N*D_t^dagger*D_t`, with entries
+
+```text
+(N/2^q) * sum_(x : f_Y(x)=t) (-1)^((e xor e') dot x),
+```
+
+and the corresponding PGM block is the polar partial isometry of `D_t`.
+Thus the ordinary cyclic QFT removes the orbit label `d`, but leaves a
+fibre-restricted Walsh polar transform in the multiplicity space.  For
+`E_r={0}`, this remaining map is already uniform subset-sum fibre synthesis
+and index erasure.  Low-weight errors strengthen it to the simultaneous
+orthogonalization of many restricted Walsh characters.
+
+This also explains why phase estimation of `U_Y` is insufficient.  It can
+compute `t=f_Y(x)` efficiently, but it leaves the original system in `|x>`.
+For fixed `t`, the vectors with `f_Y(x)=t` form an orthogonal basis of the
+multiplicity space `H_t`; phase estimation does not separately extract a
+canonical within-fibre index.  Measuring `t` has distribution `|F_t|/2^q`,
+independent of `d`, and destroys the relative phases between different fibres.
+The irrep label is easy; selecting the particular normalized vector `|F_t>`
+inside `H_t` is the missing operation.
+
+On the Gram-good event, the singular values of the Fourier blocks
+`sqrt(N)*D_t` are close to one.  The directly implementable contraction
+`D_t`, however, has singular values of order `N^(-1/2)`: apply the Boolean
+Hadamard, compute `f_Y`, and project onto one prescribed `t`.  Amplitude
+amplification therefore costs `Theta(sqrt(N))`.  In this particular
+projected-unitary/QSVT access model, the same scale is necessary for constant
+accuracy, up to approximation logarithms: an odd polynomial bounded by one on
+`[-1,1]` that maps a value of order `N^(-1/2)` to a constant has degree
+`Omega(sqrt(N))` by Bernstein's inequality.  This is a route-specific lower
+bound, not a lower bound against arbitrary arithmetic quantum circuits.
+
+There is a smaller parity-only block decomposition, which remains the main
+logical opening.  For a seed density matrix `R`, put
+`rho_d=U_Y^d R U_Y^(-d)` and average separately over even and odd `d`.  Exact
+Fourier orthogonality gives
+
+```text
+rho_b = sum_t Pi_t R Pi_t
+      + (-1)^b * sum_t Pi_t R Pi_(t+H).
+```
+
+On an unordered pair `{t,t+H}`, put
+`A_t=Pi_t R Pi_(t+H)` and write its polar decomposition as
+`A_t=W_t|A_t|`.  In the ordered decomposition
+`H_t direct-sum H_(t+H)`, the parity Helstrom sign observable is
+
+```text
+[[0, W_t], [W_t^dagger, 0]],
+```
+
+with an arbitrary fixed convention on the kernel.  For the clean rank-one
+seed, `W_t=|F_t><F_(t+H)|`, and the Hermitian half-turn swap/test observable is
+`W_t+W_t^dagger`.  For an averaged low-weight-error or dephasing ensemble,
+`W_t` is a generally high-rank weighted cross-fibre transport.  This parity
+formula concerns the stated averaged ensemble; the full robust PGM above is
+what gives the uniform subspace guarantee for arbitrary coherent low-weight
+error states.  A direct arithmetic implementation of only these parity polars
+could conceivably be weaker than the full decoder, but no such implementation
+is presently known.
+
 ### Why this does not yet give an efficient decoder
 
 The codebook has
@@ -1293,6 +1383,43 @@ faults.  This rules out decoding each small pool independently and taking a
 majority.  It does not rule out an adaptive or product measurement whose
 outcomes first narrow the full-secret posterior and are then correlated
 globally; such a construction would be another genuinely global decoder.
+
+A related exact barrier applies to bounded-degree processing of passive
+single-qubit `X` measurements.  In the iid uniformly averaged/dephasing model,
+write the outcome as `S_i in {+1,-1}`.  For `T` of size `j`,
+
+```text
+E[product_(i in T) S_i | d,Y]
+  = lambda^j * 2^(-j)
+    * sum_(epsilon in {+1,-1}^T)
+        omega^(d * sum_i epsilon_i Y_i).
+```
+
+Averaging `d` over its two parities shows that the even-minus-odd expectation
+is exactly
+
+```text
+lambda^j * 2^(1-j)
+  * #{epsilon : sum_i epsilon_i Y_i = H mod N}.
+```
+
+Therefore, if the public labels contain no signed half-turn relation of support
+at most `r`, every real multilinear statistic of degree at most `r` has exactly
+the same expectation under the two parity mixtures.  For iid-uniform labels,
+
+```text
+Pr[there is such a relation]
+  <= N^(-1) * sum_(j=1)^r 2^j * choose(q,j).
+```
+
+For polynomial `q` and `r=O(log n)`, this is
+`2^(-n+O(log^2 n))`.  This rules out bounded-locality statistics or syndromes
+formed from these passive `X`-measurement outcomes, as well as bounded-degree
+moment methods.  It does not apply to unrestricted majority, arbitrary
+classical postprocessing, or a general quantum circuit, whose effective
+multilinear degree can be large.  Higher-degree processing must implicitly
+aggregate dense signed subset-sum relations, which is precisely what the
+collective PGM does.
 
 ## Relation to known DCP algorithms
 

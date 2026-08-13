@@ -577,7 +577,14 @@ adaptive `A(D)` selection and therefore bypasses rather than proves the
 paper's Lemma 3.  Its synthesis matrix has exponentially many columns, and the
 current proof supplies no polynomial circuit for the polar measurement.  The
 new result removes an information-theoretic concern but does not change the
-polynomial-algorithm verdict.
+polynomial-algorithm verdict.  Exploiting cyclic covariance exactly
+block-diagonalizes the synthesis map, but each residue block is still the
+polar transform of a fibre-restricted Walsh matrix.  The direct
+projected-unitary/QSVT implementation exposes those blocks at singular-value
+scale `N^(-1/2)` and therefore retains `Theta(sqrt(N))` constant-accuracy cost,
+up to approximation logarithms, in that access model.  This is not an
+unrestricted circuit lower bound; a direct parity-only arithmetic transform
+remains logically open.
 
 This verdict is deliberately narrower than a countertheorem to every possible
 reading of the two sentences called Lemma 3, and it is not a lower bound for
