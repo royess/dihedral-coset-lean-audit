@@ -57,8 +57,17 @@ direct expansion doubles the orbit branches per modulus bit.  In the iid
 averaged/dephasing model, passive `X`
 measurements give a complementary positive result--`O(n)` samples identify
 `{d,-d}`, hence the target parity--but the direct FFT decoder costs
-`O(N log N)`.  The chosen-query sparse-Fourier and hidden-number methods
-examined here do not directly instantiate on this one-pass random sample set.
+`O(N log N)`.  Parseval now gives a sharp statistical-query boundary: against
+the conventional adversarial `STAT` oracle, polynomially many adaptive
+`STAT(1/poly(n))` queries have uniform-secret average parity advantage at most
+`poly(n)/N`, although individual-example and collective quantum algorithms
+remain outside that model.  The chosen-query sparse-Fourier and
+hidden-number methods examined here do not directly instantiate on this
+one-pass random sample set.  An explicit robust parity-only observable exists
+uniformly on the coherent low-weight-error subspaces on the Gram-good event,
+but its known multiplexed-polar implementation remains `Theta(sqrt(N))` at
+constant accuracy in the standard projected-unitary/QSVT access model; a separate exact
+operator-Schmidt theorem rules out low-bond Frobenius/MPO compression only.
 Ordinary pairwise/list collimation retains its subexponential resource law and
 suffers an additional explicit-relation survival loss in permitted
 hidden-fault models.  None of these statements is an unrestricted circuit

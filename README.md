@@ -93,7 +93,17 @@ supply, and expanding that projector doubles the orbit branches at each bit.
 In the iid averaged/dephasing model, a complementary route measures
 every raw qubit in `X`; `O(n)` passive samples then identify `{d,-d}`
 statistically, but the evident correlation/FFT decoder scans all `N=2^n`
-frequencies and no polynomial passive decoder was found.  Pairwise
+frequencies and no polynomial passive decoder was found.  A new Parseval
+argument makes one part rigorous: against the conventional adversarial
+`STAT` oracle, the uniform-secret average parity advantage of any adaptive
+algorithm using only polynomially many inverse-polynomial-tolerance queries
+is at most `poly(n)/N`.  This does not cover algorithms that inspect individual
+samples or collective quantum measurements.  The robust
+parity-only observable can also be written explicitly without outputting the
+complete secret/error label, but its known multiplexed-polar realization
+still costs `Theta(sqrt(N))` at constant accuracy in the standard
+projected-unitary/QSVT access model.  Exact operator-Schmidt analysis further rules
+out polynomial-bond MPO/Frobenius compression, not general circuits.  Pairwise
 Kuperberg-style collimation remains subexponential and its
 explicit terminal relations are further suppressed by allowed hidden-fault
 models.  These are scoped route failures, not a general lower bound.

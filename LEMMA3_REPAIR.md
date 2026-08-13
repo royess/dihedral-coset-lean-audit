@@ -595,7 +595,19 @@ every bit.  Second, measuring each raw phase qubit in `X` in the iid
 averaged/dephasing model produces passive noisy cosine samples.  A correlation
 test identifies `{d,-d}` with `O(n)` samples, but evaluating it by FFT costs
 `O(N log N)` and no polynomial-time decoder for the passive one-bit sample
-model was found.
+model was found.  A normalized-Fourier/Parseval argument now proves that,
+against the conventional adversarial `STAT` oracle, every adaptive
+polynomial-query `STAT(1/poly(n))` decoder has uniform-secret average parity
+advantage only `poly(n)/N`; this statement is deliberately limited to
+statistical queries and does not include individual-example or collective
+quantum algorithms.
+The Gram-good blocks also define an explicit parity-only involution that is
+uniformly correct on every coherent low-weight-error vector, without
+outputting the complete secret or error label.  Its known projected-unitary
+polar implementation nevertheless costs `Theta(sqrt(N))` at constant accuracy
+in that access model, and exact
+operator-Schmidt flatness rules out only polynomial-bond Frobenius/MPO
+compression, not arbitrary circuits.
 Third, pairwise Kuperberg-style collimation retains the usual
 `2^(Theta(sqrt(n)))` clean resource balance, while explicit linear-support
 relations, when fixed or drawn from a polynomial family independently of the

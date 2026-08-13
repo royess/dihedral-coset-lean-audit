@@ -928,11 +928,12 @@ produced a polynomial circuit.
    K_Y = (N/2^m) * sum_(a in ZMod N) A_a tensor B_(H-a).
    ```
 
-   For random high-density instances these `N` Schmidt components have
-   comparable size.  An exact tensor-network representation therefore has
-   bond dimension `N`, and a rank-`r` Frobenius approximation has relative
-   error of order `sqrt(1-r/N)`.  This blocks polynomial-bond-dimension MPO
-   contraction, not arbitrary circuits.
+   For random high-density instances these `N` Schmidt components are
+   exponentially close to flat.  The quantitative operator-Schmidt theorem
+   below shows that an operator-Schmidt-rank-`R` approximation captures at
+   most essentially `R/N` of the squared Frobenius mass.  This blocks
+   relative-Frobenius compression of this kernel by polynomial-bond MPOs, not
+   arbitrary circuits.
 4. A 2-adic recursion can compute `f_Y(x) mod N/2`, but inside each residue it
    still has to erase the multiplicity and coherently distinguish the two
    half-turn fibres.  The same problem reappears at the first recursive layer.
@@ -1275,8 +1276,62 @@ accuracy, up to approximation logarithms: an odd polynomial bounded by one on
 `Omega(sqrt(N))` by Bernstein's inequality.  This is a route-specific lower
 bound, not a lower bound against arbitrary arithmetic quantum circuits.
 
-There is a smaller parity-only block decomposition, which remains the main
-logical opening.  For a seed density matrix `R`, put
+The same blocks give an explicit robust **parity-only** observable, without
+requiring the measurement to output `d` or the error word.  Write
+
+```text
+D_t = U_t S_t
+```
+
+for the polar decomposition.  Exact Fourier block diagonalization gives
+
+```text
+||G_Y-I||_op
+  = max_t ||N*D_t^dagger*D_t-I||_op.
+```
+
+Thus the one Gram-good event above simultaneously makes each polar `U_t` a
+full-rank isometry from the error-label space onto `ran(D_t)`.  On the direct
+sum of those images define
+
+```text
+T_tilde = sum_t U_(t+H) U_t^dagger,
+```
+
+with any fixed Hermitian involutive extension on the orthogonal complement.
+Pairing `t` with `t+H` makes `T_tilde` Hermitian and involutive on its intended
+support.  If `||G_Y-I||_op<=alpha<1` and
+
+```text
+a = 1-sqrt(1-alpha),
+```
+
+then, for every secret `d` and every unit vector `v` in the coherent
+low-weight-error label space,
+
+```text
+||T_tilde U_Y^d H^(tensor q) J_E v
+    - (-1)^d U_Y^d H^(tensor q) J_E v||^2
+  <= 4*a^2.
+```
+
+This follows fibre by fibre from
+`||S_t-I/sqrt(N)||_op<=a/sqrt(N)` and orthogonality of the residue sectors.
+Measuring `T_tilde` therefore has wrong-parity probability at most `a^2`,
+uniformly over the whole coherent error subspace.  This closes the algebraic
+existence side for a robust one-bit measurement more directly than decoding
+the complete `(d,e)` label.
+
+It does not improve the known implementation cost.  A multiplexed projected
+unitary implements all `D_t` blocks, but their singular values are still
+`Theta(N^(-1/2))`; polarizing it and sandwiching the shift `t -> t+H` costs
+`Theta(sqrt(N))` at constant accuracy in the standard QSVT realization.  The
+same Bernstein argument gives the matching degree lower bound in that access
+model.  This remains a route-specific statement, not an unrestricted lower
+bound for the parity observable.
+
+For comparison, the averaged-ensemble parity Helstrom operator has a closely
+related block decomposition.  For a seed density matrix `R`, put
 `rho_d=U_Y^d R U_Y^(-d)` and average separately over even and odd `d`.  Exact
 Fourier orthogonality gives
 
@@ -1297,12 +1352,79 @@ On an unordered pair `{t,t+H}`, put
 with an arbitrary fixed convention on the kernel.  For the clean rank-one
 seed, `W_t=|F_t><F_(t+H)|`, and the Hermitian half-turn swap/test observable is
 `W_t+W_t^dagger`.  For an averaged low-weight-error or dephasing ensemble,
-`W_t` is a generally high-rank weighted cross-fibre transport.  This parity
-formula concerns the stated averaged ensemble; the full robust PGM above is
-what gives the uniform subspace guarantee for arbitrary coherent low-weight
-error states.  A direct arithmetic implementation of only these parity polars
-could conceivably be weaker than the full decoder, but no such implementation
-is presently known.
+`W_t` is a generally high-rank weighted cross-fibre transport.  This exact
+Helstrom formula concerns the stated averaged ensemble; the `T_tilde`
+construction immediately above, as well as the full robust PGM, gives a
+uniform subspace guarantee for arbitrary coherent low-weight error states on
+Gram-good labels.  A direct arithmetic implementation of only these parity
+polars could conceivably be weaker than the full decoder, but no such
+implementation is presently known.
+
+### A flat operator-Schmidt spectrum across balanced cuts
+
+The clean parity kernel also rules out a different tempting implementation:
+compressing the Helstrom operator as a polynomial-bond-dimension matrix
+product operator.  Split the `q` Boolean variables into left and right parts
+of sizes `ell` and `r=q-ell`, and write `f_Y=f_L+f_R`.  Define matrices
+
+```text
+A_a^L[u,u'] = 1_(f_L(u)-f_L(u')=a),
+B_b^R[v,v'] = 1_(f_R(v)-f_R(v')=b).
+```
+
+For the normalized clean parity mixtures,
+
+```text
+Delta_Y = rho_even-rho_odd
+        = 2^(1-q) * sum_(a in Z_N) A_a^L tensor B_(H-a)^R.
+```
+
+Distinct `A_a^L` have disjoint matrix-entry supports, and so do the right
+factors.  After Frobenius normalization, this is already an exact
+operator-Schmidt decomposition.  If
+
+```text
+eta_t^L = #f_L^(-1)(t),
+C_L(a) = ||A_a^L||_F^2 = sum_t eta_t^L eta_(t-a)^L,
+```
+
+and similarly on the right, its exact Schmidt coefficients are
+
+```text
+s_a = 2^(1-q) * sqrt(C_L(a)*C_R(H-a)).
+```
+
+Suppose every fibre on side `j` is within relative error `epsilon_j<1` of
+`mu_L=2^ell/N` or `mu_R=2^r/N`.  Then every coefficient obeys
+
+```text
+(2/N)(1-epsilon_L)(1-epsilon_R)
+  <= s_a <=
+(2/N)(1+epsilon_L)(1+epsilon_R).
+```
+
+The operator-Schmidt rank is therefore exactly `N`.  By the Eckart--Young
+theorem, every operator-Schmidt-rank-at-most-`R` approximation `X` satisfies
+
+```text
+||Delta_Y-X||_F^2 / ||Delta_Y||_F^2
+  >= 1 - min(1, (R/N)*kappa_epsilon^2),
+
+kappa_epsilon =
+  ((1+epsilon_L)(1+epsilon_R))
+  / ((1-epsilon_L)(1-epsilon_R)).
+```
+
+For random labels and a `6*n | 6*n` split of the `q=12*n` clean block, the
+standard simultaneous fibre estimate permits
+`epsilon_L,epsilon_R<=2^(-n)+2^(-5*n)` except with probability at most
+`2^(1-2*n)`.  A polynomial-bond-rank approximation then captures only
+`poly(n)/N` of the squared Frobenius mass.
+
+This is an exact low-bond tensor-network barrier, not a quantum-circuit lower
+bound.  Only `O(n)` gates crossing the cut can already create Schmidt rank
+`N`, and approximating `Delta_Y` in Frobenius norm is not the same task as
+implementing `sign(Delta_Y)` on the promised input ensemble.
 
 ### An exact dyadic recursion, and why it does not close on parity
 
@@ -1531,6 +1653,74 @@ polynomial passive decoder was found.  The exact result is therefore an
 `O(n)` sample upper bound together with an open computational heavy-character
 problem, not a hardness theorem.
 
+There is, however, a rigorous barrier for the broad subclass of algorithms
+that access these examples only through statistical queries.  Let
+`P_d` denote the passive distribution above, and let `P_star` have uniform
+`Y` and an independent uniform sign `S`.  For an arbitrary query
+`Phi(Y,S) in [-1,1]`, put
+
+```text
+a(y) = (Phi(y,+1)+Phi(y,-1))/2,
+b(y) = (Phi(y,+1)-Phi(y,-1))/2.
+```
+
+Then the difference between its expectations is exactly one Fourier
+coefficient:
+
+```text
+Delta_Phi(d)
+  = E_(P_d)[Phi] - E_(P_star)[Phi]
+  = lambda * Re(hat(b)(-d)).
+```
+
+With the normalized Fourier transform, Parseval gives
+
+```text
+sum_(d in Z_N) Delta_Phi(d)^2
+  <= lambda^2 * E_y[b(y)^2]
+  <= lambda^2.
+```
+
+Consequently a query of absolute tolerance `tau` can disagree with the null
+answer by more than `tau` for fewer than `lambda^2/tau^2` secrets.  For each
+secret, consider the adversarial oracle strategy that returns the null
+expectation whenever it lies within tolerance, and otherwise returns any
+valid answer.  For a fixed random tape, follow the exact-null transcript of
+an adaptive deterministic `Q`-query algorithm and take the union of the
+exceptional secret sets encountered along that path.  Outside a set of size
+at most `Q*lambda^2/tau^2`, this strategy follows the entire null transcript.
+Its final parity guess is fixed and is correct for at most `N/2` secrets in
+the full group; granting arbitrary success on the exceptional set gives
+
+```text
+P_success <= 1/2 + Q*lambda^2/(N*tau^2)
+```
+
+for a uniform secret.  Averaging over the random tape yields the same bound
+for randomized adaptive algorithms.  Thus their uniform-secret average
+parity advantage against the conventional adversarial `STAT` oracle is
+exponentially small when both the query count and inverse tolerance are
+polynomial.
+
+This theorem covers approximate-expectation, moment, gradient, and other
+algorithms that genuinely factor through the conventional adversarial
+absolute-tolerance `STAT` interface.  It does **not** lower-bound algorithms
+that inspect the individual samples combinatorially, exact-expectation or
+stronger query oracles, or collective quantum measurements.  Random-example
+access can use rare exact relations among the observed labels and is strictly
+outside this argument.
+
+The access distinction is also why the positive hidden-number algorithms
+examined here do not settle the passive decoder.  The chosen-multiplier
+Fourier methods require a prescribed or actively queried multiplier set;
+their own analysis explicitly does not extend that theorem to the uniform
+distribution model.  Akavia's random-sample learning-of-noisy-characters
+framework is closer to the present setting, but its positive Hamming result
+returns a noisy complex character value rather than this one-bit stochastic
+cosine observation.  The Boolean or `l_2` random-sample variants are treated
+there as the difficult regime.  This is a placement of the access model, not
+an asserted formal equivalence or a hardness assumption used by this audit.
+
 A related exact barrier applies to bounded-degree processing of passive
 single-qubit `X` measurements.  In the iid uniformly averaged/dephasing model,
 write the outcome as `S_i in {+1,-1}`.  For `T` of size `j`,
@@ -1567,6 +1757,117 @@ classical postprocessing, or a general quantum circuit, whose effective
 multilinear degree can be large.  Higher-degree processing must implicitly
 aggregate dense signed subset-sum relations, which is precisely what the
 collective PGM does.
+
+Several cheaper-looking public-label transformations can also be audited
+exactly.  For one untouched phase qubit with label `y`, average the secret
+uniformly over either parity and call the two states `rho_b^y`.  Twice their
+off-diagonal entry (the Bloch coherence coefficient) is
+
+```text
+(2/N) * sum_(j=0)^(H-1) omega^((b+2*j)*y).
+```
+
+This geometric sum equals `1` for `y=0`, equals `(-1)^b` for `y=H`, and is
+zero otherwise.  Hence `rho_0^y=rho_1^y` for every `y!=H`: label zero is
+uninformative, while `H` reveals parity perfectly.  For an acceptance weight
+`A(y) in [0,1]`, let `HelstromAdvantage` mean the conditional optimal success
+probability minus `1/2`.  Then the exact identity is
+
+```text
+P_accept * HelstromAdvantage
+  = A(H)/(2*N) <= 1/(2*N).
+```
+
+Selecting a label merely near `H` gives no one-qubit parity information.  The
+identity does not apply to joint processing, where several labels may satisfy
+an exact signed relation with total `H`.
+
+The 2-adic valuation does not change this conclusion.  A uniform label obeys
+`Pr[2^r divides Y]=2^(-r)`, and among `Q` labels
+
+```text
+Pr[there exists i with 2^r dividing Y_i] <= Q*2^(-r).
+```
+
+Conditioning one label on `2^r` dividing it, then dividing that label and the
+modulus by `2^r`, costs `2^r` raw samples and saves only `r=O(log n)` bits at
+polynomial cost.
+Repeating multiplies these rejection costs: removing `r_1+...+r_k` bits is
+just the original condition `2^(r_1+...+r_k) divides Y`.  Constant-probability
+single-qubit parity still requires the original label `Y=H`.
+
+If a fixed designated label `Y_0` is conditioned on being odd, globally
+multiplying **all** labels by `Y_0^(-1)` is legitimate: it anchors `Y_0` at
+one and replaces the common secret by `d*Y_0`, which has the same parity.
+Conditional on that designated label, the remaining labels stay iid uniform,
+so this supplies no chosen-query schedule.  This statement would need a
+different conditioning analysis if `Y_0` were selected adaptively as the
+first odd sample.  Normalizing each sample separately instead creates
+sample-dependent higher secret bits; it does not rewrite the observations
+using one common secret, and the physical states are unchanged.  Nor can a
+deterministic one-copy channel simply manufacture a chosen multiplier:
+fidelity monotonicity forbids a map taking every
+`|psi_1(d)>` to `|psi_a(d)>` unless `a=0,+1,-1 mod N`.  Multiplication by a
+larger public `a` would make adjacent outputs more distinguishable than the
+adjacent inputs.  Collective or probabilistic transformations are not covered
+by this one-copy statement.
+
+Pairing labels has a population tradeoff.  A standard two-state parity merge
+outputs `y+z` or `y-z`, each with probability `1/2`.  If `Q` labels are
+bucketed modulo `B=2^m`, then for iid-uniform labels the expected number of
+useful difference-branch outputs from disjoint equal-bucket pairs is at most
+
+```text
+Q*(Q-1)/(4*B).
+```
+
+Finding one collision uses the birthday scale `Q=Omega(sqrt(B))`, but
+preserving a constant fraction of the population forces `B=O(Q)` and gains
+only `m<=log2(Q)+O(1)` bits per layer.  An exact half-turn pair already needs
+`Q=Omega(sqrt(N))`.  Sorting does not improve this: every wrong label,
+including the nearest possible one `H+1`, has exactly zero one-qubit parity
+information.  Exact subsets of cyclic gaps that total `H` are the same
+modular-relation problem again.
+
+More generally, for every fixed integer coefficient vector having an odd
+entry, `sum_i a_iY_i` is uniform modulo `N`.  A fixed candidate combination
+hits `H` with probability `1/N` and is divisible by `2^m` with probability
+`2^(-m)`.  Polynomially many data-independent candidates only gain the
+corresponding union-bound factor.  Choosing coefficients after seeing the
+labels is precisely random modular relation/subset-sum search; these facts are
+not a lower bound against that adaptive problem or a collective POVM.
+
+There is an exact positive group-hashing step behind the collimation idea.
+Tensor `k` raw phase states, reversibly compute
+
+```text
+f_Y(x) mod B,       B=2^m,
+```
+
+and measure the residue `r`.  Writing each compatible full sum as
+`f_Y(x)=r+B*a_x`, and writing `eta_r` for the size of that measured fibre, the
+normalized conditional state is, up to a global phase,
+
+```text
+eta_r^(-1/2) * sum_(x : f_Y(x)=r mod B)
+  exp(2*pi*i*d*a_x/(N/B)) |x>.
+```
+
+It is therefore an exact phase vector whose height has fallen by `m` bits.
+Its expectation over random labels and the Born-distributed measurement
+outcome `r` is exactly
+
+```text
+E_(Y,r)[eta_r] = 1 + (2^k-1)/B.
+```
+
+Taking `k=m+O(1)` gives constant expected length.  The forward hash is an
+efficient circuit; the unresolved operation is compression.  A standard
+explicit-table realization enumerates the `2^k` paths, while retaining `x`
+implicitly also retains the child/path indices.  Converting the implicit
+fibre into a short clean phase-vector basis is again coherent fibre-index
+erasure.  This explains why the positive hashing identity leads to a
+collimation sieve rather than a polynomial decoder.
 
 Pairwise Kuperberg-style collimation does aggregate relations, but the usual
 resource law remains subexponential and the hidden faults make explicit
@@ -1636,6 +1937,9 @@ chosen-query sparse-Fourier and hidden-number results below:
 - [Sparse Fourier Transform in Any Constant Dimension with Nearly-Optimal Sample Complexity in Sublinear Time](https://arxiv.org/abs/1604.00845)
 - [A Sublinear Algorithm of Sparse Fourier Transform for Nonequispaced Data](https://arxiv.org/abs/math/0502357)
 - [Solving Hidden Number Problem with One Bit Oracle and Advice](https://doi.org/10.1007/978-3-642-03356-8_20)
+- [The Multivariate Hidden Number Problem](https://eprint.iacr.org/2015/111)
+- [Learning Noisy Characters](https://people.csail.mit.edu/akavia/AkaviaPhDThesis.pdf)
+- [Efficient noise-tolerant learning from statistical queries](https://doi.org/10.1145/293347.293351)
 
 There is a complete subexponential fallback for DCP: the Kuperberg/Regev
 family of sieves runs in subexponential time, with variants trading time and
@@ -1648,16 +1952,22 @@ possible, but they do not give the polynomial-time repair sought here:
 ## Current verdict and next research question
 
 The ideal `HalfTurnEraser` is mathematically coherent, and `K_Y` gives an exact
-operator formula whose polar part is the desired swap.  Random subset-sum
+operator formula whose polar part is the desired swap.  The multiplexed
+fibre polars also give the explicit robust `T_tilde` parity observable above,
+uniformly on every coherent low-weight-error subspace for Gram-good public
+labels.  Random subset-sum
 fibres make the associated whitening matrix exponentially close to the
 identity on the occupied fibre-uniform support, so unequal fibre sizes are not
 the blocker.  The missing step is a
 polynomial implementation of the synthesis/parity action itself.  The
 investigation has not found one: PREP/QSVT, signed-projector sampling,
 FFT/Schur decomposition, tensor-network contraction, 2-adic recursion,
-hashing, lattice, and local-relation routes all retain an exponential cost in
-the parameter regime at issue.  The best generic coherent scale identified is
-`Theta(sqrt(N)) = 2^(n/2)`.
+hashing, lattice, statistical-query decoding, and local-relation routes all
+retain an exponential cost or exponentially small advantage in the precise
+models analyzed.  The best generic coherent scale identified is
+`Theta(sqrt(N)) = 2^(n/2)`.  The operator-Schmidt theorem and the
+statistical-query theorem make two of these route boundaries rigorous without turning
+them into unrestricted circuit or sample-access lower bounds.
 
 This is not a no-go theorem.  A distribution-specific collective circuit
 could conceivably decode only the parity without exposing a reusable fibre
