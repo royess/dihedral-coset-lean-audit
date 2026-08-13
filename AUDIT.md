@@ -19,12 +19,18 @@ implementation was found.  The standard routes examined either retain an
 exponential cost in their stated models or fail to supply the missing
 operation.  Thus the obstacle is now both a proof gap and an algorithmic
 implementation gap, not merely a missing concentration estimate.
-A precise constructive interface has nevertheless been isolated: split the
-paths into free coordinates and `n+O(log n)` correction coordinates, and use a
-reversible modular subset-sum encoder on the latter.  This gives an exact
-same-garbage half-turn pairing on inverse-polynomial mass.  The encoder is not
-known in polynomial time; computing it is a near-critical random modular
-subset-sum problem.  Separately, a random-singleton oracle calculation proves
+A precise constructive interface has nevertheless been isolated.  A one-pool
+version uses `n+O(log n)` correction coordinates and a reversible modular
+subset-sum encoder.  More strongly, a two-pool cross-filter plus a large common
+label pool needs only a bounded, verifiable random-target find-one solver on
+exactly `n` correction bits with inverse-polynomial average success: running
+both solver calls on both branches makes their outputs and workspaces common
+garbage, so canonical rank/unrank is not an additional requirement.  The large
+label pool removes the earlier projection loss.  No such polynomial
+density-one RMSS finder is known here, and compatibility with unknown fixed
+faulty coordinates remains open: under the paper's marginal fault scale the
+naive common-label overlap can lose `2^(-Theta(n/log n))`.  Separately, a
+random-singleton oracle calculation proves
 that hash isolation plus an arbitrary one-shot joint POVM still needs
 `Omega(sqrt(D))` queries for constant phase advantage.  That lower bound is
 restricted to the oracle model and leaves explicit arithmetic circuits open.

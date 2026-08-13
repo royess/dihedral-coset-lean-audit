@@ -24,8 +24,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
 - the most explicit direct candidate is a signed sum of product-state frame
   projectors, but its natural implementation has the same cancellation and
   normalization barrier;
-- obtaining polynomial time would require a new average-case subset-sum
-  sampling or direct-measurement idea.
+- a two-pool cross-filter with a large common label pool reduces the
+  fault-free task to an ordinary exact-density random-target RMSS finder, but
+  no polynomial finder is known;
+- an independent or fixed-size random fault law permitted by the paper's
+  marginal bounds causes a `2^(-Theta(n/log n))` common-label loss in this
+  construction, so a positive noisy result still needs a new collective
+  fault-aware eraser.
 
 ## Fibre formulation
 
@@ -296,9 +301,15 @@ N / 2^|C| = 2^(-s).
 ```
 
 Taking `s=O(log n)` would therefore give inverse-polynomial success.  More
-generally, if the encoder covers only a residue set of density `beta`, the
-usable mass is approximately `beta*2^(-s)`; inverse-polynomial `beta` is still
-enough.
+generally, let `T` be the residue set on which the encoder succeeds and define
+
+```text
+beta_pair = |T intersect (T-H)| / N.
+```
+
+The usable mass is approximately `beta_pair*2^(-s)`.  The density of `T`
+alone is insufficient: `T` and `T-H` can be disjoint even when `T` has
+positive density.  An inverse-polynomial `beta_pair` is sufficient.
 
 This is a genuine constructive reduction, not an implementation.  For a
 random correction set and a fixed target residue, the number `eta_r` of
@@ -322,6 +333,331 @@ canonical representative by `N/2^|C|`.  To exploit a large correction set one
 would need many coherently and symmetrically selected representatives, which
 returns to fibre sampling or rank/unrank.
 
+This multiplicity tradeoff can be stated quantitatively.  For a correction
+pool of `k` free bits, let
+
+```text
+mu = 2^k/N
+```
+
+be its typical number of solutions per target.  If a clean target-dependent
+correction state is
+
+```text
+|phi_r> = sum_(x in F_r) alpha_x |x>,
+sum_x |alpha_x|^2 = 1,
+```
+
+then the amount of the raw uniform fibre that it can capture is controlled by
+
+```text
+m_eff(r) = |sum_x alpha_x|^2 <= |support(phi_r)|.
+```
+
+The corresponding projection fraction is of order `m_eff/mu`.  Therefore an
+inverse-polynomial fraction requires coherent support on at least
+`mu/poly(n)` solutions.  When `k-n=omega(log n)`, a polynomial-size list of
+solutions cannot remove the canonical-projection loss.  Retaining many
+independent classical solver seeds does not supply this factor: after
+normalization, each seed still selects one representative.  Gaining the full
+multiplicity requires coherently erasing the seed or recovering a canonical
+seed/rank from the physical solution, which is again the missing large-fibre
+sampling or rank/unrank operation.  This is why each active correction pool in
+the two-pool construction must stay near critical density even when a separate
+large common label pool is available.
+
+### A stronger reduction: two correction pools
+
+Canonical rank/unrank is sufficient, but it is not necessary.  A two-pool
+symmetrization reduces the same-garbage problem to an ordinary, bounded-time,
+verifiable random-target modular subset-sum finder.
+
+Let `C_0` and `C_1` be independent sets of
+
+```text
+k = n+s,        D = 2^k
+```
+
+random modular weights, with subset-sum maps `f_0` and `f_1`.  Suppose a
+solver `S(C,r;z)` uses a retained random seed `z`, either returns a Boolean
+preimage of `r` under `f_C`, or raises a verifiable failure flag.  It need not
+return a canonical or uniformly random preimage.  Assume only the
+random-instance, random-target success bound
+
+```text
+p = Pr_(C,r,z)[S(C,r;z) succeeds] >= 1/poly(n).
+```
+
+Choose a public random invertible affine map `pi` on `{0,1}^k`.  For a common
+label `g` and two common solver seeds, compute
+
+```text
+a = S(C_0, t   - f_1(g);       z_0),
+b = S(C_1, t+H - f_0(pi(g));   z_1).
+```
+
+Retain the label only when both calls succeed.  The two physical paths are
+
+```text
+x_0(g) = (a,       g),
+x_1(g) = (pi(g),   b).
+```
+
+They satisfy `f(x_0(g))=t` and `f(x_1(g))=t+H` exactly.  Both solver circuits
+are run on both half-turn branches.  On branch zero, compare and clear the
+physical `C_0` block using `a`; on branch one, compare and clear the physical
+`C_1` block using `b`.  A controlled swap and `pi^(-1)` put `g` in the same
+register on both branches.  The seeds, solver outputs, and bounded solver
+workspaces were computed from identical common inputs, so they are identical
+garbage and can be retained.  For a deterministic computation conditional on
+a classical retained seed, they can also be uncomputed after the matched
+physical block is cleared.  A postselected coherent quantum solver need not be
+uncomputable by simply applying its inverse, but its identical success
+workspace can remain as common garbage.  Thus the accepted state has the
+exact form
+
+```text
+(|0> + (-1)^d |1>) tensor |common garbage>.
+```
+
+This is the key improvement over the one-pool encoder.  The finder does not
+need to be canonical, reversible as a mathematical function, uniform over a
+fibre, or edge-reversal symmetric.  A classical randomized solver can be
+made reversible by retaining its seed and bounded computation history.  The
+same construction also accepts a cleanly success-flagged coherent solver:
+the two solver-output amplitudes multiply in the same way on both branches,
+and its common success workspace need not be erased.
+
+The success calculation is explicit.  Write
+
+```text
+a_g = Pr_z[S(C_0, t   - f_1(g); z) succeeds],
+b_h = Pr_z[S(C_1, t+H - f_0(h); z) succeeds],
+Z_pi = E_g[a_g * b_(pi(g))].
+```
+
+For the equal-amplitude raw state on `F_t union F_(t+H)`, with uniform retained
+classical seeds, let `eta_t` and `eta_(t+H)` be the two full `2k`-variable
+fibre sizes.  The exact projected mass is then
+
+```text
+2*D*Z_pi / (eta_t + eta_(t+H)).
+```
+
+For balanced random fibres this is
+
+```text
+(N/D)*Z_pi * (1+negligible) = 2^(-s)*Z_pi*(1+negligible).
+```
+
+The affine permutation prevents the two solvers' good target sets from being
+disjoint.  Two-transitivity gives the exact identities
+
+```text
+E_pi[Z_pi]   = mean(a)*mean(b),
+Var_pi[Z_pi] = Var(a)*Var(b)/(D-1).
+```
+
+There is also a direct random-target bridge.  For a random `k`-weight pool,
+the distinct-input collision identity gives
+
+```text
+E_C[TV(f_C(U_k), U_(ZMod N))]
+  <= (1/2)*sqrt(N/D)
+   = 2^(-s/2-1).
+```
+
+Equivalently, pairwise independence applies to distinct nonzero Boolean
+words, while the deterministic zero word is handled separately; one obtains
+`E[||P_C-U||_2^2] <= 1/D`.  Consequently the averages of `a_g` and `b_g`
+differ from the solver's uniform random-target success probabilities by at
+most the corresponding total variation errors.  Averaging over the two pools
+yields
+
+```text
+E[mean(a)*mean(b)] >= p^2 - 2^(-s/2).
+```
+
+Taking
+
+```text
+s >= 4*log2(1/p) + O(1) = O(log n)
+```
+
+makes `Z_pi=Omega(p^2)` for a nonnegligible set of public choices, while the
+additional factor `2^(-s)` remains inverse-polynomial.  The total heralded
+success is therefore inverse-polynomial.
+
+This sharpens the positive boundary considerably: in the fault-free model,
+an inverse-polynomial-success average-case RMSS **find-one** algorithm at
+density `1+O(log n/n)` is sufficient.  Clean uniform fibre sampling and
+canonical rank/unrank are not separate requirements.  The construction does
+not supply that finder.  No polynomial algorithm for this near-critical
+random-target inversion problem was identified, so the computational blocker
+remains, but it is now narrower than the one-pool formulation suggested.
+The target is not made easier by being induced from a measured path; the
+planted-path reduction below turns it exactly into a fresh fixed-half-turn
+RMSS instance.
+
+Unknown fixed faulty coordinates are a separate unresolved issue.  The
+public-`Y` solver and its canonical predicate can still be run without knowing
+the occupied affine subcube: candidate words outside the subcube simply have
+zero input amplitude.  Thus hidden support membership is not an operational
+prerequisite.  The missing statement is a lower bound on the overlap of the
+two branchwise good-label sets under the actual fault distribution.
+
+### Removing the `2^(-s)` loss with a large common label pool
+
+The preceding reduction can be strengthened in the fault-free model.  Split
+the physical selection register into `C_0 | C_1 | R`, with sizes `k`, `k`, and
+`ell`.  Let
+
+```text
+Omega = {0,1}^(k+ell),
+M     = |Omega|,
+u     = (g,r),
+sigma(u) = (h,s),
+```
+
+where `sigma` is a public efficiently reversible affine permutation.  Define
+
+```text
+a(u)       = S(C_0, t   - f_1(g) - f_R(r)),
+b(sigma u) = S(C_1, t+H - f_0(h) - f_R(s)).
+```
+
+On joint success, use the paths
+
+```text
+x_0(u) = (a(u), g, r),
+x_1(u) = (h, b(sigma u), s).
+```
+
+They lie in `F_t` and `F_(t+H)` respectively.  Both maps are injective because
+the non-correction coordinates retain `u` or `sigma(u)`.  Run both bounded
+solver computations on both branches and retain their seeds and workspaces.
+After verifying and clearing the matched correction block, apply `sigma^(-1)`
+on branch one and then use a branch-controlled swap of the `C_0` and `C_1`
+label registers.  Both branches now place `(g,r)` in the same physical
+registers.  The surviving label and all solver garbage are therefore
+identical, so the half-turn phase is exact.
+
+For deterministic seeds, let `G_sigma` be the labels on which both solvers
+succeed.  In the equal-amplitude two-fibre state the exact accepted mass is
+
+```text
+2*|G_sigma| / (eta_t + eta_(t+H)).
+```
+
+For seed-averaged success functions `A(u)` and `B(v)`, put
+
+```text
+Z_sigma = (1/M) * sum_u A(u)*B(sigma(u)).
+```
+
+The exact mass is `2*M*Z_sigma/(eta_t+eta_(t+H))`.  Since the full register has
+`2k+ell` bits, balanced random fibres give
+
+```text
+eta_t + eta_(t+H) = (2+o(1))*M*2^k/N,
+P_accept           = (1+o(1))*(N/2^k)*Z_sigma.
+```
+
+Thus `k=n` removes the earlier `2^(-s)` projection loss.  A random affine
+`sigma` is two-transitive, so
+
+```text
+E_sigma[Z_sigma]   = mean(A)*mean(B),
+Var_sigma[Z_sigma] = Var(A)*Var(B)/(M-1).
+```
+
+Taking `ell=n+O(log n)` makes `f_R(U_ell)` inverse-polynomially close to
+uniform in expected total variation; a larger linear `ell` gives exponential
+error.  Consequently the residual targets reduce to ordinary uniform random
+targets for independent, exactly `n`-variable RMSS instances.  The sufficient
+primitive is therefore narrower still: a bounded, verifiable coherent
+implementation of an inverse-polynomial-success random-target RMSS finder at
+exact density one.  No polynomial implementation was found.
+
+This refinement does not cure unknown faults.  If the occupied affine
+subcubes in `C_0`, `C_1`, and `R` fix `f_0`, `f_1`, and `f_R` coordinates, put
+`F=f_0+f_1+f_R`.  In the uniform benchmark a fully mixing `sigma` leaves one
+uncancelled common-label overlap factor `2^(-F)` after normalization by the
+smaller physical fibre.  At the paper's marginal scale `1/(c'*log n)`, every
+such construction uses `Omega(n)` coordinates, and an allowed independent or
+fixed-size random fault model has `F=Theta(n/log n)` typically.  The overlap
+is then `2^(-Theta(n/log n))`.  Using all polynomially many paper coordinates
+as `R` makes this worse.  A split-preserving permutation avoids part of the
+raw intersection loss but no longer decorrelates the conditional per-slice
+good-target sets.  A fault-aware eraser or flagged free coordinates would be
+a genuinely new required interface.
+
+The entropy boundary explains the potential loss.  If a correction pool has
+`k=n+s` physical coordinates but only `u=k-f` of them are free in a fixed
+fault environment, its occupied subcube contains at most `2^u` strings and can
+cover at most
+
+```text
+min(1, 2^u/N) = min(1, 2^(s-f))
+```
+
+of uniformly random targets.  Inverse-polynomial target coverage therefore
+requires `f <= s+O(log n)` unless the solver has a stronger support-aware
+interface.
+
+On arbitrary fixed environments there is nevertheless a sign-safe version.
+Map every accepted branch path to a public common label `lambda`; retain every
+rejected path as orthogonal garbage explicitly tagged by its branch.  In the
+deterministic unit-amplitude special case, if each label contains the full
+injective retained seed, solver output/history, and surviving path garbage,
+and the accepted branch-label sets are `G_0` and `G_1`, the final readout is
+exactly
+
+```text
+Pr[correct | retained state]
+  = 1/2 + |G_0 intersect G_1| / (|G_0|+|G_1|).
+```
+
+For weighted solver outputs, the cardinality in the numerator is replaced by
+the real inner product of the two common-label amplitude vectors.  The
+cross-filter construction makes those common amplitudes nonnegative, so the
+overlap is nonnegative: faults can erase the bias but cannot reverse it.  This
+makes safe repetition possible once an inverse-polynomial overlap mass is
+proved; it does not prove such a mass for an arbitrary fixed environment.
+More precisely, rejected inputs must remain as orthogonal branch-tagged data,
+not be many-to-one erased to a single marker; a `good` flag and the retained
+original path/work registers make this map unitary.
+
+Under an additional model in which faulty fixed bits are uniform relative to
+the public solver, the expected common-label overlap loses the factor
+`2^(-(f_0+f_1))`, while each branch's individual canonical projection retains
+the same `2^(-s)` scale after normalization by its smaller physical fibre.
+Thus `f_0+f_1=O(log n)` is sufficient for inverse-polynomial bias.  In the
+paper's fault parameterization the marginal scale is `1/(c'*log n)`, so two
+pools of size `n+O(log n)` contain `Theta(n/log n)` faults in expectation for
+the standard independent fixed-rate model with constant `c'`.  More exactly,
+that model gives
+
+```text
+E[2^(-(f_0+f_1))]
+  = (1-1/(2*c'*log n))^(2k)
+  = exp(-Theta(n/log n)).
+```
+
+The raw overlap is therefore subexponential rather than inverse-polynomial.
+Marginal upper bounds alone do not force this many faults, but they permit
+this independent model, so no theorem uniform over the permitted noise laws
+can obtain a polynomial overlap from the present construction.  Choosing the pools
+independently of `Y` and of the hidden fault pattern prevents adaptive
+concentration, but it does not change this expectation.  What is not
+established is a mechanism that exposes enough free coordinates or otherwise
+removes this overlap loss.  The current
+`RandomFixedBitsMixture` module is an abstract pushforward under an assumed
+uniform fixed assignment and does not by itself supply that quantum
+fault-mixture premise.  Consequently the two-pool construction is a genuine
+fault-free reduction, but it does not yet meet the paper's noisy parameter
+regime.
+
 ## Why an input-dependent partner is not easier
 
 Suppose a proposed pairer receives a path `x` and searches for
@@ -331,11 +667,29 @@ Suppose a proposed pairer receives a path `x` and searches for
 sum_i a_i * (s_i*Y_i) = H mod N.
 ```
 
-For uniform random `Y_i`, the signed coefficients `s_i*Y_i` remain independent
-and uniform.  Hence a pairer with inverse-polynomial coverage immediately
-gives an inverse-polynomial-success solver for random modular subset sum:
-choose a random `x`, sign a fresh RMSS instance by `s_i`, run the pairer, and
-output `a=x xor x'`.
+There is an exact joint-distribution reduction.  Sample a fresh uniform RMSS
+instance `A`, sample an independent uniform `x`, and set
+
+```text
+Y_i = (1-2*x_i)*A_i,
+t   = f_Y(x) = -sum_i x_i*A_i mod N.
+```
+
+The map `(A,x) <-> (Y,x)` is a bijection, so this reproduces the joint
+experiment in which a uniform path lies in its measured fibre.  Any
+opposite-half partner returned by the pairer yields
+
+```text
+sum_i a_i*A_i = H mod N.
+```
+
+Thus a path-local pairer with inverse-polynomial coverage gives an
+inverse-polynomial-success fixed-target RMSS solver.  This is a statement
+about the joint distribution, not independence after conditioning on a
+prescribed measured value of `t`: for fixed `t`, the relation
+`sum_i x_i*A_i=-t` correlates `A` and `x`.  The planted path provides a known
+relation at target `-t`, but it does not simplify the independent half-turn
+equation at target `H` in the joint reduction.
 
 Quantum coherence imposes a further condition.  A distribution `q_A(a)` over
 valid moves must be invariant under reversal of the edge:
@@ -442,17 +796,18 @@ oracle calculation above shows that black-box access is insufficient.
 
 The correction-kernel interface is implementable with exponential resources.
 A deterministic meet-in-the-middle or dynamic-programming solver can be made
-reversible and canonical, yielding a clean encoder at exponential cost.
-Recent generic quantum subset-sum search improves the search exponent to
-`O*(2^(2k/7))` for `k` variables, but a search algorithm that returns an
-arbitrary solution is not by itself a clean coherent encoder; canonical
-selection and garbage removal remain additional obligations:
+reversible and canonical, yielding the one-pool encoder at exponential cost.
+The two-pool construction above can instead consume any bounded, verifiable
+find-one solver, but it does not improve that solver's running time.  Recent
+generic quantum subset-sum search improves the search exponent to
+`O*(2^(2k/7))` for `k` variables and can therefore feed this reduction only at
+exponential cost:
 
 - [Improved Quantum Algorithms for Subset Sum and k-SUM](https://arxiv.org/abs/2608.07309)
 
 For random high-density modular subset sum, the known Wagner-style route is
-subexponential in its applicable parameterization and finds one solution
-rather than supplying the edge-symmetric encoder needed here:
+subexponential in its applicable parameterization rather than polynomial in
+the critical correction-pool regime required here:
 
 - [On Random High Density Subset Sums](https://eccc.weizmann.ac.il/report/2005/007/download/)
 
@@ -602,8 +957,10 @@ values lie at the same scale.
 
 ## Why high density is not already a polynomial solution
 
-For one selected group the paper uses `m = c*n` Boolean variables modulo an
-`n`-bit modulus, so the subset-sum density is the constant `c`, not a growing
+For the global selected `A`-side instance considered by the half-turn repair,
+the paper has `a=n/log2(n)` selected local blocks of width
+`m_0=c*log2(n)`, hence `m_A=a*m_0=c*n` Boolean variables modulo an `n`-bit
+modulus.  Its subset-sum density is the constant `c`, not a growing
 high-density regime.  Known results that solve certain medium-density random
 instances in expected polynomial time require a much smaller modulus
 bitlength, on the order of the square of the logarithm of the variable count;
@@ -620,11 +977,13 @@ fibre sampler for an `n`-bit modulus.  Known high-density random modular
 subset-sum methods instantiate here at subexponential, rather than
 polynomial, cost.  Dynamic programming still has a state space of size `N`.
 
-Moreover, finding one classical solution is insufficient.  A coherent eraser
-needs nearly uniform amplitudes over a fibre, branch-independent clean
-garbage, and a controlled inverse.  Reversible execution of a randomized
-finder generally leaves the random seed and search path as which-path
-garbage.
+For the direct one-pool polar/PGM construction, finding one classical solution
+is insufficient: that route needs nearly uniform amplitudes over a fibre,
+branch-independent clean garbage, and a controlled inverse.  The two-pool
+cross-filter is an important exception.  It runs both bounded solver circuits
+on both branches, so retained seeds and search histories are common garbage;
+there an ordinary verifiable find-one solver would suffice.  No polynomial
+finder is known at the required exact-density random-target interface.
 
 ## Local-relation and fault-model cautions
 
@@ -658,6 +1017,50 @@ pairing designed on the full Boolean cube may flip fixed faulty coordinates
 and leave the actual affine-subcube support.  A valid primitive must preserve,
 or coherently learn and respect, that unknown support decomposition; the
 fault-free construction alone does not discharge this obligation.
+
+This limitation can be quantified for fault-oblivious sparse or list-based
+repairs.  Consider the permitted model that chooses exactly
+`f=floor(delta*q_used)` faulty positions uniformly among the coordinates used
+by the construction, with `delta=1/(c'*log n)`.  A proposed half-turn move of
+Hamming weight `w`, chosen without fault flags, avoids all faulty coordinates
+with probability
+
+```text
+binom(q_used-w,f) / binom(q_used,f)
+  <= exp(-f*w/q_used)
+  = exp(-delta*w+O(w/q_used)).
+```
+
+For fault-independent candidate moves whose weights satisfy the stated lower
+bound, polynomially many candidates only multiply this estimate by a
+polynomial.
+On the other hand, for random modular weights the signed-weight reduction and
+a union bound give
+
+```text
+Pr[there is a half-turn relation of weight at most w]
+  <= N^(-1) * sum_(j <= w) binom(q_used,j)
+  <= N^(-1) * (e*q_used/w)^w.
+```
+
+For polynomial `q_used`, inverse-polynomial fault avoidance would require
+`w=O(log^2 n)`, but such a relation exists with probability at most
+`2^(-n+O(log^3 n))`.  Typical available relations have weight
+`Omega(n/log n)` and avoid the permitted random fault set with only
+`exp(-Omega(n/log^2 n))` probability.  Oversampling gives the same entropy
+tradeoff: a pool of `n+s` bits with `f` hidden fixed coordinates covers at
+most `min(1,2^(s-f))` of random targets, while a one-output canonical filter
+costs `2^(-s)`.  Recovering inverse-polynomial mass therefore requires about
+`2^f/poly(n)` coherently aligned solutions, not a polynomial list whose index
+remains as orthogonal garbage.
+
+This is a barrier for fault-oblivious single-match, sparse-move, and
+polynomial-list families, not a lower bound for arbitrary collective quantum
+channels.  The precise escape hatch is a collective fault-aware eraser that
+implicitly aligns exponentially many compatible relations, or explicit fault
+flags.  No such decoder is known; the original first-zero construction was a
+candidate collective mechanism, but the spectral analysis shows that its
+retained mass is dominated by secret-independent diagonal modes.
 
 ## Relation to known DCP algorithms
 
@@ -709,9 +1112,10 @@ distinct sufficient interfaces:
 
 > Can one either (a) use the product-state representation of `K_Y` to implement
 > its sign/polar action on the random fibre-uniform input ensemble without the
-> natural `sqrt(N)` normalization, or (b) extract `n+O(log n)` random
-> correction coordinates with a reversible, inverse-polynomial-coverage
-> modular subset-sum encoder?
+> natural `sqrt(N)` normalization, or (b) build a bounded, verifiable,
+> inverse-polynomial-success random-target RMSS find-one algorithm on exactly
+> `n` random correction coordinates and make the large-label two-pool
+> construction respect the occupied fault subcube?
 
 A positive answer to either version would be a new DCP/subset-sum algorithmic
 ingredient.  No such polynomial construction is supplied by the paper or

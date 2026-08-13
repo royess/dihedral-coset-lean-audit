@@ -37,9 +37,12 @@ as an exact information-theoretic measurement, and random fibres make its
 whitening exponentially close to trivial on the occupied fibre-uniform
 support.  None of the analyzed realizations yields polynomial cost; the
 generic PREP/QSVT route has coherent scale `2^(n/2)`.  A newly isolated
-positive interface would suffice: `n+O(log n)` correction coordinates with a
-reversible modular subset-sum encoder give exact same-garbage half-turn pairing
-on inverse-polynomial mass.  No polynomial encoder was found.  Moreover, in a
+two-pool interface would suffice: with a large common label pool, two
+independent correction pools of exactly `n` bits and any bounded, verifiable
+random-target modular subset-sum finder with inverse-polynomial average success
+give exact same-garbage half-turn pairing without the earlier projection loss.
+The finder need not be canonical or sample a fibre uniformly, but no
+polynomial density-one finder was found.  Moreover, in a
 hash-isolated random-singleton oracle model, even an arbitrary one-shot joint
 measurement needs `Omega(sqrt(D))` queries for constant phase advantage.  This
 is an oracle-model barrier, not a lower bound for explicit arithmetic
@@ -61,14 +64,20 @@ separate spectral obstruction.  The strongest positive replacement found is
 a distributional ParityPGM whose ideal action is exact and whose random-fibre
 normalization is benign.  Implementing it in polynomial time would itself
 constitute a new one-bit DCP algorithm, and no such implementation is supplied
-here.  The free-plus-correction construction in
-[`LEMMA3_HALF_TURN_ERASER.md`](LEMMA3_HALF_TURN_ERASER.md) makes the remaining
-algorithmic target exact: a reversible encoder on `n+O(log n)` random modular
-weights would suffice with inverse-polynomial mass.  Random fibres contain
-enough representations information-theoretically, but no polynomial encoder
-is known here.  This verdict does not claim that either isolated sentence of
-Lemma 3 is false in every interpretation, or that a polynomial DCP algorithm
-is impossible.
+here.  The free-plus-correction constructions in
+[`LEMMA3_HALF_TURN_ERASER.md`](LEMMA3_HALF_TURN_ERASER.md) make the remaining
+algorithmic target exact.  A one-pool reversible encoder is sufficient, and a
+stronger two-pool symmetrization first reduces the task to an ordinary bounded,
+verifiable random-target find-one algorithm near density one.  A large common
+label pool removes the residual `2^(-s)` projection loss, so correction pools
+of exactly `n` bits suffice; solver success is squared but remains
+inverse-polynomial.  Random fibres contain enough representations
+information-theoretically, but no polynomial finder is known here.  In the
+paper's noisy regime, unknown fixed faulty coordinates can further reduce the
+two branch-label overlap by
+`2^(-Theta(n/log n))`; the fault-free construction has not removed that loss.
+This verdict does not claim that either isolated sentence of Lemma 3 is false
+in every interpretation, or that a polynomial DCP algorithm is impossible.
 
 ### Lemma 1
 

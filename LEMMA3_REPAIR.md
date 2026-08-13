@@ -528,14 +528,20 @@ is supplied or found.  Closing the standalone inequalities would therefore
 not repair the core algorithm.
 
 The global replacement investigation now has a sharper conditional positive
-result.  If `n+O(log n)` correction coordinates admit a reversible map taking
-every (or an inverse-polynomial fraction of) modular residues to a Boolean
-preimage, then the remaining coordinates can be kept as a common free label
-and the two half-turn branches can be erased to identical garbage.  The
-projected mass is inverse-polynomial.  Random correction fibres contain enough
-preimages information-theoretically, but constructing that map is a
-near-critical random modular subset-sum problem and no polynomial algorithm is
-known here.  Hash isolation does not remove this issue: in the corresponding
+result.  A single set of `n+O(log n)` correction coordinates with a reversible
+preimage map is sufficient, but canonical rank/unrank is not necessary.  With
+two independent correction pools of exactly `n` bits, a large common label
+pool, a public random affine permutation, and cross-filtering, any bounded and
+verifiable random-target RMSS find-one solver with inverse-polynomial average
+success erases the two half-turn branches to identical garbage without the
+earlier projection loss.  Both solver calls run on both branches, so arbitrary
+solver outputs, seeds, and bounded workspaces are common garbage.  Random
+correction fibres contain enough preimages information-theoretically, but no
+polynomial find-one algorithm is known here at exact density one.  Adapting the
+construction to unknown fixed faulty coordinates is also open; the direct
+common-label overlap in the paper's noisy regime can lose
+`2^(-Theta(n/log n))`.  Hash isolation does not remove the underlying inversion
+issue: in the corresponding
 random-singleton oracle model, constant one-shot phase advantage requires
 `Omega(sqrt(D))` queries even for an arbitrary joint POVM.  This is an
 oracle-model barrier rather than an unconditional arithmetic lower bound; see
