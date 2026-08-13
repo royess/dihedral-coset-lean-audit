@@ -527,6 +527,20 @@ global ParityPGM replacement exists algebraically, but no polynomial circuit
 is supplied or found.  Closing the standalone inequalities would therefore
 not repair the core algorithm.
 
+The global replacement investigation now has a sharper conditional positive
+result.  If `n+O(log n)` correction coordinates admit a reversible map taking
+every (or an inverse-polynomial fraction of) modular residues to a Boolean
+preimage, then the remaining coordinates can be kept as a common free label
+and the two half-turn branches can be erased to identical garbage.  The
+projected mass is inverse-polynomial.  Random correction fibres contain enough
+preimages information-theoretically, but constructing that map is a
+near-critical random modular subset-sum problem and no polynomial algorithm is
+known here.  Hash isolation does not remove this issue: in the corresponding
+random-singleton oracle model, constant one-shot phase advantage requires
+`Omega(sqrt(D))` queries even for an arbitrary joint POVM.  This is an
+oracle-model barrier rather than an unconditional arithmetic lower bound; see
+[`LEMMA3_HALF_TURN_ERASER.md`](LEMMA3_HALF_TURN_ERASER.md).
+
 This verdict is deliberately narrower than a countertheorem to every possible
 reading of the two sentences called Lemma 3, and it is not a lower bound for
 all DCP algorithms.  It says that the repository currently contains neither a

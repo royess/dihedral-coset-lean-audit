@@ -36,8 +36,15 @@ is not yet formalized in Lean.  A global half-turn/ParityPGM replacement exists
 as an exact information-theoretic measurement, and random fibres make its
 whitening exponentially close to trivial on the occupied fibre-uniform
 support.  None of the analyzed realizations yields polynomial cost; the
-generic PREP/QSVT route has coherent scale `2^(n/2)`.  Lemma 4 and the paper's
-headline algorithm theorem therefore remain unproved.
+generic PREP/QSVT route has coherent scale `2^(n/2)`.  A newly isolated
+positive interface would suffice: `n+O(log n)` correction coordinates with a
+reversible modular subset-sum encoder give exact same-garbage half-turn pairing
+on inverse-polynomial mass.  No polynomial encoder was found.  Moreover, in a
+hash-isolated random-singleton oracle model, even an arbitrary one-shot joint
+measurement needs `Omega(sqrt(D))` queries for constant phase advantage.  This
+is an oracle-model barrier, not a lower bound for explicit arithmetic
+circuits.  Lemma 4 and the paper's headline algorithm theorem therefore remain
+unproved.
 
 | Lemma | Status of the core claim | Published proof and repair status |
 | --- | --- | --- |
@@ -54,9 +61,14 @@ separate spectral obstruction.  The strongest positive replacement found is
 a distributional ParityPGM whose ideal action is exact and whose random-fibre
 normalization is benign.  Implementing it in polynomial time would itself
 constitute a new one-bit DCP algorithm, and no such implementation is supplied
-here.  This verdict does not claim that either isolated sentence of Lemma 3 is
-false in every interpretation, or that a polynomial DCP algorithm is
-impossible.
+here.  The free-plus-correction construction in
+[`LEMMA3_HALF_TURN_ERASER.md`](LEMMA3_HALF_TURN_ERASER.md) makes the remaining
+algorithmic target exact: a reversible encoder on `n+O(log n)` random modular
+weights would suffice with inverse-polynomial mass.  Random fibres contain
+enough representations information-theoretically, but no polynomial encoder
+is known here.  This verdict does not claim that either isolated sentence of
+Lemma 3 is false in every interpretation, or that a polynomial DCP algorithm
+is impossible.
 
 ### Lemma 1
 

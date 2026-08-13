@@ -253,6 +253,214 @@ Several standard constructions all expose the same `sqrt(N)` scale.
 These are barriers for the standard oracle and block-encoding routes, not an
 unconditional circuit lower bound for random arithmetic subset sum.
 
+## A constructive reduction: free coordinates plus a correction kernel
+
+There is a useful positive construction between full fibre rank/unrank and a
+purely black-box search.  Split the Boolean coordinates into a free set `R`
+and a correction set `C`, and write
+
+```text
+f_Y(g,c) = f_R(g) + f_C(c) mod N.
+```
+
+Assume that `|C| = n+s` and that there is a reversible polynomial-time
+encoder
+
+```text
+e_C : ZMod N -> {0,1}^C,
+f_C(e_C(r)) = r.
+```
+
+For every free string `g`, define
+
+```text
+x_0(g) = (g, e_C(t   - f_R(g))),
+x_1(g) = (g, e_C(t+H - f_R(g))).
+```
+
+Then `f_Y(x_0(g))=t` and `f_Y(x_1(g))=t+H`, while both paths have the same
+free label `g`.  Computing and then uncomputing the two correction words gives
+the clean branchwise action
+
+```text
+|0>|x_0(g)> -> |0>|g>|0>,
+|1>|x_1(g)> -> |1>|g>|0>.
+```
+
+Thus this interface is sufficient for an exact same-garbage half-turn
+pairing.  In a balanced random fibre, the canonical graph contains `2^|R|`
+paths out of approximately `2^(|R|+|C|)/N`, so its projected mass is
+
+```text
+N / 2^|C| = 2^(-s).
+```
+
+Taking `s=O(log n)` would therefore give inverse-polynomial success.  More
+generally, if the encoder covers only a residue set of density `beta`, the
+usable mass is approximately `beta*2^(-s)`; inverse-polynomial `beta` is still
+enough.
+
+This is a genuine constructive reduction, not an implementation.  For a
+random correction set and a fixed target residue, the number `eta_r` of
+Boolean representations has mean approximately `2^s` and variance at most
+`2^s`, so a fixed target is missing with probability at most about `2^(-s)`.
+That establishes information-theoretic abundance.  It does not give a
+uniform, canonical, reversible way to find a representation for the many
+targets that occur coherently as `g` varies.  Computing `e_C(r)` is a random
+modular subset-sum problem at density
+
+```text
+(n+s)/n = 1 + O(log n/n),
+```
+
+which is precisely the critical regime rather than an easy high-density
+regime.
+
+The full paper pool `Q=poly(n)` does not remove this tradeoff.  Making `C`
+much larger makes representations more abundant but shrinks the mass of one
+canonical representative by `N/2^|C|`.  To exploit a large correction set one
+would need many coherently and symmetrically selected representatives, which
+returns to fibre sampling or rank/unrank.
+
+## Why an input-dependent partner is not easier
+
+Suppose a proposed pairer receives a path `x` and searches for
+`x'=x xor a`.  Put `s_i=1-2*x_i`.  The half-turn equation is exactly
+
+```text
+sum_i a_i * (s_i*Y_i) = H mod N.
+```
+
+For uniform random `Y_i`, the signed coefficients `s_i*Y_i` remain independent
+and uniform.  Hence a pairer with inverse-polynomial coverage immediately
+gives an inverse-polynomial-success solver for random modular subset sum:
+choose a random `x`, sign a fresh RMSS instance by `s_i`, run the pairer, and
+output `a=x xor x'`.
+
+Quantum coherence imposes a further condition.  A distribution `q_A(a)` over
+valid moves must be invariant under reversal of the edge:
+
+```text
+q_A(a) = q_(D_a A)(a),
+```
+
+where `D_a` negates the coefficients on the support of `a`.  Otherwise the
+forward and reverse branches retain different solver histories as garbage.
+Uniform sampling of all valid moves has the required symmetry, but is exactly
+the missing fibre/partner-sampling primitive.  Greedy, lexicographic-first,
+and ordinary randomized find-one algorithms do not automatically have this
+property.
+
+This also explains why a direct 2-adic triangular encoder was not found.
+Among polynomially many random coefficients, the largest valuation supplied
+directly is only `O(log n)` with overwhelming probability.  Synthesizing the
+higher-valuation pivots requires modular collisions.  In a disjoint-support
+list-merging construction with polynomial list width `L`, one level can remove
+only `O(log L)` bits while retaining polynomially many candidates, and there
+are only `O(log |C|)` Boolean-compatible merge levels.  This family therefore
+handles only `O(log^2 n)` modulus bits with polynomial resources, not `n`.
+This is a barrier for that construction family, not a lower bound for all
+arithmetic quantum circuits.
+
+## A one-shot measurement barrier after hash isolation
+
+Hash isolation narrows the possible direct-decoder opening, but does not make
+the hidden relative phase freely observable.  Consider the idealized bucket
+state
+
+```text
+|Psi_d^(x,y)> = (|0,x> + (-1)^d |1,y>)/sqrt(2),
+```
+
+where `x` and `y` are independent unknown singleton labels in a domain of size
+`D`.  Averaging over those labels gives
+
+```text
+rho_d = (I_2 tensor I_D)/(2D)
+      + (-1)^d (X tensor |s><s|)/(2D),
+|s> = D^(-1/2) sum_x |x>.
+```
+
+Consequently
+
+```text
+||rho_0-rho_1||_1 = 2/D,
+P_opt(no queries) = 1/2 + 1/(2D).
+```
+
+The best phase information visible without finding or aligning the two labels
+is therefore only of order `1/D`.
+
+There is a matching constructive search curve for coherent erasure.  With
+`theta=arcsin(D^(-1/2))`, applying `T` inverse-Grover iterations on each
+branch and projecting the data register onto the common state `|s>` succeeds
+with probability
+
+```text
+p_T = sin^2((2T+1)*theta).
+```
+
+On success the label is erased and a Hadamard reads `d`, giving total success
+`1/2+p_T/2`.  Thus small `T` gives advantage `Theta(T^2/D)`, while constant
+advantage takes `Theta(sqrt(D))` queries.
+
+This square-root barrier is not confined to circuits that explicitly announce
+an erasure step.  Here the random-singleton oracle model gives the decoder the
+standard branch-controlled phase or equality oracles marking `x` and `y`.
+Purifying an arbitrary `T`-query joint POVM with distinguishing advantage
+`epsilon` and reflecting about its accepting outcome gives a `2T`-query
+conversion procedure whose average probability of reaching the independent
+second singleton is at least `4*epsilon^2`.  Grover optimality therefore
+implies
+
+```text
+4*epsilon^2 <= sin^2((4T+1)*theta),
+epsilon = O(T/sqrt(D)).
+```
+
+In particular, even a completely general one-shot measurement needs
+`Omega(sqrt(D))` oracle queries for constant advantage.  The argument does not
+prove the tighter small-query `O(T^2/D)` bound for every POVM.  More
+importantly, it is an oracle-model lower bound: an explicit arithmetic circuit
+could evade it only by exploiting structure beyond random preimage labels.
+See [Zalka's optimality theorem](https://arxiv.org/abs/quant-ph/9711070) and
+the related phase-distinguishing-to-preimage-conversion argument in
+[From the Hardness of Detecting Superpositions to Cryptography](https://eprint.iacr.org/2022/1375.pdf).
+
+The hash tradeoff can also be seen without query lower bounds.  If a bucket
+has full-domain size `D`, its expected number of opposite-half partners is
+`D/N`, so sparse-bucket paired mass is about `D/N`.  Frequencies that are safe
+without learning the partner XOR occupy only a `1/D` fraction.  Their product
+is `1/N`, independent of the bucket size.  A reusable public predictor for the
+missing inner product would, through Goldreich--Levin list decoding and one
+retained pair state, recover a short list of candidate partner moves and hence
+reconstruct the eraser.  The only genuinely weaker opening is therefore a
+distribution-specific, consume-once collective measurement; the singleton
+oracle calculation above shows that black-box access is insufficient.
+
+## Explicit non-polynomial realizations
+
+The correction-kernel interface is implementable with exponential resources.
+A deterministic meet-in-the-middle or dynamic-programming solver can be made
+reversible and canonical, yielding a clean encoder at exponential cost.
+Recent generic quantum subset-sum search improves the search exponent to
+`O*(2^(2k/7))` for `k` variables, but a search algorithm that returns an
+arbitrary solution is not by itself a clean coherent encoder; canonical
+selection and garbage removal remain additional obligations:
+
+- [Improved Quantum Algorithms for Subset Sum and k-SUM](https://arxiv.org/abs/2608.07309)
+
+For random high-density modular subset sum, the known Wagner-style route is
+subexponential in its applicable parameterization and finds one solution
+rather than supplying the edge-symmetric encoder needed here:
+
+- [On Random High Density Subset Sums](https://eccc.weizmann.ac.il/report/2005/007/download/)
+
+These algorithms make the positive interface concrete, but do not turn it
+into a polynomial repair.  In particular, the polynomial number of samples in
+the paper does not enter the proven polynomial regime for an exact `n`-bit
+modulus.
+
 The block-encoding statement can be made precise in the natural
 product-preparation oracle model.  Controlled preparation of
 `|q>|psi_q>` followed by projection of `q` onto the uniform state encodes the
@@ -496,14 +704,18 @@ successive dyadic moduli with fresh states, a polynomial one-bit decoder would
 give a polynomial DCP algorithm by bit recursion.  It would therefore be a new
 algorithmic breakthrough in exactly the problem the paper claims to solve.
 
-The narrowest remaining positive question is therefore:
+The narrowest remaining positive question can now be stated through two
+distinct sufficient interfaces:
 
-> Can the product-state representation of `K_Y` be used to implement its sign
-> or polar action on the random fibre-uniform input ensemble, with
-> inverse-polynomial success, without paying the natural `sqrt(N)` signed-sum
-> normalization?
+> Can one either (a) use the product-state representation of `K_Y` to implement
+> its sign/polar action on the random fibre-uniform input ensemble without the
+> natural `sqrt(N)` normalization, or (b) extract `n+O(log n)` random
+> correction coordinates with a reversible, inverse-polynomial-coverage
+> modular subset-sum encoder?
 
-A positive answer would be a new DCP/subset-sum algorithmic ingredient.  No
-such construction is supplied by the paper or found in this investigation.  A
-negative answer would require a circuit-model or average-case lower bound that
-is not presently available.
+A positive answer to either version would be a new DCP/subset-sum algorithmic
+ingredient.  No such polynomial construction is supplied by the paper or
+found in this investigation.  The random-singleton oracle model now has a
+rigorous `Omega(sqrt(D))` constant-advantage barrier, but a negative answer for
+the explicit arithmetic problem would require a stronger circuit-model or
+average-case lower bound that is not presently available.
