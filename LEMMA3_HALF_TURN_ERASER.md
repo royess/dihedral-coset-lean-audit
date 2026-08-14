@@ -42,6 +42,18 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   seeing `Y`.  This does not apply
   after additionally measuring `f_Y mod H`, whose surviving intersection is
   generally non-affine;
+- on a clean cube, an exact triangular checksum factorization removes
+  `log q-O(log log n)` low modulus bits without rejecting any checksum
+  outcome, but its
+  quotient phase is nonlinear.  Any all-outcome fixed-garbage continuation
+  beyond the raw contiguous valuation chain would contradict exact fibre
+  uniformity, so this no-rejection route peels only `O(log q)` bits;
+- every classical reversible basis preprocessor followed by one Hadamard
+  reduces to explicit half-turn basis pairing and hence to RMSS when it has
+  inverse-polynomial mass-weighted advantage.  On the clean cube, full exact
+  pairing exists only when a live raw label equals `H`, although abstract
+  partial matchings cover all but exponentially small expected mass at
+  `q=12*n`;
 - even with arbitrary fast orbit translations and the efficient reflection
   about the low-weight reference subspace, parity requires
   `Omega(sqrt(N))` reference queries in that translation-covariant
@@ -68,6 +80,11 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `O(log log n)` useful no-reuse levels and remove `o(n)` modulus bits.
   Direct importance sampling of the exact Bayesian coefficient ratio has
   relative variance `Theta(N)` once its posterior is sharp.  At `q=12*n`,
+  for a nondegenerate secret, a Hellinger bound shows that the posterior is in
+  fact concentrated on `{d,-d}` with a polynomially tunable exponentially
+  small tail, while uniform sampling inside the correct parity class has
+  `N/4-o(N)` relative variance.
+  At the same parameters,
   in the matched passive model with a nondegenerate secret, ordinary
   absolute-weight sign reweighting has average-sign magnitude at most
   `N^(-4.06843+epsilon)` with high probability for every fixed
@@ -75,7 +92,11 @@ The conclusion is therefore a research boundary, not a repaired theorem:
 - a fermionic-Gaussian/matchgate circuit that reads too few occupation bits is
   exactly parity-blind on typical clean labels: nonadaptive `k`-bit output
   needs a signed half-turn relation of weight at most `2*k`, and adaptive
-  Gaussian feedforward needs one of weight at most `4*k-2`.
+  Gaussian feedforward needs one of weight at most `4*k-2`.  This threshold is
+  qualitatively tight: a disjoint-pair matchgate reading `12*n` occupation
+  bits produces `6*n` visibility-one passive cosine observations with exponentially reliable
+  maximum-likelihood parity, but efficient decoding still reduces to the same
+  weighted `A_0/A_H` coefficient problem.
 
 ## Fibre formulation
 
@@ -2215,6 +2236,121 @@ For a general `q=poly(n)` block the same statement gives only
 `B=poly(n)`, still just `O(log n)` bits.  This is a route-specific population
 law, not a lower bound against overlapping or collective arithmetic circuits.
 
+### Exact dyadic checksum factorization without outcome rejection
+
+There is a population-preserving clean-core counterpart to residue pairing.
+It is stronger in retained path dimension but weaker in output form.  For
+`q>=m`, it
+removes logarithmically many low modulus bits without rejecting any checksum
+outcome, although the quotient phase becomes nonlinear.  Fix `B=2^m`, write
+
+```text
+a_i = Y_i mod B,
+f_B(x) = sum_i a_i*x_i mod B,
+```
+
+and assume all participating coordinates are live selection qubits.  The
+following statements are equivalent:
+
+1. every fibre of `f_B` has exactly `2^(q-m)` elements;
+2. there is a reversible classical bijection
+
+   ```text
+   x <-> (f_B(x),g(x)),  g(x) in {0,1}^(q-m);
+   ```
+
+3. for every `j=0,...,m-1`, at least one raw coefficient has
+   `v_2(a_i)=j`.
+
+For necessity, the Fourier transform of the subset-sum distribution is
+
+```text
+p_hat(k) = product_i (1+exp(2*pi*i*k*a_i/B))/2.
+```
+
+Uniform fibres require `p_hat(k)=0` for every nonzero `k`.  Taking
+`k=2^(m-j-1)` forces a factor with valuation exactly `j`.  Conversely, one
+coefficient of every valuation makes each nontrivial Fourier coefficient
+vanish.
+
+The converse is constructive.  Choose pivots `p_j` with
+`a_(p_j)=2^j*u_j`, `u_j` odd, and retain all nonpivot bits as `z`.  For a
+desired residue `r`, put
+
+```text
+c = r-sum_(i notin P) a_i*z_i mod 2^m.
+```
+
+The least bit of `c` uniquely fixes the valuation-zero pivot.  Subtract its
+contribution, divide by two, and continue.  At step `j` the least bit of the
+divided residual uniquely fixes `x_(p_j)`.  This triangular algorithm and its
+inverse have polynomial-size reversible circuits.
+
+Every `r` occurs with probability exactly `1/B`.  Conditioned on `r`, the
+normalized state is, up to the global phase `omega_N^(d*r)`,
+
+```text
+2^(-(q-m)/2) * sum_z omega_(N/B)^(d*Q_r(z)) |z>.
+```
+
+The quotient is explicit but is not generally a fresh linear subset sum.
+Write `Y_i=a_i+B*b_i`, let `u_r(z)` be the pivot solution, and define the
+ordinary integer carry
+
+```text
+kappa_r(z)
+  = [sum_(i notin P) a_i*z_i
+     +sum_j a_(p_j)*u_(r,j)(z)-r]/B.
+```
+
+Then the conditional phase after measuring `r` is, up to a global phase,
+
+```text
+omega_(N/B)^(d*Q_r(z)),
+
+Q_r(z)
+  = sum_(i notin P) b_i*z_i
+    +sum_j b_(p_j)*u_(r,j)(z)
+    +kappa_r(z) mod N/B.
+```
+
+Thus the preprocessing is exact and efficient, but the pivot selectors and
+carry make `Q_r` nonlinear.
+
+For iid-uniform labels, the probability of missing valuation `j` is at most
+`exp(-q/2^(j+1))`.  Hence
+
+```text
+m = floor(log_2(q/(C*log n)))
+```
+
+works with high probability for a sufficiently large constant `C`.  This
+peels `log_2 q-O(log log n)` bits while accepting every checksum outcome and
+removing only the `m` measured checksum coordinates.  It does not
+iterate to a polynomial decoder.  If **every** first-stage residue `r` admits
+a second no-rejection fixed-garbage factorization of `Q_r mod 2^s`, composing
+the bijections gives
+
+```text
+x <-> (f_Y(x) mod 2^(m+s),g(x)).
+```
+
+The equivalence above then forces raw coefficients of every valuation through
+`m+s-1`.  In particular, an all-outcome clean recursion cannot extend beyond
+the largest contiguous raw valuation chain.  The probability that this chain
+reaches `M` is at most `q/2^M`, so its total length is `O(log q)` with high
+probability.
+
+A selected residue can evade this statement.  For example, two unit weights
+modulo four give a balanced quotient bit on the residue-zero branch but not on
+the residue-one branch.  For fixed `r`, a reversible nonlinear pivot exposing
+the next bit exists exactly when the even and odd `Q_r` subfibres have equal
+size; constructing it is a bijection between those two conditional fibres.
+That is the same fibre-matching primitive under investigation, rather than an
+automatic continuation of triangular elimination.  Fixed-basis faults on a
+pivot also invalidate the cube bijection, so this paragraph is a clean-core
+structural construction, not a repair of the unflagged fault model.
+
 ### Overlapping linear syndromes expose carry constraints, not free reuse
 
 The preceding population bound leaves open a circuit that overlaps many
@@ -2383,6 +2519,89 @@ positive interface precisely: construct a useful non-affine residue
 intersection or union with coherently erasable labels, or implement the
 corresponding cross-fibre polar directly.  No such polynomial construction
 was found.
+
+### Exact basis pairing is an RMSS solver
+
+The remaining non-affine opening is not supplied by an arbitrary classical
+reversible preprocessor followed by one final Hadamard.  On any fixed
+computational transcript, such a circuit is an injective basis encoding
+
+```text
+x -> (b(x),g(x)).
+```
+
+Every garbage label `g` for which both values of `b` occur defines a disjoint
+pair `x_0(g),x_1(g)`.  The difference between the even- and odd-secret
+averaged interference terms of this pair is zero unless
+
+```text
+f_Y(x_1(g))-f_Y(x_0(g)) = H mod N.
+```
+
+Every valid pair contributes half of its two-path probability mass,
+equivalently one path's mass, to the parity advantage.  For an equal-amplitude
+`q`-bit cube, if `M_tau` is the
+number of valid unordered pairs on transcript `tau`, then
+
+```text
+conditional advantage = M_tau/|S_tau|,
+mass-weighted total advantage = sum_tau M_tau/2^q.
+```
+
+Moreover, flipping `b` and reversing the classical circuit computes the
+partner path.  Under the planted change of variables
+
+```text
+A_i = (-1)^(x_i)*Y_i,
+```
+
+a partner difference `a=x xor x'` satisfies exactly
+
+```text
+sum_(i:a_i=1) A_i = H mod N.
+```
+
+The `A_i` are fresh iid-uniform labels when `Y` is uniform and the planted
+path is sampled first.  Therefore any uniform polynomial reversible
+preprocessor of this form with inverse-polynomial mass advantage gives an
+inverse-polynomial-success polynomial RMSS solver.  This is a reduction, not
+an RMSS hardness theorem, but it closes the idea that a complicated
+Toffoli/CNOT basis permutation plus one Hadamard could avoid relation search
+merely by using non-affine garbage labels.
+
+There is an exact full-coverage boundary on the clean equal-amplitude cube.
+An arbitrary, even unbounded and `Y`-dependent, permutation can pair
+**every** basis path with a half-turn partner if and only if some live raw
+label equals `H`.  Necessity follows because
+full pairing gives `p_t=p_(t+H)` for every subset-sum probability `p_t`.
+Hence `p_hat(1)=0`, while
+
+```text
+p_hat(1) = product_i (1+omega^(Y_i))/2,
+```
+
+so some factor forces `Y_i=H`.  Sufficiency is just flipping that coordinate.
+Thus full exact basis pairing has probability at most `q/N` for random labels.
+
+This does not obstruct near-complete abstract matching.  Its maximum coverage
+is
+
+```text
+gamma = 1-sum_(t=0)^(H-1) |p_t-p_(t+H)|.
+```
+
+For iid labels,
+
+```text
+E sum_(t in Z_N) (p_t-p_(t+H))^2 = 2^(1-q),
+E[1-gamma] <= 2^((n-q-1)/2).
+```
+
+At `q=12*n`, the expected unmatched mass is therefore exponentially small,
+with the corresponding Markov tail bounds.  The computational problem is to
+rank or align those enormous, nearly balanced fibres coherently.  Exact full
+matching is rare, while information-theoretic partial matching is plentiful;
+neither observation constructs the missing efficient unitary.
 
 ## A signed harmonic and an orbit-access query barrier
 
@@ -2726,6 +2945,100 @@ threshold.  The formalism follows
 noninteracting-fermion circuits are treated by
 [Terhal--DiVincenzo](https://arxiv.org/abs/quant-ph/0108010).
 
+### Linear-output matchgates expose the passive decoding problem
+
+The output threshold above is qualitatively near-tight.  Pair the clean data
+qubits and apply the nearest-neighbour matchgate
+
+```text
+G(H_2,H_2)
+  = 2^(-1/2) *
+    [ 1  0  0  1
+      0  1  1  0
+      0  1 -1  0
+      1  0  0 -1 ],
+
+H_2 = 2^(-1/2) * [1 1; 1 -1].
+```
+
+The even- and odd-parity blocks have the same determinant, so this is a legal
+matchgate.  For one input pair with labels `Y_i,Y_j`, its four occupation
+probabilities are
+
+```text
+Pr[00] = [1+cos(2*pi*d*(Y_i+Y_j)/N)]/4,
+Pr[11] = [1-cos(2*pi*d*(Y_i+Y_j)/N)]/4,
+Pr[01] = [1+cos(2*pi*d*(Y_i-Y_j)/N)]/4,
+Pr[10] = [1-cos(2*pi*d*(Y_i-Y_j)/N)]/4.
+```
+
+The parity sector is uniform and secret-independent.  Set `Z=Y_i+Y_j` in
+the even sector, `Z=Y_i-Y_j` in the odd sector, and set `S=+1` for outcomes
+`00,01` and `S=-1` for `11,10`.  Then
+
+```text
+Pr[S=s | Z,d] = [1+s*cos(2*pi*d*Z/N)]/2,
+```
+
+and disjoint pairs give iid-uniform `Z`.  Thus `q=12*n` clean phase qubits
+produce `6*n` independent visibility-one passive cosine observations using
+only a Gaussian circuit and occupation measurements.
+
+These observations determine parity exponentially reliably.  For opposite-
+parity candidates `d,k`, one of them is odd and invertible.  Rescaling the
+uniform label makes the other frequency an even multiplier `r`.  The
+one-sample Hellinger affinity is at most `sqrt(3)/2`: the squared conditional
+affinity has mean at most `3/4`, by character orthogonality and
+Cauchy--Schwarz.  The likelihood-ratio/Hellinger bound and a union bound give
+
+```text
+Pr[maximum-likelihood parity is wrong]
+  <= (N/2)*(sqrt(3)/2)^(6*n)
+  = 2^(-0.245112...*n-1).
+```
+
+This is averaged over iid labels and outcomes for every fixed secret.  It is
+an information and measurement theorem, not an efficient decoder: the direct
+maximum-likelihood implementation scans `N` candidates, and no polynomial
+optimization is known.
+
+Indeed, for the effective transcript `D=((Z_i,S_i))`, put
+
+```text
+P_D(X)
+  = product_i [1+(S_i/2)*(X^(Z_i)+X^(-Z_i))]
+  = sum_t A_t X^t mod (X^N-1).
+```
+
+The two parity evidences are exactly
+
+```text
+E_b = 2^(-6*n) * [A_0+(-1)^b*A_H].
+```
+
+So full-output Gaussian decoding lands on the same weighted ternary
+coefficient problem as passive `X` measurement.  Pointwise Pfaffian
+evaluation does not sum it over the `N` roots of unity.  In fact
+
+```text
+P_D(X)
+  = Pf(direct_sum_i [0 p_i(X); -p_i(X) 0]),
+
+p_i(X)=1+(S_i/2)*(X^(Z_i)+X^(-Z_i)).
+```
+
+Even this block-diagonal sparse-exponent Pfaffian still requires extracting
+the cyclic coefficients `A_0,A_H`.  The generic sparse-exponent Pfaffian
+coefficient problem contains ordinary subset-sum counting through block
+factors `1+X^(w_i)`; this does not prove hardness for the restricted random
+physical factors above.  For this clean product input, full and adaptive
+occupation-transcript probabilities remain efficiently evaluable for each
+fixed candidate by covariance/Pfaffian methods, but no polynomial procedure
+for summing or optimizing them over secret parity was found.  See
+[Bravyi](https://arxiv.org/abs/quant-ph/0404180) and
+[Brod](https://arxiv.org/abs/1602.03539) for the relevant Gaussian
+measurement and simulation formalisms.
+
 ## Candidate verification and posterior filtering
 
 A different direct construction starts from a uniform superposition over
@@ -2874,6 +3187,108 @@ sum_k pi(k)^2/Q(k) = 1+chi^2(pi || Q).
 A useful proposal must therefore already place polynomial mass on the hidden
 posterior modes.  These are statements about importance/rejection methods,
 not lower bounds against arithmetic circuits.
+
+The posterior concentration behind this variance barrier can be proved
+directly.  In the matched passive model, let
+
+```text
+W_D(k) = product_i [1+lambda*S_i*cos(2*pi*k*Y_i/N)],
+```
+
+assume `d` is not `0,H`, and let `C` be the parity class containing the two
+indistinguishable candidates `{d,-d}`.  For one labelled sign observation,
+the Hellinger affinity between candidates `d` and `k notin {d,-d}` obeys
+
+```text
+E_Y Affinity(P_d(.|Y),P_k(.|Y)) <= 1-lambda^2/8.
+```
+
+Indeed, squared Hellinger distance is at least half squared total variation,
+and character orthogonality gives
+
+```text
+E_Y [cos(2*pi*d*Y/N)-cos(2*pi*k*Y/N)]^2 >= 1.
+```
+
+For independent samples, put
+
+```text
+T_D = sum_(k notin {d,-d}) sqrt(W_D(k)/W_D(d)).
+```
+
+Then
+
+```text
+E_D[T_D] <= (N-2)*(1-lambda^2/8)^q.
+```
+
+At `q=12*n`, define
+
+```text
+beta(lambda) = -1-12*log_2(1-lambda^2/8).
+```
+
+For every `0<alpha<beta(lambda)`, Markov's inequality and
+`sum r_k <= (sum sqrt(r_k))^2` give
+
+```text
+Pr[sum_(k notin {d,-d}) W_D(k)
+     > N^(-2*alpha)*W_D(d)]
+  <= N^(-(beta(lambda)-alpha)+o(1)).
+```
+
+At visibility one,
+
+```text
+beta(1) = 12*log_2(8/7)-1 = 1.3117409...,
+```
+
+and the paper-scale `lambda=1-O(1/log n)` changes this only by `o(1)`.
+Thus the correct-parity posterior has
+`1-O(N^(-2*alpha))` mass on `{d,-d}`, while the wrong-to-correct evidence
+ratio is `O(N^(-2*alpha))`, with the displayed high probability.
+
+Sharp posterior concentration does not make uniform candidate sampling
+efficient.  Within the correct parity class of size `N/2`, on the same event,
+
+```text
+CV^2
+  = (N/2)*sum_(k in C) pi_C(k)^2-1
+  >= N/(2+N^(-2*alpha))^2-1
+  = N/4-o(N).
+```
+
+More generally, if a proposal assigns total mass `r` to `{d,-d}`, its
+importance second-moment factor is at least `(1-o(1))/r`.  Polynomial relative
+variance therefore requires a proposal that has already placed
+inverse-polynomial mass on the hidden pair.  The square-root posterior has
+squared overlap `4/N*(1+o(1))` with the uniform state on the correct parity
+class, reproducing `Theta(sqrt(N))` state conversion in this candidate
+dictionary.  These are candidate-sampling and state-conversion barriers, not
+an arithmetic lower bound.
+
+There is no linear cross-parity control-variate shortcut in the matched
+ensemble.  With `p=(-1)^d`, set
+
+```text
+R=A_0+p*A_H,
+Q=A_0-p*A_H,
+g_1=(1+lambda^2/2)^q-1.
+```
+
+The exact moments satisfy
+
+```text
+E[R] = 1+4*g_1/N,
+E[Q] = 1,
+E[R*Q] = E[A_0^2-A_H^2] = 1+4*g_1/N.
+```
+
+Hence `Cov(R,Q)=0` exactly.  Equivalently, every fixed even/odd candidate
+pair has zero likelihood covariance after averaging the matched data.  This
+rules out only a linear control variate under this ensemble, not nonlinear
+arithmetic, annealing, or a data-dependent proposal that locates the hidden
+pair by another method.
 
 There is also a quantitative sign-cancellation diagnostic in the matched
 observation model.  Assume `d` is neither `0` nor `H`, the labels are iid
@@ -3148,6 +3563,16 @@ consumes the slack--and the label-averaged target fraction remains about
 `1/N`.  A concrete residue-pair syndrome uses the public
 labels to remove `Theta(log n)` modulus bits in polynomial time, but its
 no-reuse population loss prevents enough iterations to reach a small modulus.
+The clean triangular checksum factorization improves retention: it removes
+`log q-O(log log n)` bits with no rejected residue and keeps `q-m` free
+coordinates.  Its quotient phase contains nonlinear carry selectors, however,
+and an all-outcome fixed-garbage continuation beyond the contiguous raw
+valuation chain is impossible; selective continuation is precisely a new
+conditional fibre matching.  More generally, a reversible basis
+preprocessor plus one Hadamard yields an RMSS partner finder whenever it has
+inverse-polynomial mass advantage.  Exact full basis pairing is almost surely
+absent on the clean full cube, even though a nonconstructive partial matching
+covers nearly every path in expectation.
 Allowing arbitrary overlapping binary syndromes does not make this reuse
 free: the exact affine-code normal form replaces disjoint pairing by a system
 of higher-order modular carry congruences.  The all-embedding SNF/counting
@@ -3171,7 +3596,12 @@ useful, its total herald is `Theta(1/N)` on the balanced event.  The direct
 normalized likelihood filter has at most `O(1/N)` heralding once its posterior
 has constant useful mass.  Its uniform importance-sampling relative variance
 is exactly `N*sum_k pi(k)^2-1`, so it becomes linear in `N` when the posterior
-is concentrated.  At `q=12*n`, a stronger typical-instance calculation in
+is concentrated.  For a nondegenerate secret, a Hellinger calculation proves
+this concentration rather than assuming it: at `q=12*n` and high visibility,
+all likelihood outside `{d,-d}` is `N^(-Omega(1))` relative to the planted likelihood with high
+probability, yet uniform sampling in the correct parity class has
+`N/4-o(N)` relative variance.  At the same parameters, a stronger
+typical-instance calculation in
 the matched nondegenerate passive model shows that the average-sign magnitude
 seen by ordinary absolute-weight reweighting is at most
 `N^(-4.06843+epsilon)` with high probability for every fixed `epsilon>0`;
@@ -3183,7 +3613,12 @@ normalization.  Direct purified-density sign transformation costs
 route only to `Theta(sqrt(N))`.  Low-output fermionic-Gaussian circuits form
 another exact but scoped barrier: below the stated linear output thresholds,
 their full classical output distribution is parity-independent on typical
-labels.  Pair products of passive samples do give an exact smaller-
+labels.  Linear output is enough to escape: a disjoint-pair matchgate produces
+`6*n` visibility-one passive observations whose maximum-likelihood parity
+error is exponentially small.  Evaluating that decision efficiently still
+reduces exactly to the weighted coefficients `A_0,A_H`; Pfaffian
+simulatability only evaluates one proposed candidate and does not perform the
+cyclic coefficient extraction.  Pair products of passive samples do give an exact smaller-
 modulus recursion.  Along nondegenerate levels, including the odd-secret
 case before the final modulus, the visibility follows
 `lambda_ell=2*(lambda/2)^(2^ell)`; polynomial no-reuse recursion removes only

@@ -111,6 +111,15 @@ in one `f_Y mod H` fibre, even if selected after seeing `Y`.  The
 syndrome-isolated core is
 not contradicted because its additional modular measurement leaves a
 generally non-affine intersection.
+On a clean cube, a separate triangular checksum factorization removes
+`log q-O(log log n)` low bits without rejecting any checksum outcome, but
+leaves a nonlinear carry phase.  An all-outcome fixed-garbage recursion cannot pass the largest
+contiguous raw valuation chain, so it still removes only `O(log q)` bits.
+Any classical reversible basis preprocessor followed by one Hadamard reduces
+to an RMSS partner finder when it has inverse-polynomial mass-weighted
+advantage; on the clean cube, full exact basis pairing exists only if some
+live raw label equals `H`, although abstract partial matching is almost
+complete in expectation.
 Moreover, an exact translation-covariant
 orbit/reference adversary theorem extends the square-root barrier beyond
 QSVT: arbitrary fast orbit
@@ -133,7 +142,12 @@ while the direct normalized likelihood filter reaches useful posterior mass
 with at most `O(1/N)` heralding probability in its state-conversion model.  A
 uniform importance estimator has exact squared coefficient of variation
 `N*sum_k pi(k)^2-1`, hence needs linear-in-`N` sampling once the posterior is
-sharp.  At `q=12*n`, in the matched passive model with a nondegenerate secret,
+sharp.  For a nondegenerate secret, a Hellinger bound makes the sharpness
+quantitative: at `q=12*n` and high visibility the posterior is concentrated
+on `{d,-d}` with high probability, while uniform sampling in the correct
+parity class has
+`N/4-o(N)` relative variance.  At the same parameters, in the matched passive
+model with a nondegenerate secret,
 ordinary absolute-weight sign reweighting has average-sign magnitude at most
 `N^(-4.06843+epsilon)` with high probability for every fixed `epsilon>0`,
 although this does not lower-bound a direct arithmetic coefficient algorithm.
@@ -158,7 +172,13 @@ approximations retain `Omega(N)` normalization; directly taking
 the sign of the purified density-matrix block encoding costs `Omega(N)`,
 whereas frame polarization gives the sharper `Theta(sqrt(N))` route.  A
 bounded-output fermionic-Gaussian circuit is also exactly parity-blind below
-the signed-relation threshold; these are scoped access/circuit-class results.
+the signed-relation threshold.  This is qualitatively tight in output scaling:
+a linear-output
+disjoint-pair matchgate produces `6*n` passive visibility-one observations
+with exponentially reliable maximum-likelihood parity, but efficient
+postprocessing reduces to the same weighted `A_0/A_H` coefficient problem;
+Pfaffian evaluation does not perform the cyclic coefficient extraction.
+These are scoped access/circuit-class results.
 Exact operator-Schmidt analysis further rules out polynomial-bond
 MPO/Frobenius compression, not general circuits.  Pairwise
 Kuperberg-style collimation remains subexponential and its
