@@ -34,6 +34,12 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   potentially underdense once excess faults consume the slack--and its
   label-averaged nonzero-target fraction is still about `1/N`, with the
   zero-mask correction shown below;
+- arbitrary overlapping CNOT/syndrome branches admit an exact algebraic
+  normal form: removing `m` modulus bits requires simultaneous carry
+  congruences through degree `m`.  Fixed embeddings chosen independently of
+  `Y` satisfy even their degree-one part with probability only `2^(-m*k)`,
+  while an accept-all map retains at most `2*q/2^m` logical dimensions in
+  expectation;
 - even with arbitrary fast orbit translations and the efficient reflection
   about the low-weight reference subspace, parity requires
   `Omega(sqrt(N))` reference queries in that translation-covariant
@@ -48,6 +54,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   arbitrary fixed faulty bits.  The PGM is an existence theorem, not a
   polynomial circuit, so a positive efficient result still needs a new
   collective fault-aware decoder.
+- passive `X` outcomes do possess an exact pair-product recursion.  On every
+  nondegenerate reduced-frequency level--in particular for an odd secret
+  before the final two-point modulus--the passive visibility `lambda` changes
+  by `lambda -> lambda^2/2`; polynomial resources permit only
+  `O(log log n)` useful no-reuse levels and remove `o(n)` modulus bits.
+  Direct importance sampling of the exact Bayesian coefficient ratio has
+  relative variance `Theta(N)` once its posterior is sharp.
 
 ## Fibre formulation
 
@@ -2187,6 +2200,102 @@ For a general `q=poly(n)` block the same statement gives only
 `B=poly(n)`, still just `O(log n)` bits.  This is a route-specific population
 law, not a lower bound against overlapping or collective arithmetic circuits.
 
+### Overlapping linear syndromes expose carry constraints, not free reuse
+
+The preceding population bound leaves open a circuit that overlaps many
+CNOT parity checks rather than consuming disjoint pairs.  Such a circuit has
+an exact normal form.  Fix `B=2^m` dividing `N`.  On any one computational-
+syndrome branch its surviving support is an affine binary code
+
+```text
+x = x_0+G*z,  z in F_2^k,
+```
+
+where `G` has column rank `k`.  Let `v_i` be row `i` of `G`, put
+`sigma_i=(-1)^(x_0_i)`, and group the public labels by row pattern:
+
+```text
+A_v = sum_(i:v_i=v) sigma_i*Y_i mod B.
+```
+
+The restricted modular phase is exactly
+
+```text
+f_Y(x_0+G*z)
+  = f_Y(x_0)+sum_(v != 0) A_v*(v dot z mod 2) mod B.
+```
+
+Using the integer algebraic normal form
+
+```text
+v dot z mod 2
+  = sum_(nonempty T subset supp(v))
+      (-2)^(|T|-1)*product_(j in T) z_j,
+```
+
+this phase is constant modulo `B` if and only if, for every nonempty
+`T subset [k]` with `|T|<=m`,
+
+```text
+sum_(v:T subset supp(v)) A_v = 0 mod 2^(m-|T|+1).
+```
+
+The converse follows from Boolean Mobius inversion; terms of degree greater
+than `m` already contain a factor `2^m`.  Thus overlap replaces disjoint
+pairing by simultaneous higher-order carry congruences.  It does not let one
+physical phase label serve several independent logical variables for free.
+
+For a fixed full-rank affine embedding chosen independently of iid-uniform
+`Y`, the degree-one congruences alone are a surjective map onto `Z_B^k`: the
+row patterns spanning `F_2^k` contain an odd-determinant `k` by `k` minor.
+They therefore hold with probability exactly `B^(-k)`, and full constancy has
+probability at most `B^(-k)`.  A `Y`-dependent construction can evade this
+fixed-map bound, but it must solve the displayed modular carry system.
+
+There is also a sharp accept-all corollary.  If one fixed syndrome map must
+make `f_Y mod B` constant on every coset of `D=ker M`, then comparison of
+`f_Y(x xor a)-f_Y(x)` at `x=0` and at `x=e_i` gives, for every `a in D`,
+
+```text
+sum_(i:a_i=1) Y_i = 0 mod B,
+2*Y_i = 0 mod B for every i in supp(a).
+```
+
+These conditions are also sufficient.  Hence `D` may touch only coordinates
+with `Y_i mod B` in `{0,B/2}`.  If `X` counts those coordinates for random
+labels, then `X` is `Binomial(q,2/B)`, `dim D<=X`, and
+`E[dim D]<=2*q/B`; for example `dim D=O(q/B+log n)` with high probability.
+The residue-pair construction escapes by routing or rejecting branches; it
+pays the population loss above.
+
+Coherent reuse of many random hashes has an equally exact bookkeeping law.
+For a uniform `ell` by `q` binary hash `L`, measuring `Lx` preserves the
+off-diagonal `|x><x'|` precisely when
+
+```text
+L*(x xor x') = 0,
+```
+
+For fixed `L` the multiplier is the indicator of this event; averaging over a
+fresh uniform `L` gives exactly `2^(-ell)`.  Measuring and forgetting the hash
+record applies that dephasing irreversibly.  If the hash is only computed
+coherently, retaining `(L,Lx)` keeps orthogonal which-hash garbage, while
+reversing the computation before any measurement merely restores the original
+uncompressed state.  Erasing the hash while coherently summing every
+compatible pair is again an incidence-polar/fibre-erasure operation.
+
+These identities also explain why standard coding substitutions do not yet
+finish the decoder.  A trellis or BCJR message must retain the running
+residue in `Z_N`, hence has `N` states.  Binary polar or CNOT transforms retain
+the higher-degree terms above.  A conventional code-graph quantum walk still
+has label-averaged marked fraction
+`(1-2^(-kappa))/N`, so the usual marked-fraction term is `Theta(sqrt(N))`
+even if the graph gap is constant.  This does not rule out a new succinct
+`Y`-dependent arithmetic message or transition rule.  It identifies the
+positive interface precisely: efficiently construct an affine branch whose
+carry congruences hold with `k=n+e+O(log n)`, or construct the corresponding
+cross-fibre polar directly.  No such polynomial construction was found.
+
 ## A signed harmonic and an orbit-access query barrier
 
 The robust parity observable also has a particularly simple Fourier-harmonic
@@ -2455,6 +2564,96 @@ the coefficients are signed, this is only a hit-rate obstruction, not a tight
 estimator complexity bound; cancellation can make coefficient estimation
 harder.
 
+The normalization barrier can be stated exactly for ordinary importance
+sampling.  Write
+
+```text
+W(k) = P_D(omega^k),
+pi(k) = W(k)/sum_j W(j).
+```
+
+Sampling `k` uniformly to estimate `A_0=N^(-1)*sum_k W(k)` has squared
+coefficient of variation
+
+```text
+CV^2 = N*sum_k pi(k)^2-1.
+```
+
+The tight-envelope rejection sampler succeeds with probability
+
+```text
+A_0/max_k W(k) = 1/(N*pi_max).
+```
+
+Consequently, once the posterior has constant effective support, the direct
+Monte Carlo estimator needs `Theta(N)` samples and coherent rejection has
+the familiar `Theta(sqrt(N))` scale.  For a general proposal `Q`, the second-
+moment factor is
+
+```text
+sum_k pi(k)^2/Q(k) = 1+chi^2(pi || Q).
+```
+
+A useful proposal must therefore already place polynomial mass on the hidden
+posterior modes.  These are statements about importance/rejection methods,
+not lower bounds against arithmetic circuits.
+
+There is also a quantitative sign-cancellation diagnostic in the matched
+observation model.  Assume `d` is neither `0` nor `H`, the labels are iid
+uniform, and
+
+```text
+Pr[S_i=s | Y_i,d]
+  = (1+s*lambda*cos(2*pi*d*Y_i/N))/2.
+```
+
+Character orthogonality gives the exact first moments
+
+```text
+E[W(k)]
+  = [1+(lambda^2/2)*(1_(k=d)+1_(k=-d))]^q,
+E[A_0]
+  = 1+(2/N)*[(1+lambda^2/2)^q-1],
+E[A_H]
+  = (-1)^d*(2/N)*[(1+lambda^2/2)^q-1].
+```
+
+For comparison, put `C=(1+lambda)^q` and replace every ternary coefficient by
+its absolute value.  Every nonzero ternary word contains a unit coefficient,
+so its random modular sum is uniform and
+
+```text
+E[U_H] = (C-1)/N,
+E[U_0] = 1+(C-1)/N.
+```
+
+At `lambda=1` and `q=12*n`, the mean signed signal has scale
+`N^(12*log_2(3/2)-1)=N^6.01955...`, while the mean unsigned half-turn mass has
+scale `N^11`.  Their ratio is about `2*N^(-4.98045)`.  This compares first
+moments, not typical-instance ratios or a complexity lower bound.  It shows
+that separately approximating positive and negative witness counts to
+ordinary inverse-polynomial relative precision would not resolve the ratio of
+these first-moment scales.
+
+A least-significant-bit Bayes recursion does not evade the coefficient
+problem.  For `r in Z_(2^j)`, define the evidence of one congruence class by
+
+```text
+Z_(j,r) = (2^j/N)*sum_(k=r mod 2^j) L_D(k).
+```
+
+Fourier orthogonality gives exactly
+
+```text
+Z_(j,r)
+  = 2^(-q)*sum_(ell=0)^(2^j-1)
+      A_(ell*N/2^j)*exp(2*pi*i*r*ell/2^j).
+```
+
+The first step `j=1` already needs `A_H`; later steps require the other
+high-valuation coefficients.  Thus this recursion does not begin with an
+easy low-modulus instance.
+
 A simple passive 2-adic recursion is exactly blind at the first step.  For a
 nonzero secret, conditioning on one observed sign gives
 
@@ -2470,6 +2669,66 @@ exactly blind for an odd secret.  Guessing the parity and folding
 `Y=z+h*H` instead produces an integer-versus-half-integer frequency test, not
 a smaller instance of the same ordinary problem.  This closes the direct
 residue-Bayes recursion, while leaving more global recursions open.
+
+There is nevertheless an exact correlation self-reduction.  From two
+independent passive examples put
+
+```text
+Z = Y_1-Y_2,
+T = S_1*S_2.
+```
+
+When `2*d != 0 mod N`, `Z` is uniform and
+
+```text
+E[T | Z=z,d] = (lambda^2/2)*cos(2*pi*d*z/N).
+```
+
+More generally, for `j` examples, fixed signs `epsilon_i in {+1,-1}`,
+`Z=sum_i epsilon_i*Y_i`, and `T=product_i S_i`, expansion into `2^j`
+characters leaves only the two characters `+epsilon` and `-epsilon`:
+
+```text
+E[T | Z=z,d] = lambda^j*2^(1-j)*cos(2*pi*d*z/N).
+```
+
+Thus correlations really do manufacture new passive samples, but with
+attenuated visibility.  Bucket `Q` labels modulo `B=2^m` and disjointly pair
+equal residues.  The exact expected number of pairs is
+
+```text
+E[P]
+  = Q/2-(B/4)*[1-(1-2/B)^Q].
+```
+
+Discard the common bucket residue and divide the difference by `B`.  Each
+pair is then a sample over `Z_(N/B)` with visibility `lambda^2/2`, provided
+`2*d != 0` in the current input modulus.  At a degenerate current frequency
+an extra character survives and must be handled separately.  Retaining a
+constant fraction forces `B=O(Q)`, hence removes only `O(log Q)` modulus bits
+per level.  Along nondegenerate levels, after `ell` pair levels the visibility
+is
+
+```text
+lambda_ell = 2*(lambda/2)^(2^ell).
+```
+
+For constant initial visibility, polynomial sample complexity permits only
+`ell=O(log log n)` levels, even optimistically removing just
+`O(log n*log log n)=o(n)` bits.  This is a genuine positive recursive
+construction and a matching no-reuse resource law, not a lower bound against
+dense processing.
+
+The same calculation diagnoses the closest Goldreich--Levin bucket test.
+For a frequency set `K`, its pair kernel estimates
+`sum_(k in K)|hat f(k)|^2`, but the kernel separating even from odd
+frequencies is exactly supported on `Y'-Y=H`.  A quadratic test therefore
+waits for a half-turn collision, with expected ordered-pair count
+`Q*(Q-1)/N`.  Higher-
+order prefix tests are the signed modular relations above.  The chosen-query
+sparse-Fourier and hidden-number theorems cited below do not supply these
+consume-once offsets; this access-model mismatch does not prove passive
+decoding hard.
 
 Directly Fourier transforming a polynomial-size classical sample table has
 the same limitation.  Any normalized amplitude state supported on `M` known
@@ -2553,6 +2812,12 @@ consumes the slack--and the label-averaged target fraction remains about
 `1/N`.  A concrete residue-pair syndrome uses the public
 labels to remove `Theta(log n)` modulus bits in polynomial time, but its
 no-reuse population loss prevents enough iterations to reach a small modulus.
+Allowing arbitrary overlapping binary syndromes does not make this reuse
+free: the exact affine-code normal form replaces disjoint pairing by a system
+of higher-order modular carry congruences.  Fixed embeddings chosen
+independently of `Y` satisfy those constraints with exponentially small
+probability, while finding a useful `Y`-dependent embedding is another
+arithmetic decoding problem.
 The best generic coherent scale identified is
 `Theta(sqrt(N)) = 2^(n/2)`.  The operator-Schmidt theorem and the
 statistical-query theorem make two of these route boundaries rigorous without turning
@@ -2566,7 +2831,13 @@ reflection queries for bounded-error parity.  Candidate verification has
 true-candidate joint mass exactly `1/N`; once its conditional candidate is
 useful, its total herald is `Theta(1/N)` on the balanced event.  The direct
 normalized likelihood filter has at most `O(1/N)` heralding once its posterior
-has constant useful mass.  These
+has constant useful mass.  Its uniform importance-sampling relative variance
+is exactly `N*sum_k pi(k)^2-1`, so it becomes linear in `N` when the posterior
+is concentrated.  Pair products of passive samples do give an exact smaller-
+modulus recursion.  Along nondegenerate levels, including the odd-secret
+case before the final modulus, the visibility follows
+`lambda_ell=2*(lambda/2)^(2^ell)`; polynomial no-reuse recursion removes only
+`o(n)` bits.  These
 theorems leave open only circuits that exploit the internal Boolean modular
 arithmetic beyond the orbit algebra or compute the weighted ternary
 coefficient ratio by a new method.

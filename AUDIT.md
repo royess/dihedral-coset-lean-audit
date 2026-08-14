@@ -61,8 +61,12 @@ target fraction remains about `1/N`, so
 Gaussian elimination does not finish the decoder.  The strongest explicit
 `Y`-dependent syndrome pairs labels by their residues
 modulo `B=Theta(n)` and removes `Theta(log n)` modulus bits, but a no-reuse
-layer typically retains only about one quarter of its input population and cannot be
-iterated to a small modulus while maintaining density one.  Separately, a
+layer retains at most one quarter of its input population asymptotically with
+high probability and cannot be iterated to a small modulus while maintaining
+density one.  Arbitrary
+overlapping CNOT/syndrome branches have an exact affine-code normal form:
+removing `m` modulus bits requires simultaneous carry congruences through
+degree `m`, so overlap does not supply free coherent reuse.  Separately, a
 query adversary strengthens the scoped
 implementation barrier: even with free arbitrary powers of the orbit shift
 and the efficient low-weight reference-subspace reflection, parity needs
@@ -80,7 +84,14 @@ measurements give a complementary positive result--`O(n)` samples identify
 a weighted ternary subset-sum polynomial under a uniform secret prior; direct
 likelihood filtering exposes
 an at-most-`O(1/N)` useful-posterior heralding probability in that normalized
-state-conversion model.  Parseval now gives a sharp
+state-conversion model.  Uniform importance sampling has exact squared
+coefficient of variation `N*sum_k pi(k)^2-1`; it takes linear-in-`N` samples
+when the posterior has constant effective support.  An exact pair-product
+recursion creates passive samples over smaller 2-adic moduli.  Writing its
+initial visibility as `lambda_pass`, the visibility is
+`2*(lambda_pass/2)^(2^ell)` along nondegenerate levels, including an odd
+secret before the final modulus, limiting polynomial no-reuse recursion to
+`o(n)` removed bits.  Parseval now gives a sharp
 statistical-query boundary: against
 the conventional adversarial `STAT` oracle, polynomially many adaptive
 `STAT(1/poly(n))` queries have uniform-secret average parity advantage at most

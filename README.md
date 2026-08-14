@@ -104,7 +104,10 @@ prepared difference still hits the required residue with probability about
 `1/N` on average over the iid public labels in the Born-planted coupling.  A
 concrete residue-pair implementation can remove
 `Theta(log n)` modulus bits in polynomial time, but loses too much population
-to iterate to a small modulus.  Moreover, an exact translation-covariant
+to iterate to a small modulus.  General overlapping CNOT/syndrome branches
+admit an exact carry-congruence normal form; overlap replaces the population
+loss by simultaneous modular constraints and does not yet produce a decoder.
+Moreover, an exact translation-covariant
 orbit/reference adversary theorem extends the square-root barrier beyond
 QSVT: arbitrary fast orbit
 powers and an efficient reflection about the low-weight reference space still
@@ -124,6 +127,13 @@ coefficients of a weighted
 ternary subset-sum polynomial; the direct dynamic program is exponential,
 while the direct normalized likelihood filter reaches useful posterior mass
 with at most `O(1/N)` heralding probability in its state-conversion model.  A
+uniform importance estimator has exact squared coefficient of variation
+`N*sum_k pi(k)^2-1`, hence needs linear-in-`N` sampling once the posterior is
+sharp.  Pair products provide an exact passive smaller-modulus recursion, but
+if `lambda_pass` is the initial visibility, then along nondegenerate levels--
+including an odd secret before the final modulus--their visibility becomes
+`2*(lambda_pass/2)^(2^ell)` after `ell` levels, so a polynomial no-reuse
+recursion removes only `o(n)` modulus bits.  A
 new Parseval
 argument makes one part rigorous: against the conventional adversarial
 `STAT` oracle, the uniform-secret average parity advantage of any adaptive

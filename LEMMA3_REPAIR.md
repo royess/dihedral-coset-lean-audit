@@ -601,8 +601,13 @@ linear equation involving the unknown half-turn difference rather than the
 secret alone.  Thus the construction isolates, but does not solve, a
 density-one RMSS core.  An explicit `Y`-dependent residue-pair syndrome can
 remove `Theta(log n)` modulus bits in polynomial time, but its no-reuse
-population typically drops by about a factor of four per large-`B` layer, so it cannot
-be iterated to a small modulus while retaining density one.
+population drops by at least a factor of four asymptotically with high
+probability per large-`B` layer, so it cannot be iterated to a small modulus
+while retaining density one.  More
+general overlapping CNOT/syndrome branches admit an exact affine-code normal
+form: removing `m` modulus bits requires simultaneous higher-order carry
+congruences, and no polynomial `Y`-dependent solver for those constraints was
+found.
 
 The robust observable's signed conjugation harmonic also yields a stronger
 scoped lower bound.  In the translation-covariant orbit/reference model, an
@@ -630,7 +635,14 @@ half-turn and zero coefficients of a weighted ternary subset-sum generating
 function under a uniform secret prior.  Coherent likelihood filtering
 prepares a useful posterior only
 with at most `O(1/N)` heralding probability in its direct normalized
-state-conversion model.  A
+state-conversion model.  Uniform importance sampling has exact squared
+coefficient of variation `N*sum_k pi(k)^2-1`, so it costs linear in `N` after
+the posterior concentrates.  Pair products give an exact passive recursion
+to smaller 2-adic moduli.  Writing their initial visibility as `lambda_pass`,
+along nondegenerate levels, including an odd secret before the final modulus,
+their visibility after `ell` levels is
+`2*(lambda_pass/2)^(2^ell)`; polynomial no-reuse recursion removes only
+`o(n)` modulus bits.  A
 normalized-Fourier/Parseval argument now proves that,
 against the conventional adversarial `STAT` oracle, every adaptive
 polynomial-query `STAT(1/poly(n))` decoder has uniform-secret average parity
