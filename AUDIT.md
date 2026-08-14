@@ -74,7 +74,14 @@ escapes because the additional modular measurement leaves a generally
 non-affine intersection.  A clean triangular checksum factorization removes
 `log q-O(log log n)` low bits without rejecting any checksum outcome, but its
 quotient is nonlinear and any all-outcome fixed-garbage continuation remains
-limited by the `O(log q)` raw valuation chain.  A reversible basis
+limited by the `O(log q)` raw valuation chain.  On the clean cube, coarse-fibre indexing is
+easier but still insufficient: exact residue-DP rank/unrank costs
+`O(poly(q)*R)` modulo `R`, and an ordinary checksum preserves a fresh linear
+quotient on a small-knapsack fibre.  Polynomial `R` removes only `O(log n)`
+bits; refinement to the half-turn scale is exponential in this trellis
+realization.  Every `O(log n)`-local final matching after the triangular
+checksum chart has exponentially small expected Born-weighted coverage over
+the iid public high labels at the stated parameters.  A reversible basis
 preprocessor plus one Hadamard yields an RMSS finder whenever it has
 inverse-polynomial mass-weighted advantage; on the clean cube, exact full
 basis pairing needs a live raw `H` label, although abstract partial matching
@@ -107,7 +114,14 @@ matched passive model with a nondegenerate secret, ordinary absolute-weight
 sign reweighting has average-sign magnitude at most
 `N^(-4.06843+epsilon)` with high
 probability for every fixed `epsilon>0`; this does not lower-bound a direct
-arithmetic coefficient algorithm.  An exact pair-product
+arithmetic coefficient algorithm.  At visibility `1-Theta(1/log n)`, a
+uniformly accurate `poly(n)`-sparse trigonometric expansion of the log
+likelihood gives a precise constructive optimizer interface.  The radix
+envelopes analyzed here remain too loose to certify polynomial pruning, and
+scalar polynomials in `G_J` below the
+displayed `Theta(n/log n)` threshold cannot create its half-turn harmonic with
+high probability.
+An exact pair-product
 recursion creates passive samples over smaller 2-adic moduli.  Writing its
 initial visibility as `lambda_pass`, the visibility is
 `2*(lambda_pass/2)^(2^ell)` along nondegenerate levels, including an odd

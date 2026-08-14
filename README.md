@@ -115,6 +115,14 @@ On a clean cube, a separate triangular checksum factorization removes
 `log q-O(log log n)` low bits without rejecting any checksum outcome, but
 leaves a nonlinear carry phase.  An all-outcome fixed-garbage recursion cannot pass the largest
 contiguous raw valuation chain, so it still removes only `O(log q)` bits.
+On the clean cube, coarse modular fibres are nevertheless exactly rankable: residue DP gives a
+reversible chart modulo `R` in `O(poly(q)*R)` size, and an ordinary-integer
+checksum leaves a fresh linear quotient on a small-knapsack support.  These
+are polynomial preprocessors for `R=poly(n)`, but their known refinement cost
+is exponential in the total number of peeled bits.  After the triangular
+checksum chart, every `O(log n)`-local final-half-turn matching has
+exponentially small expected Born-weighted coverage over the iid public high
+labels at the stated parameters.
 Any classical reversible basis preprocessor followed by one Hadamard reduces
 to an RMSS partner finder when it has inverse-polynomial mass-weighted
 advantage; on the clean cube, full exact basis pairing exists only if some
@@ -151,6 +159,13 @@ model with a nondegenerate secret,
 ordinary absolute-weight sign reweighting has average-sign magnitude at most
 `N^(-4.06843+epsilon)` with high probability for every fixed `epsilon>0`,
 although this does not lower-bound a direct arithmetic coefficient algorithm.
+For visibility `1-Theta(1/log n)`, the whole log likelihood also has a
+uniformly accurate polynomial-size sparse trigonometric expansion.  A
+polynomial global optimizer for that expansion would decode `{d,-d}`, but
+the radix envelopes analyzed here remain too loose to certify polynomial
+pruning.  Every scalar polynomial in `G_J` below the
+displayed `Theta(n/log n)` threshold has zero half-turn Fourier coefficient
+with high probability.
 Pair products
 provide an exact passive smaller-modulus recursion, but
 if `lambda_pass` is the initial visibility, then along nondegenerate levels--

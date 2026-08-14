@@ -48,6 +48,17 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   quotient phase is nonlinear.  Any all-outcome fixed-garbage continuation
   beyond the raw contiguous valuation chain would contradict exact fibre
   uniformity, so this no-rejection route peels only `O(log q)` bits;
+- on a clean cube, coarse subset-sum fibres modulo `R=poly(n)` are not an unresolved indexing
+  problem: residue dynamic programming gives exact reversible rank/unrank in
+  `O(poly(q)*R)` circuit size.  An ordinary-integer checksum gives an even
+  cleaner linear quotient on a small-knapsack support.  Their displayed
+  DP/trellis implementations scale exponentially in the total number of
+  peeled modulus bits, however, and therefore expose only `O(log n)` bits at
+  polynomial cost;
+- after the triangular checksum chart, a final-half-turn matching whose logical moves
+  have Hamming radius `w` covers at most `D_w/M` expected mass, where
+  `D_w=sum_(j=1)^w choose(K,j)` and `M` is the residual modulus.  In particular,
+  coordinate-greedy and `O(log n)`-local matchings remain exponentially sparse;
 - every classical reversible basis preprocessor followed by one Hadamard
   reduces to explicit half-turn basis pairing and hence to RMSS when it has
   inverse-polynomial mass-weighted advantage.  On the clean cube, full exact
@@ -84,7 +95,14 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   fact concentrated on `{d,-d}` with a polynomially tunable exponentially
   small tail, while uniform sampling inside the correct parity class has
   `N/4-o(N)` relative variance.
-  At the same parameters,
+  At paper-scale visibility below one, the complete log likelihood nevertheless
+  has a uniformly accurate `poly(n)`-sparse trigonometric representation.
+  Thus passive decoding reduces constructively to a sparse high-frequency
+  optimizer or partition algorithm.  The radix envelopes analyzed below
+  remain too loose to certify polynomial pruning, and every scalar polynomial
+  in `G_J` below the displayed `Theta(n/log n)`
+  threshold has exactly zero half-turn Fourier coefficient with high
+  probability.  At the same parameters,
   in the matched passive model with a nondegenerate secret, ordinary
   absolute-weight sign reweighting has average-sign magnitude at most
   `N^(-4.06843+epsilon)` with high probability for every fixed
@@ -172,8 +190,8 @@ were available, applying their inverses branchwise would erase the fibre and
 leave the half bit coherent.
 
 This construction is an existence statement.  Implementing the polar
-partial isometry, or implementing the controlled uniform fibre sampler, is
-the computational problem.
+partial isometry, or implementing the controlled full-modulus uniform fibre
+sampler, is the computational problem.
 
 ## A concrete signed-frame candidate
 
@@ -314,8 +332,9 @@ Several standard constructions all expose the same `sqrt(N)` scale.
    singular-value/normalization scale about `N^(-1/2)`.  Generic QSVT or polar
    transformation again needs degree of order `sqrt(N)`.
 4. Coherent pretty-good-measurement implementations require the same
-   inverse-square-root frame operation.  A clean uniform fibre sampler would
-   solve it, but constructing that sampler is exactly the missing primitive.
+   inverse-square-root frame operation.  A clean full-modulus uniform fibre
+   sampler would solve it, but constructing that sampler is exactly the
+   missing primitive.
 5. Hashing a large fibre down to unique or polynomial-size buckets removes
    the multiplicity only by adding about `n` constraints.  The remaining
    inversion problem has density near one and generic search again costs
@@ -427,8 +446,9 @@ solutions cannot remove the canonical-projection loss.  Retaining many
 independent classical solver seeds does not supply this factor: after
 normalization, each seed still selects one representative.  Gaining the full
 multiplicity requires coherently erasing the seed or recovering a canonical
-seed/rank from the physical solution, which is again the missing large-fibre
-sampling or rank/unrank operation.  This is why each active correction pool in
+seed/rank from the physical solution, which is again the missing
+half-turn-resolving large-fibre sampling or rank/unrank operation.  This is
+why each active correction pool in
 the two-pool construction must stay near critical density even when a separate
 large common label pool is available.
 
@@ -998,10 +1018,13 @@ produced a polynomial circuit.
    still has to erase the multiplicity and coherently distinguish the two
    half-turn fibres.  The same problem reappears at the first recursive layer.
 5. Leftover-hash and decoupling estimates prove that the *forward* subset-sum
-   value is statistically close to uniform.  They do not invert the map or
-   clean the preimage index.  Sequentially choosing Boolean variables leaves
-   a final critical-density core; hash isolation makes a fibre small but still
-   requires finding and coherently cleaning its element.
+   value is statistically close to uniform.  They do not by themselves invert
+   the map or clean the preimage index.  For a polynomial modulus `R`, the
+   residue-DP chart below does clean the coarse fibre in `O(poly(q)*R)` size;
+   its cost becomes exponential as `R` approaches the half-turn scale.
+   Sequentially choosing Boolean variables leaves a final critical-density
+   core; hash isolation makes a fibre small but still requires finding and
+   coherently cleaning its element.
 6. Lattice, meet-in-the-middle, Wagner, and local-relation approaches do not
    become polynomial at the paper's parameters.  In particular, with only
    polynomially many random coefficients, the expected number of signed
@@ -1922,12 +1945,129 @@ E_(Y,r)[eta_r] = 1 + (2^k-1)/B.
 ```
 
 Taking `k=m+O(1)` gives constant expected length.  The forward hash is an
-efficient circuit; the unresolved operation is compression.  A standard
-explicit-table realization enumerates the `2^k` paths, while retaining `x`
-implicitly also retains the child/path indices.  Converting the implicit
-fibre into a short clean phase-vector basis is again coherent fibre-index
-erasure.  This explains why the positive hashing identity leads to a
-collimation sieve rather than a polynomial decoder.
+efficient circuit.  If one insists on a short explicit list, a standard table
+still enumerates its paths.  Exact indexing of a **large** coarse fibre is
+easier than that sentence suggests, however, and deserves to be separated
+from full-modulus fibre erasure.
+
+### Small-modulus fibres have exact dynamic-programming charts
+
+Fix any `R=2^h` dividing `N` and a measured residue `t`.  Define suffix counts
+
+```text
+C_i(s) = number of x_i,...,x_(k-1) such that
+         sum_(j>=i) x_j*Y_j = s mod R.
+```
+
+They obey
+
+```text
+C_k(0)=1,
+C_k(s)=0 for s!=0,
+C_i(s)=C_(i+1)(s)+C_(i+1)(s-Y_i).
+```
+
+The table has `k*R` entries of at most `k+1` bits.  For a path in the fibre,
+lexicographic rank scans the coordinates from left to right.  When `x_i=1`,
+it adds the number `C_(i+1)(s)` of preceding completions with `x_i=0`, then
+updates the remaining residue to `s-Y_i`.  Unranking performs the inverse
+comparison.  Reversible arithmetic and coherent table lookup therefore give
+an exact clean rank/unrank circuit of size
+
+```text
+O(poly(k)*R)
+```
+
+without QRAM; invalid ranks retain a validity flag.  The variable fibre size
+is harmless: valid ranks occupy the interval `[0,eta_t)`, padded by
+zero-amplitude computational states.  Operationally, compute the rank, unrank
+it into scratch, XOR that reconstructed path into the original path register,
+and reverse the scratch computation; every valid input path is thereby
+cleared without touching its phase.  On the measured phase state this gives
+
+```text
+eta_t^(-1/2) * sum_(j<eta_t)
+  omega_(N/R)^(d*q_t(j)) |j>,
+
+x_t(j) = unrank(t,j),
+q_t(j) = [f_Y(x_t(j))-t]/R mod N/R.
+```
+
+Both `x_t(j)` and `q_t(j)` are computable coherently.  Thus, for
+`R=poly(n)`, canonical indexing of the exponentially large **coarse** fibre
+is polynomial.  What remains hard is that `q_t(j)` is generally an
+unstructured function of the rank, and the interval has exponentially many
+valid indices.  This chart is not a short explicit phase-vector list and does
+not align the two full half-turn fibres.
+
+There is a related one-shot variant that keeps the quotient linear.  Write
+
+```text
+Y_i = A_i+T*B_i,
+0<=A_i<T,             T=2^L,
+C_T(x)=sum_i A_i*x_i as an ordinary integer.
+```
+
+Measure the ordinary checksum `C=C_T(x)`, rather than only its residue.  On a
+clean cube put `eta_C=|{x:C_T(x)=C}|`.  The normalized branch is, up to the
+global phase `omega_N^(d*C)`,
+
+```text
+eta_C^(-1/2) * sum_(C_T(x)=C)
+  omega_(N/T)^(d*sum_i B_i*x_i) |x>.
+```
+
+The remaining multiplier is a fresh linear subset sum over `Z_(N/T)`;
+conditioning on all `A_i` and the Born outcome leaves the `B_i` iid uniform.
+The support, however, is a small-integer knapsack fibre rather than a cube.
+Ordinary-sum counts
+
+```text
+D_i(s)=D_(i+1)(s)+D_(i+1)(s-A_i),
+0<=s<=sum_i A_i,
+```
+
+give exact reversible rank/unrank in `poly(k,T)` size.  If
+`R_C=sum_i A_i+1<=k*T`, and `H_Shannon` denotes entropy in bits, then
+
+```text
+E_(C~Born)[log_2 eta_C] = k-H_Shannon(C) >= k-log_2 R_C,
+Pr[eta_C < delta*2^k/R_C] <= delta.
+```
+
+So a polynomial `T` removes `O(log n)` phase bits while losing only
+`O(log n)` branch entropy with high Born probability.  The branch also has an
+exact knapsack-MPS representation of bond dimension at most `R_C`:
+
+```text
+sum_(C_T(x)=C) omega_(N/T)^(d*B dot x)|x>
+ = (1/R_C) * sum_(u=0)^(R_C-1) zeta^(-u*C)
+     tensor_i (|0>+zeta^(u*A_i)*omega_(N/T)^(d*B_i)|1>),
+```
+
+where `zeta` is an `R_C`-th root.  This is a coherent sum of product vectors,
+not a classical mixture or a single product state.
+
+Neither chart iterates to a polynomial full decoder.  Refining the modular
+chart to total modulus `2^L` costs `O(poly(k)*2^L)` by the same residue DP.
+Successive ordinary digit sums accumulate a product trellis, while the
+one-shot checksum at `T=2^L` already costs `poly(k)*2^L` and dominates that
+plan.  Hence this explicit route is polynomial only for `L=O(log n)`.  At
+`R=N`, exact rank/unrank has size `O(poly(k)*N)`.  Ranking the two residues
+separately and matching equal ranks then implements an explicit clean
+half-turn eraser with accepted fraction
+
+```text
+2*min(eta_t,eta_(t+H))/(eta_t+eta_(t+H)).
+```
+
+This is `1-o(1)` on the simultaneous random-fibre flatness event.  Preparing a controlled
+uniform fibre from zero additionally uses uniform-interval rotations and is
+accurate to `epsilon` with polynomial overhead in `log(1/epsilon)`.  This is
+a valid exponential upper bound, but it is slower than the existing
+`Theta(sqrt(N))` constant-accuracy frame/postselection route.  The scaling is
+a property of this DP/trellis realization, not a lower bound against a new
+arithmetic circuit.
 
 Pairwise Kuperberg-style collimation does aggregate relations, but the usual
 resource law remains subexponential and the hidden faults make explicit
@@ -2350,6 +2490,71 @@ That is the same fibre-matching primitive under investigation, rather than an
 automatic continuation of triangular elimination.  Fixed-basis faults on a
 pivot also invalidate the cube bijection, so this paragraph is a clean-core
 structural construction, not a repair of the unflagged fault model.
+
+### Local matching after the checksum is still exponentially sparse
+
+The nonlinear quotient does not make a coordinate-greedy final matching
+effective.  Let `B=2^m` with `m<n`, put `M=N/B`, `K=q-m`, and condition on low residues for
+which the triangular chart exists and on its measured residue `r`.  Write
+`Y_i=a_i+B*b_i`.  Because the pivot choice and `r` use only the `a_i`, the
+high quotients `b_i` remain iid uniform in `Z_M`.  For two distinct logical
+paths `z,z'`,
+
+```text
+Q_r(z')-Q_r(z)
+ = sum_(i notin P) (z'_i-z_i)*b_i
+   +sum_(p in P) [u_p(z')-u_p(z)]*b_p
+   +kappa_r(z')-kappa_r(z) mod M.
+```
+
+Some nonpivot coordinate differs, and its coefficient is `+1` or `-1`.
+Conditioning on every other high quotient therefore gives the exact identity
+
+```text
+Pr_b[Q_r(z')-Q_r(z)=M/2] = 1/M.
+```
+
+Put
+
+```text
+D_w = sum_(j=1)^w choose(K,j).
+```
+
+Let `Gamma_w` be the largest vertex fraction covered by any matching whose
+pairs have logical Hamming distance at most `w` and quotient difference
+`M/2`.  The matching may be selected after seeing all public high labels.
+Every covered vertex must have at least one of its `D_w` possible local
+partners, so
+
+```text
+E_b[Gamma_w | a,r] <= D_w/M,
+Pr_b[Gamma_w>=epsilon | a,r] <= D_w/(epsilon*M).
+```
+
+For `w=1`, the expected number of valid undirected coordinate edges is
+exactly `K*2^(K-1)/M`; a greedy coordinate sweep therefore covers at most
+`K/M` expected mass.
+
+This statement survives the final checksum's Born-size bias.  If `S_t` is
+the selected fibre of `Q_r mod M/2` and `Gamma_(w,t)` is its maximum local
+matching coverage, every valid half-turn edge lies inside one `S_t`, hence
+
+```text
+sum_t (|S_t|/2^K)*Gamma_(w,t) <= Gamma_w.
+```
+
+Thus the same expectation and Markov bounds hold when `t` is the actually
+measured Born outcome.  For `K=poly(n)`, `B=poly(n)`, and `w=O(log n)`,
+
+```text
+D_w/M = 2^(-n+O(log^2 n)).
+```
+
+This rules out even label-adaptive bounded-displacement involutions, not only
+a fixed catalogue.  It also covers a conjugated bit flip whose reversible
+light cone changes at most `w` logical input coordinates.  It does not cover
+nonlocal arithmetic pairers or polynomial-depth circuits with block-wide
+light cones; those return to the RMSS/fibre-alignment opening.
 
 ### Overlapping linear syndromes expose carry constraints, not free reuse
 
@@ -3267,6 +3472,92 @@ class, reproducing `Theta(sqrt(N))` state conversion in this candidate
 dictionary.  These are candidate-sampling and state-conversion barriers, not
 an arithmetic lower bound.
 
+### A sparse log-likelihood reduction, but no sparse optimizer
+
+At visibility strictly below one, the likelihood itself has a useful sparse
+representation.  Define
+
+```text
+rho = lambda/(1+sqrt(1-lambda^2)).
+```
+
+For `s` in `{+1,-1}` one has the exact uniformly convergent series
+
+```text
+ln(1+s*lambda*cos(theta))
+ = -ln(1+rho^2)
+   +2*sum_(j>=1) (-1)^(j+1)*s^j*rho^j*cos(j*theta)/j.
+```
+
+Let `G_J(k)` be the sum of these series over the `q` observations, truncated
+after harmonic `J`.  Then
+
+```text
+||G_J-ln W_D||_infinity
+ <= 2*q*rho^(J+1)/[(J+1)*(1-rho)].
+```
+
+For the paper-scale visibility `1-lambda=Theta(1/log n)`, one has
+`1-rho=Theta(1/sqrt(log n))`.  Taking `J=c_trunc*sqrt(log n)` with a sufficiently
+large constant `c_trunc` makes the error an arbitrarily small constant times `n`, and
+`J=c_1*log^(3/2) n` for a sufficiently large constant `c_1` makes it `O(1)`.
+The truncated score has only
+`q*J=poly(n)` public frequencies `j*Y_i`.
+
+Combined with the Hellinger event above, this is a genuine constructive
+reduction.  There the planted log likelihood exceeds every candidate outside
+`{d,-d}` by `2*alpha*ln N`.  Consequently, an additive-`o(n)` global
+optimizer for the sparse trigonometric polynomial `G_J` would recover
+`{d,-d}`, and a sufficiently accurate partition algorithm for `exp(G_J)`
+would decide parity.  No such polynomial optimizer or partition-function
+evaluator was found.  At `lambda=1`, likelihood factors can vanish and no
+uniform finite log truncation exists, so this uniformly controlled reduction
+uses the noisy high-visibility regime rather than the clean endpoint.
+
+The two elementary radix envelopes analyzed here do not yet yield a
+polynomial pruning theorem.  On a prefix
+`k=a+2^ell*u`, exact maximization is the same sparse problem on the residual
+group `Z_(N/2^ell)` with prefix-dependent phases.  The harmonic triangle envelope has
+`Theta(n log log n)` slack,
+and even the factorwise envelope remains a linear amount above the planted
+score.  These two envelope bounds therefore remain too loose to certify a
+polynomial pruning rule for the early prefix family.  Exact elimination of
+one high bit also destroys sparsity: even
+`max_b cos(2*pi*(u+b*H)/N)=|cos(pi*u/H)|` has all `H` Fourier coefficients
+nonzero.
+
+There is a sharper parity-only limitation for low-order processing.  Let
+
+```text
+F_J = {+/- j*Y_i : 1<=i<=q, 1<=j<=J}.
+```
+
+If a scalar polynomial of degree at most `pdeg` in `G_J` has a nonzero
+half-turn Fourier coefficient, some word of length at most `pdeg` in `F_J` must
+sum to `H`.  For a fixed nonzero coefficient vector the probability of this
+event is at most `J*pdeg/N`, and a union bound gives
+
+```text
+Pr[H occurs in the Fourier support]
+ <= (pdeg+1)*J*pdeg*(2*q*J)^pdeg/N.
+```
+
+Hence, with high probability, every
+
+```text
+pdeg <= (1-epsilon)*log_(2*q*J)(N) = Omega(n/log n)
+```
+
+degree scalar polynomial in `G_J` has **exactly zero** half-turn coefficient,
+even if its scalar coefficients are chosen after seeing the public labels.
+Since the parity partition difference is the `H` coefficient of
+`exp(G_J)`, low-order Taylor, Chebyshev, low-total-order Bessel, and cluster
+truncations return equal parity sums until they implicitly aggregate dense
+modular relations.
+This is a scoped algebraic barrier.  It does not exclude branching,
+nonpolynomial arithmetic, or a new implicit optimizer for the sparse
+high-frequency score.
+
 There is no linear cross-parity control-variate shortcut in the matched
 ensemble.  With `p=(-1)^d`, set
 
@@ -3573,6 +3864,15 @@ preprocessor plus one Hadamard yields an RMSS partner finder whenever it has
 inverse-polynomial mass advantage.  Exact full basis pairing is almost surely
 absent on the clean full cube, even though a nonconstructive partial matching
 covers nearly every path in expectation.
+On a clean cube, coarse-fibre indexing itself is now explicit: residue DP gives exact
+reversible rank/unrank modulo `R` in `O(poly(q)*R)` size, and an ordinary
+small-integer checksum leaves a fresh linear high-label phase on a
+polynomial-bond knapsack support.  These are real polynomial preprocessors
+for `R=poly(n)`.  Their known refinement cost is exponential in the total
+peeled modulus bits, reaching `O(poly(q)*N)` at full fibre resolution.  Over
+iid public high labels, the final-half-turn graph of every `O(log n)`-local
+logical matching still has only exponentially small expected Born-weighted
+coverage.
 Allowing arbitrary overlapping binary syndromes does not make this reuse
 free: the exact affine-code normal form replaces disjoint pairing by a system
 of higher-order modular carry congruences.  The all-embedding SNF/counting
@@ -3625,7 +3925,14 @@ case before the final modulus, the visibility follows
 `o(n)` bits.  These
 theorems leave open only circuits that exploit the internal Boolean modular
 arithmetic beyond the orbit algebra or compute the weighted ternary
-coefficient ratio by a new method.
+coefficient ratio by a new method.  In the noisy high-visibility regime, the
+log likelihood itself now has a uniformly accurate polynomial-size sparse
+trigonometric representation, so one especially concrete opening is an
+implicit global optimizer for that random high-frequency polynomial.  The
+radix envelopes analyzed here remain too loose to certify polynomial
+pruning, while scalar polynomials in `G_J` below the
+displayed `Theta(n/log n)` threshold have no half-turn harmonic at all with
+high probability.
 
 This is not a no-go theorem.  A distribution-specific collective circuit
 could conceivably decode only the parity without exposing a reusable fibre

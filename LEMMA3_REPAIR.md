@@ -615,7 +615,14 @@ generally non-affine intersection.
 On a clean cube, a triangular checksum factorization gives a second exact
 preprocessor: it removes `log q-O(log log n)` low bits without rejecting any
 checksum outcome, but leaves a nonlinear quotient phase.  Any all-outcome fixed-garbage
-continuation is limited by the raw `O(log q)` valuation chain.  A classical
+continuation is limited by the raw `O(log q)` valuation chain.  On the clean cube, coarse modular
+fibres do admit exact canonical charts: residue-DP rank/unrank has size
+`O(poly(q)*R)` modulo `R`, and an ordinary checksum keeps a fresh linear
+quotient on a small-knapsack support.  These are polynomial for `R=poly(n)`,
+but the known trellis cost is exponential in the total peeled modulus bits.
+Every `O(log n)`-local final-half-turn matching after the triangular checksum
+chart also has exponentially small expected Born-weighted coverage over the
+iid public high labels at the stated parameters.  A classical
 reversible basis preprocessor followed by one Hadamard also has an exact
 normal form: inverse-polynomial mass-weighted advantage yields an RMSS partner
 finder, and on the clean cube full exact basis pairing requires a live raw
@@ -658,7 +665,14 @@ candidate sampling has
 nondegenerate secret, ordinary absolute-weight sign reweighting has
 average-sign magnitude at most `N^(-4.06843+epsilon)` with high probability
 for every fixed `epsilon>0`; this does not lower-bound a direct arithmetic
-computation of the coefficient ratio.  Pair products give an exact passive
+computation of the coefficient ratio.  For visibility `1-Theta(1/log n)`, the
+log likelihood has a uniformly accurate polynomial-size sparse trigonometric
+expansion.  Optimizing it would decode `{d,-d}`, but the radix envelopes
+analyzed here remain too loose to certify polynomial pruning.  Scalar
+polynomials in `G_J` below the displayed
+`Theta(n/log n)` threshold have no half-turn Fourier component with high
+probability.
+Pair products give an exact passive
 recursion to smaller 2-adic moduli.  Writing their initial visibility as `lambda_pass`,
 along nondegenerate levels, including an odd secret before the final modulus,
 their visibility after `ell` levels is
