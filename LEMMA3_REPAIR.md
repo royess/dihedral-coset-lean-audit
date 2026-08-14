@@ -586,6 +586,36 @@ up to approximation logarithms, in that access model.  This is not an
 unrestricted circuit lower bound; a direct parity-only arithmetic transform
 remains logically open.
 
+A random binary-syndrome construction is a genuine polynomial-time
+preprocessor.  Measuring the syndrome together with `f_Y(x) mod (N/2)`
+preserves the exact relative phase and compresses the supported affine cube to
+a code-constrained core of effective dimension
+`kappa=k-e`; this is `n+O(log n)` under a conditional tight choice for the
+hidden fault count.  A conservative public cap can make it larger, while
+faults exceeding the cap make it smaller and can make it underdense after
+consuming the slack.  Pairwise independence gives precise partner-count
+moments, but over iid public labels in the Born-planted coupling, a uniformly
+prepared code difference still reaches the half-turn target with expected
+fraction `(1-o(1))/N`.  Logical-`X` measurement produces a
+linear equation involving the unknown half-turn difference rather than the
+secret alone.  Thus the construction isolates, but does not solve, a
+density-one RMSS core.  An explicit `Y`-dependent residue-pair syndrome can
+remove `Theta(log n)` modulus bits in polynomial time, but its no-reuse
+population typically drops by about a factor of four per large-`B` layer, so it cannot
+be iterated to a small modulus while retaining density one.
+
+The robust observable's signed conjugation harmonic also yields a stronger
+scoped lower bound.  In the translation-covariant orbit/reference model, an
+algorithm may use
+arbitrary fast powers of the secret orbit and the efficient reflection about
+the low-weight reference subspace.  Conjugation reduces parity decoding to
+deciding whether one uniquely marked clock position is even or odd; the
+adversary ratio is `sqrt(N/2)`.  Hence `Omega(sqrt(N))` reflection queries are
+necessary for bounded-error parity in that model, including on the Gram-good
+physical frame.  This
+extends the QSVT barrier but still excludes circuits that use other gates to
+exploit the internal Boolean modular arithmetic.
+
 Three further realizations make that opening narrower without closing it.
 First, the exact power-of-two frame recursion writes the next signed frame as
 the difference of the preceding full frame and its phase conjugate.  Its sign
@@ -595,7 +625,13 @@ every bit.  Second, measuring each raw phase qubit in `X` in the iid
 averaged/dephasing model produces passive noisy cosine samples.  A correlation
 test identifies `{d,-d}` with `O(n)` samples, but evaluating it by FFT costs
 `O(N log N)` and no polynomial-time decoder for the passive one-bit sample
-model was found.  A normalized-Fourier/Parseval argument now proves that,
+model was found.  The exact Bayesian parity rule is the ratio of the
+half-turn and zero coefficients of a weighted ternary subset-sum generating
+function under a uniform secret prior.  Coherent likelihood filtering
+prepares a useful posterior only
+with at most `O(1/N)` heralding probability in its direct normalized
+state-conversion model.  A
+normalized-Fourier/Parseval argument now proves that,
 against the conventional adversarial `STAT` oracle, every adaptive
 polynomial-query `STAT(1/poly(n))` decoder has uniform-secret average parity
 advantage only `poly(n)/N`; this statement is deliberately limited to

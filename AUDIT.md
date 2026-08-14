@@ -50,6 +50,25 @@ singular values are `Theta(N^(-1/2))`, giving a route-specific
 `Theta(sqrt(N))` constant-accuracy cost, up to approximation logarithms.  Thus
 the new result strengthens the existence
 side while leaving the algorithmic verdict unchanged.
+A random binary-syndrome measurement gives a further exact positive
+preprocessor: jointly measuring the syndrome and the subset sum modulo
+`N/2` preserves the parity phase, including on a fixed faulty affine subcube,
+and reduces the path space to a critical-density code-constrained RMSS core
+when its rank is tightly matched to the hidden fault count; otherwise the core
+is mis-tuned--larger under a conservative cap, or smaller and potentially
+underdense once excess faults consume the slack.  Its label-averaged residual
+target fraction remains about `1/N`, so
+Gaussian elimination does not finish the decoder.  The strongest explicit
+`Y`-dependent syndrome pairs labels by their residues
+modulo `B=Theta(n)` and removes `Theta(log n)` modulus bits, but a no-reuse
+layer typically retains only about one quarter of its input population and cannot be
+iterated to a small modulus while maintaining density one.  Separately, a
+query adversary strengthens the scoped
+implementation barrier: even with free arbitrary powers of the orbit shift
+and the efficient low-weight reference-subspace reflection, parity needs
+`Omega(sqrt(N))` reflection queries in that translation-covariant
+orbit/reference model for bounded error.  General arithmetic circuits remain
+outside the theorem.
 The exact dyadic frame recurrence reaches the same boundary: its direct
 realization needs coherent access to the preceding full fibre-support
 projector, which a bare two-outcome parity measurement does not supply, and
@@ -57,7 +76,12 @@ direct expansion doubles the orbit branches per modulus bit.  In the iid
 averaged/dephasing model, passive `X`
 measurements give a complementary positive result--`O(n)` samples identify
 `{d,-d}`, hence the target parity--but the direct FFT decoder costs
-`O(N log N)`.  Parseval now gives a sharp statistical-query boundary: against
+`O(N log N)`.  The exact Bayesian answer is the ratio of two coefficients of
+a weighted ternary subset-sum polynomial under a uniform secret prior; direct
+likelihood filtering exposes
+an at-most-`O(1/N)` useful-posterior heralding probability in that normalized
+state-conversion model.  Parseval now gives a sharp
+statistical-query boundary: against
 the conventional adversarial `STAT` oracle, polynomially many adaptive
 `STAT(1/poly(n))` queries have uniform-secret average parity advantage at most
 `poly(n)/N`, although individual-example and collective quantum algorithms

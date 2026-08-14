@@ -46,7 +46,17 @@ polynomial density-one finder was found.  Moreover, in a
 hash-isolated random-singleton oracle model, even an arbitrary one-shot joint
 measurement needs `Omega(sqrt(D))` queries for constant phase advantage.  This
 is an oracle-model barrier, not a lower bound for explicit arithmetic
-circuits.  Lemma 4 and the paper's headline algorithm theorem therefore remain
+circuits.  A new random-syndrome construction is an exact polynomial
+phase-preserving preprocessor, but it stops at a density-one code-constrained
+RMSS core only when its rank is tightly matched to the hidden fault count;
+otherwise the core is mis-tuned--larger under a conservative cap, or smaller
+and potentially underdense once excess faults consume the slack--and its
+label-averaged marked fraction remains about `1/N`.  A separate adversary
+reduction
+shows that even free fast orbit translations plus the efficient reference-
+subspace reflection require `Omega(sqrt(N))` queries in that
+translation-covariant orbit-access model for bounded-error parity.  Lemma 4
+and the paper's headline algorithm theorem therefore remain
 unproved.
 
 | Lemma | Status of the core claim | Published proof and repair status |
@@ -86,6 +96,21 @@ label but leaves, in each residue block, the polar transform of a
 fibre-restricted Walsh matrix.  At constant accuracy, the natural
 projected-unitary/QSVT realization of that remaining transform still has
 `Theta(sqrt(N))` cost, up to approximation logarithms.
+Random binary-syndrome isolation preserves the half-turn phase exactly and
+compresses a raw block to a density-one code-constrained core (of dimension
+`n+O(log n)` only when the hidden fault count is tightly matched), but
+Gaussian elimination only parameterizes that core: testing a uniformly
+prepared difference still hits the required residue with probability about
+`1/N` on average over the iid public labels in the Born-planted coupling.  A
+concrete residue-pair implementation can remove
+`Theta(log n)` modulus bits in polynomial time, but loses too much population
+to iterate to a small modulus.  Moreover, an exact translation-covariant
+orbit/reference adversary theorem extends the square-root barrier beyond
+QSVT: arbitrary fast orbit
+powers and an efficient reflection about the low-weight reference space still
+need `Omega(sqrt(N))` reflection queries for bounded-error parity.  This
+remains an access-model result and
+leaves circuits exploiting the internal Boolean modular arithmetic open.
 An exact dyadic recursion reaches the same boundary in the natural frame
 model: its direct realization needs coherent access to the preceding full
 fibre-support projector, which a bare two-outcome parity measurement does not
@@ -93,7 +118,13 @@ supply, and expanding that projector doubles the orbit branches at each bit.
 In the iid averaged/dephasing model, a complementary route measures
 every raw qubit in `X`; `O(n)` passive samples then identify `{d,-d}`
 statistically, but the evident correlation/FFT decoder scans all `N=2^n`
-frequencies and no polynomial passive decoder was found.  A new Parseval
+frequencies and no polynomial passive decoder was found.  Its exact Bayesian
+decision under a uniform secret prior is the ratio of the zero and half-turn
+coefficients of a weighted
+ternary subset-sum polynomial; the direct dynamic program is exponential,
+while the direct normalized likelihood filter reaches useful posterior mass
+with at most `O(1/N)` heralding probability in its state-conversion model.  A
+new Parseval
 argument makes one part rigorous: against the conventional adversarial
 `STAT` oracle, the uniform-secret average parity advantage of any adaptive
 algorithm using only polynomially many inverse-polynomial-tolerance queries

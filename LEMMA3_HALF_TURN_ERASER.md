@@ -27,6 +27,17 @@ The conclusion is therefore a research boundary, not a repaired theorem:
 - a two-pool cross-filter with a large common label pool reduces the
   fault-free task to an ordinary exact-density random-target RMSS finder, but
   no polynomial finder is known;
+- a random binary-syndrome preprocessor preserves the half-turn phase exactly
+  and, when its rank is tightly matched to the hidden fault count, compresses
+  the full cube to a critical-density code-constrained RMSS core; otherwise
+  the core is mis-tuned--larger under a conservative cap, or smaller and
+  potentially underdense once excess faults consume the slack--and its
+  label-averaged nonzero-target fraction is still about `1/N`, with the
+  zero-mask correction shown below;
+- even with arbitrary fast orbit translations and the efficient reflection
+  about the low-weight reference subspace, parity requires
+  `Omega(sqrt(N))` reference queries in that translation-covariant
+  orbit-access model for bounded error;
 - an independent or fixed-size random fault law permitted by the paper's
   marginal bounds causes a `2^(-Theta(n/log n))` common-label loss in this
   particular construction;
@@ -1915,6 +1926,575 @@ for fault-adaptive algorithms or arbitrary collective measurements.  It does
 not contradict the robust-PGM guarantee, which aggregates the full relation
 space rather than requiring one preselected surviving edge.
 
+## A syndrome-isolated critical core
+
+There is a genuine polynomial-time preprocessor that preserves the desired
+phase and sharply reduces the number of unresolved paths.  It does not by
+itself decode that phase.  Let the selection register have `q` coordinates,
+let `F` be a fixed set of `e` faulty coordinates with fixed computational
+values `b_F`, and start from the normalized supported state
+
+```text
+2^(-(q-e)/2) * sum_(x : x_F=b_F) omega^(d*f_Y(x)) |x>.
+```
+
+Choose an `r by q` binary matrix `M`, independently of the public labels and
+the fault environment.  Reversibly compute and measure
+
+```text
+(M*x, f_Y(x) mod H) = (u,t).
+```
+
+For `j in {0,1}` put
+
+```text
+S_j = {x : x_F=b_F, M*x=u, f_Y(x)=t+j*H mod N},
+eta_j = |S_j|.
+```
+
+The outcome probability and normalized residual state are exactly
+
+```text
+P[u,t] = 2^(-(q-e)) * (eta_0+eta_1),
+
+omega^(d*t)/sqrt(eta_0+eta_1)
+  * (sum_(x in S_0)|x> + (-1)^d sum_(x in S_1)|x>).
+```
+
+Thus this CSS-like hashing step is efficient and preserves the parity phase
+even for deterministic fixed-basis faults.  What it retains, rather than
+erases, are the two path sets `S_0,S_1`.
+
+The residual relation count can be analyzed exactly.  Let `G=[q] minus F`,
+assume `M_G` has row rank `r`, and define the difference code
+
+```text
+D = {a in F_2^q : a_F=0, M*a=0},
+kappa = dim(D) = q-e-r.
+```
+
+Use the exact Born/planted coupling for this calculation: first draw `x`
+uniformly from the supported affine cube, independently of `Y`, and then set
+`(u,t)=(M*x,f_Y(x) mod H)`.  This reproduces the joint measured experiment,
+including its size bias.  It does not condition on an externally prescribed
+pair `(u,t)`.
+
+For a supported path `x`, a partner difference `a` must obey
+
+```text
+g_x(a) = f_Y(x xor a)-f_Y(x)
+       = sum_(i : a_i=1) (1-2*x_i)*Y_i
+       = H mod N.
+```
+
+For iid-uniform `Y`, every nonzero `g_x(a)` is uniform in `Z_N`, and the
+values for two distinct nonzero binary words are pairwise independent.  The
+latter follows by selecting a `2 by 2` coefficient minor of determinant
+`+1` or `-1`.  Hence, for
+
+```text
+Z_H = #{a in D minus {0} : g_x(a)=H},
+Z_0 = #{a in D minus {0} : g_x(a)=0},
+mu = (2^kappa-1)/N,
+```
+
+one has exactly
+
+```text
+E[Z_H] = mu,
+Var(Z_H) = mu*(1-1/N),
+mu/(mu+1-1/N) <= Pr[Z_H>0] <= min(1,mu).
+```
+
+This is an average paired-path statement for a computational path drawn with
+its Born weight before the two deterministic labels are measured; it is not
+a simultaneous guarantee for every syndrome/residue outcome.
+
+The half containing the selected path has size `1+Z_0`, while the opposite
+half has size `Z_H`; the same variance bound controls both centered random
+parts.  They are asymptotically balanced when `mu` grows.  For a Bernoulli
+random matrix, if `k=q-r>e`, then
+
+```text
+Pr[rank(M_G)=r]
+  = product_(j=0)^(r-1) (1-2^(j-(q-e)))
+  >= 1-2^(e-k).
+```
+
+Choosing `k=e+n+s` therefore leaves effective dimension
+`kappa=n+s` and about `2^s` paths per half.  Taking
+`s=Theta(log n)` makes the residual fibres polynomial-size and usually
+paired in the preceding averaged sense.  This is a conditional parameter
+statement, not a way to learn the hidden value `e`.  A public fault cap
+`e_max` could instead be used with `k=e_max+n+s`, giving
+`kappa>=n+s` whenever `e<=e_max`, at the cost of a larger residual core.  If
+instead `k=n+s` is
+fixed independently of faults, an allowed
+environment with `e=Theta(n/log n)` reduces the mean partner count to about
+`2^(s-e)`.
+
+This compression does not make the residual inversion easy.  Uniformly
+prepare `a in D` and test `g_x(a)=H`.  Averaged over the random public labels,
+the marked fraction is still exactly
+
+```text
+E[Z_H/2^kappa] = (1-2^(-kappa))/N.
+```
+
+The projected-PREP/polar route therefore retains `Theta(sqrt(N))`
+amplification cost.  Gaussian elimination only parameterizes the core; it
+does not enumerate the polynomially many actual target solutions.  In the
+singleton case, applying a logical Boolean Hadamard to
+
+```text
+(|z_0> + (-1)^d |z_1>)/sqrt(2)
+```
+
+returns a uniform `w` satisfying
+
+```text
+w dot (z_0 xor z_1) = d mod 2.
+```
+
+Interpreting that outcome requires the unknown half-turn move
+`z_0 xor z_1`.  For larger fibres the corresponding likelihood is a Walsh
+correlation of two code-constrained subset-sum fibres.  Thus an ordinary CSS
+or logical-`X` measurement moves the relation into the classical
+interpretation problem rather than removing it.
+
+A sharp sufficient CSS condition illustrates the circularity.  If one could
+find an affine code `x_0+C` and a known nonzero linear form `l` such that
+
+```text
+f_Y(x) = t+H*l(x) mod N
+```
+
+throughout the code, one Boolean Hadamard readout would reveal parity.  But a
+nonzero direction of this code already supplies a half-turn relation.  For a
+fixed, `Y`-independent `k`-dimensional candidate, the required basis
+increments land in `{0,H}` with probability `2^k/N^k`; choosing the code from
+`Y` must solve the modular constraints.
+
+This positive preprocessor therefore narrows the open primitive to a
+density-one, code-constrained random modular subset-sum decoder.  The
+triangular-label/Gaussian-elimination interpolation of
+[Remaud--Schrottenloher--Tillich](https://arxiv.org/abs/2206.14408) reaches the
+same qualitative boundary in the clean setting: making its preparation
+polynomial leaves a non-polynomial residual subset-sum problem, while making
+the residual problem polynomial leaves subexponential preparation.  The
+syndrome theorem above is not a polynomial HalfTurnTest.
+
+### A concrete residue-pair syndrome shaves logarithmically many bits
+
+The general syndrome construction has an explicit `Y`-dependent instance
+that makes a real, but limited, algorithmic gain.  For one clean phase qubit
+
+```text
+|psi_y(d)> = (|0>+omega_N^(d*y)|1>)/sqrt(2),
+```
+
+take two labels `y,z` and measure the Boolean parity `p=x_1 xor x_2`.  Up to a
+global phase and a Clifford relabelling, the two equiprobable outcomes are
+
+```text
+p=0 : |psi_(y+z)(d)>,
+p=1 : |psi_(y-z)(d)>.
+```
+
+Fix `B=2^m` dividing `N`.  Partition residues modulo `B` into the orbits of
+`r -> -r` and pair labels within each orbit by a deterministic index rule that
+uses only their residues modulo `B`.  There are exactly
+
+```text
+c_B = B/2+1
+```
+
+orbits, so among `q` labels there are at least
+
+```text
+L >= (q-c_B)/2
+```
+
+disjoint pairs.  If the two residues agree, retain `p=1`; if they are
+negatives, retain `p=0`.  The resulting logical label is divisible by `B`.
+In the self-inverse residue classes `0` and `B/2`, both outcomes are usable.
+For disjoint clean pairs, the number `G` of usable logical qubits therefore
+stochastically dominates `Binomial(L,1/2)`.
+
+Take `q=12*n`, let `k=n+s` with `s=O(log n)`, and choose the largest power of
+two satisfying
+
+```text
+B/2+1 <= 6*n-6*s.
+```
+
+Then `B=Theta(n)`, `L>=3*k`, and a Chernoff bound gives
+
+```text
+Pr[G<k] <= exp(-k/12).
+```
+
+After retaining any `k` pairs chosen using only the residues and parity
+outcomes, divide their labels by `B`.  The clean output is exactly
+
+```text
+tensor_(j=1)^k
+  (|0>+omega_(N/B)^(d*A_j)|1>)/sqrt(2),
+```
+
+where the `A_j` are independent uniform elements of `Z_(N/B)`.  To see the
+uniformity, write paired labels as `r+B*Q_y` and `+r+B*Q_z` or
+`-r+B*Q_z`; the retained quotient is an affine sum or difference of two
+independent high quotients.  Pairing and outcome selection use no high-
+quotient information.
+
+This removes `log_2 n+O(1)` modulus bits in polynomial time and lands on an
+ordinary random modular subset-sum core.  Conditional on a fixed fault
+environment with `e=O(n/log n)`, at most `e` disjoint pairs are contaminated.
+The clean usable count dominates `Binomial(L-e,1/2)`, while the retained
+block contains at most `e`
+faulty logical outputs.  Its realized logical fault rate is therefore
+`O(1/log n)`, although those outputs are not flagged.  Marginal fault bounds
+alone do not force every realized environment to satisfy this count.
+
+The gain cannot simply be iterated to a polynomial decoder.  At the reduced
+modulus `N'=N/B`, a fixed nonzero prescribed target has label-averaged marked
+fraction `(1-2^(-k))/N'`, including the zero-mask correction.  Thus generic
+amplification still costs
+
+```text
+Theta(sqrt(N/B)) = 2^(n/2)/poly(n).
+```
+
+For `B=Theta(n)`, only one parity outcome is usable except for `O(1)` expected
+self-inverse-residue samples.  One no-reuse layer retains
+at most `q/4+O(1)` logical qubits in expectation and no more than
+`q/4+o(q)` with
+overwhelming probability.  Starting from `12*n`, two such layers therefore
+leave at most `0.75*n+o(n)` qubits with overwhelming probability, while the
+modulus still has `n-O(log n)` bits.  The next core is underdense.  Taking
+`B=2` retains both
+outcomes but removes only one modulus bit while halving the population; the
+initial constant factor permits only three full layers before the output
+falls below density one.
+
+More generally, two random labels satisfy `y=+z or -z mod B` with probability
+at most `2/B`.  A polynomial-size input can support a linear number of
+disjoint candidate pairs with non-negligible probability only for `B=O(q)`.
+For the present `q=12*n` block this is `B=O(n)`, so a no-reuse residue-pair
+layer can remove only `O(log n)` bits while retaining `Theta(n)` variables.
+For a general `q=poly(n)` block the same statement gives only
+`B=poly(n)`, still just `O(log n)` bits.  This is a route-specific population
+law, not a lower bound against overlapping or collective arithmetic circuits.
+
+## A signed harmonic and an orbit-access query barrier
+
+The robust parity observable also has a particularly simple Fourier-harmonic
+form.  Let `E` be the low-weight error-label space and put
+
+```text
+A = H^(tensor q) J_E,
+P_0 = A*A^dagger,
+C|d,e> = U_Y^d A|e>,
+G = C^dagger*C,
+Z_par|d> = (-1)^d |d>.
+```
+
+Then the alternating conjugation orbit is exactly
+
+```text
+K_E = sum_(j in Z_N) (-1)^j U_Y^j P_0 U_Y^(-j)
+    = C (Z_par tensor I_E) C^dagger.
+```
+
+If `C=V*sqrt(G)` is its polar decomposition, the zero-extended ideal parity
+observable is
+
+```text
+T_par = V (Z_par tensor I_E) V^dagger.
+```
+
+On `||G-I||_op<=epsilon<1`, define
+
+```text
+beta = ||sqrt(G)-I||_op <= 1-sqrt(1-epsilon).
+```
+
+Then, on the occupied code range, or globally when `T_par` is extended by
+zero,
+
+```text
+||K_E-T_par||_op <= 2*beta+beta^2.
+```
+
+This is just the expansion of
+`sqrt(G)*Z_par*sqrt(G)-Z_par`.  Fibrewise, if
+`D_t=Pi_t*A`, the same operator is
+
+```text
+K_E = N * sum_t D_(t+H) D_t^dagger.
+```
+
+Writing `D_t=U_t*S_t` gives
+
+```text
+K_E = N * sum_t U_(t+H) S_(t+H) S_t U_t^dagger.
+```
+
+Its Gram-flat limit is the cross-fibre transport `T_tilde` above, and the
+occupied-range distance is controlled by the displayed
+`2*beta+beta^2` bound.
+Equivalently, for the efficient translated reference reflections
+
+```text
+R_j = 2*U_Y^j P_0 U_Y^(-j)-I,
+```
+
+one has `K_E=(1/2)*sum_j(-1)^j R_j`.  This is an exact direct construction,
+but its natural LCU normalization is `N/2`.
+
+More strongly, square-root cost is necessary in the entire idealized
+**orbit/reference** access model.  Let `S|z>=|z+1>` be an `N`-position clock.
+Give an algorithm arbitrary controlled powers `S^a`, translation-covariant
+ancilla gates, and `T` uses of the reference reflection
+
+```text
+R_ref = I-2*|0><0| tensor I_E.
+```
+
+Every free operation, including the coupling to the output ancilla, must
+commute with global clock translation, and the final bit is read only from
+that ancilla.  Direct clock-position measurement is not part of this model;
+with such a measurement the promised basis input would reveal `d` trivially.
+The success criterion is bounded error, equivalently constant worst-case
+advantage over guessing.
+
+On input `|d>|v>`, conjugating the computation by `S^(-d)` moves the input to
+`|0>|v>` and changes `R_ref` into the phase oracle marking the unique position
+`-d`.  Since `N` is even, `parity(-d)=parity(d)`.  The task is therefore to
+decide whether one uniquely marked item lies in the even or odd parity class
+of the clock.
+
+The adversary matrix between even and odd marked positions is the all-ones
+matrix of `K_(N/2,N/2)`.  Its norm is `N/2`, while masking by any one query
+position gives a star of norm `sqrt(N/2)`.  The adversary ratio is therefore
+`sqrt(N/2)`, proving
+
+```text
+T = Omega(sqrt(N)).
+```
+
+This agrees with optimal unstructured search; see
+[Ambainis's adversary method](https://arxiv.org/abs/quant-ph/0002066) and
+[Zalka's optimal search bound](https://arxiv.org/abs/quant-ph/9711070).  The
+reference reflection is itself efficient, because it is a Boolean-Hadamard
+conjugate of a reversible Hamming-weight test.
+
+The physical Gram-good frame inherits the bound.  The polar isometry
+intertwines `U_Y` with the clock shift.  If `P'_0` denotes the ideal reference
+projector transported into the physical range, put
+`R_phys=I-2*P_0` and `R'_0=I-2*P'_0`.  Then
+
+```text
+||P_0-P'_0||_op <= 2*beta,
+||R_phys-R'_0||_op <= 4*beta,
+```
+
+and the physical input differs from its ideal-clock image by at most `beta`.
+A `T`-query hybrid changes the final state by at most `(4*T+1)*beta`.  Under
+the `q=12*n`, `tau=1/32` Gram parameters above,
+`beta*sqrt(N)` is exponentially small, so the `Omega(sqrt(N))` lower bound
+survives on the promised robust code states.
+
+This theorem permits fast-forwarding every orbit translation; it is stronger
+than the polynomial-functional-calculus/QSVT barrier.  It still does not
+cover arbitrary gates exploiting the internal Boolean subset-sum arithmetic,
+so it is not a general circuit lower bound.
+
+One fixed-walk attempt makes the distinction concrete.  In the ideal clock,
+put `W=R_ref*S^2`.  For `H=N/2`,
+
+```text
+W^H = I-2*Pi_even = -Z_par.
+```
+
+Fast-forwarding this particular walk would solve the problem, but its odd
+sector has phases `2*pi*k/H` while its even sector has the interlaced phases
+`2*pi*(k+1/2)/H`.  Ordinary phase estimation must resolve separation
+`pi/H` and costs `Theta(H)` walk uses.  Adaptive Grover-style use improves
+this to `Theta(sqrt(N))`, and the orbit theorem prevents a further gain in
+this model.
+
+There is also no exact bounded-local anticommuting observable on a typical
+random block.  If an `r`-local operator `O` obeys
+`U_Y O U_Y^dagger=-O`, every nonzero computational-basis entry connects paths
+at distance at most `r` whose subset sums differ by `H`.  Therefore
+
+```text
+Pr_Y[there is a nonzero such O]
+  <= N^(-1) * sum_(j=1)^r 2^j*choose(q,j).
+```
+
+At `q=12*n`, this is exponentially small for
+`r<0.10838*n`.  This excludes direct exact bounded-support half-turn
+Hamiltonians or walk generators; it does not exclude deep circuits or
+long-time evolution under a generic local Hamiltonian.
+
+## Candidate verification and posterior filtering
+
+A different direct construction starts from a uniform superposition over
+candidate secrets.  For `m` clean phase samples, set
+
+```text
+|Psi_d^Y> = 2^(-m/2) * sum_x omega^(d*f_Y(x)) |x>.
+```
+
+Controlled phase correction by a candidate `k`, followed by Boolean
+Hadamards and postselection on `0^m`, produces hypothesis amplitude
+
+```text
+A_Y(d-k)
+  = 2^(-m) * sum_x omega^((d-k)*f_Y(x))
+  = product_i (1+omega^((d-k)*Y_i))/2.
+```
+
+If `eta_t` denotes the full-sum fibre size, the exact herald probability is
+
+```text
+p_0 = (1/N)*sum_k |A_Y(d-k)|^2
+    = 2^(-2*m) * sum_t eta_t^2.
+```
+
+For iid-uniform labels,
+
+```text
+E_Y[p_0] = 2^(-m) + (1-2^(-m))/N.
+```
+
+The joint probability of heralding and holding the true candidate is exactly
+`1/N`, because `A_Y(0)=1`.  More explicitly,
+
+```text
+Pr[k=d and herald] = 1/N,
+Pr[k=d | herald] = 1/(N*p_0),
+Pr[k | herald] = |A_Y(d-k)|^2/(N*p_0).
+```
+
+In the balanced random-label regime, the averaged formula displays the
+tradeoff: when `m<n`, heralding is easier but the true-candidate mass is of
+order `2^m/N`, corresponding to effective candidate count `N/2^m`; literal
+support need not shrink.  When `m>=n+O(1)`, the conditional
+candidate can be useful, but on the corresponding balanced-fibre event the
+herald itself has probability
+`Theta(1/N)`.  This is a valid postselected decoder whose natural coherent
+amplification scale is again `sqrt(N)`; for one-shot unknown input states,
+even the reflection needed for that amplification may require extra copies.
+
+The same normalization appears after passive `X` measurements.  For data
+`D=((Y_i,S_i))`, define
+
+```text
+ell_i(k) = (1+lambda*S_i*cos(2*pi*k*Y_i/N))/2,
+L_D(k) = product_i ell_i(k),
+pi_D(k) = L_D(k)/sum_j L_D(j).
+```
+
+The most direct square-root likelihood filter, normalized by
+`ell_max=(1+lambda)/2`, prepares the coherent posterior after successful
+postselection, but succeeds with
+
+```text
+p_filter = (sum_k L_D(k))/(N*ell_max^q)
+         = (L_max/ell_max^q)/(N*pi_max)
+         <= 1/(N*pi_max),
+L_max = max_k L_D(k),
+pi_max = max_k pi_D(k).
+```
+
+Once the posterior has constant mass on `d` or `{d,-d}`, the filter therefore
+has probability `O(1/N)`.  Amplitude amplification costs `Omega(sqrt(N))` in
+this state-conversion model.  Sequential filtering does not automatically
+remove the cost: a failed filter maps the preceding posterior to a different
+failure-conditioned state, so a naive retry cannot resume it.  Retaining all
+failure flags leaves unconditioned hypothesis populations.  An annealing
+version would need independent efficient
+reflections about its intermediate posteriors or a proven rapidly mixing
+posterior chain.  This is the setting captured by
+[quantum rejection sampling](https://arxiv.org/abs/1103.2774), not a lower
+bound against a new arithmetic decoder.
+
+There is an exact classical expression for what such an arithmetic decoder
+would have to compute.  Put `a_i=lambda*S_i/2` and form the cyclic generating
+function
+
+```text
+P_D(X) = product_i (1+a_i*X^(Y_i)+a_i*X^(-Y_i))
+       = sum_(t in Z_N) A_t X^t mod (X^N-1).
+```
+
+Then `L_D(k)=2^(-q)*P_D(omega^k)`.  Under the uniform prior on `d`, the two
+parity evidences are exactly
+
+```text
+E_b = (2/N) * sum_(k mod 2=b) L_D(k)
+    = 2^(-q) * (A_0+(-1)^b*A_H).
+```
+
+Since `A_0>0`, the Bayesian parity success is
+
+```text
+P_Bayes = 1/2 + |A_H|/(2*A_0).
+```
+
+Thus optimal passive parity decoding reduces to two coefficients of a
+weighted ternary subset-sum polynomial.  The cyclic dynamic program costs
+`O(q*N)` and an FFT costs `O(N*log N)`; no polynomial-in-`n` way to obtain the
+ratio `A_H/A_0` was found.  An absolute-weight proposal for its ternary
+expansion hits residue `H` with random-label probability about `1/N`.  Because
+the coefficients are signed, this is only a hit-rate obstruction, not a tight
+estimator complexity bound; cancellation can make coefficient estimation
+harder.
+
+A simple passive 2-adic recursion is exactly blind at the first step.  For a
+nonzero secret, conditioning on one observed sign gives
+
+```text
+Pr[Y=y | S=s]
+  = (1/N) * (1+s*lambda*cos(2*pi*d*y/N)).
+```
+
+Reduce `Y` modulo `B=2^m`.  The reduced distribution is exactly uniform
+unless `N/B` divides `d`; when divisibility holds it is a cosine with frequency
+`d/(N/B)` modulo `B`.  Consequently every proper power-of-two residue hash is
+exactly blind for an odd secret.  Guessing the parity and folding
+`Y=z+h*H` instead produces an integer-versus-half-integer frequency test, not
+a smaller instance of the same ordinary problem.  This closes the direct
+residue-Bayes recursion, while leaving more global recursions open.
+
+Directly Fourier transforming a polynomial-size classical sample table has
+the same limitation.  Any normalized amplitude state supported on `M` known
+labels obeys
+
+```text
+Pr[QFT output = k] <= M/N.
+```
+
+For uniformly random distinct passive labels and outcomes, and generic
+`2*d != 0 mod N`, put
+`|v_D>=q^(-1/2)*sum_i S_i|Y_i>`.  The expected probability at each of the two
+frequencies `+d,-d` is
+
+```text
+[1+(q-1)*lambda^2*(N-2)/(4*(N-1))]/N
+  = (1+(q-1)*lambda^2/4)/N + O(q/N^2).
+```
+
+Implicitly generating exponentially many combination labels helps only if
+their path indices are erased, returning to the original fibre-erasure
+primitive.  These calculations leave a narrow positive opening: compute the
+weighted coefficient ratio through a new data-dependent arithmetic method,
+or prove a polynomial-gap posterior walk.  Neither is supplied here.
+
 ## Relation to known DCP algorithms
 
 The subset-sum connection is not accidental.  Bacon--Childs--van Dam identify
@@ -1962,12 +2542,34 @@ the blocker.  The missing step is a
 polynomial implementation of the synthesis/parity action itself.  The
 investigation has not found one: PREP/QSVT, signed-projector sampling,
 FFT/Schur decomposition, tensor-network contraction, 2-adic recursion,
-hashing, lattice, statistical-query decoding, and local-relation routes all
-retain an exponential cost or exponentially small advantage in the precise
-models analyzed.  The best generic coherent scale identified is
+hashing, lattice, statistical-query decoding, posterior filtering, and
+local-relation routes all retain an exponential cost or exponentially small
+advantage in the precise models analyzed.  Random syndrome isolation is a
+real polynomial preprocessor, but it terminates at a density-one
+code-constrained RMSS core only when its rank is tightly matched to the hidden
+fault count; otherwise the core is mis-tuned--larger under a conservative cap
+or smaller when faults exceed the cap, becoming underdense once that excess
+consumes the slack--and the label-averaged target fraction remains about
+`1/N`.  A concrete residue-pair syndrome uses the public
+labels to remove `Theta(log n)` modulus bits in polynomial time, but its
+no-reuse population loss prevents enough iterations to reach a small modulus.
+The best generic coherent scale identified is
 `Theta(sqrt(N)) = 2^(n/2)`.  The operator-Schmidt theorem and the
 statistical-query theorem make two of these route boundaries rigorous without turning
 them into unrestricted circuit or sample-access lower bounds.
+
+The signed-harmonic formula sharpens this boundary.  In the complete
+translation-covariant orbit/reference model, even free fast powers of the
+secret orbit and an
+efficient reference-subspace reflection still require `Omega(sqrt(N))`
+reflection queries for bounded-error parity.  Candidate verification has
+true-candidate joint mass exactly `1/N`; once its conditional candidate is
+useful, its total herald is `Theta(1/N)` on the balanced event.  The direct
+normalized likelihood filter has at most `O(1/N)` heralding once its posterior
+has constant useful mass.  These
+theorems leave open only circuits that exploit the internal Boolean modular
+arithmetic beyond the orbit algebra or compute the weighted ternary
+coefficient ratio by a new method.
 
 This is not a no-go theorem.  A distribution-specific collective circuit
 could conceivably decode only the parity without exposing a reusable fibre
@@ -1984,9 +2586,11 @@ distinct sufficient interfaces:
 > natural `sqrt(N)` normalization, or (b) build a bounded, verifiable,
 > inverse-polynomial-success random-target RMSS find-one algorithm on exactly
 > `n` random correction coordinates and make the large-label two-pool
-> construction respect the occupied fault subcube?
+> construction respect the occupied fault subcube, or (c) decode the
+> syndrome-isolated density-one core or the weighted coefficient ratio
+> `A_H/A_0` without enumerating `N` residues?
 
-A positive answer to either version would be a new DCP/subset-sum algorithmic
+A positive answer to any version would be a new DCP/subset-sum algorithmic
 ingredient.  No such polynomial construction is supplied by the paper or
 found in this investigation.  The random-singleton oracle model now has a
 rigorous `Omega(sqrt(D))` constant-advantage barrier, but a negative answer for
