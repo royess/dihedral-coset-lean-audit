@@ -66,7 +66,12 @@ high probability and cannot be iterated to a small modulus while maintaining
 density one.  Arbitrary
 overlapping CNOT/syndrome branches have an exact affine-code normal form:
 removing `m` modulus bits requires simultaneous carry congruences through
-degree `m`, so overlap does not supply free coherent reuse.  Separately, a
+degree `m`.  An all-embedding SNF/counting bound goes further: for `q=12*n`,
+with high probability no affine coset of dimension at least `91` is contained
+in one `f_Y mod H` fibre, even under selection after seeing `Y`.  The
+syndrome-isolated core
+escapes because the additional modular measurement leaves a generally
+non-affine intersection.  Separately, a
 query adversary strengthens the scoped
 implementation barrier: even with free arbitrary powers of the orbit shift
 and the efficient low-weight reference-subspace reflection, parity needs
@@ -86,7 +91,12 @@ likelihood filtering exposes
 an at-most-`O(1/N)` useful-posterior heralding probability in that normalized
 state-conversion model.  Uniform importance sampling has exact squared
 coefficient of variation `N*sum_k pi(k)^2-1`; it takes linear-in-`N` samples
-when the posterior has constant effective support.  An exact pair-product
+when the posterior has constant effective support.  At `q=12*n`, in the
+matched passive model with a nondegenerate secret, ordinary absolute-weight
+sign reweighting has average-sign magnitude at most
+`N^(-4.06843+epsilon)` with high
+probability for every fixed `epsilon>0`; this does not lower-bound a direct
+arithmetic coefficient algorithm.  An exact pair-product
 recursion creates passive samples over smaller 2-adic moduli.  Writing its
 initial visibility as `lambda_pass`, the visibility is
 `2*(lambda_pass/2)^(2^ell)` along nondegenerate levels, including an odd
@@ -101,8 +111,15 @@ hidden-number methods examined here do not directly instantiate on this
 one-pass random sample set.  An explicit robust parity-only observable exists
 uniformly on the coherent low-weight-error subspaces on the Gram-good event,
 but its known multiplexed-polar implementation remains `Theta(sqrt(N))` at
-constant accuracy in the standard projected-unitary/QSVT access model; a separate exact
-operator-Schmidt theorem rules out low-bond Frobenius/MPO compression only.
+constant accuracy in the standard projected-unitary/QSVT access model.  In
+the clean orbit dictionary, the raw signed-frame LCU is coefficient-unique
+and constant-error parity approximations retain `Omega(N)` normalization;
+directly signing the purified density block
+costs `Omega(N)` rather than the frame route's `Theta(sqrt(N))`.  A
+bounded-output fermionic-Gaussian circuit is also exactly parity-blind below
+the signed-relation threshold; both statements are explicitly scoped to
+their circuit/access models.  A separate exact operator-Schmidt theorem rules
+out low-bond Frobenius/MPO compression only.
 Ordinary pairwise/list collimation retains its subexponential resource law and
 suffers an additional explicit-relation survival loss in permitted
 hidden-fault models.  None of these statements is an unrestricted circuit

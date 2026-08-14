@@ -36,14 +36,21 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   zero-mask correction shown below;
 - arbitrary overlapping CNOT/syndrome branches admit an exact algebraic
   normal form: removing `m` modulus bits requires simultaneous carry
-  congruences through degree `m`.  Fixed embeddings chosen independently of
-  `Y` satisfy even their degree-one part with probability only `2^(-m*k)`,
-  while an accept-all map retains at most `2*q/2^m` logical dimensions in
-  expectation;
+  congruences through degree `m`.  More strongly, for `q=12*n` and reduction
+  modulo `H`, with high probability no affine coset of dimension `91` or more
+  is contained in one `f_Y mod H` fibre, including cosets selected after
+  seeing `Y`.  This does not apply
+  after additionally measuring `f_Y mod H`, whose surviving intersection is
+  generally non-affine;
 - even with arbitrary fast orbit translations and the efficient reflection
   about the low-weight reference subspace, parity requires
   `Omega(sqrt(N))` reference queries in that translation-covariant
   orbit-access model for bounded error;
+- within the clean orbit-projector dictionary, the raw signed-frame LCU
+  coefficients are unique and every constant-error parity approximation retains `Omega(N)`
+  normalization.  Directly taking the sign of the purified parity-density
+  block encoding costs `Omega(N)` in QSVT degree, while factorizing through
+  the frame improves this route only to `Theta(sqrt(N))`;
 - an independent or fixed-size random fault law permitted by the paper's
   marginal bounds causes a `2^(-Theta(n/log n))` common-label loss in this
   particular construction;
@@ -60,7 +67,15 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   by `lambda -> lambda^2/2`; polynomial resources permit only
   `O(log log n)` useful no-reuse levels and remove `o(n)` modulus bits.
   Direct importance sampling of the exact Bayesian coefficient ratio has
-  relative variance `Theta(N)` once its posterior is sharp.
+  relative variance `Theta(N)` once its posterior is sharp.  At `q=12*n`,
+  in the matched passive model with a nondegenerate secret, ordinary
+  absolute-weight sign reweighting has average-sign magnitude at most
+  `N^(-4.06843+epsilon)` with high probability for every fixed
+  `epsilon>0`;
+- a fermionic-Gaussian/matchgate circuit that reads too few occupation bits is
+  exactly parity-blind on typical clean labels: nonadaptive `k`-bit output
+  needs a signed half-turn relation of weight at most `2*k`, and adaptive
+  Gaussian feedforward needs one of weight at most `4*k-2`.
 
 ## Fibre formulation
 
@@ -2249,8 +2264,80 @@ For a fixed full-rank affine embedding chosen independently of iid-uniform
 `Y`, the degree-one congruences alone are a surjective map onto `Z_B^k`: the
 row patterns spanning `F_2^k` contain an odd-determinant `k` by `k` minor.
 They therefore hold with probability exactly `B^(-k)`, and full constancy has
-probability at most `B^(-k)`.  A `Y`-dependent construction can evade this
-fixed-map bound, but it must solve the displayed modular carry system.
+probability at most `B^(-k)`.
+
+In fact, at the full half-turn modulus one can union-bound **all** affine
+embeddings, including ones selected after seeing `Y`.  Fix a `k`-dimensional
+affine coset `C=x_0+D`, choose a full-rank `q` by `k` generator `G` for `D`,
+and let `s` be the number of distinct nonzero row patterns of `G`.  The signs
+from `x_0` are already included in the independent uniform aggregates `A_v`
+above.  The coset is contained in one `f_Y mod B` fibre only if
+
+```text
+sum_(v != 0) A_v*(v dot z mod 2) = 0 mod B
+```
+
+for every `z`.  For distinct nonzero patterns `v`, the Boolean parity
+functions
+
+```text
+p_v(z) = v dot z mod 2 = (1-chi_v(z))/2
+```
+
+are linearly independent over the rationals.  Their evaluation matrix
+therefore contains a nonsingular `s` by `s` zero-one minor `Q`.  If the Smith
+invariants of `Q` are `d_1,...,d_s`, then for `B=2^m`
+
+```text
+Pr[Q*A = 0 mod 2^m]
+  = 2^(-m*s+sum_j min(m,v_2(d_j)))
+  <= 2^(-m*s+v_2(det Q))
+  <= 2^(-m*s+(s/2)*log_2 s).
+```
+
+The last step is Hadamard's determinant bound.  Row-pattern count is
+basis-invariant.  The number of full-rank generators using `s` patterns is at
+most
+
+```text
+choose(2^k-1,s)*(s+1)^q <= 2^(k*s)*(s+1)^q.
+```
+
+Every `k`-subspace has exactly `|GL(k,2)|` generators, where
+`|GL(k,2)|>=c_0*2^(k^2)` for the absolute constant
+`c_0=product_(j>=1)(1-2^(-j))`, and each subspace has `2^(q-k)` affine
+cosets.  Consequently
+
+```text
+Pr[there exists a k-dimensional affine C
+   on which f_Y mod 2^m is constant]
+ <= c_0^(-1) * sum_(s=k)^min(q,2^k-1)
+      2^(s*(k-m)+(s/2)*log_2 s-k^2
+         +q*log_2(s+1)+q-k).
+```
+
+This is a union over every subspace and every coset, so it already includes
+arbitrary `Y`-dependent selection.  For `q=12*n`, `m=n-1`, and `k=91`, the
+largest summand is the `s=91` term for all sufficiently large `n`, with
+exponent
+
+```text
+(-91+12*log_2(92)+12)*n+O(1)
+  = -0.717256...*n+O(1).
+```
+
+Summing the at most `12*n` terms changes this only by `O(log n)`.  Thus, with
+probability `1-2^(-0.71725*n+O(log n))`, no affine coset of dimension at least
+`91` is contained in one `f_Y mod H` fibre.  In particular, the desired
+dimension `n+o(n)` affine branch does not merely lack a known solver: it is
+absent with overwhelming probability.
+
+This does not contradict the syndrome-isolated core above.  That construction
+also measures `f_Y mod H`, and its support is the generally non-affine
+intersection of an affine syndrome coset with a modular subset-sum fibre.
+The theorem does not cover such intersections, unions of branches,
+nonuniform or approximate support, nonlinear encodings, or a direct
+cross-fibre polar.
 
 There is also a sharp accept-all corollary.  If one fixed syndrome map must
 make `f_Y mod B` constant on every coset of `D=ker M`, then comparison of
@@ -2292,9 +2379,10 @@ has label-averaged marked fraction
 `(1-2^(-kappa))/N`, so the usual marked-fraction term is `Theta(sqrt(N))`
 even if the graph gap is constant.  This does not rule out a new succinct
 `Y`-dependent arithmetic message or transition rule.  It identifies the
-positive interface precisely: efficiently construct an affine branch whose
-carry congruences hold with `k=n+e+O(log n)`, or construct the corresponding
-cross-fibre polar directly.  No such polynomial construction was found.
+positive interface precisely: construct a useful non-affine residue
+intersection or union with coherently erasable labels, or implement the
+corresponding cross-fibre polar directly.  No such polynomial construction
+was found.
 
 ## A signed harmonic and an orbit-access query barrier
 
@@ -2361,6 +2449,116 @@ R_j = 2*U_Y^j P_0 U_Y^(-j)-I,
 
 one has `K_E=(1/2)*sum_j(-1)^j R_j`.  This is an exact direct construction,
 but its natural LCU normalization is `N/2`.
+
+### The clean orbit dictionary cannot reduce this normalization
+
+In the clean case the normalization is intrinsic to this particular LCU
+dictionary, rather than an artifact of choosing equal weights.  Write
+
+```text
+W = sum_(j in Z_N) |psi_j><j|,
+G = W^dagger*W,
+D = diag_j((-1)^j),
+P_j = |psi_j><psi_j|.
+```
+
+Assume `||G-I||_op<=delta<1`, and let `V=W*G^(-1/2)` be the polar isometry.
+The ideal zero-extended parity observable is `T=V*D*V^dagger`.  For diagonal
+`C=diag(c_j)`,
+
+```text
+sum_j c_j*P_j = W*C*W^dagger
+              = V*sqrt(G)*C*sqrt(G)*V^dagger.
+```
+
+If this operator approximates `T` on `ran(V)` with error `epsilon`, then
+
+```text
+||C-D||_op <= (epsilon+delta)/(1-delta),
+sum_j |c_j|
+  >= N*(1-(epsilon+delta)/(1-delta)).
+```
+
+The first inequality follows by conjugating through `sqrt(G)` and using
+
+```text
+||G^(-1/2)-I||*(||G^(-1/2)||+1) <= delta/(1-delta).
+```
+
+Separately, for the raw signed frame `K=W*D*W^dagger`, a left inverse of the
+full-column-rank map `W` shows that
+
+```text
+sum_j c_j*P_j = K
+```
+
+forces `C=D`.  Its signed projector coefficients are unique and their `l_1`
+norm is exactly `N`.  The same exact conclusion holds for the reflection
+dictionary.  Put
+
+```text
+R_j = 2*P_j-I,
+L_tilde = sum_j a_j*R_j+b*I.
+```
+
+Because the physical Hilbert space has dimension greater than `N`, the
+orthogonal complement of `ran(V)` fixes the identity offset.  An
+`epsilon`-approximation to the zero-extended `T` obeys
+
+```text
+sum_j |a_j|
+  >= (N/2)*(1-(2*epsilon+delta)/(1-delta)).
+```
+
+The exact reflection representation of `K` therefore has the unique
+normalization `N/2`.  Nonuniform coefficients and cancellation do not improve
+it.  The preceding inequality separately says that any constant-error
+diagonal-projector or reflection approximation to `T`, if one exists, still
+has linear normalization.  This is a dictionary theorem: it does not cover
+higher-rank grouped preparations, a different arithmetic block encoding, or
+an unrelated circuit for `T`.
+
+Directly block-encoding the parity density matrix is even less favorable.
+The efficient purifications
+
+```text
+|Phi_b>
+  = sqrt(2/N)*sum_(j mod 2=b) |j>|psi_j>
+```
+
+give a constant-normalized block encoding of
+
+```text
+rho_b = (2/N)*sum_(j mod 2=b) P_j,
+Delta = rho_0-rho_1 = (2/N)*W*D*W^dagger.
+```
+
+If `p_t=N*eta_t/2^q`, the two eigenvalues on the fibre pair
+`{t,t+H}` are
+
+```text
++/-(2/N)*sqrt(p_t*p_(t+H)).
+```
+
+On the Gram-flat event they have magnitude `Theta(1/N)`.  If a degree-`r`
+polynomial bounded by one on `[-1,1]` approximates the sign at `+/-s`, where
+`s=Theta(1/N)`, with fixed error below one, the mean-value theorem and
+Bernstein's inequality give
+
+```text
+r = Omega(1/s) = Omega(N).
+```
+
+Equivalently, direct qubitization must resolve an eigenphase gap
+`Theta(1/N)`.  Factoring through `B=W/sqrt(N)` exposes singular values only
+at scale `Theta(N^(-1/2))`; its projected-unitary/QSVT polar route therefore
+costs `Theta(sqrt(N))` at constant accuracy, up to approximation logarithms.
+The square-root frame construction is genuinely better than taking the sign
+of `Delta`, but it is still exponential.  These statements concern the
+standard purified-density and projected-unitary encodings, not a hypothetical
+arithmetic block encoding with exponentially better normalization.  See the
+primary [QSVT](https://arxiv.org/abs/1806.01838) and
+[qubitization](https://arxiv.org/abs/1610.06546) references.
 
 More strongly, square-root cost is necessary in the entire idealized
 **orbit/reference** access model.  Let `S|z>=|z+1>` be an `N`-position clock.
@@ -2448,6 +2646,85 @@ At `q=12*n`, this is exponentially small for
 `r<0.10838*n`.  This excludes direct exact bounded-support half-turn
 Hamiltonians or walk generators; it does not exclude deep circuits or
 long-time evolution under a generic local Hamiltonian.
+
+### A bounded-output matchgate circuit is parity-blind
+
+Another structured route can be excluded exactly below a linear output
+threshold.  On the clean input
+
+```text
+|psi_d^Y>
+  = tensor_(i=1)^q (|0>+omega^(d*Y_i)|1>)/sqrt(2),
+```
+
+allow a parity-preserving fermionic-Gaussian unitary that depends arbitrarily
+on the public `Y`, and nonadaptive measurement of `k` output occupations.
+The initial joint state is required to be
+
+```text
+|psi_d^Y><psi_d^Y| tensor sigma_A(Y),
+```
+
+where the ancilla state is arbitrary but independent of `d`.  If there is no
+signed relation
+
+```text
+sum_(i in S) sigma_i*Y_i = H mod N,
+1 <= |S| <= 2*k,  sigma_i in {+1,-1},
+```
+
+then the complete `k`-bit output distribution is exactly the same under the
+uniform even-secret and odd-secret ensembles.
+
+Indeed, Gaussian evolution maps each Majorana operator linearly to other
+Majoranas.  Every product of a subset of the `k` measured occupation signs
+therefore pulls back to a sum of Majorana monomials of degree at most `2*k`.
+After the Jordan--Wigner map, a term containing a data `Z` has zero expectation
+on the equatorial input.  Every surviving term has secret-frequency support
+among signed sums of at most `2*k` public labels.  Parity averaging keeps only
+the half-turn character,
+
+```text
+(1/N)*sum_(d in Z_N) (-1)^d*omega^(d*r) = 1_(r=H).
+```
+
+Thus all output sign moments agree, and Walsh inversion makes the whole
+classical output law agree.  For iid-uniform labels,
+
+```text
+Pr[there is such a relation of weight at most 2*k]
+  <= N^(-1)*sum_(w=1)^(2*k) 2^w*choose(q,w).
+```
+
+At `q=12*n`, this is exponentially small whenever, for some fixed
+`epsilon>0`,
+
+```text
+k <= (0.0541889-epsilon)*n.
+```
+
+There is a similarly scoped adaptive statement.  For a fixed transcript of
+`k` sequential occupation measurements with only
+Gaussian feedforward between them, the POVM effect contains `2*k-1`
+occupation projectors in `K^dagger*K` and hence has Majorana degree at most
+`4*k-2`.  Its transcript distribution is parity-identical when no relation
+of that support exists, giving the typical-instance threshold
+
+```text
+k <= (0.0270944-epsilon)*n
+```
+
+for `q=12*n` and any fixed `epsilon>0`.
+
+This excludes low-output matchgate/free-fermion summaries, not all Gaussian
+circuits.  It does not cover ordinary qubit operations that break fermionic
+Gaussianity, non-Gaussian gates or injections, arbitrary-basis measurement
+patterns, a prior preprocessing that entangles data and ancillas outside the
+Gaussian model, or circuits reading linearly many outputs beyond the stated
+threshold.  The formalism follows
+[Jozsa--Miyake](https://arxiv.org/abs/0804.4050); adaptive
+noninteracting-fermion circuits are treated by
+[Terhal--DiVincenzo](https://arxiv.org/abs/quant-ph/0108010).
 
 ## Candidate verification and posterior filtering
 
@@ -2630,10 +2907,69 @@ E[U_0] = 1+(C-1)/N.
 At `lambda=1` and `q=12*n`, the mean signed signal has scale
 `N^(12*log_2(3/2)-1)=N^6.01955...`, while the mean unsigned half-turn mass has
 scale `N^11`.  Their ratio is about `2*N^(-4.98045)`.  This compares first
-moments, not typical-instance ratios or a complexity lower bound.  It shows
-that separately approximating positive and negative witness counts to
-ordinary inverse-polynomial relative precision would not resolve the ratio of
-these first-moment scales.
+moments, not the mean of a ratio.  Exact second moments nevertheless turn the
+associated sign-reweighting obstruction into a typical-instance statement.
+Write the signed and absolute endpoint coefficients as
+
+```text
+A_t = sum_(z in {-1,0,1}^q : sum_i z_i*Y_i=t)
+        (lambda/2)^|z| * product_(i:z_i!=0) S_i,
+U_t = sum_(z in {-1,0,1}^q : sum_i z_i*Y_i=t)
+        (lambda/2)^|z|.
+```
+
+Thus `A_t/U_t` is exactly the average sign under the absolute-weight
+distribution on ternary paths ending at `t`.  In the matched observation
+model above, put
+
+```text
+g_j = (1+j*lambda^2/2)^q-1.
+```
+
+For `N>=8` and `d` different from `0,H`, direct enumeration of the six
+frequency-coincidence lines gives
+
+```text
+E[A_0^2]
+  = 1+(4*g_3+2*g_2+(6*N-16)*g_1)/N^2,
+E[A_H^2]
+  = (4*g_3+2*g_2+(2*N-16)*g_1)/N^2.
+```
+
+The absolute coefficients satisfy
+
+```text
+Var(U_t) <= ((1+lambda^2)^q-1)/N,
+t in {0,H}.
+```
+
+One way to see the variance bound is to group pairs of ternary words by
+their activity supports.  Apart from the zero word, which is handled
+separately, different supports expose a two-by-two unit minor and hence
+independent uniform endpoint sums; the total squared absolute weight of
+equal-support pairs is `(1+lambda^2)^q`.
+
+At `lambda=1` and `q=12*n`, the second moments of `A_0,A_H` are
+`Theta((5/2)^q/N^2)`, whereas
+`E[U_t]=Theta(2^q/N)`.  Chebyshev for `U_t`, followed by second-moment Markov
+for `A_t`, yields, for every fixed `epsilon>0`,
+
+```text
+Pr[max_(t in {0,H}) |A_t|/U_t
+     >= N^(-4.06843+epsilon)]
+  <= O(N^(-2*epsilon))+O(N^(-11)).
+```
+
+Therefore an ordinary iid absolute-weight sampler followed by the sample
+mean of the signs needs exponentially many endpoint-conditioned samples for
+constant relative precision: for `M` samples its variance is
+`(1-(A_t/U_t)^2)/M`, so constant relative mean-square error requires
+`M=Omega((U_t/A_t)^2)`.  This is a barrier for that sign-reweighting
+estimator, not a generic FPRAS impossibility or a lower bound on a direct
+arithmetic computation of `A_H/A_0`.  The large exact second moments also
+make their relative second moments grow, so replacing the random signed
+coefficients by their first moments has no second-moment concentration
+justification.
 
 A least-significant-bit Bayes recursion does not evade the coefficient
 problem.  For `r in Z_(2^j)`, define the evidence of one congruence class by
@@ -2814,10 +3150,12 @@ labels to remove `Theta(log n)` modulus bits in polynomial time, but its
 no-reuse population loss prevents enough iterations to reach a small modulus.
 Allowing arbitrary overlapping binary syndromes does not make this reuse
 free: the exact affine-code normal form replaces disjoint pairing by a system
-of higher-order modular carry congruences.  Fixed embeddings chosen
-independently of `Y` satisfy those constraints with exponentially small
-probability, while finding a useful `Y`-dependent embedding is another
-arithmetic decoding problem.
+of higher-order modular carry congruences.  The all-embedding SNF/counting
+bound is stronger: for `q=12*n`, with high probability no affine coset of
+dimension at least `91` is contained in one `f_Y mod H` fibre, even if that
+coset is chosen after seeing `Y`.  The syndrome-isolated core remains possible
+precisely
+because its additional modular measurement leaves a non-affine intersection.
 The best generic coherent scale identified is
 `Theta(sqrt(N)) = 2^(n/2)`.  The operator-Schmidt theorem and the
 statistical-query theorem make two of these route boundaries rigorous without turning
@@ -2833,7 +3171,19 @@ useful, its total herald is `Theta(1/N)` on the balanced event.  The direct
 normalized likelihood filter has at most `O(1/N)` heralding once its posterior
 has constant useful mass.  Its uniform importance-sampling relative variance
 is exactly `N*sum_k pi(k)^2-1`, so it becomes linear in `N` when the posterior
-is concentrated.  Pair products of passive samples do give an exact smaller-
+is concentrated.  At `q=12*n`, a stronger typical-instance calculation in
+the matched nondegenerate passive model shows that the average-sign magnitude
+seen by ordinary absolute-weight reweighting is at most
+`N^(-4.06843+epsilon)` with high probability for every fixed `epsilon>0`;
+this does not lower-bound a direct arithmetic coefficient algorithm.  Within
+the clean orbit-projector dictionary, the raw signed-frame coefficients are
+unique and constant-error parity approximations still have `Omega(N)` LCU
+normalization.  Direct purified-density sign transformation costs
+`Omega(N)`, while the factorized frame polar improves this standard access
+route only to `Theta(sqrt(N))`.  Low-output fermionic-Gaussian circuits form
+another exact but scoped barrier: below the stated linear output thresholds,
+their full classical output distribution is parity-independent on typical
+labels.  Pair products of passive samples do give an exact smaller-
 modulus recursion.  Along nondegenerate levels, including the odd-secret
 case before the final modulus, the visibility follows
 `lambda_ell=2*(lambda/2)^(2^ell)`; polynomial no-reuse recursion removes only
@@ -2849,7 +3199,7 @@ successive dyadic moduli with fresh states, a polynomial one-bit decoder would
 give a polynomial DCP algorithm by bit recursion.  It would therefore be a new
 algorithmic breakthrough in exactly the problem the paper claims to solve.
 
-The narrowest remaining positive question can now be stated through two
+The narrowest remaining positive question can now be stated through three
 distinct sufficient interfaces:
 
 > Can one either (a) use the product-state representation of `K_Y` to implement

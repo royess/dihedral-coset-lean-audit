@@ -606,8 +606,12 @@ probability per large-`B` layer, so it cannot be iterated to a small modulus
 while retaining density one.  More
 general overlapping CNOT/syndrome branches admit an exact affine-code normal
 form: removing `m` modulus bits requires simultaneous higher-order carry
-congruences, and no polynomial `Y`-dependent solver for those constraints was
-found.
+congruences.  In fact, an all-embedding SNF/counting argument shows that for
+`q=12*n`, with high probability no affine coset of dimension at least `91` is
+contained in one `f_Y mod H` fibre, even if selected after seeing `Y`.  The
+syndrome-isolated core is
+not contradicted because its additional modular measurement leaves a
+generally non-affine intersection.
 
 The robust observable's signed conjugation harmonic also yields a stronger
 scoped lower bound.  In the translation-covariant orbit/reference model, an
@@ -637,8 +641,12 @@ prepares a useful posterior only
 with at most `O(1/N)` heralding probability in its direct normalized
 state-conversion model.  Uniform importance sampling has exact squared
 coefficient of variation `N*sum_k pi(k)^2-1`, so it costs linear in `N` after
-the posterior concentrates.  Pair products give an exact passive recursion
-to smaller 2-adic moduli.  Writing their initial visibility as `lambda_pass`,
+the posterior concentrates.  At `q=12*n`, in the matched passive model with a
+nondegenerate secret, ordinary absolute-weight sign reweighting has
+average-sign magnitude at most `N^(-4.06843+epsilon)` with high probability
+for every fixed `epsilon>0`; this does not lower-bound a direct arithmetic
+computation of the coefficient ratio.  Pair products give an exact passive
+recursion to smaller 2-adic moduli.  Writing their initial visibility as `lambda_pass`,
 along nondegenerate levels, including an odd secret before the final modulus,
 their visibility after `ell` levels is
 `2*(lambda_pass/2)^(2^ell)`; polynomial no-reuse recursion removes only
@@ -653,9 +661,14 @@ The Gram-good blocks also define an explicit parity-only involution that is
 uniformly correct on every coherent low-weight-error vector, without
 outputting the complete secret or error label.  Its known projected-unitary
 polar implementation nevertheless costs `Theta(sqrt(N))` at constant accuracy
-in that access model, and exact
-operator-Schmidt flatness rules out only polynomial-bond Frobenius/MPO
-compression, not arbitrary circuits.
+in that access model.  In the clean orbit dictionary, the raw signed-frame
+LCU is coefficient-unique and constant-error parity approximations retain
+`Omega(N)` normalization, while directly signing the purified density block
+costs `Omega(N)` rather than the frame route's
+`Theta(sqrt(N))`.  Low-output fermionic-Gaussian circuits are also exactly
+parity-blind below the signed-relation threshold.  These are scoped
+circuit/access-model statements, and exact operator-Schmidt flatness rules
+out only polynomial-bond Frobenius/MPO compression, not arbitrary circuits.
 Third, pairwise Kuperberg-style collimation retains the usual
 `2^(Theta(sqrt(n)))` clean resource balance, while explicit linear-support
 relations, when fixed or drawn from a polynomial family independently of the

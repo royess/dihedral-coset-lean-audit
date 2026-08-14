@@ -105,8 +105,12 @@ prepared difference still hits the required residue with probability about
 concrete residue-pair implementation can remove
 `Theta(log n)` modulus bits in polynomial time, but loses too much population
 to iterate to a small modulus.  General overlapping CNOT/syndrome branches
-admit an exact carry-congruence normal form; overlap replaces the population
-loss by simultaneous modular constraints and does not yet produce a decoder.
+admit an exact carry-congruence normal form.  More strongly, for `q=12*n`,
+with high probability no affine coset of dimension at least `91` is contained
+in one `f_Y mod H` fibre, even if selected after seeing `Y`.  The
+syndrome-isolated core is
+not contradicted because its additional modular measurement leaves a
+generally non-affine intersection.
 Moreover, an exact translation-covariant
 orbit/reference adversary theorem extends the square-root barrier beyond
 QSVT: arbitrary fast orbit
@@ -129,7 +133,12 @@ while the direct normalized likelihood filter reaches useful posterior mass
 with at most `O(1/N)` heralding probability in its state-conversion model.  A
 uniform importance estimator has exact squared coefficient of variation
 `N*sum_k pi(k)^2-1`, hence needs linear-in-`N` sampling once the posterior is
-sharp.  Pair products provide an exact passive smaller-modulus recursion, but
+sharp.  At `q=12*n`, in the matched passive model with a nondegenerate secret,
+ordinary absolute-weight sign reweighting has average-sign magnitude at most
+`N^(-4.06843+epsilon)` with high probability for every fixed `epsilon>0`,
+although this does not lower-bound a direct arithmetic coefficient algorithm.
+Pair products
+provide an exact passive smaller-modulus recursion, but
 if `lambda_pass` is the initial visibility, then along nondegenerate levels--
 including an odd secret before the final modulus--their visibility becomes
 `2*(lambda_pass/2)^(2^ell)` after `ell` levels, so a polynomial no-reuse
@@ -143,8 +152,15 @@ samples or collective quantum measurements.  The robust
 parity-only observable can also be written explicitly without outputting the
 complete secret/error label, but its known multiplexed-polar realization
 still costs `Theta(sqrt(N))` at constant accuracy in the standard
-projected-unitary/QSVT access model.  Exact operator-Schmidt analysis further rules
-out polynomial-bond MPO/Frobenius compression, not general circuits.  Pairwise
+projected-unitary/QSVT access model.  Within the clean orbit dictionary, the
+raw signed-frame LCU coefficients are unique and constant-error parity
+approximations retain `Omega(N)` normalization; directly taking
+the sign of the purified density-matrix block encoding costs `Omega(N)`,
+whereas frame polarization gives the sharper `Theta(sqrt(N))` route.  A
+bounded-output fermionic-Gaussian circuit is also exactly parity-blind below
+the signed-relation threshold; these are scoped access/circuit-class results.
+Exact operator-Schmidt analysis further rules out polynomial-bond
+MPO/Frobenius compression, not general circuits.  Pairwise
 Kuperberg-style collimation remains subexponential and its
 explicit terminal relations are further suppressed by allowed hidden-fault
 models.  These are scoped route failures, not a general lower bound.
