@@ -1,0 +1,70 @@
+name: Lean
+
+on:
+  push:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lean-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-audit:
+    name: Build and audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Reject proof placeholders and project axioms
+        run: |
+          if grep -R -n -E --include='*.lean' \
+              '\b(sorry|admit)\b|^[[:space:]]*axiom\b' \
+              SimonDCP.lean SimonDCP; then
+            echo 'Found a proof placeholder or project-local axiom.' >&2
+            exit 1
+          else
+            scan_status=$?
+            if [ "${scan_status}" -ne 1 ]; then
+              echo "Source scan failed with exit ${scan_status}." >&2
+              exit "${scan_status}"
+            fi
+          fi
+
+      - name: Build Lean declarations
+        uses: leanprover/lean-action@v1
+        with:
+          build: true
+          test: false
+          lint: false
+          mk_all-check: true
+
+      - name: Kernel-replay project modules sequentially
+        run: |
+          # No-target mode launches one task per project module concurrently.
+          # Replay exact modules serially to keep the runner's memory bounded.
+          mapfile -t source_files < <(
+            find SimonDCP -type f -name '*.lean' -print | sort
+          )
+          if [ "${#source_files[@]}" -eq 0 ]; then
+            echo 'No project Lean modules found to kernel-replay.' >&2
+            exit 1
+          fi
+          echo "Kernel-replaying ${#source_files[@]} project modules."
+          for source_file in "${source_files[@]}"; do
+            module="${source_file%.lean}"
+            module="${module//\//.}"
+            echo "::group::leanchecker ${module}"
+            lake env leanchecker "${module}"
+            echo "::endgroup::"
+          done
+
+      - name: Report theorem axiom dependencies
+        run: lake env lean SimonDCP/AxiomAudit.lean

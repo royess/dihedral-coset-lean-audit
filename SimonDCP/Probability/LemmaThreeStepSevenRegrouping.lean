@@ -1,4 +1,5 @@
 import SimonDCP.Probability.LemmaThreeToFourL2
+import Mathlib.Algebra.Order.Chebyshev
 
 /-!
 # Finite Step-7 regrouping by the low residue
@@ -30,6 +31,14 @@ has to identify the concrete path types and residue maps, prove that the
 circuit amplitude is the scaled double sum below, and supply the conditioned
 count-error and coefficient-energy budgets (for example through a suitable
 Parseval or collision calculation).
+
+The collision section also records the limitation of a purely coherent
+estimate.  Any uniform B-residue fibre bound `K` must satisfy
+`#BPaths <= #Residues * K`.  If all B-path contributions are the same complex
+number, the coefficient energy is exactly its squared magnitude times the sum
+of squared fibre sizes, hence at least the pigeonhole scale
+`normSq(common) * #BPaths^2 / #Residues`.  Beating this scale requires actual
+cancellation or orthogonality, not just regrouping.
 -/
 
 namespace SimonDCP.Probability.LemmaThreeStepSevenRegrouping
@@ -202,5 +211,162 @@ theorem coefficientEnergy_bResidueCoefficient_eq_collisionSum
   intro z _
   exact normSq_finsetSum_eq_collisionSum
     (bPaths.filter fun b => bResidue b = z) term
+
+/-! ## Coherent-fibre obstruction and upper bounds -/
+
+/-- The B-residue fibres partition the finite B-path set. -/
+theorem sum_bResidueFiberCard
+    [Fintype Residue] [DecidableEq Residue]
+    (bPaths : Finset BPath) (bResidue : BPath -> Residue) :
+    (∑ z, (bPaths.filter fun b => bResidue b = z).card) = bPaths.card := by
+  classical
+  simpa using
+    (Finset.sum_card_fiberwise_eq_card_filter
+      (s := bPaths) (t := (Finset.univ : Finset Residue)) bResidue)
+
+/-- Any uniform B-residue fibre bound must account for all B paths. -/
+theorem card_bPaths_le_card_residue_mul_fiberCardBound
+    [Fintype Residue] [DecidableEq Residue]
+    (bPaths : Finset BPath) (bResidue : BPath -> Residue)
+    (fiberCardBound : Nat)
+    (hFiberCard : ∀ z,
+      (bPaths.filter fun b => bResidue b = z).card ≤ fiberCardBound) :
+    bPaths.card ≤ Fintype.card Residue * fiberCardBound := by
+  rw [← sum_bResidueFiberCard bPaths bResidue]
+  calc
+    (∑ z, (bPaths.filter fun b => bResidue b = z).card) ≤
+        ∑ _z : Residue, fiberCardBound :=
+      Finset.sum_le_sum fun z _ => hFiberCard z
+    _ = Fintype.card Residue * fiberCardBound := by simp
+
+/--
+Pigeonhole lower bound for the squared B-residue fibre sizes.  Thus a small
+maximum fibre requires enough residue labels relative to the number of paths.
+-/
+theorem card_sq_div_le_sum_sq_bResidueFiberCard
+    [Fintype Residue] [DecidableEq Residue] [Nonempty Residue]
+    (bPaths : Finset BPath) (bResidue : BPath -> Residue) :
+    (bPaths.card : Real) ^ 2 / Fintype.card Residue ≤
+      ∑ z, ((bPaths.filter fun b => bResidue b = z).card : Real) ^ 2 := by
+  classical
+  have hSum :
+      (∑ z, ((bPaths.filter fun b => bResidue b = z).card : Real)) =
+        bPaths.card := by
+    exact_mod_cast sum_bResidueFiberCard bPaths bResidue
+  have hCauchy := sq_sum_le_card_mul_sum_sq
+    (s := (Finset.univ : Finset Residue))
+    (f := fun z =>
+      ((bPaths.filter fun b => bResidue b = z).card : Real))
+  rw [hSum] at hCauchy
+  apply (div_le_iff₀ (by positivity : (0 : Real) < Fintype.card Residue)).2
+  simpa [mul_comm] using hCauchy
+
+/--
+If every B path has the same complex contribution, the coefficient energy is
+exactly its squared magnitude times the squared-fibre collision sum.
+-/
+theorem coefficientEnergy_bResidueCoefficient_const
+    [Fintype Residue] [DecidableEq Residue]
+    (bPaths : Finset BPath) (bResidue : BPath -> Residue)
+    (common : Complex) :
+    coefficientEnergy
+        (bResidueCoefficient bPaths bResidue fun _ => common) =
+      Complex.normSq common *
+        ∑ z, ((bPaths.filter fun b => bResidue b = z).card : Real) ^ 2 := by
+  classical
+  unfold coefficientEnergy bResidueCoefficient
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro z _
+  simp only [Finset.sum_const, nsmul_eq_mul, Complex.normSq_mul,
+    Complex.normSq_natCast]
+  ring
+
+/--
+Identical B-path contributions therefore inherit the unavoidable
+fibre-collision lower
+bound.  Any smaller coefficient estimate must exploit cancellation or extra
+orthogonality not present in this purely coherent constant-contribution model.
+-/
+theorem coefficientEnergy_bResidueCoefficient_const_lower_bound
+    [Fintype Residue] [DecidableEq Residue] [Nonempty Residue]
+    (bPaths : Finset BPath) (bResidue : BPath -> Residue)
+    (common : Complex) :
+    Complex.normSq common *
+        ((bPaths.card : Real) ^ 2 / Fintype.card Residue) ≤
+      coefficientEnergy
+        (bResidueCoefficient bPaths bResidue fun _ => common) := by
+  rw [coefficientEnergy_bResidueCoefficient_const]
+  exact mul_le_mul_of_nonneg_left
+    (card_sq_div_le_sum_sq_bResidueFiberCard bPaths bResidue)
+    (Complex.normSq_nonneg common)
+
+/--
+A coefficient-energy bound in terms of the largest right-path residue fibre.
+No cancellation or independence is required.  In particular, an injective
+residue map has `fiberCardBound = 1` and loses no factor beyond the diagonal
+path energy.
+-/
+theorem coefficientEnergy_bResidueCoefficient_le_fiberCard_mul_sum_normSq
+    [Fintype Residue] [DecidableEq Residue]
+    (bPaths : Finset BPath) (bResidue : BPath -> Residue)
+    (term : BPath -> Complex) (fiberCardBound : Nat)
+    (hFiberCard : ∀ z,
+      (bPaths.filter fun b => bResidue b = z).card ≤ fiberCardBound) :
+    coefficientEnergy (bResidueCoefficient bPaths bResidue term) ≤
+      (fiberCardBound : Real) *
+        ∑ b ∈ bPaths, Complex.normSq (term b) := by
+  classical
+  unfold coefficientEnergy bResidueCoefficient
+  calc
+    (∑ z, Complex.normSq
+        (∑ b ∈ bPaths.filter (fun b => bResidue b = z), term b)) ≤
+      ∑ z, ((bPaths.filter fun b => bResidue b = z).card : Real) *
+        ∑ b ∈ bPaths.filter (fun b => bResidue b = z),
+          Complex.normSq (term b) := by
+      apply Finset.sum_le_sum
+      intro z _
+      simpa using normSq_sum_real_mul_le
+        (bPaths.filter fun b => bResidue b = z)
+        (fun _ => (1 : Real)) term
+    _ ≤ ∑ z, (fiberCardBound : Real) *
+        ∑ b ∈ bPaths.filter (fun b => bResidue b = z),
+          Complex.normSq (term b) := by
+      apply Finset.sum_le_sum
+      intro z _
+      apply mul_le_mul_of_nonneg_right
+      · exact_mod_cast hFiberCard z
+      · exact Finset.sum_nonneg fun b _ => Complex.normSq_nonneg (term b)
+    _ = (fiberCardBound : Real) *
+        ∑ b ∈ bPaths, Complex.normSq (term b) := by
+      rw [← Finset.mul_sum]
+      simp_rw [Finset.sum_filter]
+      rw [Finset.sum_comm]
+      congr 1
+      apply Finset.sum_congr rfl
+      intro b _
+      rw [Finset.sum_eq_single (bResidue b)]
+      · simp
+      · intro z _ hz
+        simp [Ne.symm hz]
+      · simp
+
+/--
+A universal specialization of the fibre-cardinality estimate: coherently
+grouping the right paths by residue costs at most the total number of right
+paths times their diagonal energy.  A sharper fibre bound, Parseval identity,
+or orthogonality argument can improve this factor.
+-/
+theorem coefficientEnergy_bResidueCoefficient_le_card_mul_sum_normSq
+    [Fintype Residue] [DecidableEq Residue]
+    (bPaths : Finset BPath) (bResidue : BPath -> Residue)
+    (term : BPath -> Complex) :
+    coefficientEnergy (bResidueCoefficient bPaths bResidue term) ≤
+      (bPaths.card : Real) *
+        ∑ b ∈ bPaths, Complex.normSq (term b) := by
+  apply coefficientEnergy_bResidueCoefficient_le_fiberCard_mul_sum_normSq
+    bPaths bResidue term bPaths.card
+  intro z
+  exact Finset.card_filter_le bPaths (fun b => bResidue b = z)
 
 end SimonDCP.Probability.LemmaThreeStepSevenRegrouping

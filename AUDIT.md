@@ -23,8 +23,9 @@ implementation gap, not merely a missing concentration estimate.
 ## Lean formalization targets
 
 The source contains no `sorry`, `admit`, or handwritten project-local axioms.
-A clean Arch WSL build, including the Lemma 1 repair and current Lemma 3 repair
-modules, completed all 8665 jobs successfully on August 11, 2026.
+A clean build, including the Lemma 1 repair, current Lemma 3 repair, and
+decoder-facing conditional and expectation-level Lemma 4 repair modules,
+completed all 8674 jobs successfully on August 16, 2026.
 `SimonDCP/AxiomAudit.lean` prints the axiom dependencies of the principal
 results.  Analytic theorems contain only `propext`, `Classical.choice`, and
 `Quot.sound`.  The finite exhaustive searches, including the six-coordinate
@@ -574,6 +575,323 @@ polynomial exponent is `-2`, so replacing it by the unsupported bound `n` is
 unnecessary.  Only additive signed-sum error control follows without a
 non-cancellation hypothesis.
 
+`Lemma4Repair.lean` makes that boundary exact. Two count functions that are
+each uniformly within `error` of the same mean yield weighted amplitudes whose
+absolute difference is at most
+
+```text
+2 * numberOfBins * error * coefficientBound.
+```
+
+Dividing by a reference amplitude is sound only after supplying a positive
+lower bound on its magnitude. Under that explicit anti-cancellation premise,
+Lean converts the additive bound into the corresponding relative-error bound.
+Thus a repaired Lemma 4 can target the additive conclusion directly, or prove
+the new lower-bound premise; conditional balls-in-bins control alone cannot
+establish the paper's multiplicative statement.
+
+The decoder does not, however, require a multiplicative ratio.
+`ApproximateReadout.lean` computes the concrete Hadamard Born probability for
+an arbitrary normalized one-qubit state.  If its two amplitudes are `a` and
+`b`, with target sign `s = (-1)^d`, then
+
+```text
+Pr[wrong bit] = normSq(b - s*a) / 2.
+```
+
+Consequently additive mismatch norm at most `epsilon` gives correct-bit
+probability at least `1 - epsilon^2/2`, even when either reference amplitude
+cancels.
+
+The final paragraph of the paper still has other high-part labels present
+when it applies Hadamard to `h*`, so a pure-one-qubit theorem alone would not
+model that step.  `ApproximateReadout.lean` now also proves the exact labelled
+identity for normalized paired amplitude families `a_x, b_x`, and identifies
+it with the concrete QuantumAlg first-qubit marginal after `H ⊗ I`:
+
+```text
+Pr[wrong bit] = (sum_x normSq(b_x - (-1)^d*a_x)) / 2.
+```
+
+It proves that the paper's stated L1 premise
+`sum_x norm(b_x - (-1)^d*a_x) <= epsilon` would imply correct mass at least
+`1 - epsilon^2/2`.  This removes any factorization assumption while retaining
+all unmeasured labels.  `Lemma4Decoder.lean` then uses Cauchy--Schwarz to prove
+both the single-pair and labelled decoder-facing bounds.  The single-pair
+bound is
+decoder-facing bound
+
+```text
+Pr[correct bit] >=
+  1 - normSq(scale) * countBudget * coefficientBudget / 2,
+```
+
+where `countBudget` bounds the squared L2 distance of the two count functions
+and `coefficientBudget` bounds the squared energy of the complex coefficient
+family.  Uniform pointwise count error `error` supplies the explicit budget
+`4 * numberOfBins * error^2`.  This removes anti-cancellation from the final
+readout repair while leaving the paper's literal multiplicative claim
+unproved.  The labelled version sums the scaled count/coefficient-energy
+budget over every residual amplitude pair, exactly matching the structure of
+the paper's final Hadamard argument.  A composed theorem starts from an actual
+normalized `1+n` qubit state, applies `H ⊗ I`, and bounds its correct
+first-qubit marginal directly.
+
+The same file lifts the result through the finite union bound.  If every bin
+in both branches has deviation-event mass at most `tail`, the records whose
+final qubit satisfies this quantitative readout guarantee have mass at least
+
+```text
+1 - 2 * numberOfBins * tail.
+```
+
+This probabilistic statement is complete inside the explicitly conditioned
+finite interface; its per-bin tails, coordinate identities, and coefficient
+energy bound remain application hypotheses.
+
+The actual-state labelled theorem is also lifted through a second union bound.
+If each residual pair and each low-part bin in both branches has deviation
+event mass at most `tail`, then the classical records whose concrete `H ⊗ I`
+first-qubit marginal satisfies the labelled readout guarantee have mass at
+least
+
+```text
+1 - 2 * numberOfPairs * numberOfBins * tail.
+```
+
+No independence between these events is used.  The bound makes the paper's
+needed simultaneous concentration premise explicit across both indexing
+layers; it does not derive that premise after the adaptive conditioning.
+
+The same module now proves a complete finite probabilistic repair. On a
+normalized nonnegative finite space, if every low-part bin in both high-bit
+branches has deviation-event mass at most `tail`, the additive comparison has
+success mass at least
+
+```text
+1 - 2 * numberOfBins * tail.
+```
+
+The relative comparison has the same success mass under a uniform positive
+reference-amplitude lower bound. The per-bin tail hypotheses can be supplied
+by the existing pairwise-Bernoulli Chebyshev theorem once conditional first and
+second moments are proved. This separates a formalized corrected Lemma 4 from
+the still-open task of connecting its hypotheses to the paper's adaptive,
+conditioned experiment.
+
+For the decoder-facing route, the corresponding open connection is more
+precise: identify each actual conditioned Step-7 amplitude pair with the two
+scaled weighted amplitudes, then prove the resulting labelled count-error and
+coefficient-energy budgets.  No pure-qubit factorization or
+reference-amplitude lower bound is needed.  Once per-pair/per-bin conditional
+tails are supplied, the formalized two-layer union bound already propagates
+them to the actual gate-level decoder event.
+
+`Lemma4AverageDecoder.lean` removes the need for this simultaneous event when
+the goal is the algorithm's overall decoding probability.  For a normalized
+finite classical record distribution, it proves
+
+```text
+expected scaled mismatch energy <= epsilon
+  ==> overall Pr[correct after H ⊗ I] >= 1 - epsilon/2.
+```
+
+It also proves that the paired count distance is at most twice the sum of the
+two branches' L2 count energies around a common centre, with no factor equal
+to the number of bins.  Composing this with
+`expected_selectedCountErrorEnergy_actualMean_eq` gives an explicit
+paper-facing theorem under `WeightedPairCollisionUniform` for every residual
+pair and both branches.  Importantly, selection is inside this collision
+moment.  Thus the theorem neither assumes nor concludes that the paper's bare
+pre-conditioning pairwise independence survives its adaptive transcript.
+The remaining obligations are now the actual Step-7 coordinate identities,
+equal selected branch populations, the selected-pair collision identities,
+and a scale-times-coefficient-energy bound.  This expectation route avoids
+the exponential two-layer union bound entirely.  The same module proves that
+the equal-bit conditioning counterexample violates
+`WeightedPairCollisionUniform`, even though its two underlying Boolean bucket
+labels are jointly uniform before conditioning.
+
+`Lemma4StepSevenAverage.lean` closes the next algebraic interface.  It feeds
+the explicit finite Step-7 double sums from
+`LemmaThreeStepSevenRegrouping.lean` into the averaged `H ⊗ I` theorem, so the
+count-weighted coordinate identities are derived rather than assumed inside
+that path model.  The accompanying universal estimate proves
+
+```text
+energy of the coherently residue-grouped B coefficients
+  <= #BPaths * total diagonal B-path energy.
+```
+
+The sharper bounded-fibre form replaces `#BPaths` by
+`max_z #(BPaths with residue z)`.  It is carried through both the averaged
+count-energy theorem and the selected-pair collision theorem; an injective
+B-residue map therefore incurs no extra cardinality factor.  This narrows the
+coefficient-side obligation to an actual conditioned fibre-multiplicity bound
+or a Parseval/orthogonality identity.
+
+The same module proves the converse counting obstruction
+
+```text
+#BPaths <= #Residues * maximum B-residue fibre size.
+```
+
+When all B terms are the same complex number, it also identifies the
+coefficient energy exactly with `normSq(common) * sum_z #(B_z)^2` and proves
+the lower bound `normSq(common) * #BPaths^2 / #Residues`.  Thus the
+bounded-fibre route is not automatically polynomial when the number of
+compatible B paths greatly exceeds the number of residues.  A concrete proof
+must obtain a small fibre from structure or exploit genuine
+cancellation/orthogonality.
+
+`Lemma4PaperDecoder.lean` takes a complementary paper-facing route through
+the complete transcript model `M = (Y,D,W',S,h')`.  Because
+`LemmaThreePaperPathBridge.lean` already gives both residual `hStar` branches
+the same raw path amplitude within each transcript, the final Hadamard
+mismatch has the exact finite form
+
+```text
+sum_M normSq(normalization(M) * commonAmplitude(M)) *
+  (WalshSignedCount(M,1) - WalshSignedCount(M,0))^2.
+```
+
+The equality is machine-checked: `h xor hStar = h'` factors the secret-bit and
+measured-`h'` signs out of the two full signed counts, and their unit squared
+magnitudes disappear.  The resulting decoder theorem gives success at least
+`1 - budget/2` from a bound on this exact Walsh-only energy.  It needs neither
+an amplitude ratio nor a separate coefficient family.  It still requires the
+paper-path/circuit coordinate identification, normalization, and—most
+importantly—a bound on this Walsh-signed branch mismatch in the fully
+conditioned adaptive experiment.  Bare pairwise independence before fixing
+`W'`, `S`, and `h'` does not establish that bound.
+
+`Lemma4AdaptiveWalshEnergy.lean` makes the remaining second-moment premise
+exact.  It reindexes each transcript's signed branch difference as a sum over
+the fixed ambient hidden-state type, then expands the squared mismatch over
+ordered hidden-state pairs.  For fixed hidden states `phi` and `psi`, their
+correlation still contains the complete transcript weight and both adaptive
+compatibility indicators.  Thus `D`, acceptance, `W'`, `S`, `h'`, and the
+outcome-dependent normalization are all inside the correlation sum rather
+than treated as a fixed support after conditioning.
+
+Lean proves the exact identity
+
+```text
+Walsh mismatch energy
+  = sum_phi correlation(phi,phi)
+    + sum_(phi != psi) correlation(phi,psi).
+```
+
+The diagonal sum is globally—not pointwise—equal to the compatible common-
+path energy: one hidden state may survive for several values of `D`.  The
+existing path-energy theorem bounds it by
+`normalizationBound / card(Low)`.  Therefore a quantitative upper bound
+`delta` on the signed adaptive off-diagonal sum yields
+
+```text
+Pr[correct after H tensor I]
+  >= 1 - (normalizationBound / card(Low) + delta) / 2.
+```
+
+Exact adaptive pair orthogonality is the special case `delta = 0`.  The new
+module does not claim that this premise follows from the paper's unconditioned
+pairwise independence.  Rather, it isolates the exact weighted conditional
+correlation statement that a repaired Lemma 4 must prove or replace with a
+quantitative cancellation estimate.
+
+`Lemma4AdaptiveWalshFibre.lean` proves one deterministic replacement for that
+cancellation estimate.  For a complete transcript `M`, let `K_M` be the
+number of hidden states satisfying the full compatibility predicate, including
+acceptance and every recorded value.  Since each compatible state contributes
+one sign, finite Cauchy--Schwarz gives
+
+```text
+(WalshSignedCount(M,1) - WalshSignedCount(M,0))^2 <= K_M^2.
+```
+
+The weighted first moment `sum_M weight(M) * K_M` is exactly the common-path
+diagonal energy already bounded by the Step-2 theorem.  Hence a uniform
+`K_M <= K` implies
+
+```text
+Walsh mismatch energy <= K * normalizationBound / card(Low),
+Pr[correct after H tensor I]
+  >= 1 - K * normalizationBound / card(Low) / 2.
+```
+
+No independence or phase cancellation is used.  Lean also proves the
+structural specialization `K = 1` when the complete transcript separates
+compatible hidden states, and the unconditional fallback
+`K = card(Hidden)`.  The latter may be exponential, so a useful application
+still needs a polynomial complete-transcript fibre bound.  This is a distinct,
+explicit alternative to bounding the signed adaptive off-diagonal
+correlation.
+
+`Lemma4AdaptiveWalshFibreObstruction.lean` proves the matching counting
+constraint.  Summing `K_M` over complete transcripts counts every compatible
+fine path exactly once.  Therefore a uniform `K_M <= K` requires
+
+```text
+#compatible paths <= #complete transcripts * K.
+```
+
+The squared `K_M` also obey the usual pigeonhole collision lower bound.  A
+polynomial fibre claim must therefore account for all surviving hidden paths
+and all available transcript labels.  The paper's displayed exponential mean
+`mu` for A-state portions suggests that this issue is substantive, but it is
+not yet an instantiation of the exact compatible-path cardinality: that would
+require the missing bridge from the concrete experiment to the finite model.
+
+The formal interface now makes that bridge quantitative.  A finite paper bin
+contained in one complete-transcript compatible fibre and lying within
+`error` of the displayed mean satisfies `mu <= K + error`.  Specializing the
+paper's `c = 12` mean exponent under
+`faultLoss + 12*logN <= n`, a half-relative-error bin forces
+
+```text
+2^(9*n) / 2 <= K.
+```
+
+Hence, once the paper's intended A-state bin is identified with such a
+compatible subfibre, its own near-uniformity premise makes `K` exponential.
+The cancellation-free fibre theorem would then be too coarse unless the
+transcript normalization supplies a compensating factor; the sharper repair
+must instead control the normalized weighted fibre moment or the adaptive
+Walsh-sign cancellation directly.
+
+`Lemma4AdaptiveWalshNormalizedFibre.lean` proves the compensating-factor
+route without assuming any phase cancellation.  Rather than bounding
+`K_M` and the normalization separately, it assumes the coupled, circuit-facing
+quantity
+
+```text
+normSq(normalization(M)) * K_M <= B
+```
+
+for every complete transcript.  Regrouping by compatible hidden states then
+shows that the squared-fibre estimate is at most `B` times the *unnormalized*
+common-path energy.  The existing Step-2 theorem therefore gives
+
+```text
+Walsh mismatch energy <= B / card(Low),
+Pr[correct after H tensor I] >= 1 - B / (2 * card(Low)).
+```
+
+For `B = 1`, reciprocal normalization cancels even an exponential raw fibre
+and restores the ideal `1/card(Low)` mismatch scale.  This turns the next
+paper-specific task into a precise statement about the actual
+postmeasurement factor: prove the product bound above.  Normalization of the
+whole state only controls an average and does not imply this pointwise claim.
+
+The final composed theorem therefore assumes: actual state coordinates equal
+to the displayed direct path sums with a common B-side path/residue/term
+family in both branches; equal selected A-branch populations; selected-pair
+collision uniformity after conditioning; and a record-uniform bound on the
+displayed diagonal B-side expression.  The universal estimate may be
+exponentially loose because of `#BPaths`; the bounded-fibre theorem is useful
+only if the concrete conditioned experiment supplies a small fibre bound.
+Otherwise a Parseval or orthogonality argument is still needed.
+
 ## Remaining invalid or missing obligations
 
 - The original proof of Lemma 1 assumes an unproved sign symmetry and
@@ -609,9 +927,12 @@ non-cancellation hypothesis.
   independence over all `q_(g_a)` values (although this isolated exception may
   be asymptotically removable).
 - The repaired Lemma 4 parameter arithmetic still relies on unproved
-  conditional balls-in-bins, variance, and union-bound premises, and additive
-  count control still does not imply a multiplicative amplitude ratio under
-  cancellation.
+  conditional balls-in-bins, variance, and union-bound premises.  Its literal
+  multiplicative amplitude ratio needs the anti-cancellation lower bound in
+  `Lemma4Repair.lean`; the decoder-facing additive replacement avoids that
+  premise but still needs the conditioned Step-7 amplitude-family
+  identification and the labelled count-error and coefficient-energy bounds
+  isolated in `Lemma4Decoder.lean`.
 - Only the deterministic Step-6 carry/top-bit arithmetic is closed.  Its
   postselection probability and decoding bias are not proved; keeping all low
   outcomes preserves mass but is spectrally unbiased in the analyzed clean
@@ -641,8 +962,8 @@ their arbitrary normalized finite classical mixtures, and the
   bound claim.  It does not claim a
 gate/tensor-circuit equality or a density-matrix model; those are optional
 semantic strengthening for Lemma 1 rather than blockers to its core result.
-The paper's overall theorem still needs the unresolved conditional phase and
-amplitude claims in Lemmas 3 and 4, later adaptive measurement and
+The paper's overall theorem still needs the unresolved conditioned
+model-identification and energy claims in Lemmas 3 and 4, later adaptive measurement and
 postselection semantics, error amplification, a suitable polynomial-cost
 implementation argument, and the external lattice reductions.  Until those
 obligations are supplied, the paper's overall polynomial-time theorem and its
