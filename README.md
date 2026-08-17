@@ -164,10 +164,14 @@ decoder.  Without a stored or algebraically invertible bucket index,
 table-free rejection and a direct-predicate Cartesian Johnson walk return to
 `sqrt(N)`.  A fixed-relative-error rare-cap polynomial surrogate needs degree
 `Omega(log M)`, and the displayed `o(log M)` one-sided local even-moment
-certificate leaves `M^(1-o(1))` expected blocks alive.  Yet Kac--Rice gives
-only `M^o(1)` expected crossings
-and accepted indices, so a sparse output-sensitive root locator remains the
-precise opening.
+certificate leaves `M^(1-o(1))` expected blocks alive.  Conversely, a
+certified factor-`C` interval log-sum-exp oracle would enumerate the rare row
+in `O(C*u*log M)` expected calls.  It is exactly an implicit Gaussian-KDE
+block-sum problem.  Cancellation-blind Bessel truncation is exponential and
+rejection-based quantum tilting returns to `sqrt(M/k)`.  Yet Kac--Rice gives
+only `M^o(1)` expected crossings and accepted indices, so the implicit
+partition-sum or sparse output-sensitive root locator remains the precise
+opening.
 Its exact Bayesian
 decision under a uniform secret prior is the ratio of the zero and half-turn
 coefficients of a weighted
@@ -280,8 +284,16 @@ pair--pair route in the two-orientation raw-moment model has exponent at least
 `1/2`; balanced standard trees in the same model with at least eight lists
 exceed `0.6856`.
 At the near-miss point, the explicit per-block-nonempty leading-Gram cutoff
-whitener has diagonal-ratio exponent `1.5095`; partial or regularized signed
-whitening and nonlinear birthday decoders remain open.  A
+whitener has diagonal-ratio exponent `1.5095`.  The regularized
+degree-symmetric leading surrogate has an exact polynomial-size spectral
+optimizer.  Its diagonal rules out the retuned point and leaves a possible
+sub-square-root interval only at `0.02073134<p<0.02079354`; omitted covariance
+and exact-signal terms remain open.
+Bucket-sum-only random rehash medians contain no information beyond the
+original path sum;
+a fixed positive pair-overlap law can still give either sign of prediction
+correlation, so nonlinear progress requires control of the residual odd
+half-turn clusters.  A
 new Parseval
 argument makes one part rigorous: against the conventional adversarial
 `STAT` oracle, the uniform-secret average parity advantage of any adaptive

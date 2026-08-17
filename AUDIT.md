@@ -118,9 +118,14 @@ inherit that bound.  Without a stored bucket index or algebraic bucket
 inverter, table-free rejection and a direct-predicate Cartesian Johnson walk
 return to `sqrt(N)`.  Fixed-relative-error rare-cap polynomial surrogates need
 degree `Omega(log M)`, and the displayed `o(log M)` one-sided local moment
-certificate leaves `M^(1-o(1))` expected blocks alive.  Kac--Rice gives only
-`M^o(1)` expected crossings and accepted indices, leaving sparse
-output-sensitive root location open.  The exact Bayesian answer is the ratio
+certificate leaves `M^(1-o(1))` expected blocks alive.  A certified
+factor-`C` interval log-sum-exp oracle would instead enumerate the rare row in
+`O(C*u*log M)` expected calls; this is an implicit Gaussian-KDE block-sum
+primitive.  Cancellation-blind Bessel truncation is exponential and
+rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives only
+`M^o(1)` expected crossings and accepted indices, leaving the implicit
+partition-sum or sparse output-sensitive root locator open.  The exact
+Bayesian answer is the ratio
 of two coefficients of
 a weighted ternary subset-sum polynomial under a uniform secret prior; direct
 likelihood filtering exposes
@@ -221,8 +226,15 @@ pair--pair route in the two-orientation raw-moment model has exponent at least
 `1/2`; balanced standard trees in the same model with at least eight lists
 exceed `0.6856`.
 At the near-miss point, the explicit per-block-nonempty leading-Gram cutoff
-whitener has diagonal-ratio exponent `1.5095`; partial or regularized signed
-whitening and nonlinear routes remain open.
+whitener has diagonal-ratio exponent `1.5095`.  The regularized
+degree-symmetric leading surrogate has an exact polynomial-size spectral
+optimizer.  Its diagonal rules out the retuned point and leaves a possible
+sub-square-root interval only at `0.02073134<p<0.02079354`; omitted covariance
+and exact-signal terms remain open.
+Bucket-sum-only random rehash medians contain only the original path-sum
+information, while a fixed
+positive pair-overlap law can yield either sign of prediction correlation;
+the residual odd half-turn clusters are the precise nonlinear obstacle.
 Parseval now gives a sharp
 statistical-query boundary: against
 the conventional adversarial `STAT` oracle, polynomially many adaptive

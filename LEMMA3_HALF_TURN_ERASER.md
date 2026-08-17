@@ -116,8 +116,17 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   balanced standard tree with at least eight lists exceeds `0.6856` before
   overlap is charged.  At the near-miss point, the explicit per-block-
   nonempty leading-Gram cutoff whitener has diagonal-ratio exponent `1.5095`.
-  Partial or regularized signed whitening and nonlinear generalized-birthday
-  decoders remain open.
+  The regularized degree-symmetric leading surrogate now reduces exactly to
+  one `t`-dimensional eigendecomposition and a fourfold spectral sum.  Its
+  diagonal alone puts the retuned point at `0.502611...` and leaves a possible
+  sub-square-root window only for
+  `0.02073134<p<0.02079354`; omitted covariance and exact-signal terms still
+  prevent a full lower bound.
+  Bucket-sum-only random rehash medians contain no information beyond the
+  original path sum;
+  a fixed positive pair-overlap law can nevertheless give either sign of the
+  prediction correlation, so the residual odd half-turn clusters remain the
+  precise nonlinear obstacle.
   Direct importance sampling of the exact Bayesian coefficient ratio has
   relative variance `Theta(N)` once its posterior is sharp.  At `q=12*n`,
   for a nondegenerate secret, a Hellinger bound shows that the posterior is in
@@ -139,10 +148,14 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `sqrt(N)` scale.  Fixed-relative-error polynomial surrogates for the rare
   Gaussian cap need degree `Omega(log M)`, and the displayed `o(log M)` one-
   sided local even-moment certificate leaves `M^(1-o(1))` expected blocks
-  alive.  Kac--Rice
-  nevertheless gives only `M^o(1)` expected crossings and accepted integer
-  positions at the ANN cap scale: output volume is small, but no sparse
-  output-sensitive root locator is known.  The exact
+  alive.  A certified factor-`C` interval log-sum-exp oracle would, conversely,
+  enumerate the rare row in `O(C*u*log M)` expected calls.  This is exactly an
+  implicit Gaussian-KDE problem.  Cancellation-blind Fourier--Bessel
+  certification needs exponentially many terms, and rejection-based quantum
+  tilting cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives only
+  `M^o(1)` expected crossings and accepted integer positions at the ANN cap
+  scale: output volume is small, but the required implicit partition-sum or
+  output-sensitive root locator remains open.  The exact
   grouped triangle envelope is
   identical on `H/poly(n)` prefixes with high probability, while one exact
   high-bit elimination can turn one Fourier mode into a dense spectrum.
@@ -2165,6 +2178,127 @@ no-cap certificate is the displayed one-sided `L_(2r)` bound.  At
 `r=Theta(log M)`, a naive expansion of the `q`-term score already has
 `q^(O(r))` terms.  An exponential-tilting or log-sum-exp certificate is a
 genuinely stronger possibility and is not excluded.
+
+That remaining possibility has an exact positive reduction.  For a block
+`I` of orbit indices define
+
+```text
+Z_I(u) = sum_(a in I) exp(u*X_a),       T_u = exp(u^2).
+```
+
+If some `X_a>=u`, then `Z_I(u)>=T_u`.  Suppose an oracle returns a certified
+upper estimate `U_I` satisfying
+
+```text
+Z_I(u) <= U_I <= C*Z_I(u).
+```
+
+A node can be pruned whenever `U_I<T_u`, with no false negative.  At any
+fixed level of a partition tree the blocks are disjoint, and Markov's
+inequality uses only the standard-normal marginals:
+
+```text
+sum_I Pr[U_I>=T_u]
+  <= C*sum_I |I|*exp(-u^2/2)
+  = C*M*exp(-u^2/2).
+```
+
+Query the children only of nodes that survive and verify every surviving
+leaf directly.  A fixed ternary tree therefore enumerates every
+`a` with `X_a>=u` using
+
+```text
+O(1+C*M*exp(-u^2/2)*log M)
+```
+
+expected oracle calls.  When `Pr[G>=u]=1/M`, Mills' inequalities give
+
+```text
+sqrt(2*pi)*u
+  < M*exp(-u^2/2)
+  < sqrt(2*pi)*(u+1/u).
+```
+
+Thus even `C=poly(n)` would yield an expected polynomial-size inverse-row
+enumerator.  An additive `O(log n)` approximation to `log Z_I` is enough,
+provided that it is certified on the upper side.  A merely one-sided upper
+bound with no approximation ratio does not control the tree size.
+
+This oracle is exactly an implicit Gaussian-kernel density query.  Put
+`R=||g||`,
+
+```text
+x = sqrt(u*R)*g/R,       y_a = sqrt(u*R)*A_a.
+```
+
+Then
+
+```text
+exp(u*<g,A_a>)
+  = exp(u*R)*exp(-||x-y_a||^2/2),
+```
+
+so `Z_I` is a known scalar times the Gaussian KDE of the contiguous orbit
+block `{A_a:a in I}`.  The classical
+[fast Gauss transform](https://math.nyu.edu/~greengar/fgt_1991.pdf) and
+existing hashing-based KDE data structures, such as the
+[HBE construction](https://arxiv.org/abs/1808.10530) and the later
+[density-constrained query bound](https://arxiv.org/abs/2011.06997), first
+materialize or hash the source points.  They do not provide the required
+succinct block oracle for this exponentially long trigonometric orbit.
+
+The direct Fourier expansion also explains why the oracle is nontrivial.
+After absorbing signs into phases, write
+
+```text
+X_a = q^(-1/2)*sum_i R_i*cos(2*pi*Y_i*a/N-phi_i),
+kappa_i = u*R_i/sqrt(q),       K=sum_i kappa_i.
+```
+
+The [modified-Bessel generating function](https://dlmf.nist.gov/10.35)
+gives
+
+```text
+exp(u*X_a)
+  = sum_(m in Z^q) [product_i I_(m_i)(kappa_i)*exp(-i*m_i*phi_i)]
+      *exp(2*pi*i*(m dot Y)*a/N).
+```
+
+An interval sum only appends a Dirichlet kernel.  Before using cancellations,
+the absolute coefficient mass is exactly `exp(K)`.  After normalization the
+multi-index is a product of Skellam laws,
+
+```text
+Pr[D_i=m] = exp(-kappa_i)*I_|m|(kappa_i).
+```
+
+At `q=12*n`, fixed `0<gamma<=1`, `M=N^gamma`, and `Pr[G>=u]=1/M`, the law
+of large numbers gives
+
+```text
+K/q -> sqrt(gamma*ln(2)/6)*sqrt(pi/2),
+u^2/q -> gamma*ln(2)/6,
+K-u^2 = Omega(q).
+```
+
+Moreover a constant fraction of the `kappa_i` lie in a fixed positive
+interval, so the largest normalized multi-index atom is `exp(-Omega(q))`.
+Consequently any term-by-term Bessel certificate that bounds its remainder
+only by raw absolute coefficient mass must retain `exp(Omega(q))` terms just
+to reduce the tail below `exp(u^2)`.  This is a barrier only to that
+cancellation-blind expansion; aggregation by `m dot Y`, an arithmetic
+circuit for the partition sum, or another implicit KDE method remains open.
+
+Exponential tilting also fails to help if it is implemented only by quantum
+rejection sampling.  Let `0<=w_a<=1`, assume every one of the `k` marked
+indices has `w_a=1`, and put `mu=M^(-1)sum_a w_a`.  Preparing the weighted
+state from the uniform state by
+[amplitude amplification](https://arxiv.org/abs/quant-ph/0005055) costs
+`Theta(mu^(-1/2))`.  Its marked mass is `k/(M*mu)`, so finding a mark costs a
+further `Theta(sqrt(M*mu/k))` state reflections.  The product is exactly
+`Theta(sqrt(M/k))`, independent of the tilt.  This covers rejection-based
+preparation, not a non-rejection circuit that evaluates the block sums or
+inverts their rare level sets.
 
 Third, the rare row is small enough that output size itself is not the
 obstruction.  Choose centered representatives
@@ -6414,6 +6548,47 @@ The common overlap covariance survives and the diagonal term worsens.
 A median could still exploit non-Gaussian tails, so this is a no-fresh-
 replicas statement, not a nonlinear failure theorem.
 
+The entire random-bucket law makes the same point more sharply.  Fix path
+values `x_1,...,x_M in {+1,-1}`, let `Z=sum_i x_i`, hash each path
+independently into `R` buckets, and put `V_j=sum_(h(i)=j)x_i`.  Conditional
+on the path values,
+
+```text
+E_h[exp(sum_j theta_j*V_j)]
+  = [R^(-1)*sum_j exp(theta_j)]^((M+Z)/2)
+    *[R^(-1)*sum_j exp(-theta_j)]^((M-Z)/2).
+```
+
+Thus the complete labeled bucket-sum distribution depends on the data only
+through `(M,Z)`.  If `psi:Z^R -> [-1,1]` is odd and coordinatewise
+nondecreasing--for example, the sign of the numeric median or a majority of
+bucket signs with a symmetric tie rule--then
+
+```text
+g_R(M,Z) = E_h[psi(V)]
+```
+
+is odd and nondecreasing in `Z`.  The first property follows by negating all
+paths; the second follows by coupling a sign flip from `-1` to `+1`, which
+adds `2` to one bucket.  Hence
+
+```text
+g_R(M,Z) = sign(Z)*a_R(M,|Z|),       0<=a_R<=1.
+```
+
+Independent rehashing converges to a randomized margin transform of the
+same scalar `Z`, not to fresh parity replicas.  If
+
+```text
+eta(m,z) = E_avg[A_H/A_0 | M=m,Z=z],
+```
+
+then its correlation is exactly `E[eta(M,Z)*g_R(M,Z)]`.  Under the additional
+sign-alignment condition `z*eta(m,z)>=0`, this cannot beat `sign(Z)`.
+Without that unproved condition, attenuating different margins can help or
+hurt.  Rules that retain hash identities or whole overlap clusters are
+outside this reduction.
+
 The exact nonlinear benchmark makes that scope unavoidable.  For fixed
 public labels, let `A_0(S,Y)` and `A_H(S,Y)` be the zero and half-turn
 coefficients of the full weighted ternary polynomial.  Then
@@ -6433,6 +6608,134 @@ Here `E_avg` is expectation under the parity-averaged marginal law of
 `(Y,S)`.  In particular, deciding whether `sign(Z)` succeeds requires a tail
 or small-ball comparison with the full likelihood ratio `A_H/A_0`.  A large
 normalized second moment alone cannot decide its sign performance.
+
+This missing comparison has an exact residual form.  Write
+
+```text
+A_H = c*Z+R,       c=(lambda/2)^t.
+```
+
+With `E_U` denoting uniform expectation over the sign cube,
+
+```text
+E[B*sign(Z) | Y]
+  = c*E_U[|Z|]+E_U[R*sign(Z)].
+```
+
+Let `C_Y=E_U[|A_H|]` be the conditional Bayes correlation, use `sign(0)=0`,
+and define
+
+```text
+D_- = {Z*A_H<0},       D_0={Z=0,A_H!=0}.
+```
+
+Then exactly
+
+```text
+E[B*sign(Z) | Y]
+  = C_Y-2*E_U[|A_H|*1_(D_-)]-E_U[|A_H|*1_(D_0)].
+```
+
+On `D_-`, one has `|R|>=|A_H|`, and for every `tau>0`,
+
+```text
+D_- union D_0 subset {|Z|<=tau} union {|R|>=c*tau}.
+```
+
+Since `|A_H/A_0|<=1`, the parity-averaged law also gives the one-sided
+criterion
+
+```text
+E[B*sign(Z) | Y]
+  >= C_Y
+     -2*Pr_avg[|Z|<=tau]
+     -2*Pr_avg[|R|>=c*tau].
+```
+
+Proving small-ball control for `Z` under the nonproduct `A_0` tilt and a tail
+bound for `R` would therefore be sufficient.  The degree and overlap-moment
+bounds above control neither quantity.
+
+A three-bit likelihood model proves that this is a real logical gap, even
+after fixing a positive even-overlap law.  Let `u_1,u_2,u_3` be independent
+Walsh characters, put `Z=u_1+u_2+u_3`, take `B` uniform, and set
+
+```text
+A_0 = 1+r*(u_1*u_2+u_1*u_3+u_2*u_3),
+A_H = a*Z+c_3*u_1*u_2*u_3,
+Pr[u | B=b] = 2^(-3)*(A_0+b*A_H).
+```
+
+For `0<=r<1` and `a,c_3>=0`, this is a valid balanced experiment with
+nonnegative Walsh coefficients whenever
+
+```text
+3*a+c_3 <= 1+3*r,       |a-c_3|<=1-r.
+```
+
+Its moments are
+
+```text
+E[B*Z] = 3*a,       E_avg[Z^2] = 3+6*r,
+E[B*sign(Z)] = (3*a-c_3)/2.
+```
+
+For example, fix `r=1/2` and `a=1/20`.  Taking `c_3=0` gives correlation
+`+3/40`, while `c_3=3/10` gives `-3/40`; both have the same base law,
+pair-overlap second moment `6`, and linear signal `3/20`.  Taking the `u_j`
+to be disjoint degree-`t` monomials keeps `Z` homogeneous of degree `t` and
+moves only the residual to degree `3*t`.  This is a likelihood
+counterexample, not a claim that the modular coefficient counts realize it.
+
+Generic Boolean hypercontractivity cannot fill the gap.  For a degree-`t`
+Walsh polynomial it gives
+
+```text
+||Z||_1 >= 3^(-t)*||Z||_2,
+Pr[|Z|>=theta*||Z||_2]
+  >= (1-theta^2)^2*9^(-t),       0<=theta<1.
+```
+
+At `t=0.249195...*n`, these losses are respectively
+`N^(-0.3949...)` and `N^(-0.7899...)`, far larger than the small overlap
+exponent that needs to be resolved.  Nor is exponential small-ball behavior
+excluded by positivity.  On disjoint Rademacher variables, let
+
+```text
+Z_star = chi_R*product_(j=1)^k (X_j+Y_j),       |R|=t-k.
+```
+
+It is a sum of `2^k` distinct positive degree-`t` monomials, but
+
+```text
+Pr[Z_star!=0]=2^(-k),
+||Z_star||_1/||Z_star||_2=2^(-k/2).
+```
+
+Thus a useful small-ball theorem must exploit the actual modular path
+geometry, not only degree, coefficient signs, or the pairwise PSD kernel.
+
+There is also an exact positive control.  For pairwise support-disjoint
+retained half-turn words with characters `u_1,...,u_m`, suppose every union
+has only the independent two orientations contributed by its selected
+words.  Put `delta=2*(lambda/2)^t`.  The resulting closure terms are
+
+```text
+A_0^cl = [product_j(1+delta*u_j)+product_j(1-delta*u_j)]/2,
+A_H^cl = [product_j(1+delta*u_j)-product_j(1-delta*u_j)]/2.
+```
+
+Because
+
+```text
+log(product_j(1+delta*u_j)/product_j(1-delta*u_j))
+  = 2*atanh(delta)*sum_j u_j,
+```
+
+`sign(A_H^cl)=sign(sum_j u_j)`.  Higher odd likelihood terms are therefore
+perfectly compatible with majority in this ideal disjoint closure.  At the
+near-miss support size only `m<=q/t=O(1)` disjoint words fit, so the control
+does not settle the exponentially overlapping family.
 
 The formal linear-whitening repair is circular.  Conditional on the public
 labels, its parity-contrast vector and parity-averaged monomial Gram matrix
@@ -6734,10 +7037,131 @@ parameters.  This calculation is exact for the factorized leading
 two-orientation signal and its automatic Gram at visibility one.  Replacing
 the off-diagonal `1/2` entries by `lambda/2` preserves the Schur floor, and
 paper-scale `lambda=1-o(1)` changes only lower-order exponent terms.  The
-calculation does not optimize partial
-or regularized whitening jointly with the diagonal, and the full exact signal
-contains extra-orientation terms that a large signed coefficient norm could
-amplify.  Those mixed-degree repairs remain open.
+full exact signal contains extra-orientation terms that a large signed
+coefficient norm could amplify.
+
+Within the same leading surrogate, arbitrary regularized signed weights have
+an exact polynomial-size spectral reduction.  Averaging any coefficient
+array over within-block coordinate permutations and orientation relabellings
+preserves its signal and cannot increase either invariant positive-semidefinite
+quadratic form.  Hence an optimum is indexed only by its four support degrees.
+For `1<=r,u<=t`, define
+
+```text
+v_r = choose(b,r),
+E_(r,u) = 1[r=u]*choose(b,r)*2^r,
+B_(r,u) = choose(b,r)*sum_c
+  choose(r,c)*choose(b-r,u-c)*2^c,
+```
+
+where `max(0,r+u-b)<=c<=min(r,u)`.  For one block, `v` is the leading
+signal, `E` is the ordinary coefficient-norm form, and `B` is the compatible
+automatic-zero Gram.  Put
+
+```text
+v_4 = v^(tensor 4),
+E_4 = E^(tensor 4),
+B_4 = B^(tensor 4).
+```
+
+Let `q_0=1/(K*N)` and normalize `v_4^T*w=1`.  The leading signal is `2*q_0`.
+The generic distinct-pair automatic term and actual diagonal are
+
+```text
+2*q_0^2*(w^T*B_4*w-w^T*E_4*w),
+q_0*w^T*E_4*w,
+```
+
+respectively.  Thus this surrogate's exact relative second moment is
+
+```text
+R(w) = (1/2)*w^T*(B_4+rho*E_4)*w/(v_4^T*w)^2,
+rho = K*N/2-1,
+R_min = 1/[2*v_4^T*(B_4+rho*E_4)^(-1)*v_4].
+```
+
+The apparent `t^4`-dimensional inverse is unnecessary.  Set
+
+```text
+C = E^(-1/2)*B*E^(-1/2),       h=E^(-1/2)*v.
+```
+
+If `C*u_i=lambda_i*u_i` and `alpha_i=(u_i^T*h)^2`, then
+
+```text
+R_min^(-1)
+  = 2*sum_(i,j,k,l=1)^t
+      alpha_i*alpha_j*alpha_k*alpha_l
+      /(lambda_i*lambda_j*lambda_k*lambda_l+rho).
+```
+
+Constructing and numerically diagonalizing the one-block matrices takes
+`O(t^3)` arithmetic operations to prescribed precision; the fourfold sum
+takes `O(t^4)` arithmetic operations and `O(t^2)` memory.  The displayed
+variational formula is exact for every degree-symmetric signed coefficient
+array in the named surrogate, without assuming a tensor-factorized weight.
+
+Its actual diagonal alone already gives a useful asymptotic restriction.
+The `E_4` Cauchy--Schwarz inequality yields
+
+```text
+R_min >= rho/[2*(sum_(r=1)^t choose(b,r)*2^(-r))^4].
+```
+
+For `b=3*n`, `t=p*b+o(b)`, and `p<1/3`, its relative-second-moment exponent
+is at least
+
+```text
+D_mix = 1+k-12*(H_2(p)-p).
+```
+
+Combine this with the pair-list runtime exponent
+
+```text
+a = 3*(H_2(p)+p),       R_list=max(a,2*a-k).
+```
+
+In the near-miss range, optimizing the optimistic raw-averaging cost over the
+admissible low-bit range `0<=k<1-12*p` gives the exact diagonal-only bound
+
+```text
+min_k {R_list+max(D_mix,0)}
+  = max{3*(H_2(p)+p), 1+18*p-6*H_2(p)}.
+```
+
+It is below `1/2` only in the narrow interval
+
+```text
+0.0207313410485 < p < 0.0207935351480.
+```
+
+The minimum occurs at
+
+```text
+p = 0.0207662647183...,
+C_diag = 0.499463451082....
+```
+
+Thus even this weak diagonal certificate leaves at most `0.000537` exponent
+slack.  At the retuned fixed-layer point `p=0.020561836297...`, it already
+gives
+
+```text
+0.495436243025+0.007175342053
+  = 0.502611585078 > 1/2.
+```
+
+Consequently no regularized signed choice in this surrogate can beat the
+square-root exponent at that retuned point.  The tiny interval around the
+original apparent point still requires an asymptotic resolvent bound.
+
+Its scope is important.  `B` contains only the compatible leading
+automatic-zero component, and the formula assigns `q_0^2` to every generic
+distinct pair.  Dependent-filter pairs, additional zero relations, and
+extra half-turn orientations are excluded.  With signed weights, omitted
+covariances need not be a positive-semidefinite lower bound.  The reduction
+therefore neither constructs a full decoder nor proves an asymptotic lower
+bound; regularized whitening for the exact statistic remains open.
 
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
@@ -7160,8 +7584,17 @@ paths still has the same covariance exponent.  Every asymmetric exact-degree
 four-list pair--pair route in the two-orientation raw-moment model has exponent
 at least `1/2`, and balanced standard trees with at least eight lists exceed
 `0.6856`.  At the near-miss point, the explicit per-block-nonempty leading-
-Gram cutoff whitener has diagonal-ratio exponent `1.5095`; partial or
-regularized signed whitening and nonlinear aggregation remain open.  The
+Gram cutoff whitener has diagonal-ratio exponent `1.5095`.  The regularized
+degree-symmetric leading surrogate has an exact polynomial-size spectral
+optimizer.  Its diagonal rules out the retuned point and confines any
+sub-square-root window to `0.02073134<p<0.02079354`, but omitted covariances
+and extra half-turn orientations leave the full statistic open.
+Bucket-sum-only rehash medians are only margin
+transforms of the same path sum, while a positive three-character likelihood
+model shows that fixed
+pair overlap and linear signal can coexist with either prediction sign.  A
+nonlinear theorem must therefore control the residual odd half-turn clusters.
+The
 theorems still leave open circuits that exploit the internal Boolean modular
 arithmetic beyond the orbit algebra or compute the weighted ternary
 coefficient ratio by a new method.  In the noisy high-visibility regime, the
@@ -7177,10 +7610,14 @@ the exponent.  Table-free rejection filters and direct-predicate Cartesian
 Johnson walks return to `sqrt(N)` unless inverse buckets or markedness have a
 new succinct implementation.  Fixed-relative-error low-degree polynomial cap
 surrogates and the displayed `o(log M)` one-sided local moment certificate do
-not provide it.  On the other
-hand, Kac--Rice gives only `M^o(1)` expected rare-cap crossings and accepted
-indices, so output-sensitive threshold-root location remains a sharply
-defined positive opening.  The
+not provide it.  A polynomial-time certified interval log-sum-exp oracle with
+polynomial multiplicative slack would enumerate the rare row in expected
+polynomial time; it is exactly an implicit Gaussian-KDE block-sum primitive.
+Cancellation-blind Bessel expansion is exponential and rejection-based
+quantum tilting returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
+only `M^o(1)` expected rare-cap crossings and accepted indices, so the
+partition-sum oracle or output-sensitive threshold-root locator remains a
+sharply defined positive opening.  The
 grouped triangle envelope stays identical on `H/poly(n)` prefixes with high
 probability, and exact high-bit elimination can become Fourier-dense in one
 step.  These radix routes do not certify polynomial pruning, while scalar

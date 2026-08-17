@@ -670,11 +670,16 @@ preserve this exponent.  Without a stored bucket index or algebraic bucket
 inverter, table-free rejection and a direct-predicate Cartesian Johnson walk
 return to `sqrt(N)`.  Fixed-relative-error rare-cap polynomial surrogates need
 degree `Omega(log M)`, while the displayed `o(log M)` one-sided local moment
-certificate leaves `M^(1-o(1))` expected blocks alive.  Kac--Rice gives only
-`M^o(1)` expected crossings and accepted indices, so sparse output-sensitive
-root location is the remaining opening.  The exact Bayesian parity rule is the
-ratio of the half-turn and zero coefficients of a weighted ternary subset-sum generating
-function under a uniform secret prior.  Coherent likelihood filtering
+certificate leaves `M^(1-o(1))` expected blocks alive.  A certified
+factor-`C` interval log-sum-exp oracle would instead enumerate the rare row in
+`O(C*u*log M)` expected calls; this is an implicit Gaussian-KDE block-sum
+problem.  Cancellation-blind Bessel truncation is exponential and
+rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives only
+`M^o(1)` expected crossings and accepted indices, so the implicit
+partition-sum or sparse output-sensitive root locator remains open.  The
+exact Bayesian parity rule is the ratio of the half-turn and zero coefficients
+of a weighted ternary subset-sum generating function under a uniform secret
+prior.  Coherent likelihood filtering
 prepares a useful posterior only
 with at most `O(1/N)` heralding probability in its direct normalized
 state-conversion model.  Uniform importance sampling has exact squared
@@ -771,8 +776,15 @@ in the two-orientation model has exponent at least `1/2`; balanced standard
 trees in the same model with at least eight lists exceed `0.6856`.  At the
 near-miss point, the explicit per-block-nonempty leading-Gram cutoff whitener
 has diagonal-ratio
-exponent `1.5095`; partial or regularized signed whitening and nonlinear
-generalized-birthday routes remain open.
+exponent `1.5095`.  The regularized degree-symmetric leading surrogate has an
+exact polynomial-size spectral optimizer.  Its diagonal rules out the retuned
+point and leaves a possible sub-square-root interval only at
+`0.02073134<p<0.02079354`; omitted covariance and exact-signal terms remain
+open.  Bucket-sum-only random rehash medians contain
+only the original path-sum information, while a fixed positive pair-overlap
+law can
+give either sign of prediction correlation; nonlinear progress requires
+control of the residual odd half-turn clusters.
 A
 normalized-Fourier/Parseval argument now proves that,
 against the conventional adversarial `STAT` oracle, every adaptive
