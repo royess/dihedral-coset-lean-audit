@@ -675,9 +675,15 @@ factor-`C` interval log-sum-exp oracle would instead enumerate the rare row in
 `O(C*u*log M)` expected calls; this is an implicit Gaussian-KDE block-sum
 problem.  Black-box point-query implementations require `Omega(s)` classical
 or `Omega(sqrt(s))` quantum queries on a size-`s` block.  Even
-residue-aggregated
-cancellation-blind Bessel certification must retain `(1-o(1))*N` residues,
-and rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives
+residue-aggregated cancellation-blind Bessel certification must retain
+`(1-o(1))*N` residues.  On a low block, optimal iid unbiased single-
+multi-index importance sampling still needs `N^(4.303...-o(1))` or
+`N^(4.472...-o(1))` samples to reach additive RMSE `O(exp(u^2))` at the two
+splits.  The unweighted, untruncated full-spectrum Fourier `L_2` bound cannot
+prune.  The phase-averaged zero residue is amplified by `N^(0.78...+o(1))` to
+`N^(0.80...+o(1))` over a uniform energy share, so weighted phase-aware tails
+remain open.
+Rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives
 only
 `M^o(1)` expected crossings and accepted indices, so the implicit
 partition-sum or sparse output-sensitive root locator remains open.  The
@@ -781,17 +787,19 @@ trees in the same model with at least eight lists exceed `0.6856`.  At the
 near-miss point, the explicit per-block-nonempty leading-Gram cutoff whitener
 has diagonal-ratio
 exponent `1.5095`.  The regularized degree-symmetric leading surrogate has an
-exact polynomial-size spectral optimizer.  Its diagonal rules out the retuned
-point and leaves a possible sub-square-root interval only at
-`0.02073134<p<0.02079354`; omitted covariance and exact-signal terms remain
-open.  An exact Pascal--Cholesky reduction shows that a fractional-moment gain
-`delta>0.00013414` would close the surrogate at the window center.
+exact polynomial-size spectral optimizer.  Its diagonal confines the only
+possible sub-square-root interval to `0.02073134<p<0.02079354`.  An explicit
+hypergeometric-tail rank-two certificate gives `delta>0.000205` uniformly
+there and puts that entire window above `0.50020`, closing the named surrogate
+at the square-root scale; omitted covariance and exact-signal terms remain
+open.
 Bucket-sum-only random rehash medians contain
 only the original path-sum information, while a fixed positive pair-overlap
-law can
-give either sign of prediction correlation.  Actual near-miss modular triples
-have `N^(0.280916...+o(1))` expected retained incidences and a span-clean local
-anti-majority marginal.  This is not a high-probability full-path failure;
+law can give either sign of prediction correlation.  A second-moment theorem
+gives `N^(0.280916...-o(1))` distinct span-clean local anti-majority marginals
+with high probability.  They touch an exponentially vanishing fraction of
+all paths, and an independent-witness fiction has only
+`N^(-0.108737...+o(1))` signal-to-noise.  This is not a full-path failure;
 nonlinear progress requires global control of the residual odd half-turn
 clusters.
 A

@@ -118,20 +118,21 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   nonempty leading-Gram cutoff whitener has diagonal-ratio exponent `1.5095`.
   The regularized degree-symmetric leading surrogate now reduces exactly to
   one `t`-dimensional eigendecomposition and a fourfold spectral sum.  Its
-  diagonal alone puts the retuned point at `0.502611...` and leaves a possible
-  sub-square-root window only for
-  `0.02073134<p<0.02079354`; omitted covariance and exact-signal terms still
-  prevent a full lower bound.  An exact Pascal--Cholesky reduction shows that
-  a fractional-moment gain `delta>0.00013414` at the window center would close
-  the surrogate; proving that gain is the remaining spectral lemma.
+  diagonal alone puts the retuned point at `0.502611...` and confines the only
+  possible sub-square-root window to `0.02073134<p<0.02079354`.  An explicit
+  hypergeometric-tail rank-two certificate gives the stronger uniform gain
+  `delta>0.000205` and puts that entire window above `0.50020`, closing the
+  named surrogate at the square-root scale.  Omitted covariance and exact-
+  signal terms still prevent a full lower bound.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
-  prediction correlation.  More sharply, actual near-miss modular triples
-  have `N^(0.280916...+o(1))` expected retained incidences and, conditionally
-  on a span-clean incidence, give a local three-character anti-majority for
-  every `0<lambda<=1`.  This is not a high-probability or full-path failure
-  theorem, but it makes residual odd half-turn clusters the precise nonlinear
+  prediction correlation.  More sharply, a second-moment theorem gives
+  `N^(0.280916...-o(1))` distinct span-clean local anti-majority marginals
+  with high probability for every `0<lambda<=1`.  They touch an exponentially
+  vanishing fraction of all paths, and even an independent-witness fiction
+  has signal-to-noise `N^(-0.108737...+o(1))`; this is not a full-path failure
+  theorem.  Residual odd half-turn clusters remain the precise nonlinear
   obstacle.
   Direct importance sampling of the exact Bayesian coefficient ratio has
   relative variance `Theta(N)` once its posterior is sharp.  At `q=12*n`,
@@ -159,8 +160,15 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   implicit Gaussian-KDE problem.  Black-box point-query implementations need
   `Omega(s)` classical or `Omega(sqrt(s))` quantum queries on a size-`s`
   block.  Even after residue aggregation, cancellation-blind Fourier--Bessel
-  certification must retain `(1-o(1))*N` residues, and rejection-based
-  quantum tilting cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
+  certification must retain `(1-o(1))*N` residues.  On a low block, even the
+  optimal iid unbiased single-multi-index proposal needs
+  `N^(4.303...-o(1))` or `N^(4.472...-o(1))` samples to reach additive RMSE
+  `O(exp(u^2))` at the two splits.  The unweighted, untruncated full-spectrum
+  Fourier `L_2` bound cannot prune.  The phase-averaged zero
+  residue is amplified by `N^(0.78...+o(1))` to `N^(0.80...+o(1))` over a
+  uniform energy share, so weighted phase-aware tails remain open.
+  Rejection-based quantum tilting
+  cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
   only
   `M^o(1)` expected crossings and accepted integer positions at the ANN cap
   scale: output volume is small, but the required implicit partition-sum or
@@ -2430,6 +2438,116 @@ kernel zeros can be omitted, so an interval certificate must again retain
 cancellation-blind Bessel certificate.  Complex phase cancellation, an
 arithmetic partition-sum circuit, and another implicit KDE method remain
 open.
+
+Allowing the Bessel phases does not rescue termwise importance sampling.
+For an interval `I`, write the multi-index contribution as
+
+```text
+t_m = [product_i I_|m_i|(kappa_i)*exp(-i*m_i*phi_i)]
+        *D_I(m dot Y),
+Z_I = sum_m t_m.
+```
+
+For any iid importance proposal `q_m`, the unbiased one-sample estimator is
+`t_m/q_m`, and Cauchy--Schwarz gives the exact optimum
+
+```text
+inf_q E_q[|t_m/q_m|^2] = (sum_m |t_m|)^2.
+```
+
+The absolute sum is `exp(K)*E_D|D_I(sum_i D_iY_i)|`.  Uniform pointwise
+flatness of `p_Y`, together with
+
+```text
+sum_r |D_I(r)|^2 = N*s,       max_r |D_I(r)|<=s,
+```
+
+implies
+
+```text
+E_D|D_I(sum_i D_iY_i)| >= 1-o(1).
+```
+
+Indeed the uniform average is at least one, and replacing the uniform law by
+`p_Y` changes it by at most `2*s*TV(p_Y,Unif)=o(1)`.  On a low block with
+`|Z_I|<=exp(u^2)`, even the optimal proposal therefore has complex variance
+at least `(1-o(1))*exp(2*K)`.  An iid sample mean needs
+
+```text
+Omega(exp(2*(K-u^2)))
+```
+
+samples for additive RMSE `O(exp(u^2))`.  At the two split exponents this is
+
+```text
+N^(4.303451636...-o(1)),       N^(4.472118117...-o(1)),
+```
+
+respectively.  This is a sign-problem barrier for iid single-multi-index
+importance sampling, including its optimal proposal.  It does not cover
+control variates, correlated or quasirandom estimators, or exact phase
+cancellation before sampling.
+
+The unweighted full-spectrum Fourier `L_2` certificate also cannot prune.
+Let `A_r` be the exactly aggregated Fourier coefficients, so that
+
+```text
+exp(u*X_a) = sum_r A_r*exp(2*pi*i*r*a/N).
+```
+
+When no public frequency is zero, `N^(-1)sum_a X_a=0`.  Parseval and Jensen
+then give
+
+```text
+sum_r |A_r|^2 = N^(-1)*sum_a exp(2*u*X_a) >= 1.
+```
+
+The Cauchy certificate for a length-`s` interval is consequently at least
+`sqrt(N*s)`.  Both displayed split exponents have `gamma<1/4`, so even for a
+leaf this is larger than `exp(u^2)=N^(2*gamma+o(1))`.  This rules out only the
+untruncated, unweighted full-spectrum `L_2` bound.  A weighted tail bound or
+an algorithm that first evaluates selected phase cancellations remains open.
+
+The phase-averaged coefficient energy is not uniform across residues, so one
+cannot strengthen this observation by simply assigning `1/N` of the energy
+to each residue.  Conditional on `kappa` and `Y`, define
+
+```text
+A_r = sum_(m:m dot Y=r)
+        [product_i I_|m_i|(kappa_i)]*exp(-i*m dot phi).
+```
+
+For independent uniform phases, cross terms survive only when the two
+multi-indices agree.  Hence
+
+```text
+E_phi[|A_r|^2] = J*q_Y^(2)(r),
+J = product_i I_0(2*kappa_i),
+Pr[Q_i=m] = I_|m|(kappa_i)^2/I_0(2*kappa_i),
+q_Y^(2)(r) = Pr[sum_i Q_iY_i=r mod N].
+```
+
+In particular, the all-zero multi-index forces
+
+```text
+q_Y^(2)(0)
+  >= product_i I_0(kappa_i)^2/I_0(2*kappa_i).
+```
+
+At `gamma=5/49`, the law of large numbers gives
+
+```text
+log_N(J) -> 0.403496088032...,
+-log_N(q_Y^(2)(0)) <= 0.200011224981...+o(1).
+```
+
+Thus the expected zero-residue energy is at least
+`N^(0.203484863051...+o(1))`, larger than the uniform share `J/N` by
+`N^(0.799988775019...+o(1))`.  At `gamma=1/9`, the corresponding exponents
+are `0.438925140723...`, `0.217410009875...`, and an amplification of
+`N^(0.782589990125...+o(1))`.  This deterministic zero-vector spike refutes
+only a uniform-energy shortcut.  It neither rules out nor supplies a
+weighted phase-aware truncation.
 
 Exponential tilting also fails to help if it is implemented only by quantum
 rejection sampling.  Let `0<=w_a<=1`, assume every one of the `k` marked
@@ -6829,8 +6947,10 @@ to be disjoint degree-`t` monomials keeps `Z` homogeneous of degree `t` and
 moves only the residual to degree `3*t`.  This is a likelihood
 counterexample, not a claim that the modular coefficient counts realize it.
 
-The actual modular path geometry realizes the same sign reversal locally, at
-least in an exponentially large first moment.  Work at the apparent density
+The actual modular path geometry realizes the same sign reversal locally.
+The first-moment construction below is followed by a second-moment theorem
+showing that exponentially many such local marginals occur with high
+probability.  Work at the apparent density
 
 ```text
 p = 0.020766264718...,
@@ -6900,6 +7020,97 @@ N^(12*E_type-3*(a+1)+o(1))
   = N^(0.28091614349...+o(1)).
 ```
 
+This first moment is typical.  Let `X` count the retained switched ordered
+triples of the fixed type.  For a triple `tau`, let `L_tau` and `R_tau` be
+its three signed rows on the first and last two blocks.  Retention is
+
+```text
+L_tau*Y_L = 0 mod K,
+L_tau*Y_L+R_tau*Y_R = H*1_3 mod N.
+```
+
+For a pair `tau,sigma`, define the rational relation dimensions
+
+```text
+h = 6-rank_Q([L_tau;L_sigma]),
+g = 6-rank_Q([R_tau;R_sigma]).
+```
+
+Let `c` be the dimension of the common left/right relation space.  If a
+common relation does not annihilate the displayed target, the joint event is
+impossible.  Otherwise Smith normal form gives
+
+```text
+Pr[E_tau and E_sigma]
+  <= O(1)*K^(-(6-h))*N^(-(6-g))*(K/N)^(g-c).
+```
+
+All nonzero minors have constant size because there are only six rows with
+entries in `{0,+1,-1}`.  Relative to the independent baseline
+`K^(-6)*N^(-6)`, the gain is therefore at most
+
+```text
+K^(h+g-c)*N^c.
+```
+
+The factor `(K/N)^(g-c)` is essential.  A right-only relation makes the
+left-half `K`-multiple quotient satisfy one extra condition modulo `N`, so a
+one-sided relation gains only `K`; only a relation common to both halves can
+gain `K*N`.
+
+The type count pays more than this gain.  Let `V` have the signed
+19-pattern coordinate law above and put `e_0=0`.  Saturate a relation lattice
+and reduce it modulo two.  A primitive one-dimensional image is a nonzero
+binary linear form, while a rank-two image has minimum entropy at the four
+masses displayed below.  Thus
+
+```text
+e_1 = H_2(p) = 0.145721552307...,
+q_2 = (p-y)/3,
+e_2 = H(x_0+q_2,2*q_2,2*q_2,q_2+y)
+    = 0.269430191135...,
+e_3 = H(V) = E_type = 0.398275541393....
+```
+
+Here `H` is base-two Shannon entropy.  In dimension three the relation map
+is injective on the full signed pattern, which explains why `e_3` contains
+the orientation entropy.  The mutual-information inequality
+
+```text
+H(V,V') <= 2*E_type-H(A*V)
+```
+
+shows that a half with relation dimension `h` loses at least `6*e_h` in its
+base-`N` pair-count exponent.  Consequently a class `(h,g,c)` contributes to
+the normalized second moment with exponent at most
+
+```text
+a*(h+g-c)+c-6*(e_h+e_g).
+```
+
+The row number is fixed and every column has one of finitely many pattern
+types, so only `O(1)` relation subspaces occur and their union hides no
+exponential factor.  Enumerating the 29 non-generic classes gives the three
+closest cases
+
+```text
+(h,g,c)    negative exponent margin
+(1,1,1)    0.249195176611...
+(2,2,2)    0.234235391465...
+(3,3,3)    0.280916143490....
+```
+
+Every mixed or one-sided class has a larger margin.  Pairs singular only
+modulo two but of full rational rank have only a constant Smith-index gain;
+their binary span equality still pays an exponential type cost.  Pairs for
+which both the left and right six-row stacks have full rank modulo two are
+exactly independent.  It follows that
+
+```text
+Var(X)/E[X]^2 <= N^(-0.234235391465...+o(1)),
+X = (1+o(1))*N^(0.280916143490...+o(1)) with high probability.
+```
+
 There is an exact local likelihood consequence.  Put `T_j=supp(z_j)` and
 `U_j=product_(i in T_j)S_i`.  Singleton patterns make the three characters
 independent over `F_2`.  The largest other support in their seven-element
@@ -6942,11 +7153,68 @@ E[B*Maj_3(U) | Y]
 
 This removes the caveat that the three-character reversal is merely an
 abstract likelihood example: actual retained modular paths realize it in
-their local marginal, and the expected number of span-clean incidences has
-the same `N^(0.280916...+o(1))` exponent.  It is still only a first-moment
-count, not a high-probability theorem, and it does not determine
-the sign of the full exponentially large path sum.  It rules out a global
-MLR argument based only on coefficient positivity and pair overlap.
+their local marginal.  This local phenomenon is also typical.  Put
+
+```text
+xi = 1-a-16*(p-y) = 0.169467432016....
+```
+
+If `D` counts dirty retained incidences, the conditional union bound and the
+second-moment theorem give
+
+```text
+E[D] <= E[X]*N^(-xi+o(1)).
+```
+
+Chebyshev for `X` and Markov for `D` show that all but an `o(1)` fraction of
+the retained incidences are span-clean with high probability.  A clean span
+contains only the six exact-`t` orientations `+/-z_j`, and a switched triple
+has only polynomially many inverse switch descriptions.  Deduplication
+therefore yields
+
+```text
+N^(0.280916143490...-o(1))
+```
+
+distinct span-clean local anti-majority marginals with high probability.
+
+This still does not determine the sign of the full path sum.  The analogous
+two-path second moment gives the total number `M_path` of retained exact-`t`
+paths as
+
+```text
+M_path = N^(m+o(1)) with high probability,
+m = 3*a-1 = 0.498390353227....
+```
+
+The clean triples touch at most `3*X` path incidences, an exponentially
+vanishing fraction
+
+```text
+3*X/M_path <= N^(-0.217474209738+o(1)).
+```
+
+At paper-scale visibility, one local correlation has magnitude
+
+```text
+c = (lambda/2)^t = N^(-beta+o(1)),
+beta = 12*p = 0.249195176616....
+```
+
+Even under the optimistic fiction that all `X` local witnesses were
+independent, their aggregate signal-to-noise ratio would be only
+
+```text
+c*sqrt(X)
+  = N^(-0.108737104871+o(1)).
+```
+
+Locally `Pi_tau*Z=2*(U_1+U_2+U_3)`, but Walsh projection and sign do not
+commute.  The outside-span component and the remaining odd clusters can
+still determine `sign(Z)`.  The theorem therefore proves high-probability
+abundance of local anti-majority spans, not failure of the full-path sign.
+It rules out a global MLR argument based only on coefficient positivity and
+pair overlap.
 
 Generic Boolean hypercontractivity cannot fill the gap.  For a degree-`t`
 Walsh polynomial it gives
@@ -7414,8 +7682,9 @@ gives
 
 Consequently no regularized signed choice in this surrogate can beat the
 square-root exponent at that retuned point.  The tiny interval around the
-original apparent point still requires an asymptotic resolvent bound, but the
-remaining lemma has an exact polynomial interpretation.
+original apparent point is also closed by the explicit fractional-moment
+certificate below.  The required resolvent has an exact polynomial
+interpretation.
 
 Temporarily adjoin degree zero and write `c_r=choose(b,r)`.  The extended
 normalized one-block matrix `C_full` has the exact Pascal--Cholesky
@@ -7480,35 +7749,35 @@ C_cut^(tensor 4)+rho*I
 R_min >= sqrt(rho)/M_half^4.
 ```
 
-At the dangerous center `p_*=0.0207662647183...`, put
+For a general density `p` in the narrow interval, put
 
 ```text
-a = 3*(H_2(p_*)+p_*),
-d_exp = 12*(H_2(p_*)-p_*)-1.
+a = 3*(H_2(p)+p),
+D(k) = 1+k-12*(H_2(p)-p),
+D = D(a).
 ```
 
-The defining equation for `p_*` gives
+At the dangerous center `p_*=0.0207662647183...`, the defining equation for
+`p_*` gives
 
 ```text
-d_exp=a=0.499463451082....
+a = 12*(H_2(p_*)-p_*)-1 = 0.499463451082....
 ```
 
-Taking `k=a` makes
+Taking the admissible filter exponent `k=a`, a bound
 
 ```text
-rho = N^(1+a+o(1)),
-H_cut^4 = N^(1+a+o(1)).
+M_half <= H_cut^(1/2)*N^(-delta+o(1))
 ```
 
-Consequently a bound
+gives a relative-second-moment exponent at least
 
 ```text
-M_half <= H_cut^(1/2)*N^(-delta+o(1)),
-delta > (1/2-a)/4 = 0.000134137230...,
+max{D,D/2+4*delta,0}.
 ```
 
-would imply `R_min>=N^(4*delta+o(1))` and close the surrogate at the window
-center.  The known exact inverse moment is only
+At the center, `delta>(1/2-a)/4=0.000134137230...` is enough.  The exact
+inverse moment by itself is
 
 ```text
 h_cut^T*C_cut^(-1)*h_cut
@@ -7516,18 +7785,149 @@ h_cut^T*C_cut^(-1)*h_cut
 A_(b,t) = sum_(r=0)^t choose(b,r).
 ```
 
-Cauchy--Schwarz then gives
-`M_half<=sqrt(H_cut*(A_(b,t)-1)/A_(b,t))`, with no strict exponential gain.
-Proving the tiny displayed fractional-moment gap is the precise remaining
-resolvent problem; finite-size evidence is not used as a proof here.
+Cauchy--Schwarz gives only
+`M_half<=sqrt(H_cut*(A_(b,t)-1)/A_(b,t))`.  A hypergeometric-tail polynomial
+supplies the strict gain that this generic inequality misses.
+
+Fix
+
+```text
+I = [0.0207313410485,0.0207935351480],
+eta = 0.00003,
+x = [(2*p+1)-sqrt((2*p+1)^2-8*p^2)]/4,
+y = x+eta,
+j = floor(x*b),       d_0 = floor(y*b).
+```
+
+For `j<=k<=d_0`, define
+
+```text
+a_k = (-1)^(k-j)*choose(k-1,j-1)
+      *choose(d_0,k)/choose(t,k),
+P(r) = sum_(k=j)^d_0 a_k*choose(r,k),
+z_k = sqrt(choose(b,k))*a_k,
+u = G*z,       Z=||z||^2,       E=||h_cut-u||^2.
+```
+
+If `X` is hypergeometric with population size `t`, `r` successes, and
+`d_0` draws, then
+
+```text
+1[X>=j]
+  = sum_(k=j)^X (-1)^(k-j)*choose(k-1,j-1)*choose(X,k),
+E[choose(X,k)] = choose(r,k)*choose(d_0,k)/choose(t,k).
+```
+
+Therefore `P(r)=Pr[X>=j]`, `0<=P(r)<=1`, and `u_r=(h_cut)_r*P(r)`.
+Moreover `P(r)=1` whenever `r>=t-d_0+j`, so
+
+```text
+E <= sum_(r<t-d_0+j) choose(b,r)*2^(-r),
+Z = sum_(k=j)^d_0 choose(b,k)*choose(k-1,j-1)^2
+    *choose(d_0,k)^2/choose(t,k)^2.
+```
+
+The matrix comparison is exact.  Since `I-z*z^T/Z` is positive
+semidefinite,
+
+```text
+C_cut >= A := h_cut*h_cut^T+u*u^T/Z.
+```
+
+Regularize both matrices by `epsilon*I`, apply the operator monotonicity of
+the inverse square root, and let `epsilon` decrease to zero.  The vector
+`h_cut` lies in `range(A)`, so the right side converges to the positive-
+spectrum quadratic form `h_cut^T*(A^dagger)^(1/2)*h_cut`.  Write
+
+```text
+H=||h_cut||^2,       S=||u||^2,       R=h_cut^T*u.
+```
+
+The nonzero Gram matrix of `[h_cut,u/sqrt(Z)]` is
+
+```text
+K_2 = [[H,R/sqrt(Z)],[R/sqrt(Z),S/Z]].
+```
+
+Polar decomposition and the explicit square root of a two-by-two positive
+matrix give
+
+```text
+M_half <= (sqrt(K_2))_(1,1)
+  <= H*sqrt(Z/S)+sqrt(H-R^2/S)
+  <= H*sqrt(Z/S)+sqrt(E).
+```
+
+The last step uses
+`H-R^2/S=min_alpha ||h_cut-alpha*u||^2<=||h_cut-u||^2`.  In particular,
+`S=H*(1-o(1))` once `E/H` is exponentially small.
+
+The two remaining estimates are one-dimensional entropy bounds.  Uniformly
+for `p` in `I`, endpoint Stirling estimates give
+
+```text
+E/H <= 2^(-g(p)*b+o(b)),
+g(p) = H_2(p)-p-[H_2(p-eta)-(p-eta)],
+
+Z <= 2^(-zeta(p)*b+o(b)),
+zeta(p) = -max_(x<=q<=y) phi_p(q),
+phi_p(q) = H_2(q)+2*q*H_2(x/q)+2*y*H_2(q/y)
+           -2*p*H_2(q/p).
+```
+
+The maximizer of `phi_p` is unique and solves
+
+```text
+q*(1-q)*(y-q)^2 = (q-x)^2*(p-q)^2.
+```
+
+Indeed, `phi_p'` is the base-two logarithm of the ratio of the two sides,
+and its derivative is negative throughout the interval.  Outward-rounded
+interval evaluation gives, uniformly on `I`,
+
+```text
+0.00013675408 < g(p),
+0.00023072040 < zeta(p).
+```
+
+At the center the values are
+
+```text
+x = 0.000414371270461938...,
+q = 0.000429511362920746...,
+g = 0.000136812129417931...,
+zeta = 0.000232475207104743....
+```
+
+Since `b=3*n`, the rank-two bound proves, uniformly on `I`,
+
+```text
+M_half <= H_cut^(1/2)*N^(-0.000205+o(1)).
+```
+
+For arbitrary admissible `k`,
+`max{D(k),D(k)/2+4*0.000205,0}` is nondecreasing in `k` with slope at most
+one.  Combining it with `R_list=max(a,2*a-k)` therefore places the minimum at
+`k=a`.  There the total surrogate cost exponent is at least
+
+```text
+a+max{D,D/2+4*0.000205,0} > 0.50020
+```
+
+throughout `I`; the sharp lower-end value is `0.500209365738...`.  Thus the
+diagonal certificate handles the complement of `I`, while the
+hypergeometric fractional-moment certificate handles all of `I`.  Together
+they close the asymptotic sub-square-root window for the named regularized
+degree-symmetric leading surrogate.
 
 Its scope is important.  `B` contains only the compatible leading
 automatic-zero component, and the formula assigns `q_0^2` to every generic
 distinct pair.  Dependent-filter pairs, additional zero relations, and
 extra half-turn orientations are excluded.  With signed weights, omitted
 covariances need not be a positive-semidefinite lower bound.  The reduction
-therefore neither constructs a full decoder nor proves an asymptotic lower
-bound; regularized whitening for the exact statistic remains open.
+therefore proves the lower bound only for the named leading surrogate.  It
+neither constructs a full decoder nor proves a lower bound for the exact
+statistic; exact regularized whitening remains open.
 
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
@@ -7952,20 +8352,23 @@ at least `1/2`, and balanced standard trees with at least eight lists exceed
 `0.6856`.  At the near-miss point, the explicit per-block-nonempty leading-
 Gram cutoff whitener has diagonal-ratio exponent `1.5095`.  The regularized
 degree-symmetric leading surrogate has an exact polynomial-size spectral
-optimizer.  Its diagonal rules out the retuned point and confines any
-sub-square-root window to `0.02073134<p<0.02079354`, but omitted covariances
-and extra half-turn orientations leave the full statistic open.  An exact
-Pascal--Cholesky reduction isolates the missing surrogate lemma as a
-fractional-moment gain `delta>0.00013414` at the window center.
+optimizer.  Its diagonal confines the only possible sub-square-root window
+to `0.02073134<p<0.02079354`.  An explicit hypergeometric-tail rank-two
+certificate gives `delta>0.000205` uniformly there and raises that entire
+window above `0.50020`, closing the named surrogate at the square-root scale.
+Omitted covariances and extra half-turn orientations leave the full statistic
+open.
 Bucket-sum-only rehash medians are only margin
 transforms of the same path sum, while a positive three-character likelihood
 model shows that fixed
 pair overlap and linear signal can coexist with either prediction sign.
 Actual near-miss modular triples go farther: they have
-`N^(0.280916...+o(1))` expected retained incidences and each span-clean local
-marginal is anti-majority.  This remains an expectation/local statement, not
-a high-probability failure of the full path sum.  A nonlinear theorem must
-therefore control or compensate the residual odd half-turn clusters.
+`N^(0.280916...-o(1))` distinct span-clean local anti-majority marginals with
+high probability.  They touch only an exponentially vanishing path fraction,
+and even an independent-witness fiction has
+`N^(-0.108737...+o(1))` signal-to-noise.  This is not a failure theorem for the
+full path sum.  A nonlinear theorem must therefore control or compensate the
+residual odd half-turn clusters.
 The
 theorems still leave open circuits that exploit the internal Boolean modular
 arithmetic beyond the orbit algebra or compute the weighted ternary
@@ -7985,11 +8388,15 @@ surrogates and the displayed `o(log M)` one-sided local moment certificate do
 not provide it.  A polynomial-time certified interval log-sum-exp oracle with
 polynomial multiplicative slack would enumerate the rare row in expected
 polynomial time; it is exactly an implicit Gaussian-KDE block-sum primitive.
-Point-query implementations cost `Omega(s)` classically and
+Black-box point-query implementations cost `Omega(s)` classically and
 `Omega(sqrt(s))` quantumly on a size-`s` block.  Even residue-aggregated
-cancellation-blind Bessel certification must keep `(1-o(1))*N` residues, and
-rejection-based quantum tilting returns to `sqrt(M/k)`.  On the other hand,
-Kac--Rice gives
+cancellation-blind Bessel certification must keep `(1-o(1))*N` residues.
+On a low block, optimal iid unbiased single-multi-index importance sampling
+needs `N^(4.303...-o(1))` or `N^(4.472...-o(1))` samples to reach the
+pruning-scale additive RMSE.  The unweighted, untruncated full-spectrum
+Fourier `L_2` bound cannot prune, and the phase-averaged energy is not
+uniformly spread; weighted phase-aware tails remain open.  Rejection-based
+quantum tilting returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
 only `M^o(1)` expected rare-cap crossings and accepted indices, so the
 partition-sum oracle or output-sensitive threshold-root locator remains a
 sharply defined positive opening.  The
