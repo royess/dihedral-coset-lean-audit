@@ -136,7 +136,9 @@ can mark `{d,-d}`, but its target input mass is only `Theta(q/N)` on the
 natural sparse-data state, retaining an `Omega(sqrt(N/q))` state-conversion
 cost.
 The sparse score also gives an exact parity-constrained circulant SDP, but
-Fourier diagonalization leaves `N/2` candidate atoms and the generic quantum
+Fourier diagonalization leaves `N/2` candidate atoms; PSD separation remains
+the original parity-restricted optimizer, and a faithful group-algebra
+representation needs `N/2` dimensions.  The generic quantum
 SDP interfaces examined here retain square-root dimension dependence or
 assume stronger low-rank input, Gibbs preparation, or implicit oracles.  A
 repeated-squaring construction gives a genuinely polynomial-
@@ -145,8 +147,12 @@ relaxation is parity-blind with a growing gap.  At polynomial-size order two,
 Hankel transport enforces harmonic squaring for aligned occurrence trees and
 invalidates that witness in the aligned-tree formulation.  A finite Laurent
 phase closure gives an exact conditional pseudo-
-moment certificate, but neither typical certificate acceptance nor a planted
-parity gap is proved.  With high probability, the natural exact
+moment certificate.  A randomized sixteen-bucket reassociation has an
+exponentially likely cut-dissociation event, but its closure-interpolation
+lemma is unproved.  An exact expander identity buffer independently proves
+that the order-two gap is not invariant under exact redundant lifts.  These
+results do not settle the fixed aligned arithmetic lift or yield a planted
+gap.  With high probability, the natural exact
 factor graph has `Omega(n)` treewidth, coefficient BP has exponential support,
 and uniform bitwise BP has no inverse-polynomial first-round seed; these
 statements do not cover a different arithmetic compression.

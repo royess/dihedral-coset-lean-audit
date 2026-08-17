@@ -127,7 +127,10 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `epsilon>0`;
 - the same circulant gives an exact parity-constrained SDP with sparse,
   block-encodable data, but its Fourier form is still optimization over
-  `N/2` candidate atoms.  Standard sparse-input quantum SDP solvers retain
+  `N/2` candidate atoms; PSD separation is exactly the parity-restricted
+  sparse-score maximization, and any positivity-reflecting group-algebra
+  representation has dimension at least `N/2`.  Standard sparse-input
+  quantum SDP solvers retain
   square-root dependence on that dimension; polylogarithmic-dimension and
   Gibbs/implicit variants require stronger low-rank input, preparation, or
   oracle assumptions not supplied here.  A separate repeated-squaring
@@ -142,8 +145,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   aligned harmonic relations such as `w_(i,2m)=w_(i,m)^2`; in that aligned-
   tree formulation, the first-order independent-harmonic witness therefore
   cannot extend.  A finite Laurent phase-closure
-  test gives an explicit conditional order-two pseudo-moment certificate,
-  but no high-probability acceptance or planted-gap theorem is known.  With
+  test gives an explicit conditional order-two pseudo-moment certificate.
+  A randomized sixteen-bucket reassociation has an exponentially likely
+  degree-four cut-dissociation event, but a missing closure-interpolation
+  lemma prevents turning it into a parity-blindness theorem.  An exact
+  expander identity buffer does prove lift non-invariance for a redundant
+  quadratic formulation.  Neither result proves parity blindness, or a
+  planted gap, for the fixed aligned arithmetic lift.  With
   high probability, the natural local factor graph has `Omega(n)` treewidth,
   exact coefficient BP develops
   exponentially many residues, and uniform bitwise BP has no inverse-
@@ -3850,6 +3858,33 @@ before it reaches exponential size.  It does not exclude an implicit
 compression, an SDP supplied with long arithmetic relations, or a different
 lift.
 
+For the displayed coherent rank-one test family, the missing separator is
+exactly a bounded modular-relation test.  Give sample `i` a unit phase
+`eta_i`, set `eta_(i,m)=eta_i^m`, and extend this assignment multiplicatively
+to words.  The rank-one matrix
+
+```text
+M_(u,v) = eta(u)*conj(eta(v))
+```
+
+descends to the parity-p Hankel quotient if and only if every
+`c in Word_(4*L)` satisfying `c dot Y=h*H mod N` also satisfies
+`eta(c)=p^h`.  Necessity is a Hankel/parity identity.  Conversely, any two
+representatives of one moment entry differ by such a word, so the condition
+makes every entry well defined.  Any violating relation can be split among
+four `Word_L` indices and is therefore exposed by the moment matrix.
+
+This also gives a one-sided randomized reduction.  Choose a prime
+`P>8*L*J` and independent phases `eta_i=exp(2*pi*i*r_i/P)`.  A fixed nonzero
+aggregate vector `c` has every coefficient smaller than `P` in magnitude, so
+it remains nonzero modulo `P` and is phase-consistent with probability at most
+`1/P`.
+Consequently a membership or separation routine for this succinct rank-one
+family detects whether a bounded `0/H` modular relation exists, with the
+usual one-sided repetition.  This does not prove that every possible
+instance-specific SDP separator has the same form; it identifies the exact
+task for the natural word-Hankel pseudo-point.
+
 There is an exact sparse SDP formulation, but generic implicit SDP machinery
 does not by itself perform the missing optimization.  Remove the constant term
 from `G_J`, let `Shift` be cyclic translation on `Z_N`, and define
@@ -3901,6 +3936,45 @@ references are [Quantum Speed-ups for Semidefinite
 Programming](https://arxiv.org/abs/1609.05537) and [Quantum SDP Solvers:
 Large Speed-ups, Optimality, and Applications to Quantum
 Learning](https://arxiv.org/abs/1710.02581).
+
+The separation problem for this sparse SDP is exactly the missing decoder,
+not an easier black box hidden by the notation.  Put
+
+```text
+Pi_p = (I+p*R)/2,
+K_(p,t) = Pi_p*(t*I-C_J)*Pi_p + Pi_(-p).
+```
+
+Because `C_J` commutes with `R`, Fourier diagonalization gives the exact
+equivalence
+
+```text
+K_(p,t) >= 0
+iff
+t >= max_(k:(-1)^k=p) [G_J(k)+q*ln(1+rho^2)].
+```
+
+Thus even weak PSD separation at the normalized accuracy needed to preserve
+the established planted score gap decides which parity sector contains the
+maximum.  The matrix remains sparse--it uses only the shifts in `I`, `R`,
+`C_J`, and `R*C_J`--but sparsity does not supply the separator.
+
+There is also an exact representation-theoretic limit on a common proposed
+compression.  The cyclic group algebra satisfies
+
+```text
+C[Z_N] is isomorphic to C^N.
+```
+
+Its `N` minimal Fourier idempotents are nonzero mutually orthogonal
+projections.  Any star-homomorphic representation that reflects positivity
+on the whole algebra must map every one of them nontrivially: otherwise the
+negative of an omitted idempotent maps to the zero PSD matrix.  Its matrix
+dimension is therefore at least `N`, or at least `N/2` after fixing parity.
+Character subsampling merely selects candidate frequencies; it is not a
+positivity-reflecting compression.  This is a barrier only for faithful
+group-algebra or character-subsampling representations, not for a nonlinear
+instance-specific separator.
 
 Even a classical exact chordal conversion is generically large here.  The
 first-harmonic Cayley graph has normalized nontrivial eigenvalues
@@ -4218,18 +4292,228 @@ sum_i a_i*Y_i = h*H mod N,   h in Z.
 Its loop phase is `product_i S_i^(a_i)*p^h`.  When every `a_i=0`, all
 deterministic harmonic, carry, and reassociation aliases are therefore phase-
 consistent.  A conflict must contain a nonzero public-label relation.  What
-remains unproved is that every possible low-width Laurent
-loop has a sparse enough coefficient vector for the existing no-short-
-relation bound to exclude it.  Independently permuting or buffering
-occurrence trees can change which loops the order-two closure sees, so this
-is also formulation-dependent.
+remains unproved for an arbitrary preselected compiler is that every possible
+low-width Laurent loop has a sparse enough coefficient vector for the
+existing no-short-relation bound to exclude it.  Independently regrouping or
+buffering occurrence trees can change which loops the order-two closure sees,
+so this is also formulation-dependent.
+
+An odd closure cycle is not automatically a planted decoder.  Let
+
+```text
+T = {i : a_i is odd},    t=|T|.
+```
+
+Under the matched passive-sign model and a uniform secret, its prescribed
+sign has the exact correlation
+
+```text
+E_[d,S|Y] [(-1)^d * product_(i in T) S_i]
+ = lambda^t*2^(-t)
+   * #{epsilon in {+1,-1}^T : sum_i epsilon_i*Y_i=H mod N}.
+```
+
+Consequently any single parity-selecting algebraic cycle has zero linear
+population correlation unless its odd support already contains a signed
+half-turn relation.  This does not exclude a joint nonlinear use of many
+cycles; it shows that an isolated algebraic gap does not obtain the planted
+bit merely from same-sample harmonic consistency.
+
+A randomized regrouping gives a precise candidate no-loop event, but not yet
+a typical-acceptance theorem.  It changes the multiplication-tree layout but
+not the rank-one function being computed.  Index the `Q=q*J` frequency
+occurrences by `o`, and write
+
+```text
+f_o = b_o*H + F_o,    b_o in {0,1},    0<=F_o<H.
+```
+
+Independently color every set bit of each lower mask `F_o` into `K=16`
+buckets.  Let `F_(o,c)` be the sum of the powers of two in bucket `c`.
+Compute each bucket product in a bottom tree, then combine the sixteen cut
+ports with a balanced depth-four top tree.  Define the event `D4` by
+
+```text
+sum_(o,c) gamma_(o,c)*F_(o,c) != 0 mod H
+```
+
+for every nonzero integer vector `gamma` with `l_1` norm at most four.
+On `D4`, every bucket is nonempty.  If its sizes are `w_c`, the number of
+multiplication nodes is still exactly
+
+```text
+sum_c (w_c-1) + (K-1) = wt(F_o)-1.
+```
+
+Thus this is only an occurrence-specific reassociation of the original exact
+product.
+
+The event holds with exponentially high probability.  Put
+
+```text
+L=n-1,
+P=16*Q,
+w_*=(L-ceil(log_2 J))/3.
+```
+
+The lower mask of `m*Y_i`, after its at most `ceil(log_2 J)` forced zero
+bits, has independent fair remaining bits.  A Chernoff bound makes all `Q`
+masks have weight at least `w_*` except with probability
+
+```text
+Q*exp(-(L-ceil(log_2 J))/36).
+```
+
+For a fixed nonzero `gamma` of `l_1` norm at most four, some occurrence has a
+nonconstant coefficient across its sixteen colors.  Revealing its colored
+set bits from low to high, choose a baseline color and divide the largest
+common power `2^s` from its nonzero coefficient differences.  The norm bound
+gives `s<=2`.  Every support bit below the final `s` positions then imposes a
+nontrivial parity condition on its color, whose conditional mass is at most
+`15/16`; the low-to-high exposure absorbs carries exactly.
+Counting such coefficient vectors by signed words of length at most four
+gives
+
+```text
+Pr[not D4]
+ <= Q*exp(-(L-ceil(log_2 J))/36)
+    +(2*P+1)^4*(15/16)^(w_*-2).
+```
+
+Jointly over the labels and compiler colors, for `q=12*n` and
+`J=Theta((ln n)^(3/2))`, this is `exp(-Omega(n))`.
+
+The primitive gate identities explain why `D4` is tempting.  First quotient
+the unary parity and root pins.  For a quadratic gate `v=a*b`, its immediate
+order-two rotations include
+
+```text
+v <-> a*b,
+v*conj(a) <-> b,
+v*conj(b) <-> a,
+```
+
+together with conjugates.  If every completed closure cycle admitted a
+decomposition into maximal top and core segments whose interfaces stayed in
+degree-two cut monomials, `D4` would force every core segment to have identical
+endpoints.  The top trees could then realize arbitrary root targets, and
+pinning the lower root of occurrence `o` to `sign(a_o*p^(b_o))` would make
+both parity relaxations attain `U_J`.
+
+That interpolation lemma is currently missing.  The completed closure may
+Hankel-transport an identity that was itself obtained after many prior
+transitivity and transport steps; primitive gate rotations alone do not show
+that the resulting carrier still crosses the top/core interface in the
+claimed normal form.  Thus the displayed `D4` probability bound is rigorous,
+but `D4 => no conflicting loop` is not.  The randomized sixteen-bucket layout
+remains a concrete compiler candidate, not a proved parity-blind relaxation.
+
+There is a rigorous way to make the formulation dependence itself explicit.
+It does not strengthen the natural lift; instead it shows why a fixed-order
+claim cannot be invariant under exact redundant quadratic reformulations.
+Let `G=(V,E)` be a simple connected `4`-regular edge expander satisfying
+`|delta_G(S)|>=h*|S|` for `|S|<=|V|/2`, with an Eulerian orientation having
+two incoming and two outgoing edges at every vertex.
+Delete one directed non-loop edge and replace its two occurrences by terminals `x`
+and `w`.  At every vertex impose the direct quadratic binomial
+
+```text
+product_(incoming edges) z_e = product_(outgoing edges) z_e.
+```
+
+Multiplying all vertex equations cancels every internal edge and gives
+`x=w`.  Conversely, when `x=w`, additive phases can be routed along any path
+between the terminals, so the internal unit variables extend the boundary
+assignment.  The buffer is therefore an exact rank-one identity gadget.
+
+Choose an expansion constant `h>0`, put `C=ceil(8/h)`, and take
+`|V|>3*C`.  Track a generated buffer identity by the integer vector
+`c in Z^V` of vertex binomials used in it.  Primitive buffer identities have
+`c=e_v`; identities outside the buffer have `c=0`; inversion negates `c`,
+Hankel transport preserves it, and transitivity adds two such vectors.  On an
+internal edge `(u,v)`, the exponent is `c_u-c_v`.
+
+Every visible closure identity is the ratio of two degree-at-most-two
+monomials.  Since internal buffer edges occur nowhere else, at most four of
+their exponent differences are nonzero.  The conservative constant `8`
+covers restoring the deleted edge and terminal cancellations.  For any
+integer vector with at most eight disagreement edges, expansion implies that
+it equals one integer constant away from at most `C` vertices.  Indeed, if no
+level set had a strict majority, summing the expansion bound over all level
+sets would give more than `16` boundary incidences, whereas each disagreement
+edge is counted twice.  For the majority level, its complement has boundary
+at most eight and therefore size at most `C`.
+
+This yields a closure-round induction.  Every primitive `c` is zero outside
+one vertex.  If two previously generated vectors are zero outside at most
+`C` vertices, their sum is zero outside at most `2*C` vertices.  The preceding
+lemma says that the sum is constant away from at most `C` vertices.  That
+constant cannot be nonzero when `|V|>3*C`, because the sum was nonzero on at
+most `2*C` vertices.  Thus the new vector is again zero outside at most `C`
+vertices.  Consequently no nonzero constant vector
+`r*1_V` is ever generated, and no terminal identity `w^r=x^r` with `r!=0`
+enters the order-two closure.
+Insert a disjoint copy of this buffer between every canonical frequency root
+`x_(i,m)` and the exposed objective root `w_(i,m)`.  In any closed phase loop,
+all private internal-edge exponents vanish.  The graph `G-e` is connected--a
+connected even-regular graph has no bridge--so the buffer coefficient vector
+is constant on `V`.  The induction forces that constant to be zero; hence
+every exposed pin has zero net use and contributes phase one.  After deleting
+the buffers, an actual parity-sector assignment makes the remaining
+arithmetic loop consistent.
+
+The finite no-conflict phase-groupoid construction therefore accepts
+arbitrary sign pins together with either parity pin.  Seed it with the direct
+degree-two column identities `[a*b]=[c*d]`; the resulting block-rank-one
+Hankel Gram satisfies their full order-two equality localizers.  In
+particular, choosing
+
+```text
+w_(i,m) = sign(a_(i,m))
+```
+
+makes both order-two relaxations attain the full separable ceiling `U_J`.
+This theorem assumes the vertex relations are included directly as quadratic
+binomials.  Compiling each one through extra ternary gate variables changes
+the truncated closure and needs a separate width audit.  It also assumes
+that harmonic/addition identities are attached below the buffers: adding
+them directly among the exposed roots restores the corresponding low-order
+relations.  The result is therefore an exact lift-noninvariance example, not
+a claim that the original aligned arithmetic QCQP is parity-blind.  A
+symbolic row-lattice normal-form presolver can also combine all buffer
+binomials, recover `w=x` by integer linear algebra, and add that equality
+before solving.
+The gap is for the raw fixed-order moment/localizer formulation and its finite
+Hankel closure, not for an implicit solver allowed to normalize the full row
+lattice first.
+
+In fact, for the exactly encoded root-of-unity phases used here, this equality
+preprocessing is polynomial for every deterministic unit-modulus binomial
+system.  Store each relation `z^a=xi` as an integer exponent row.  Smith or
+Hermite normal form checks phase consistency, computes the row-lattice
+quotient while retaining torsion and phase data, and reduces every auxiliary
+monomial to a normal-form class in that quotient; feasible assignments are
+characters, or the corresponding phase-twisted character coset.  For the
+repeated-squaring arithmetic lift, it reduces the variables to one cyclic
+phase satisfying
+`z^H=p`; its candidate roots are exactly the `N/2` roots in parity class `p`.
+The reduced objective is again `G_J(k)` on those characters.  Row-lattice
+normalization removes artificial long equality derivations, including the
+expander buffer, but leaves positivity and optimization as the original
+sparse-score problem.  It also does not solve the bounded-word question in
+the explicit hierarchy: a Smith-normal-form basis need not exhibit the
+shortest modular relation.
 
 The order-two SDP is polynomial size--its degree-two monomial matrix has
 `O(V^2)` rows--but the exact results now point in both directions: aligned
 harmonics rule out the first-order witness, while acceptance of coherent pins
-for both parity hypotheses constructs explicit common pseudo-moments.  Proving
-typical closure acceptance, or proving a planted parity gap in a strengthened
-formulation, remains the first specific low-level relaxation opening.
+for both parity hypotheses constructs explicit common pseudo-moments.  The
+randomized sixteen-bucket compiler has a rigorous exponentially likely
+cut-dissociation event, but its closure-interpolation lemma remains open.  The
+expander buffer independently proves lift non-invariance for a redundant
+formulation.  Proving a planted parity gap, or parity blindness for the fixed
+aligned arithmetic compiler, remains the first specific low-level relaxation
+opening.
 
 Natural exact message passing encounters a different sharp barrier.  Keep
 only the `m=1` product tree for each sample and contract its private nodes to
@@ -5173,9 +5457,12 @@ known for either.  The QCQP's strengthened first-order Shor relaxation has an
 explicit parity-blind gap, and natural exact BP has exponential width or
 support.  At order two, aligned harmonic identities invalidate the first-
 order witness in the aligned-tree formulation, while a finite Laurent closure
-supplies an exact conditional pseudo-moment certificate.  Typical certificate
-acceptance versus a planted parity gap remains a concrete polynomial-size
-opening.
+supplies an exact conditional pseudo-moment certificate.  A randomized
+sixteen-bucket reassociation has an exponentially likely cut-dissociation
+event, but not yet the interpolation lemma needed for closure acceptance.  An
+exact expander identity buffer does show explicit lift non-invariance.  The
+fixed aligned compiler and any planted parity gap remain concrete polynomial-
+size openings.
 
 This is not a no-go theorem.  A distribution-specific collective circuit
 could conceivably decode only the parity without exposing a reusable fibre

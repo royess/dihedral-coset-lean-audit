@@ -184,7 +184,9 @@ mark the two correlation modes in polynomial time, but from the natural
 sparse-data state its target spectral mass is only `Theta(q/N)`, so this
 state-conversion route still needs `Omega(sqrt(N/q))` amplification.
 The same sparse score has an exact parity-constrained circulant SDP, but its
-Fourier form is still maximization over `N/2` atoms and the standard quantum
+Fourier form is still maximization over `N/2` atoms; sparse PSD separation is
+the original parity-restricted optimizer, and faithful group-algebra
+representations still need `N/2` dimensions.  The standard quantum
 SDP interfaces either retain square-root dimension dependence or require
 stronger low-rank input, Gibbs preparation, or implicit-oracle assumptions.
 An exact repeated-squaring lift does compress the
@@ -194,8 +196,13 @@ first-order Shor relaxation is parity-blind with a growing integrality gap.
 At order two, Hankel transport enforces harmonic squaring for aligned
 occurrence trees, so that witness fails in the aligned-tree formulation; a
 polynomial Laurent phase-closure test gives a conditional
-pseudo-moment certificate, but typical acceptance versus a planted parity
-gap remains unresolved.  With high probability, natural exact factor-
+pseudo-moment certificate.  A randomized sixteen-bucket reassociation makes
+an exact cut-dissociation event exponentially likely, but a missing closure-
+interpolation lemma prevents a parity-blindness theorem.  An exact expander
+identity buffer separately proves lift non-invariance for a redundant
+quadratic formulation.  Neither construction settles the fixed aligned
+arithmetic lift or produces a planted gap.  With high probability, natural
+exact factor-
 graph elimination has `Omega(n)` treewidth, coefficient BP develops
 exponentially many residues, and uniform bitwise BP has no inverse-polynomial
 first-round seed.  Taking a signed

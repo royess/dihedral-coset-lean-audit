@@ -688,7 +688,9 @@ correct modes in polynomial time, but their input mass is only `Theta(q/N)`
 for the natural sparse-data state, so this filter still needs
 `Omega(sqrt(N/q))` amplification.
 The same score defines an exact sparse parity-constrained SDP, but its Fourier
-form remains optimization over `N/2` atoms and the generic quantum SDP
+form remains optimization over `N/2` atoms; PSD separation is the same
+parity-restricted optimizer, and faithful group-algebra representations need
+`N/2` dimensions.  The generic quantum SDP
 interfaces checked here retain square-root dimension dependence or require
 stronger input, preparation, or oracle assumptions.  A compact repeated-
 squaring construction instead gives an exact polynomial-size nonconvex unit-
@@ -697,9 +699,12 @@ decoder.  Its strengthened first-order Shor relaxation is parity-blind with a
 growing integrality gap.  At polynomial-size order two, harmonic squaring is
 enforced for aligned occurrence trees and that witness fails in the aligned-
 tree formulation; a finite Laurent phase closure
-gives a conditional pseudo-moment certificate, but typical acceptance versus
-a planted parity gap remains unresolved.  With high
-probability, natural exact factor-graph elimination has `Omega(n)` treewidth,
+gives a conditional pseudo-moment certificate.  A randomized sixteen-bucket
+reassociation has an exponentially likely cut-dissociation event, but its
+closure-interpolation lemma is unproved.  An exact expander identity buffer
+shows that the gap is not invariant under exact redundant lifts.  Neither
+result settles the fixed aligned arithmetic lift or supplies a planted gap.
+With high probability, natural exact factor-graph elimination has `Omega(n)` treewidth,
 coefficient BP develops exponential support, and uniform bitwise BP has no
 inverse-polynomial first-round seed.  Signed spectral traces do not already
 provide one: their ideal
