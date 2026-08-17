@@ -162,7 +162,12 @@ this gives a conditional `N^(23/49+o(1))` time--space algorithm and approaches
 QROM compilation loses the exponent, so this is not an ordinary-circuit
 decoder.  Without a stored or algebraically invertible bucket index,
 table-free rejection and a direct-predicate Cartesian Johnson walk return to
-`sqrt(N)`.
+`sqrt(N)`.  A fixed-relative-error rare-cap polynomial surrogate needs degree
+`Omega(log M)`, and the displayed `o(log M)` one-sided local even-moment
+certificate leaves `M^(1-o(1))` expected blocks alive.  Yet Kac--Rice gives
+only `M^o(1)` expected crossings
+and accepted indices, so a sparse output-sensitive root locator remains the
+precise opening.
 Its exact Bayesian
 decision under a uniform secret prior is the ratio of the zero and half-turn
 coefficients of a weighted
@@ -268,8 +273,15 @@ zero relations and make its parity-signal-normalized second moment at least
 formal raw-second-moment exponent `0.5026116`; this is a barrier for that SNR
 analysis.  On this fixed support-weight/filter orbit, uniform weighting
 minimizes the ensemble ratio among all data-independent real linear weights,
-so thinning, signed reweighting, codes, and designs do not fix it.  Data-adaptive and
-nonlinear birthday decoders remain open.  A
+so thinning, signed reweighting, codes, and designs do not fix it.  With high
+probability the same covariance exponent survives every public-label-adaptive
+nonnegative fixed-degree weighting.  Every asymmetric exact-degree four-list
+pair--pair route in the two-orientation raw-moment model has exponent at least
+`1/2`; balanced standard trees in the same model with at least eight lists
+exceed `0.6856`.
+At the near-miss point, the explicit per-block-nonempty leading-Gram cutoff
+whitener has diagonal-ratio exponent `1.5095`; partial or regularized signed
+whitening and nonlinear birthday decoders remain open.  A
 new Parseval
 argument makes one part rigorous: against the conventional adversarial
 `STAT` oracle, the uniform-secret average parity advantage of any adaptive

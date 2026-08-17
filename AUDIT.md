@@ -116,7 +116,12 @@ coherent QRAM for a data-dependent ANN table gives conditional time and space
 `N^(7/15+epsilon+o(1))` for fixed `epsilon>0`; ordinary-gate QROM does not
 inherit that bound.  Without a stored bucket index or algebraic bucket
 inverter, table-free rejection and a direct-predicate Cartesian Johnson walk
-return to `sqrt(N)`.  The exact Bayesian answer is the ratio of two coefficients of
+return to `sqrt(N)`.  Fixed-relative-error rare-cap polynomial surrogates need
+degree `Omega(log M)`, and the displayed `o(log M)` one-sided local moment
+certificate leaves `M^(1-o(1))` expected blocks alive.  Kac--Rice gives only
+`M^o(1)` expected crossings and accepted indices, leaving sparse
+output-sensitive root location open.  The exact Bayesian answer is the ratio
+of two coefficients of
 a weighted ternary subset-sum polynomial under a uniform secret prior; direct
 likelihood filtering exposes
 an at-most-`O(1/N)` useful-posterior heralding probability in that normalized
@@ -209,8 +214,15 @@ normalized second moment at least `N^(0.0073173+o(1))`; optimistic
 independent-replica raw-second-moment accounting is `N^0.5026116`.  On this
 fixed support-weight/filter orbit, uniform weighting minimizes the ensemble
 ratio among all data-independent real linear weights, excluding thinning, signed
-reweighting, codes, and designs as repairs of that SNR argument.  Nonlinear
-and data-adaptive routes remain open.
+reweighting, codes, and designs as repairs of that SNR argument.  With high
+probability the exponent also survives arbitrary public-label-adaptive
+nonnegative fixed-degree weights.  Every asymmetric exact-degree four-list
+pair--pair route in the two-orientation raw-moment model has exponent at least
+`1/2`; balanced standard trees in the same model with at least eight lists
+exceed `0.6856`.
+At the near-miss point, the explicit per-block-nonempty leading-Gram cutoff
+whitener has diagonal-ratio exponent `1.5095`; partial or regularized signed
+whitening and nonlinear routes remain open.
 Parseval now gives a sharp
 statistical-query boundary: against
 the conventional adversarial `STAT` oracle, polynomially many adaptive

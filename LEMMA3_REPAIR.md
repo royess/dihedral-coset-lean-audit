@@ -668,8 +668,12 @@ for a data-dependent ANN table then gives a conditional
 `N^(7/15+epsilon+o(1))` for fixed `epsilon>0`; ordinary-gate QROM does not
 preserve this exponent.  Without a stored bucket index or algebraic bucket
 inverter, table-free rejection and a direct-predicate Cartesian Johnson walk
-return to `sqrt(N)`.  The exact Bayesian parity rule is the ratio of the
-half-turn and zero coefficients of a weighted ternary subset-sum generating
+return to `sqrt(N)`.  Fixed-relative-error rare-cap polynomial surrogates need
+degree `Omega(log M)`, while the displayed `o(log M)` one-sided local moment
+certificate leaves `M^(1-o(1))` expected blocks alive.  Kac--Rice gives only
+`M^o(1)` expected crossings and accepted indices, so sparse output-sensitive
+root location is the remaining opening.  The exact Bayesian parity rule is the
+ratio of the half-turn and zero coefficients of a weighted ternary subset-sum generating
 function under a uniform secret prior.  Coherent likelihood filtering
 prepares a useful posterior only
 with at most `O(1/N)` heralding probability in its direct normalized
@@ -760,7 +764,14 @@ normalized second moment at least `N^(0.0073173+o(1))`; optimistic
 independent-replica raw-second-moment accounting has exponent `0.5026116`.
 On this fixed support-weight/filter orbit, uniform weighting minimizes the
 ensemble ratio among all data-independent real linear weights, so thinning,
-signed reweighting, codes, and designs do not repair it.  Data-adaptive and nonlinear
+signed reweighting, codes, and designs do not repair it.  With high probability
+the exponent survives every public-label-adaptive nonnegative fixed-degree
+weighting.  Every asymmetric exact-degree four-list pair--pair raw-moment route
+in the two-orientation model has exponent at least `1/2`; balanced standard
+trees in the same model with at least eight lists exceed `0.6856`.  At the
+near-miss point, the explicit per-block-nonempty leading-Gram cutoff whitener
+has diagonal-ratio
+exponent `1.5095`; partial or regularized signed whitening and nonlinear
 generalized-birthday routes remain open.
 A
 normalized-Fourier/Parseval argument now proves that,

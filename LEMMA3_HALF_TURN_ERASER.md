@@ -109,7 +109,15 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   On this fixed support-weight/filter orbit, the uniform aggregate minimizes the
   ensemble ratio among all fixed data-independent real linear weights, so thinning,
   signed reweighting, codes, and designs do not repair that SNR proof.
-  Data-adaptive and nonlinear generalized-birthday decoders remain open.
+  With high probability the same covariance exponent survives every
+  public-label-adaptive nonnegative weighting of the retained fixed-degree
+  paths.  In the two-orientation raw-moment model, every asymmetric exact-
+  degree four-list pair--pair route has exponent at least `1/2`, while every
+  balanced standard tree with at least eight lists exceeds `0.6856` before
+  overlap is charged.  At the near-miss point, the explicit per-block-
+  nonempty leading-Gram cutoff whitener has diagonal-ratio exponent `1.5095`.
+  Partial or regularized signed whitening and nonlinear generalized-birthday
+  decoders remain open.
   Direct importance sampling of the exact Bayesian coefficient ratio has
   relative variance `Theta(N)` once its posterior is sharp.  At `q=12*n`,
   for a nondegenerate secret, a Hellinger bound shows that the posterior is in
@@ -128,7 +136,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `epsilon>0`; no corresponding ordinary-gate bound follows.  Without a
   stored or algebraically invertible bucket index, rejection-based filters
   and a direct-predicate Cartesian Johnson walk both return exactly to the
-  `sqrt(N)` scale.  The exact
+  `sqrt(N)` scale.  Fixed-relative-error polynomial surrogates for the rare
+  Gaussian cap need degree `Omega(log M)`, and the displayed `o(log M)` one-
+  sided local even-moment certificate leaves `M^(1-o(1))` expected blocks
+  alive.  Kac--Rice
+  nevertheless gives only `M^o(1)` expected crossings and accepted integer
+  positions at the ANN cap scale: output volume is small, but no sparse
+  output-sensitive root locator is known.  The exact
   grouped triangle envelope is
   identical on `H/poly(n)` prefixes with high probability, while one exact
   high-bit elimination can turn one Fourier mode into a dense spectrum.
@@ -2071,6 +2085,138 @@ These are exact barriers for rejection/amplification, inverse-row scanning,
 and direct-predicate product-walk implementations.  They are not an
 unrestricted lower bound for the random trigonometric instance.  A succinct
 algebraic bucket enumerator or a different non-black-box walk remains open.
+
+Three further calculations sharpen the inverse-row boundary without closing
+it.  First, a rare Gaussian cap cannot be replaced by a genuinely low-degree
+Hermite surrogate at relative accuracy.  Let `G` be standard normal, let
+`A={G>=u}` have probability `p`, and let `P` be a degree-`D` polynomial such
+that
+
+```text
+E[(P(G)-1_A)^2] <= epsilon*p,       0<epsilon<1.
+```
+
+Cauchy--Schwarz and
+[Gaussian hypercontractivity](https://doi.org/10.2307/2373688) give
+
+```text
+(1-sqrt(epsilon))*p <= E[P(G)*1_A],
+||P||_2 <= (1+sqrt(epsilon))*sqrt(p),
+||P||_4 <= 3^(D/2)*||P||_2.
+```
+
+Holder's inequality therefore forces
+
+```text
+D >= ln(1/p)/(2*ln(3))
+     +(2/ln(3))*ln((1-sqrt(epsilon))/(1+sqrt(epsilon))).
+```
+
+For fixed `epsilon<1`, at the ANN update scale `p=M^(-1+o(1))` this is
+`Omega(log M)`.  The
+statement rules out only a low-total-degree Gaussian polynomialization of
+the incidence bit.  A degree-`Theta(log M)` univariate polynomial can still
+be evaluated succinctly, so this is not an inversion lower bound.
+
+Second, the displayed sublogarithmic local even-moment pruning rule still
+leaves almost all blocks alive, even when made one-sided.  Fix arbitrary unit
+vectors `A_0,...,A_(M-1)`, take a standard Gaussian vector `g`, put
+`X_a=<g,A_a>`, and write `x_+=max(x,0)`.  For `r>=1`, define
+
+```text
+mu_(2r) = E[|G|^(2r)] = (2r-1)!!,
+mu_(4r) = E[|G|^(4r)] = (4r-1)!!,
+s = ceil(4*u^(2r)/mu_(2r)).
+```
+
+Assume `s<=M` and partition a level into disjoint size-`s` blocks.  For
+`S_I=sum_(a in I)(X_a)_+^(2r)`, every marginal is standard normal and
+Cauchy--Schwarz handles arbitrary correlations:
+
+```text
+E[S_I] = s*mu_(2r)/2,
+E[S_I^2] <= s^2*mu_(4r)/2.
+```
+
+Paley--Zygmund now shows
+
+```text
+Pr[S_I >= u^(2r)] >= mu_(2r)^2/(8*mu_(4r)).
+```
+
+Thus the expected number of blocks that the exact certificate
+`||(X_I)_+||_(2r)<u` cannot prune is at least
+
+```text
+floor(M/s)*mu_(2r)^2/(8*mu_(4r)).
+```
+
+For `r=1`, blocks have size `ceil(4*u^2)`, survive with probability at
+least `1/24`, and leave `Omega(M/u^2)` expected nodes.  If
+`u^2=Theta(log M)` and `r=o(log M)`, Stirling's formula makes the bound
+
+```text
+M*(Theta(r/u^2))^r.
+```
+
+Every such `r` therefore leaves `M^(1-o(1))` expected nodes, even if
+the block moments are supplied for free.  This applies only when the local
+no-cap certificate is the displayed one-sided `L_(2r)` bound.  At
+`r=Theta(log M)`, a naive expansion of the `q`-term score already has
+`q^(O(r))` terms.  An exponential-tilting or log-sum-exp certificate is a
+genuinely stronger possibility and is not excluded.
+
+Third, the rare row is small enough that output size itself is not the
+obstruction.  Choose centered representatives
+`nu_i in [-1/2,1/2)` of `Y_i/N` and use the Gaussian interpolation
+
+```text
+X(t) = q^(-1/2)*sum_i[
+    C_i*cos(2*pi*nu_i*t)+D_i*sin(2*pi*nu_i*t)],
+```
+
+where the `C_i,D_i` are independent standard normals.  It agrees with the
+integer orbit scores.  Conditional on the public labels it is stationary,
+has unit variance, and has derivative variance
+
+```text
+v_Y = (4*pi^2/q)*sum_i nu_i^2.
+```
+
+The [Kac--Rice crossing formula](https://doi.org/10.1214/EJP.v18-2403)
+gives the expected total number of level-`u` crossings on `[0,M]` exactly as
+
+```text
+M*sqrt(v_Y)/pi*exp(-u^2/2).
+```
+
+Uniform labels give `v_Y=pi^2/3+o(1)` in probability.  If
+`Pr[G>=u]=1/M`, Mills' ratio reduces the crossing expectation to
+
+```text
+(sqrt(2*pi/3)+o(1))*u = Theta(sqrt(log M)),
+```
+
+while the expected number of accepted integer positions is exactly one.
+More generally, a cap of measure `M^(-1+o(1))` has only `M^o(1)` expected
+crossings and accepted positions.  Hence a root isolator running in
+`poly(q,log N,number of crossings)` time would remove the table for a
+typical row.  Known degree-dependent trigonometric isolation does not supply
+such a sparse, output-sensitive guarantee; the exact algorithm of
+[Schweikard](https://doi.org/10.1145/131766.131775), for example, has
+degree-dependent complexity.  The small output count alone does not locate
+the excursions.
+
+Finally, the integer score sequence is a linear recurrence of order at most
+`2*q`; subtracting the threshold adds the root `1`.  Under every dyadic
+stride `2^t` with `2^t<=M`, its roots remain distinct with failure
+probability `O(q^2*M/N)`.  Prony reconstruction therefore recovers only the
+already known public frequencies and does not lower the recurrence order.
+The recent [bounded-Skolem algorithm](https://arxiv.org/abs/2507.11234) has
+exponential dependence on recurrence order and concerns integer recurrences,
+not this growing-order Gaussian threshold problem.  This places the open
+primitive precisely: output-sensitive threshold-root location for a random
+trigonometric recurrence.
 
 There is, however, a rigorous barrier for the broad subclass of algorithms
 that access these examples only through statistical queries.  Let
@@ -6145,10 +6291,148 @@ the uniform weighting and hence obeys the same `G^4/2` lower bound.  If
 and every data-independent random seed are covered as well.  At visibility
 `lambda`, the direct kernel calculation replaces `4^C` by
 `(4/lambda^2)^C`; paper-scale `lambda=1-o(1)` changes only the `o(1)`
-exponent.  Data-dependent weights and nonlinear clipping or median
-postprocessing remain outside the theorem.  So do mixtures of different
-support degrees and filter randomizations that change `A_z` instead of merely
-weighting the fixed orbit.
+exponent.  Signed weights chosen after seeing `Y`, weights depending on `S`,
+and nonlinear clipping or median postprocessing remain outside this theorem.
+So do mixtures of different support degrees and filter randomizations that
+change `A_z` instead of merely weighting the fixed orbit.
+
+There is, however, a stronger conditional theorem for arbitrary nonnegative
+weights chosen after seeing `Y`.  Let `A_z` denote the two low-bit filters
+and final half-turn condition for an orientation `z`, and let
+
+```text
+u_z(Y) = w_z(Y)*1[A_z],       u_z(Y)>=0,
+W = sum_z u_z(Y),
+Z_u = sum_z u_z(Y)*product_(i in T_z)S_i.
+```
+
+All supports have the same size `t`.  Define `Good(Y)` to be the event that
+every retained support has exactly its two orientations `+z,-z` representing
+`H`.  At the apparent sub-square-root parameters, a direct orientation count
+gives
+
+```text
+Pr[not Good]
+  <= N^(m+beta-1+o(1))+N^(4*a-2+o(1))
+  = N^(-0.252414...+o(1))+N^(-0.002146...+o(1)).
+```
+
+The first term covers ordinary orientation flips.  The second covers the two
+flips equal to an entire filtered half, where the low-bit equation is
+dependent.  Thus `Good` holds with high probability, although the displayed
+second exponent is small.
+
+Condition on such a public instance, assume `W>0`, and average over the secret
+parity and matched signs.  If `T_z=supp(z)`, the exact Walsh formulas give
+
+```text
+E[B*product_(i in T_z)S_i | Y]
+  = lambda^t*2^(-t)*R_(T_z)(H),
+E[product_(i in T)S_i*product_(i in U)S_i | Y]
+  = lambda^|T triangle U|*2^(-|T triangle U|)
+    *R_(T triangle U)(0).
+```
+
+On `Good`, the weighted signal is therefore
+
+```text
+E[B*Z_u | Y] = 2*(lambda/2)^t*W.
+```
+
+For distinct compatible orientations that agree on an intersection of size
+`C`, their difference and its negative are two automatic zero words.  Put
+
+```text
+alpha = (lambda^2/4)^t,
+K_lambda(z,z') = (4/lambda^2)^C
+```
+
+for compatible pairs, and zero otherwise.  Its one-coordinate matrix is
+
+```text
+[[1,1,1],
+ [1,4/lambda^2,0],
+ [1,0,4/lambda^2]],
+```
+
+which is positive semidefinite for `0<lambda<=1`.  On the exact-weight
+orbit its normalized row sum is
+
+```text
+g_lambda = E[(2/lambda^2)^C]^4,
+```
+
+where `C` is the one-block hypergeometric overlap.  Transitivity and
+positive semidefiniteness imply, pointwise for the chosen public weights,
+
+```text
+u^T*K_lambda*u >= g_lambda*W^2.
+```
+
+Let `D_u=sum_z u_z^2`.  The exact parity-averaged Gram entries are
+nonnegative relation counts, so nonnegative weights give the diagonal bound
+`E[Z_u^2|Y]>=D_u`; the automatic off-diagonal relations give
+
+```text
+E[Z_u^2|Y] >= 2*alpha*g_lambda*W^2-D_u.
+```
+
+Writing `R_u=D_u/(alpha*W^2)` and dividing by the squared signal yields
+
+```text
+E[Z_u^2|Y]/E[B*Z_u|Y]^2
+  >= max{R_u/4,(2*g_lambda-R_u)/4}
+  >= g_lambda/4.
+```
+
+At visibility one this is `G^4/4=N^(F(p)+o(1))/4`.  Hence arbitrary
+`Y`-adaptive nonnegative thinning, overlap-degree reweighting, cluster-size
+normalization, and selected fixed-degree designs do not remove the covariance
+exponent.  The statement does not cover signed conditional cancellation.
+Exact signed whitening is `Gamma(Y)^dagger*1`, and every entry of `Gamma`
+contains a zero-relation coefficient `R_(T triangle U)(0)`.  This identifies
+the unresolved computation but is not a hardness theorem.
+
+Unrestricted `S`-adaptive signed weights are not a meaningful smaller class:
+once one retained monomial `chi_T` exists, choosing its weight as
+`f(Y,S)*chi_T` realizes an arbitrary desired statistic `f`.  Any further
+obstruction must impose predictability from `Y` or a precise leave-one-out
+condition.
+
+Ordinary odd clipping also does not change the final prediction:
+`sign(clip_tau(Z))=sign(Z)` away from ties.  Hashing the same paths into
+random buckets does not manufacture independent replicas.  If `D` is the
+diagonal second moment, `Q` the full second moment, and `mu` the signal, then
+a random `R`-bucket split has
+
+```text
+E[Z_j^2] = D/R+(Q-D)/R^2,
+E[Z_j*Z_k] = (Q-D)/R^2,       j!=k.
+```
+
+The common overlap covariance survives and the diagonal term worsens.
+A median could still exploit non-Gaussian tails, so this is a no-fresh-
+replicas statement, not a nonlinear failure theorem.
+
+The exact nonlinear benchmark makes that scope unavoidable.  For fixed
+public labels, let `A_0(S,Y)` and `A_H(S,Y)` be the zero and half-turn
+coefficients of the full weighted ternary polynomial.  Then
+
+```text
+Pr[S | Y,B=b] = 2^(-q)*(A_0+b*A_H),
+E[B | Y,S] = A_H/A_0.
+```
+
+Consequently every bounded data statistic `f(Y,S)` satisfies
+
+```text
+E[B*f] = E_avg[f*A_H/A_0].
+```
+
+Here `E_avg` is expectation under the parity-averaged marginal law of
+`(Y,S)`.  In particular, deciding whether `sign(Z)` succeeds requires a tail
+or small-ball comparison with the full likelihood ratio `A_H/A_0`.  A large
+normalized second moment alone cannot decide its sign performance.
 
 The formal linear-whitening repair is circular.  Conditional on the public
 labels, its parity-contrast vector and parity-averaged monomial Gram matrix
@@ -6180,6 +6464,280 @@ min_(p, 0<=a'<=3*(H_2(p)+p)) {
 The value `0.502611585079...` already assumes the optimistic counterfactual
 that independent replicas of this weighted statistic are freely available
 and that raw second-moment averaging suffices.
+
+The square-root boundary for this raw-moment route does not rely on symmetry
+or on the numerical saddle.  Let the four blocks contain `c_j*n`
+coordinates, where `c_j>0`, and use exact signed support `beta_j*n` with
+`0<=beta_j<=c_j`.  Put
+
+```text
+sum_j c_j <= 12,              beta = sum_j beta_j,
+h_j = c_j*H_2(beta_j/c_j)+beta_j.
+```
+
+Here `h_j` is the full list exponent.  Allow an arbitrary truncated exponent
+`0<=a_j<=h_j`, and let the low-bit modulus be `K=N^(k+o(1))`, where
+`k>=0`.  Define
+
+```text
+P_1 = a_1+a_2,                P_2 = a_3+a_4,
+R = max{a_1,a_2,a_3,a_4,P_1-k,P_2-k},
+m = sum_j a_j-k-1,
+D = 2*beta-m = 1+2*beta+k-sum_j a_j.
+```
+
+Assume `k+beta<1`, the regime in which the two automatic orientations give
+the leading signal estimate used by this raw-moment calculation.
+
+The optimistic independent-replica cost exponent is
+
+```text
+C_raw = R+max{F,D,0},
+```
+
+where `F` is the compatible-overlap exponent.  If `C_j` is the intersection
+of two independent exact supports in block `j`, the positive-semidefinite
+transitive overlap kernel applies even after zero-weight truncation.  Hence
+
+```text
+F >= F_0 := sum_j log_N E[2^C_j]
+F_0 >= sum_j beta_j^2/c_j
+  >= beta^2/12.
+```
+
+The middle inequality is Jensen's inequality.
+
+The runtime inequalities also give
+
+```text
+sum_j a_j <= min(4*R,2*R+2*k),
+D >= 1+2*beta-3*R.
+```
+
+Suppose for contradiction that `C_raw<1/2`.  The last display and the
+overlap bound imply
+
+```text
+R > 1/4+beta,
+R < 1/2-beta^2/12,
+beta < sqrt(39)-6 < 49/200.
+```
+
+There is a second, incompatible capacity requirement.  Put
+`Q=sum_j a_j-k`.  Since `D<1/2-R`,
+
+```text
+Q > 1/2+2*beta+R.
+```
+
+But `P_1,P_2<=R+k`, so `Q<=P_1+R` and `Q<=P_2+R`.  Both pair sums must
+exceed `1/2+2*beta`, whence
+
+```text
+sum_j a_j > 1+4*beta.
+```
+
+Concavity of entropy instead gives
+
+```text
+sum_j a_j <= sum_j h_j <= 12*H_2(beta/12)+beta.
+```
+
+Thus `g(beta)=12*H_2(beta/12)-1-3*beta` would have to be positive.
+On `[0,49/200]`, however,
+
+```text
+g'(beta) = log_2((12-beta)/beta)-3 > 0,
+g(49/200)
+  <= (49/200)*log_2(2400*e/49)-1-147/200
+  < -0.006.
+```
+
+This contradiction proves `C_raw>=1/2` for every block asymmetry, exact
+support density, list truncation, and dyadic low-bit modulus in this
+four-list pair--pair geometry.  It is a route-specific statement at
+visibility one.  It assumes that the diagonal and compatible automatic-zero
+covariance are charged, as in nonnegative raw aggregation.  Signed
+cross-degree whitening, nonlinear data-adaptive aggregation, and different
+multi-list trees remain open.
+
+Fixed data-independent nonnegative mixtures of support degrees do not evade
+this conclusion.  Split such a mixture into its `O(n^4)` exact four-block
+degree tuples.  Every layer has nonnegative signal, so some layer carries at
+least a polynomial fraction of the total signal.  All parity-averaged Gram
+entries and all cross-layer weights are nonnegative, hence the full second
+moment is at least that layer's principal second moment.  Polynomial factors
+do not change its exponent, and the asymmetric theorem applies to the chosen
+layer.  If that layer has an empty block, it is at most a three-list route;
+use its actual independent low-bit exponent `k_eff in {0,k}` and put
+`Q_eff=sum_j a_j-k_eff`.  With three active blocks,
+`Q_eff<=(P_pair-k)+a_single<=2*R`; with at most two it is also at most
+`2*R`.  Cost below `1/2` would instead require
+`Q_eff>1/2+2*beta+R`, an immediate contradiction.  Thus the optimistic
+exponent is still at least `1/2`.  This dominant-layer argument fails for
+signed cross-degree cancellation.
+
+The standard balanced Wagner trees with more leaves are farther from the
+boundary even before charging overlap.  Take `L=2^r` equal blocks, an exact
+support fraction `p` in every block, and keep every intermediate list at
+exponent
+
+```text
+a = (12/L)*(H_2(p)+p).
+```
+
+After accounting for the redundancies forced by the final half-turn equation,
+the independent low-filter exponent of the standard tree is
+
+```text
+kappa = (L-r-1)*a.
+```
+
+Thus the retained-path exponent and diagonal exponent are
+
+```text
+m = (r+1)*a-1,
+D = 1+24*p-(r+1)*a.
+```
+
+The two-orientation signal calculation requires `kappa+12*p<1`, so in
+particular `p<1/12`.  For `r>=3`,
+
+```text
+D >= 1+18*p-6*H_2(p) > 0.
+```
+
+The raw-repeat cost is consequently at least
+
+```text
+a+D = 1+24*p-r*a.
+```
+
+Put `A=12*r/L<=9/2`.  The entropy identity
+
+```text
+max_p {H_2(p)-c*p} = log_2(1+2^(-c))
+```
+
+gives, uniformly over the allowed `p`,
+
+```text
+a+D
+  >= 1-A*log_2(1+2^(-(24/A-1)))
+  >= 1-(9/2)*log_2(1+2^(-13/3))
+  > 0.6856.
+```
+
+Hence every balanced standard Wagner tree with eight or more leaves is safely
+above the square-root exponent in this model.  This does not cover arbitrary
+unbalanced merge schedules, but it confirms that four lists are the unique
+near-miss among the standard balanced trees.
+
+Signed mixing across support degrees behaves differently from both results
+above: it can cancel the exponential fixed-layer overlap, but exact whitening
+pays a much larger diagonal cost.  For one block of `b` coordinates, let
+`z in {0,+1,-1}^b`, put `r=|supp(z)|`, and define `s_z=2^(-r)`.  In the
+leading two-orientation model, after removing common constants, the signal is
+`s` and the compatible automatic-zero Gram is
+
+```text
+L(z,z') = s_z*s_z'*4^|supp(z) intersect supp(z')|
+          *1[z,z' agree on their intersection].
+```
+
+Its one-coordinate matrix, indexed by `0,+1,-1`, is
+
+```text
+[[1,1/2,1/2],
+ [1/2,1,0],
+ [1/2,0,1]].
+```
+
+Here `L` is only the compatible automatic-zero component after extracting
+the common joint-filter factor; it is not the full conditional covariance.
+
+The signal vector `s` is exactly the column indexed by the zero template.
+Therefore every allowed nonzero template set `S` has a positive-semidefinite
+principal block
+
+```text
+[[1,s_S^T],
+ [s_S,L_S]].
+```
+
+Its Schur complement gives, for arbitrary signed weights,
+
+```text
+w^T*L_S*w >= (w^T*s_S)^2.
+```
+
+Thus signed cross-degree cancellation can reduce the automatic-overlap
+exponent to zero, so a blanket mixed-degree version of the fixed-layer
+`N^F` bound would be false.  It cannot make this automatic Gram contribution
+smaller than a constant.
+
+The exact cutoff whitener can also be solved.  Take every oriented template
+with `1<=r<=t` and put
+
+```text
+A_(b,t) = sum_(j=0)^t choose(b,j).
+```
+
+The minimum of `w^T*L*w` subject to `w*s=1` is `A_(b,t)/(A_(b,t)-1)`.
+The normalized coefficient assigned to every oriented degree-`r` template is
+
+```text
+w_r = (-1)^(r+1)/(A_(b,t)-1)
+      *sum_(j=0)^(t-r) choose(b-r,j).
+```
+
+This follows by inverting the radial binomial kernel and then taking the
+Schur complement that deletes the zero template.  Its ordinary squared norm
+is
+
+```text
+||w||_2^2 = sum_(r=1)^t choose(b,r)*2^r
+  *[sum_(j=0)^(t-r)choose(b-r,j)/(A_(b,t)-1)]^2.
+```
+
+For `t=p*b+o(b)`, endpoint entropy gives
+
+```text
+log_2(||w||_2^2)/b = e(p)+o(1),
+e(p) = max_(0<=x<=p) {
+    H_2(x)+x
+  + 2*(1-x)*H_2((p-x)/(1-x))
+  - 2*H_2(p) }.
+```
+
+At the optimized four-list density
+
+```text
+p = 0.020561836297...,
+e(p) = 0.001173354299....
+```
+
+Apply this nonempty cutoff separately in each of four blocks of size `b=3*n`.
+The four blocks tensorize, so the exact whitener has
+`||w_global||_2^2=N^(12*e(p)+o(1))`.  A fixed nonempty path passes the
+independent low-bit and final conditions with probability `1/(K*N)`, while
+the normalized leading signal is `2/(K*N)`.  At
+`k=0.495436243024...`, the diagonal divided by squared signal therefore has
+exponent
+
+```text
+1+k+12*e(p) = 1.50951649461....
+```
+
+Exact signed cutoff whitening is consequently useless at the near-miss
+parameters.  This calculation is exact for the factorized leading
+two-orientation signal and its automatic Gram at visibility one.  Replacing
+the off-diagonal `1/2` entries by `lambda/2` preserves the Schur floor, and
+paper-scale `lambda=1-o(1)` changes only lower-order exponent terms.  The
+calculation does not optimize partial
+or regularized whitening jointly with the diagonal, and the full exact signal
+contains extra-orientation terms that a large signed coefficient norm could
+amplify.  Those mixed-degree repairs remain open.
 
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
@@ -6596,8 +7154,14 @@ but its overlap-induced zero relations make the parity-signal-normalized
 second moment at least `N^(0.0073173+o(1))`; even optimistic independent-
 replica raw-second-moment accounting has exponent `0.5026116`.  On the fixed
 support-weight/filter orbit this rejects every data-independent real weighting
-as a repair of that SNR proof; data-adaptive and nonlinear generalized-birthday
-aggregation remains open.  The
+as a repair of that SNR proof.  With high probability, arbitrary
+public-label-adaptive nonnegative weighting of the retained fixed-degree
+paths still has the same covariance exponent.  Every asymmetric exact-degree
+four-list pair--pair route in the two-orientation raw-moment model has exponent
+at least `1/2`, and balanced standard trees with at least eight lists exceed
+`0.6856`.  At the near-miss point, the explicit per-block-nonempty leading-
+Gram cutoff whitener has diagonal-ratio exponent `1.5095`; partial or
+regularized signed whitening and nonlinear aggregation remain open.  The
 theorems still leave open circuits that exploit the internal Boolean modular
 arithmetic beyond the orbit algebra or compute the weighted ternary
 coefficient ratio by a new method.  In the noisy high-visibility regime, the
@@ -6611,7 +7175,12 @@ it yields a genuine `N^(23/49+o(1))` time--space bound and approaches
 `N^(7/15+epsilon+o(1))` for fixed `epsilon>0`; direct ordinary-gate QROM loses
 the exponent.  Table-free rejection filters and direct-predicate Cartesian
 Johnson walks return to `sqrt(N)` unless inverse buckets or markedness have a
-new succinct implementation.  The
+new succinct implementation.  Fixed-relative-error low-degree polynomial cap
+surrogates and the displayed `o(log M)` one-sided local moment certificate do
+not provide it.  On the other
+hand, Kac--Rice gives only `M^o(1)` expected rare-cap crossings and accepted
+indices, so output-sensitive threshold-root location remains a sharply
+defined positive opening.  The
 grouped triangle envelope stays identical on `H/poly(n)` prefixes with high
 probability, and exact high-bit elimination can become Fourier-dense in one
 step.  These radix routes do not certify polynomial pruning, while scalar
@@ -6671,7 +7240,7 @@ successive dyadic moduli with fresh states, a polynomial one-bit decoder would
 give a polynomial DCP algorithm by bit recursion.  It would therefore be a new
 algorithmic breakthrough in exactly the problem the paper claims to solve.
 
-The narrowest remaining positive question can now be stated through four
+The narrowest remaining positive question can now be stated through five
 distinct sufficient interfaces:
 
 > Can one either (a) use the product-state representation of `K_Y` to implement
@@ -6683,7 +7252,9 @@ distinct sufficient interfaces:
 > syndrome-isolated density-one core or the weighted coefficient ratio
 > `A_H/A_0` without enumerating `N` residues, or (d) solve the compact
 > repeated-squaring QCQP or approximate the associated typical two-coset CVP
-> below `1.3448` without exponential lattice reduction?
+> below `1.3448` without exponential lattice reduction, or (e) invert the
+> rare Gaussian ANN rows in time polynomial in their sparse trigonometric
+> description and actual crossing count?
 
 A positive answer to any version would be a new DCP/subset-sum algorithmic
 ingredient.  No such polynomial construction is supplied by the paper or
