@@ -102,6 +102,11 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   before the final two-point modulus--the passive visibility `lambda` changes
   by `lambda -> lambda^2/2`; polynomial resources permit only
   `O(log log n)` useful no-reuse levels and remove `o(n)` modulus bits.
+  At visibility one, a four-list Wagner aggregate has a tempting formal runtime
+  `N^0.499463`, but overlap-induced zero relations make its parity-signal-
+  normalized second moment at least `N^(0.0073173+o(1))`; optimistic
+  independent-replica raw-second-moment accounting has exponent `0.5026116`.
+  This invalidates that SNR proof, not every generalized-birthday decoder.
   Direct importance sampling of the exact Bayesian coefficient ratio has
   relative variance `Theta(N)` once its posterior is sharp.  At `q=12*n`,
   for a nondegenerate secret, a Hellinger bound shows that the posterior is in
@@ -111,7 +116,14 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   At paper-scale visibility below one, the complete log likelihood nevertheless
   has a uniformly accurate `poly(n)`-sparse trigonometric representation.
   Thus passive decoding reduces constructively to a sparse high-frequency
-  optimizer or partition algorithm.  The exact grouped triangle envelope is
+  optimizer or partition algorithm.  At `q=12*n` and
+  `lambda=1-O(1/log n)`, an exact unbalanced split also turns the correlation
+  score into logarithmic-dimensional bichromatic nearest neighbor.
+  Conditional on an ideal coherent QRAM implementation of a
+  data-dependent ANN table, it gives `N^(23/49+o(1))` time and space, with
+  parameters approaching `N^(7/15+epsilon+o(1))` for every fixed
+  `epsilon>0`; no corresponding ordinary-gate bound follows.  The exact
+  grouped triangle envelope is
   identical on `H/poly(n)` prefixes with high probability, while one exact
   high-bit elimination can turn one Fourier mode into a dense spectrum.
   These analyzed radix routes do not certify polynomial pruning.  Every
@@ -1837,6 +1849,118 @@ returning to exponential repetition or square-root amplification.  No
 polynomial passive decoder was found.  The exact result is therefore an
 `O(n)` sample upper bound together with an open computational heavy-character
 problem, not a hardness theorem.
+
+### An implicit closest-pair split gives a coherent-QRAM tradeoff
+
+There is a genuine sub-square-root route in a stronger memory model.  Factor
+`N=M*L`, with both factors powers of two, and write each candidate uniquely as
+
+```text
+k = a+M*b,       0 <= a < M,       0 <= b < L.
+```
+
+For `theta_(i,a)=2*pi*a*Y_i/N` and `phi_(i,b)=2*pi*b*Y_i/L`, define unit
+vectors in `R^(2*q)` by
+
+```text
+A_a = q^(-1/2)*(S_i*cos(theta_(i,a)), -S_i*sin(theta_(i,a)))_(i<=q),
+B_b = q^(-1/2)*(cos(phi_(i,b)), sin(phi_(i,b)))_(i<=q).
+```
+
+Then exactly
+
+```text
+<A_a,B_b> = T_(a+M*b)/q,
+||A_a-B_b||^2 = 2-2*T_(a+M*b)/q.
+```
+
+Thus passive correlation maximization is an implicit bichromatic nearest-
+neighbor problem.  This identity works for odd `n` as well: `M` and `L` may
+be any complementary powers of two.
+
+For a nondegenerate secret, at `q=12*n` and `lambda=1-O(1/log n)`, the
+concentration event used above can be strengthened, for all sufficiently
+large `n`, to
+
+```text
+T_d/q = T_(-d)/q >= 491/1000,
+max_(k notin {d,-d}) T_k/q <= 3/10.
+```
+
+Its failure probability is `exp(-Omega(n))`.  The planted squared distance is
+therefore at most `509/500`, while every false squared distance is at least
+`7/5`.  Their ratio is
+
+```text
+(7/5)/(509/500) = 700/509 > 11/8.
+```
+
+The collapsed secrets `d=0,H` have a single stronger correlation peak and
+can be handled by the same construction with separate fixed-candidate tails.
+
+The Euclidean ANN tradeoff of
+[Andoni--Laarhoven--Razenshteyn--Waingarten](https://arxiv.org/abs/1608.03580)
+uses space `M^(1+rho_u+o(1))` and query time `M^(rho_q+o(1))` whenever
+
+```text
+c^2*sqrt(rho_q)+(c^2-1)*sqrt(rho_u) >= sqrt(2*c^2-1).
+```
+
+Take `c^2=11/8`, `rho_q=1/5`, and `rho_u=18/5`.  The inequality is strict.
+With `M=2^floor(5*n/49)`, preprocessing and space are
+
+```text
+M^(23/5+o(1)) = N^(23/49+o(1)).
+```
+
+Assume now that this static randomized ANN table is available through an ideal
+[coherent QRAM](https://arxiv.org/abs/0807.4994) and that its query can be
+reversibly simulated with the stated RAM exponent.  Cap and pad its expected-
+time query, use a constant number of independent tables, and uncompute every
+query transcript.  Grover search over the `L=N/M` implicit vectors `B_b`,
+followed by direct score verification, then costs
+
+```text
+sqrt(L)*M^(1/5+o(1)) = N^(23/49+o(1)).
+```
+
+The verification is separated by a fixed gap: an ANN answer on a planted
+query has squared distance at most
+
+```text
+(11/8)*(509/500) = 5599/4000,
+```
+
+whereas every false pair has squared distance at least `5600/4000`.  Hence an
+ANN answer on a false query cannot create a false positive after verification.
+Bounded-error quantum search handles the remaining ANN failure probability.
+Assume also a standard polynomial-bit discretization of the real-vector ANN
+model; the fixed score gap leaves room for its rounding error.  Recovering
+either `d` or `-d` reveals the same parity.
+
+The limiting constants are slightly better.  As the planted score threshold
+tends to `1/2`, the squared-distance ratio tends to `7/5`.  Taking `c^2` to
+`7/5` from below, `(rho_q,rho_u)` to `(1/5,16/5)`, and `M` to `N^(1/9)` gives,
+for every fixed `epsilon>0`,
+
+```text
+coherent-QRAM time and space = N^(7/15+epsilon+o(1)).
+```
+
+This is a real conditional improvement over the direct `sqrt(N)` candidate
+scan, but it is not an ordinary-gate result.  The ANN structure is an
+explicit, data-dependent table of exponential size.  Standard
+[QROM/select compilation](https://arxiv.org/abs/1805.03662) charges linear
+table-size work for a direct coherent lookup and does not preserve the
+exponent; no succinct implementation of these hash tables from the
+trigonometric orbit was found.  The constant-dimensional
+quantum closest-pair algorithm also does not apply, because the vectors here
+have dimension `2*q=Theta(log M)`.  The generic polylogarithmic-dimensional
+boundary is discussed by
+[Aaronson--Chia--Lin--Wang--Zhang](https://arxiv.org/abs/1911.01973), but their
+explicit-list evidence is not a lower bound on this structured implicit
+instance.  The result above is a coherent-QRAM time--space interface, not a
+polynomial decoder or an ordinary-circuit repair.
 
 There is, however, a rigorous barrier for the broad subclass of algorithms
 that access these examples only through statistical queries.  Let
@@ -5720,6 +5844,120 @@ sparse-Fourier and hidden-number theorems cited below do not supply these
 consume-once offsets; this access-model mismatch does not prove passive
 decoding hard.
 
+### A four-list birthday aggregate loses its apparent exponent to overlap
+
+A more aggressive birthday construction comes remarkably close to beating
+`sqrt(N)`, but its independent-path variance estimate is false.  The failure
+can be quantified exactly at visibility one.
+
+Split the `q=12*n` samples into four blocks of `3*n` coordinates.  In each
+block enumerate every signed word of exact support weight `r=3*p*n`, rounded
+to an integer.  This rounding is absorbed by the `o(1)` exponents.  One list
+has size
+
+```text
+L = choose(3*n,r)*2^r = N^(a+o(1)),
+a = 3*(H_2(p)+p),
+```
+
+where `H_2` is binary entropy.  Choose a power of two
+`K=N^(a+o(1))`.  Form all pairs from the first two lists whose sum is zero
+modulo `K`, do the same for the last two lists, and match the two filtered
+pair tables to total residue `H` modulo `N`.  Each filtered pair table has
+expected size `L^2/K=Theta(L)`.  A fixed four-list path passes all filters
+with probability `1/(K*N)`, so, writing the path count as `M_path`,
+
+```text
+E[M_path] = L^4/(K*N) = N^(m+o(1)),
+m = 3*a-1.
+```
+
+Sorting and aggregating equal residues computes in expected
+`N^(a+o(1))` time the statistic
+
+```text
+Z = sum_(retained oriented paths epsilon) product_(i in supp epsilon) S_i.
+```
+
+Every path has support size `t=beta*n`, where `beta=12*p`.  Put
+`B=(-1)^d`.  Each retained orientation and its negation give the same
+monomial and two half-turn representations.  In the displayed parameter
+regime `a+beta<1`, counting the other orientations shows
+
+```text
+E[B*Z] = 2^(1-t)*E[M_path]*(1+o(1)).
+```
+
+The expectation here is over the uniform secret, labels, and passive signs;
+it is not a fixed-secret concentration statement.  If the retained path
+monomials were independent, the diagonal signal-to-noise balance would be
+`m=2*beta`.  Its smaller solution is
+
+```text
+9*H_2(p)-15*p-1 = 0,
+p = 0.020766264718...,
+a = 0.499463451078...,
+beta = 0.249195176618...,
+m = 0.498390353235....
+```
+
+This is the tempting `N^0.499463` runtime.  The paths are not independent.
+Take two paths with supports `T,U` and suppose their orientations agree on
+the intersection.  Subtracting their two half-turn equations gives a signed
+zero relation on `T triangle U`.  Hence their sign monomials have a positive
+second-moment contribution.  For support pairs that differ in every block,
+the two filter systems have unit minors, so joint acceptance has probability
+exactly `1/(K^2*N^2)`.  The excluded pairs with an equal block support have
+exponentially negligible weight even under the overlap tilt.
+
+Let `C` be the hypergeometric intersection size of two independent
+`r`-subsets in one block and put `G=E[2^C]`.  The automatic zero relations
+give the rigorous lower bound
+
+```text
+E[Z^2]
+  >= 2^(1-2*t)*E[M_path]^2*G^4*(1-o(1)),
+E[Z^2]/E[B*Z]^2 >= G^4*(1-o(1))/2.
+```
+
+Writing `G^4=N^(F(p)+o(1))`, the exact entropy saddle is
+
+```text
+F(p) = max_(0<=gamma<=beta) {
+    beta*H_2(gamma/beta)
+  + (12-beta)*H_2((beta-gamma)/(12-beta))
+  - 12*H_2(p)+gamma }.
+```
+
+At the apparent sub-square-root point,
+
+```text
+gamma = 0.00994491049...,
+F(p) = 0.00731732816....
+```
+
+Thus the parity-signal-normalized second moment is at least
+`N^(0.0073173+o(1))`.  Equivalently, the squared coefficient of variation of
+the random variable `B*Z` is this ratio minus one, so its coefficient of
+variation is at least `N^(0.00365866+o(1))`.  This is much larger than the
+apparent `N^0.0005365` saving below `sqrt(N)`.
+
+Even under the optimistic counterfactual that independent replicas of this
+four-list statistic were freely available, the raw second-moment accounting
+has formal cost exponent
+
+```text
+min_p [a+max(F(p),2*beta-m)]
+  = 0.502611585079... > 1/2.
+```
+
+The fixed passive dataset does not provide those replicas, and the display is
+not an achieved averaging algorithm.  A large global second moment alone does
+not prove that `sign(Z)` fails, and it does not exclude clipping or different
+nonlinear aggregation.  The theorem only invalidates the independent-
+relation SNR argument for this precise Wagner aggregate; it is not a lower
+bound on generalized-birthday decoding.
+
 Directly Fourier transforming a polynomial-size classical sample table has
 the same limitation.  Any normalized amplitude state supported on `M` known
 labels obeys
@@ -6080,8 +6318,9 @@ dimension at least `91` is contained in one `f_Y mod H` fibre, even if that
 coset is chosen after seeing `Y`.  The syndrome-isolated core remains possible
 precisely
 because its additional modular measurement leaves a non-affine intersection.
-The best generic coherent scale identified is
-`Theta(sqrt(N)) = 2^(n/2)`.  The operator-Schmidt theorem and the
+Excluding ideal preloaded coherent QRAM or instance-dependent advice, the
+best generic coherent scale among the analyzed ordinary-gate implementations
+is `Theta(sqrt(N)) = 2^(n/2)`.  The operator-Schmidt theorem and the
 statistical-query theorem make two of these route boundaries rigorous without turning
 them into unrestricted circuit or sample-access lower bounds.
 
@@ -6121,13 +6360,25 @@ cyclic coefficient extraction.  Pair products of passive samples do give an exac
 modulus recursion.  Along nondegenerate levels, including the odd-secret
 case before the final modulus, the visibility follows
 `lambda_ell=2*(lambda/2)^(2^ell)`; polynomial no-reuse recursion removes only
-`o(n)` bits.  These
-theorems leave open only circuits that exploit the internal Boolean modular
+`o(n)` bits.  At visibility one, a four-list birthday sum narrowly appears
+to beat `sqrt(N)`,
+but its overlap-induced zero relations make the parity-signal-normalized
+second moment at least `N^(0.0073173+o(1))`; even optimistic independent-
+replica raw-second-moment accounting has exponent `0.5026116`.  This rejects
+only that raw SNR proof; nonlinear generalized-birthday aggregation remains
+open.  The
+theorems still leave open circuits that exploit the internal Boolean modular
 arithmetic beyond the orbit algebra or compute the weighted ternary
 coefficient ratio by a new method.  In the noisy high-visibility regime, the
 log likelihood itself now has a uniformly accurate polynomial-size sparse
 trigonometric representation, so one especially concrete opening is an
-implicit global optimizer for that random high-frequency polynomial.  The
+implicit global optimizer for that random high-frequency polynomial.  At
+`q=12*n` and `lambda=1-O(1/log n)`, an unbalanced index split gives an exact
+logarithmic-dimensional bichromatic nearest-neighbor formulation.  With
+ideal coherent-QRAM access to an ANN table,
+it yields a genuine `N^(23/49+o(1))` time--space bound and approaches
+`N^(7/15+epsilon+o(1))` for fixed `epsilon>0`; direct ordinary-gate QROM loses
+the exponent.  The
 grouped triangle envelope stays identical on `H/poly(n)` prefixes with high
 probability, and exact high-bit elimination can become Fourier-dense in one
 step.  These radix routes do not certify polynomial pruning, while scalar

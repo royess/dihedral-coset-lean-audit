@@ -660,7 +660,13 @@ every bit.  Second, measuring each raw phase qubit in `X` in the iid
 averaged/dephasing model produces passive noisy cosine samples.  A correlation
 test identifies `{d,-d}` with `O(n)` samples, but evaluating it by FFT costs
 `O(N log N)` and no polynomial-time decoder for the passive one-bit sample
-model was found.  The exact Bayesian parity rule is the ratio of the
+model was found.  At `q=12*n` and `lambda=1-O(1/log n)`, an exact unbalanced
+split turns the score into logarithmic-dimensional bichromatic nearest
+neighbor.  Ideal coherent QRAM
+for a data-dependent ANN table then gives a conditional
+`N^(23/49+o(1))` time--space algorithm, approaching
+`N^(7/15+epsilon+o(1))` for fixed `epsilon>0`; ordinary-gate QROM does not
+preserve this exponent.  The exact Bayesian parity rule is the ratio of the
 half-turn and zero coefficients of a weighted ternary subset-sum generating
 function under a uniform secret prior.  Coherent likelihood filtering
 prepares a useful posterior only
@@ -746,7 +752,12 @@ recursion to smaller 2-adic moduli.  Writing their initial visibility as `lambda
 along nondegenerate levels, including an odd secret before the final modulus,
 their visibility after `ell` levels is
 `2*(lambda_pass/2)^(2^ell)`; polynomial no-reuse recursion removes only
-`o(n)` modulus bits.  A
+`o(n)` modulus bits.  At visibility one, a four-list Wagner aggregate has a formal
+`N^0.499463` runtime, but shared-support zero relations make its parity-signal-
+normalized second moment at least `N^(0.0073173+o(1))`; optimistic
+independent-replica raw-second-moment accounting has exponent `0.5026116`.
+This is a route-specific SNR failure, not a generalized-birthday lower bound.
+A
 normalized-Fourier/Parseval argument now proves that,
 against the conventional adversarial `STAT` oracle, every adaptive
 polynomial-query `STAT(1/poly(n))` decoder has uniform-secret average parity

@@ -108,7 +108,13 @@ direct expansion doubles the orbit branches per modulus bit.  In the iid
 averaged/dephasing model, passive `X`
 measurements give a complementary positive result--`O(n)` samples identify
 `{d,-d}`, hence the target parity--but the direct FFT decoder costs
-`O(N log N)`.  The exact Bayesian answer is the ratio of two coefficients of
+`O(N log N)`.  At `q=12*n` and `lambda=1-O(1/log n)`, splitting the candidate
+index exactly converts the score to logarithmic-dimensional bichromatic
+nearest neighbor.  Assuming ideal
+coherent QRAM for a data-dependent ANN table gives conditional time and space
+`N^(23/49+o(1))`, asymptotically approaching
+`N^(7/15+epsilon+o(1))` for fixed `epsilon>0`; ordinary-gate QROM does not
+inherit that bound.  The exact Bayesian answer is the ratio of two coefficients of
 a weighted ternary subset-sum polynomial under a uniform secret prior; direct
 likelihood filtering exposes
 an at-most-`O(1/N)` useful-posterior heralding probability in that normalized
@@ -195,7 +201,11 @@ recursion creates passive samples over smaller 2-adic moduli.  Writing its
 initial visibility as `lambda_pass`, the visibility is
 `2*(lambda_pass/2)^(2^ell)` along nondegenerate levels, including an odd
 secret before the final modulus, limiting polynomial no-reuse recursion to
-`o(n)` removed bits.  Parseval now gives a sharp
+`o(n)` removed bits.  At visibility one, a four-list Wagner sum has apparent runtime
+`N^0.499463`, but overlap-induced zero relations make its parity-signal-
+normalized second moment at least `N^(0.0073173+o(1))`; optimistic
+independent-replica raw-second-moment accounting is `N^0.5026116`.  This only
+invalidates that raw SNR argument.  Parseval now gives a sharp
 statistical-query boundary: against
 the conventional adversarial `STAT` oracle, polynomially many adaptive
 `STAT(1/poly(n))` queries have uniform-secret average parity advantage at most
@@ -671,8 +681,9 @@ efficient circuit: the natural controlled product-state preparation exposes
 the synthesis map only with amplitude `1/sqrt(N)`.  LCU, PREP/QSVT,
 postselection, sampled projectors, FFT/Schur decomposition, tensor-network
 contraction, 2-adic recursion, hashing, lattice, and local-relation approaches
-all retain exponential cost in the analyzed models.  The best generic
-coherent scale found is `sqrt(N)=2^(n/2)`.
+all retain exponential cost in the analyzed models.  Excluding ideal
+preloaded coherent QRAM or instance-dependent advice, the best generic scale
+among the analyzed ordinary-gate implementations is `sqrt(N)=2^(n/2)`.
 
 The weaker two-outcome half-turn test need not be equivalent to full fibre
 sampling in an unrestricted circuit model, so this is not a general lower

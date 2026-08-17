@@ -153,7 +153,15 @@ supply, and expanding that projector doubles the orbit branches at each bit.
 In the iid averaged/dephasing model, a complementary route measures
 every raw qubit in `X`; `O(n)` passive samples then identify `{d,-d}`
 statistically, but the evident correlation/FFT decoder scans all `N=2^n`
-frequencies and no polynomial passive decoder was found.  Its exact Bayesian
+frequencies and no polynomial passive decoder was found.  At `q=12*n` and
+`lambda=1-O(1/log n)`, an exact unbalanced split maps the score to
+logarithmic-dimensional bichromatic nearest neighbor.  With ideal coherent-
+QRAM access to a data-dependent ANN table,
+this gives a conditional `N^(23/49+o(1))` time--space algorithm and approaches
+`N^(7/15+epsilon+o(1))` for every fixed `epsilon>0`.  Direct ordinary-gate
+QROM compilation loses the exponent, so this is not an ordinary-circuit
+decoder.
+Its exact Bayesian
 decision under a uniform secret prior is the ratio of the zero and half-turn
 coefficients of a weighted
 ternary subset-sum polynomial; the direct dynamic program is exponential,
@@ -250,7 +258,13 @@ provide an exact passive smaller-modulus recursion, but
 if `lambda_pass` is the initial visibility, then along nondegenerate levels--
 including an odd secret before the final modulus--their visibility becomes
 `2*(lambda_pass/2)^(2^ell)` after `ell` levels, so a polynomial no-reuse
-recursion removes only `o(n)` modulus bits.  A
+recursion removes only `o(n)` modulus bits.  At visibility one, a four-list
+Wagner aggregate
+formally reaches runtime `N^0.499463`, but shared supports create automatic
+zero relations and make its parity-signal-normalized second moment at least
+`N^(0.0073173+o(1))`.  Even optimistic independent-replica averaging has
+formal raw-second-moment exponent `0.5026116`; this is a barrier for that SNR
+analysis, not a general birthday-decoding lower bound.  A
 new Parseval
 argument makes one part rigorous: against the conventional adversarial
 `STAT` oracle, the uniform-secret average parity advantage of any adaptive
