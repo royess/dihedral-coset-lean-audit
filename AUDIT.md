@@ -139,8 +139,11 @@ prune an `N^sigma` interval when `r+sigma+2*eta+chi<R_*`, where
 `R_*=4*sqrt((1-rho)*gamma)-4*gamma`; the incoherent, well-conditioned whole-tree
 budgets are `0.4795...` and `0.4772...` at the two splits.  Random-orbit KDE
 blocks are `(1+o(1))*I`, and every feature span fixed before the Gaussian
-query needs `s/N^o(1)` dimensions for a factor-`poly(n)` certificate.
-Row-adaptive scalar or ill-conditioned constructions remain open.
+query needs `s/N^o(1)` dimensions for a factor-`poly(n)` certificate.  Full-
+row adaptive rank is vacuous because one vector represents the row but has
+overlap `Z_I`; on a generic orbit, `2*q` exact consecutive point queries
+recover the row.  Scalar arithmetic aggregation and succinct scalar-evaluable
+ill-conditioned certificates remain open.
 Rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives
 only
 `M^o(1)` expected crossings and accepted indices, leaving the implicit
@@ -260,8 +263,9 @@ with fixed data-independent orbit-constant weights.  Whole-radial conditional
 Loewner promotion fails on empty low-degree blocks, but every nonzero-signal
 `Y`-adaptive signed weighting supported on at most `N^(1/20-epsilon)` distinct
 supports has Rayleigh ratio at least `N^(1/20+epsilon-o(1))` on `E_short`.
-The full optimizer and
-nonlinear performance remain open.
+At the dangerous center, extra half-turn signal is `o_p(q_0)`, but the full
+optimizer still needs pair-diffuseness and weighted four-template bounds;
+nonlinear performance remains open.
 Bucket-sum-only random rehash medians contain only the original path-sum
 information, while a fixed
 positive pair-overlap law can yield either sign of prediction correlation.
@@ -276,7 +280,9 @@ Yet the actual modular instance `N=16,Y=(1,2,3,5,6,7)` has Wagner correlation
 `lambda^2*(7*lambda^2-8)/32<0`.  The actual residual has uniform `L_1` norm
 `1+o(1)` at visibility one, while asymptotic nonnegative-coefficient
 completions with the exact Rademacher-sum `Z` law and `o(M)` local reversals
-realize either sign.  These are
+realize either sign.  The exact remaining Wagner projection depends only on
+`r(z)=E[R|Z=z]`; small regression energy or nonpositive signed-margin
+covariance would imply positive correlation, but neither is proved.  These are
 information-sufficiency obstructions and do not settle the random modular
 sign.
 Parseval now gives a sharp
