@@ -183,6 +183,23 @@ high-visibility gap `(2*ln 2-1)*q+o(q)`.  A sparse circulant/QSVT filter can
 mark the two correlation modes in polynomial time, but from the natural
 sparse-data state its target spectral mass is only `Theta(q/N)`, so this
 state-conversion route still needs `Omega(sqrt(N/q))` amplification.
+The same sparse score has an exact parity-constrained circulant SDP, but its
+Fourier form is still maximization over `N/2` atoms and the standard quantum
+SDP interfaces either retain square-root dimension dependence or require
+stronger low-rank input, Gibbs preparation, or implicit-oracle assumptions.
+An exact repeated-squaring lift does compress the
+search to a polynomial-size nonconvex unit-modulus QCQP, which is now a
+concrete positive arithmetic target rather than a decoder.  Taking a signed
+spectral trace does not bypass normalization: the ideal trace ratio is
+`(-1)^d`, while both normalized traces are only `2/N`; polynomial traces,
+determinants, and resolvents reduce to the same signed half-turn relation
+coefficients.  Independently, Euclidean passive decoding is a rank-one
+two-coset CVP with a certified typical gap: at visibility one and `q=12*n`,
+for secret phase order `M_d=2^(Omega(n))`, an approximation factor below
+`1.3448` would recover
+parity.  The standard
+LLL/Babai, BKZ, BDD, embedding, and phase-unwrapping routes checked here do
+not reach that conditional interface in polynomial time.
 Pair products
 provide an exact passive smaller-modulus recursion, but
 if `lambda_pass` is the initial visibility, then along nondegenerate levels--

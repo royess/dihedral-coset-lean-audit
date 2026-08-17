@@ -125,6 +125,32 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   absolute-weight sign reweighting has average-sign magnitude at most
   `N^(-4.06843+epsilon)` with high probability for every fixed
   `epsilon>0`;
+- the same circulant gives an exact parity-constrained SDP with sparse,
+  block-encodable data, but its Fourier form is still optimization over
+  `N/2` candidate atoms.  Standard sparse-input quantum SDP solvers retain
+  square-root dependence on that dimension; polylogarithmic-dimension and
+  Gibbs/implicit variants require stronger low-rank input, preparation, or
+  oracle assumptions not supplied here.  A separate repeated-squaring
+  construction does give an exact
+  polynomial-size nonconvex unit-modulus QCQP; finding a planted polynomial-
+  time solver for that compact arithmetic lift remains a concrete positive
+  opening;
+- the top-mode projector has the perfect signed trace ratio `(-1)^d`, but both
+  normalized traces have scale `2/N`.  Polynomial spectral traces are exactly
+  signed half-turn relation sums; constant-error QSVT marking does not estimate
+  their sign, and trace sampling, determinant, resolvent, and the direct
+  evolve-then-measure construction retain either `1/N` precision or top-space
+  postselection;
+- passive maximum likelihood is also an exact rank-one cyclic nearest-codeword
+  problem.  Its Euclidean two-coset CVP surrogate has a certified typical
+  gap: at visibility one, `q=12*n`, and secret phase order
+  `M_d=2^(Omega(n))`, any algorithm
+  achieving approximation factor below `1.3448` on these instances would
+  recover parity with
+  exponentially small error.  LLL/Babai, standard BKZ, BDD, embedding, and
+  phase-unwrapping routes checked here do not supply that constant factor in
+  polynomial time; this is a conditional positive interface, not a hardness
+  theorem;
 - a fermionic-Gaussian/matchgate circuit that reads too few occupation bits is
   exactly parity-blind on typical clean labels: nonadaptive `k`-bit output
   needs a signed half-turn relation of weight at most `2*k`, and adaptive
@@ -3810,6 +3836,110 @@ before it reaches exponential size.  It does not exclude an implicit
 compression, an SDP supplied with long arithmetic relations, or a different
 lift.
 
+There is an exact sparse SDP formulation, but generic implicit SDP machinery
+does not by itself perform the missing optimization.  Remove the constant term
+from `G_J`, let `Shift` be cyclic translation on `Z_N`, and define
+
+```text
+C_J
+  = (1/2)*sum_(i,m<=J) a_(i,m)
+      *(Shift^(m*Y_i)+Shift^(-m*Y_i)),
+R = Shift^H,
+a_(i,m) = 2*(-1)^(m+1)*S_i^m*rho^m/m.
+```
+
+The Fourier vector `|khat>` is a simultaneous eigenvector of `C_J` and `R`,
+with eigenvalues `G_J(k)` up to the removed constant and `(-1)^k`,
+respectively.  Therefore, for `p` in `{+1,-1}`, the SDP
+
+```text
+beta_p = max Tr(C_J*X)
+subject to X >= 0,
+           Tr(X) = 1,
+           Tr(R*X) = p
+```
+
+is exactly
+
+```text
+beta_p = max_(k : (-1)^k=p) G_J(k) - constant.
+```
+
+Indeed, saturation of the expectation of the involution `R` forces every
+feasible `X` to be supported on its `p` eigenspace.  This is a favorable input
+description: `C_J` has row sparsity `O(q*J)`, its norm is at most
+`O(q*log log n)` in the paper-scale regime, and it has a standard efficient
+sparse block encoding.  The feasible set, however, is still the simplex over
+`N/2` Fourier atoms.  Fourier diagonalization therefore turns the SDP back
+into the original sparse-score maximization rather than solving it.
+
+The usual generic quantum-SDP access models do not remove this atom count.
+Sparse-input solvers retain square-root dependence on matrix dimension.
+Polylogarithmic-dimension variants instead assume stronger low-rank state
+input and rank/trace parameters for which this high-rank circulant instance
+has no efficient promise.  Alternative Gibbs/implicit formulations would
+require efficient posterior Gibbs preparation, which is not supplied here.
+Separately, the explicit word hierarchy would need a nontrivial Toeplitz
+separator; such a separator is precisely a bounded modular relation once
+the no-short-relation event stops holding.  These are access-model barriers,
+not lower bounds on every quantum SDP algorithm.  Representative primary
+references are [Quantum Speed-ups for Semidefinite
+Programming](https://arxiv.org/abs/1609.05537) and [Quantum SDP Solvers:
+Large Speed-ups, Optimality, and Applications to Quantum
+Learning](https://arxiv.org/abs/1710.02581).
+
+Even a classical exact chordal conversion is generically large here.  The
+first-harmonic Cayley graph has normalized nontrivial eigenvalues
+
+```text
+lambda_k = (1/q)*sum_i cos(2*pi*k*Y_i/N).
+```
+
+Hoeffding and a union bound give
+
+```text
+Pr[max_(k!=0) |lambda_k|>1/2]
+ <= 2*(N-1)*exp(-q/8).
+```
+
+At `q=12*n` this tends to zero exponentially.  On the additional
+overwhelmingly likely no-loop/no-generator-collision event, the associated
+simple graph is a constant expander and has linear treewidth; an exact chordal
+cover has an `Omega(N)` clique.  This only excludes the evident
+Cayley/chordal SDP conversion.
+
+There is nevertheless a genuine polynomial-size arithmetic lift.  Put
+`z=omega_N^k` and introduce unit-modulus variables
+
+```text
+u_0 = z,
+u_(r+1) = u_r^2,        0<=r<n-1,
+u_(n-1) = p.
+```
+
+The last equation is exactly the parity constraint because
+`z^(N/2)=(-1)^k`.  For every public frequency `f=m*Y_i mod N`, write the
+binary expansion `f=sum_r f_r*2^r` and form
+
+```text
+w_f = product_(r:f_r=1) u_r
+```
+
+with a balanced tree of quadratic multiplication constraints; negative
+frequencies use conjugates.  The objective `G_J(k)` is linear in
+`Re(w_f)`.  The result is an exact nonconvex unit-modulus QCQP with
+`O(n*q*J)` variables and quadratic constraints.  Its feasible points--or,
+equivalently, the rank-one points of the standard SDP lift--are exactly the
+candidate phases, so merely enforcing rank one is the original search
+problem.  A complete quotient-moment representation has `N/2` characters,
+while no polynomial-size tight relaxation is known for the planted instances.
+Still, this compact repeated-squaring lift is a more concrete
+positive target than the `N`-atom SDP: a distribution-specific phase-
+synchronization, message-passing, or low-level relaxation that provably
+recovers its planted parity would be a new polynomial decoder.  The preceding
+word-hierarchy pseudo-solution does not automatically rule out every
+relaxation of this different lift.
+
 There is also an efficient spectral filter that makes the normalization
 obstruction especially transparent.  Let `Shift` denote cyclic translation
 on `Z_N` and define the known sparse circulant
@@ -3861,6 +3991,119 @@ Thus even a perfect QSVT correlation filter needs
 `Omega(sqrt(N/q))` amplification from that state.  This is a limitation of
 spectral filtering, power iteration, and Lanczos-style state conversion, not
 of a parity circuit that avoids preparing the top eigenspace.
+
+Taking a signed spectral trace does not avoid the same normalization.  Put
+
+```text
+A = Corr/q,
+P = Shift^H,
+Pi_top = |dhat><dhat|+|-dhat><-dhat|.
+```
+
+In the Fourier basis, `P|khat>=(-1)^k|khat>`, so the ideal trace ratio looks
+perfect:
+
+```text
+Tr(P*Pi_top) = 2*(-1)^d,
+Tr(P*Pi_top)/Tr(Pi_top) = (-1)^d.
+```
+
+Operationally, however, both normalized traces have scale `2/N`.  Estimating
+the ratio to constant relative error therefore still requires `Theta(N)`
+projection attempts to obtain `O(1)` successful top-space events, or
+`Theta(sqrt(N))` coherent
+amplification.
+
+The relation obstruction can be seen exactly for every polynomial.  If
+`g(x)=sum_(m=0)^L c_m*x^m`, then
+
+```text
+(1/N)*Tr(P*g(A))
+ = sum_m c_m/(2*q)^m
+     *sum_(i_1,...,i_m; sigma_1,...,sigma_m in {+1,-1}
+            : sum_j sigma_j*Y_(i_j)=H mod N)
+        product_j S_(i_j).
+```
+
+Thus a polynomial spectral trace is precisely a signed half-turn relation
+sum, now allowing repeated public labels.  After combining repetitions, a
+fixed nonzero length-`m` word hits `H` with probability at most `m/N`.
+Consequently
+
+```text
+Pr[any half-turn word of length at most L]
+ <= L*(L+1)*(2*q)^L/N.
+```
+
+On the complementary event, `Tr(P*g(A))=0` for every degree-`L` polynomial.
+This proves exact blindness for `L=o(n/log n)`, but it does not cover the
+degree-`Theta(n)` polynomial needed for exponentially accurate marking.
+
+The constant spectral gap does allow a bounded Chebyshev/QSVT polynomial to
+approximate `Pi_top` in operator norm `epsilon` with degree
+`O(log(1/epsilon))`.  Constant `epsilon` is insufficient for the trace sign:
+
+```text
+|(1/N)*Tr(P*(g(A)-Pi_top))| <= epsilon,
+```
+
+whereas the target is `2/N`.  Taking `epsilon=O(1/N)` raises the degree only
+to `O(n)`, but it does not raise the normalized signal.  Ordinary DQC1 or
+Hadamard trace sampling then needs `O(N^2)` repetitions for additive
+`Theta(1/N)` precision, coherent mean estimation needs `O(N)` filter uses,
+and top-mode postselection remains the sharper `Theta(sqrt(N))` route.  For
+amplitude filtering from a uniform spectral probe, even constant conditional
+top mass already needs leakage `epsilon=O(N^(-1/2))` because there are `N-2`
+false modes.
+
+An equivalent outlier formulation is sometimes tempting.  Put `a_k=T_k/q`.
+Since `[A,P]=0`, the operator `B=P*A` has two positive isolated outliers when `d` is even and
+two negative isolated outliers when `d` is odd.  On the good event,
+
+```text
+Tr(B^m)
+ = 2*(-1)^d*a_d^m+R_m,
+|R_m| <= (N-2)*0.3^m
+```
+
+for odd `m`, while `a_d>=0.4`.  Its sign becomes correct for
+
+```text
+m > ln((N-2)/2)/ln(4/3) = 2.409...*n,
+```
+
+and ordinary target-score concentration also gives `a_d<=0.6` with high
+probability.  The resulting normalized moment is then exponentially smaller
+than `1/N`; rescaling the polynomial enlarges the block-encoding normalization
+by the same factor.  Bare evolution under `A` followed by measurement of `P`
+cannot help, because commutation gives
+
+```text
+exp(i*t*A)*P*exp(-i*t*A) = P.
+```
+
+Determinants and resolvents package the same signed moments.  If `D_+(z)` and
+`D_-(z)` are the determinants of `z*I-A` on the two parity sectors, then for
+`|z|>1`,
+
+```text
+ln(D_+(z)/D_-(z))
+ = -sum_(m>=1) Tr(P*A^m)/(m*z^m),
+d/dz ln(D_+(z)/D_-(z))
+ = Tr(P*(z*I-A)^(-1)).
+```
+
+At a threshold between `0.3` and `0.4`, the correct sector contains both
+`+d` and `-d`, so a naive determinant-sign test sees two sign changes and
+loses the bit.  Passing to the reflection-even cosine subspace removes that
+degeneracy but leaves one exceptional eigenvalue among `Theta(N)` dimensions.
+The determinant of a full QSP signal-unitary dilation is also fixed within
+each two-dimensional signal block and is not the determinant of the projected
+polynomial block.  These statements exclude the direct trace, moment,
+determinant, resolvent, evolve-then-measure, and full-dilation-determinant
+routes analyzed here; they do not
+exclude a new arithmetic circuit that extracts parity without estimating a
+normalized rank-two spectral statistic.
 
 There is no linear cross-parity control-variate shortcut in the matched
 ensemble.  With `p=(-1)^d`, set
@@ -4100,6 +4343,167 @@ primitive.  These calculations leave a narrow positive opening: compute the
 weighted coefficient ratio through a new data-dependent arithmetic method,
 or prove a polynomial-gap posterior walk.  Neither is supplied here.
 
+### A rank-one two-coset CVP interface
+
+The passive signs also admit an exact lattice/nearest-codeword formulation.
+This gives a useful conditional positive construction, but the resulting
+decoding radius lies outside the standard polynomial lattice regimes.  Put
+
+```text
+b_i = (1-S_i)/2,
+t_i = (N/2)*b_i,
+Y = (Y_1,...,Y_q),
+Lambda       = N*Z^q + Z*Y,
+Lambda_even  = N*Z^q + 2*Z*Y,
+Lambda_odd   = Y + Lambda_even.
+```
+
+When at least one `Y_i` is odd,
+
+```text
+det(Lambda) = N^(q-1),
+det(Lambda_even) = 2*N^(q-1),
+```
+
+and an integer basis is computable in polynomial time by Hermite normal form.
+For a candidate `k`, define its wrapped angular residual
+
+```text
+Delta_i(k)
+ = wrap_[-pi,pi)(2*pi*k*Y_i/N-pi*b_i).
+```
+
+Maximum likelihood is exactly nearest-codeword decoding of the cyclic
+rank-one code `{k*Y mod N:k in Z_N}` in the separable periodic metric
+
+```text
+Phi_lambda(k)
+ = -sum_i ln(1+lambda*cos(Delta_i(k))).
+```
+
+Ordinary Euclidean CVP is a surrogate rather than the exact likelihood:
+
+```text
+Lambda_0 = Lambda_even,
+Lambda_1 = Lambda_odd,
+dist(t,Lambda_b)^2
+ = (N/(2*pi))^2
+     *min_(k=b mod 2) sum_i Delta_i(k)^2,
+b in {0,1}.
+```
+
+For a planted secret of phase order `M_d=N/gcd(d,N)>=4`, one planted
+residual has the exact finite-grid distribution below.  In this subsection,
+"high order" means `M_d=2^(Omega(n))`.
+
+```text
+Pr[Delta=2*pi*r/M_d]
+ = [1+lambda*cos(2*pi*r/M_d)]/M_d,
+r in {-M_d/2,...,M_d/2-1}.
+```
+
+Consequently
+
+```text
+E[Delta^2]
+ = pi^2/3+2*pi^2/(3*M_d^2)
+   -2*lambda*pi^2*csc^2(pi/M_d)/M_d^2
+ = mu_lambda+O(M_d^(-2)),
+mu_lambda = pi^2/3-2*lambda.
+```
+
+At visibility one, `mu_1=1.2898681337...`.  Thus every high-order planted
+secret, of either parity, has the same continuum distance law; a uniformly
+random secret has `M_d=2^(Omega(n))` with overwhelming probability.  An opposite-
+parity maximal-order wrong candidate has a uniform residual on its relevant
+dyadic phase grid.  More exactly, for every wrong-parity `k`, the integer
+residual `k*Y-H*b` is uniform on the subgroup generated by `{k,H}`.  If `d`
+is even, every wrong `k` is odd and this subgroup has size `N`.  If `d` is
+odd, the wrong candidates are even; a dyadic subgroup of size `R` contains at
+most `R/2` candidates of the corresponding order, apart from the single
+zero candidate.
+
+This exact stratification supplies the union bound used below.  On a grid of
+size `R`, let `I_R(x)` be the Chernoff lower-tail rate for the squared wrapped
+uniform residual.  For every `R` tending to infinity, `I_R(x)` converges to the
+continuum rate `I(x)` below.  Subexponential `R` contributes only
+`exp(o(n))` candidates, and every fixed small grid, including the zero-
+candidate two-point law, has a positive lower-tail rate at the displayed
+`x`.  Thus the large grids are governed by the full-order exponent and all
+smaller strata are harmless.  Let `U` be uniform on `[-pi,pi]` and
+define the lower-tail rate function
+
+```text
+I(x)
+ = sup_(s>=0) {-s*x-ln(E[exp(-s*U^2)])},
+E[exp(-s*U^2)]
+ = erf(pi*sqrt(s))/(2*sqrt(pi*s)).
+```
+
+For `q=12*n`, the wrong-coset first-moment edge is the solution of
+
+```text
+I(x_star) = ln(2)/12,
+x_star = 2.3328459863....
+```
+
+A Chernoff bound followed by a union bound over the opposite parity class,
+with the stated 2-adic stratification, proves for every fixed `x<x_star`
+
+```text
+Pr[min_(k of wrong parity) (1/q)*sum_i Delta_i(k)^2 <= x]
+ <= exp(-Omega(n)).
+```
+
+The planted distance concentrates at `q*mu_lambda`.  Therefore, at visibility
+one,
+
+```text
+sqrt(mu_1/x_star) = 0.7435832922...,
+alpha_star = sqrt(x_star/mu_1) = 1.3448392540....
+```
+
+If a polynomial algorithm achieved CVP approximation factor
+`alpha<1.3448` on these two typical high-order rank-one coset instances,
+running it on the even and odd cosets and comparing the returned distances
+would decide parity with exponentially small error.  This is a genuine
+conditional positive interface: choose fixed `x` with
+`alpha^2*mu_1<x<x_star`; the returned correct-coset angular squared residual
+is below `q*x`, while every wrong-coset vector is above `q*x`, except on the stated
+exponentially small tails.  The value `x_star` is deliberately called a first-
+moment edge: the union bound rigorously excludes wrong-parity codewords below
+it, while showing that the correlated minimum is actually attained near
+`x_star` would require a separate second-moment or random-code argument.
+
+The standard lattice routes checked here do not realize that interface in
+polynomial time:
+
+- exact cyclic scanning costs `O(q*N)`, and generic exact CVP is exponential
+  in `q=Theta(n)`;
+- LLL followed by Babai nearest-plane has an exponential worst-case
+  approximation factor, far above `1.3448`; see [On Lovasz' lattice reduction
+  and the nearest lattice point problem](https://doi.org/10.1007/BF02579403);
+- standard BKZ guarantees with sublinear block size do not reach this constant
+  gap, while the usual constant-factor heuristic estimates require block size
+  linear in `q` and hence exponential work;
+- this is not BDD: `N*e_i` lies in the lattice, whereas the planted Euclidean
+  error is `(N/(2*pi))*sqrt(q*mu_1)=Theta(N*sqrt(n))`, already much larger
+  than `N/2`;
+- naive Kannan embedding retains the shorter vectors `(N*e_i,0)` and therefore
+  does not turn the planted vector into unique SVP;
+- phase unwrapping has no narrow-error promise, because the planted residual
+  density `(1+lambda*cos(theta))/(2*pi)` has support on the entire circle;
+- a proper dyadic reduction of one observation is exactly sign-independent
+  for an odd secret, so 2-adic lifting has no single-sample base case.
+
+Modulo `N*Z^q`, the lattice has only the `N` cyclic torus codewords; the
+infinite lattice also contains every vector `N*e_i`.  It is not a generic
+random lattice.  Random-lattice heuristics,
+sieving, and ordinary embedding therefore do not establish a polynomial
+decoder.  Comparing the two parity cosets saves only a factor two in the
+candidate count and does not change the asymptotic edge.  This route audit is
+not a hardness theorem for the structured rank-one CVP family.
+
 ## Relation to known DCP algorithms
 
 The subset-sum connection is not accidental.  Bacon--Childs--van Dam identify
@@ -4249,7 +4653,14 @@ also has a factor-aligning rank-one pseudo-solution until its explicit moment
 matrix is exponential.  Conversely, a sparse circulant/QSVT circuit can mark
 the two correlation peaks efficiently, but the natural sparse-data input has
 only `Theta(q/N)` weight there, so this route still pays
-`Omega(sqrt(N/q))` amplification.
+`Omega(sqrt(N/q))` amplification.  Signed spectral traces, moments,
+determinants, and resolvents merely repackage the half-turn relation
+coefficient at normalized scale `1/N`.  Generic SDP solvers do not optimize
+the exact `N/2`-atom parity SDP in polynomial time under their stated input
+parameters.  The two most compact new positive interfaces are instead the
+polynomial-size repeated-squaring unit-modulus QCQP and the typical rank-one
+high-order two-coset CVP gap `alpha<1.3448`; no polynomial planted solver is known for
+either.
 
 This is not a no-go theorem.  A distribution-specific collective circuit
 could conceivably decode only the parity without exposing a reusable fibre
@@ -4258,7 +4669,7 @@ successive dyadic moduli with fresh states, a polynomial one-bit decoder would
 give a polynomial DCP algorithm by bit recursion.  It would therefore be a new
 algorithmic breakthrough in exactly the problem the paper claims to solve.
 
-The narrowest remaining positive question can now be stated through three
+The narrowest remaining positive question can now be stated through four
 distinct sufficient interfaces:
 
 > Can one either (a) use the product-state representation of `K_Y` to implement
@@ -4268,7 +4679,9 @@ distinct sufficient interfaces:
 > `n` random correction coordinates and make the large-label two-pool
 > construction respect the occupied fault subcube, or (c) decode the
 > syndrome-isolated density-one core or the weighted coefficient ratio
-> `A_H/A_0` without enumerating `N` residues?
+> `A_H/A_0` without enumerating `N` residues, or (d) solve the compact
+> repeated-squaring QCQP or approximate the associated typical two-coset CVP
+> below `1.3448` without exponential lattice reduction?
 
 A positive answer to any version would be a new DCP/subset-sum algorithmic
 ingredient.  No such polynomial construction is supplied by the paper or

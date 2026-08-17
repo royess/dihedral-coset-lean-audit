@@ -687,6 +687,22 @@ exponential.  A sparse-circulant/QSVT correlation filter can mark the two
 correct modes in polynomial time, but their input mass is only `Theta(q/N)`
 for the natural sparse-data state, so this filter still needs
 `Omega(sqrt(N/q))` amplification.
+The same score defines an exact sparse parity-constrained SDP, but its Fourier
+form remains optimization over `N/2` atoms and the generic quantum SDP
+interfaces checked here retain square-root dimension dependence or require
+stronger input, preparation, or oracle assumptions.  A compact repeated-
+squaring construction instead gives an exact polynomial-size nonconvex unit-
+modulus QCQP; a proved planted solver for that lift would be a new positive
+decoder.  Signed spectral traces do not already provide one: their ideal
+ratio is `(-1)^d`, but their normalized signal is `2/N`, and moment,
+determinant, and resolvent variants reduce to the same half-turn relation
+coefficients.  Passive decoding also has an exact rank-one two-coset CVP
+surrogate with a certified conditional threshold: at visibility one and
+`q=12*n`, for secret phase order `M_d=2^(Omega(n))`, approximation factor below
+`1.3448` would
+recover parity.  None of
+the standard LLL/Babai, BKZ, BDD, embedding, or phase-unwrapping routes checked
+here reaches that factor in polynomial time.
 Pair products give an exact passive
 recursion to smaller 2-adic moduli.  Writing their initial visibility as `lambda_pass`,
 along nondegenerate levels, including an odd secret before the final modulus,

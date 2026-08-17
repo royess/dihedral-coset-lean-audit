@@ -135,6 +135,20 @@ matrix is exponential.  A polynomial sparse-circulant/QSVT correlation filter
 can mark `{d,-d}`, but its target input mass is only `Theta(q/N)` on the
 natural sparse-data state, retaining an `Omega(sqrt(N/q))` state-conversion
 cost.
+The sparse score also gives an exact parity-constrained circulant SDP, but
+Fourier diagonalization leaves `N/2` candidate atoms and the generic quantum
+SDP interfaces examined here retain square-root dimension dependence or
+assume stronger low-rank input, Gibbs preparation, or implicit oracles.  A
+repeated-squaring construction gives a genuinely polynomial-
+size exact unit-modulus QCQP, but no planted polynomial solver is known.
+The formally perfect signed top-projector trace ratio still has normalized
+signal `2/N`; polynomial spectral traces, determinant ratios, and resolvents
+are exactly the same half-turn relation sums.  A separate Euclidean
+formulation reduces passive parity to rank-one two-coset CVP: at visibility
+one, `q=12*n`, and secret phase order `M_d=2^(Omega(n))`, approximation factor below
+`1.3448` would suffice on these typical instances, while the standard
+LLL/Babai, BKZ, BDD, embedding, and
+phase-unwrapping routes audited here do not provide it in polynomial time.
 An exact pair-product
 recursion creates passive samples over smaller 2-adic moduli.  Writing its
 initial visibility as `lambda_pass`, the visibility is
