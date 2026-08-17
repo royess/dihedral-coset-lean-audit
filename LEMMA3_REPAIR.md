@@ -693,7 +693,13 @@ interfaces checked here retain square-root dimension dependence or require
 stronger input, preparation, or oracle assumptions.  A compact repeated-
 squaring construction instead gives an exact polynomial-size nonconvex unit-
 modulus QCQP; a proved planted solver for that lift would be a new positive
-decoder.  Signed spectral traces do not already provide one: their ideal
+decoder.  Its strengthened first-order Shor relaxation is parity-blind with a
+growing integrality gap, while the polynomial-size order-two relaxation is
+the first low level not settled by the current witness.  With high
+probability, natural exact factor-graph elimination has `Omega(n)` treewidth,
+coefficient BP develops exponential support, and uniform bitwise BP has no
+inverse-polynomial first-round seed.  Signed spectral traces do not already
+provide one: their ideal
 ratio is `(-1)^d`, but their normalized signal is `2/N`, and moment,
 determinant, and resolvent variants reduce to the same half-turn relation
 coefficients.  Passive decoding also has an exact rank-one two-coset CVP

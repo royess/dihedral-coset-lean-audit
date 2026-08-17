@@ -134,7 +134,16 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   construction does give an exact
   polynomial-size nonconvex unit-modulus QCQP; finding a planted polynomial-
   time solver for that compact arithmetic lift remains a concrete positive
-  opening;
+  opening.  Its strengthened first-order Shor relaxation is nevertheless
+  parity-blind and has value `Theta(q*ln ln n)` above the true `O(q)` range.
+  Order two is polynomial size and can propagate a saturated root only to a
+  frontier of at most four factors; depth-four private trees keep that direct
+  frontier away from the shared leaves, but no globally consistent planted-
+  gap or pseudo-solution theorem is known.  With high probability, the natural local
+  factor graph has `Omega(n)` treewidth, exact coefficient BP develops
+  exponentially many residues, and uniform bitwise BP has no inverse-
+  polynomial first-round seed; these are structured-relaxation/message-
+  passing barriers only;
 - the top-mode projector has the perfect signed trace ratio `(-1)^d`, but both
   normalized traces have scale `2/N`.  Polynomial spectral traces are exactly
   signed half-turn relation sums; constant-error QSVT marking does not estimate
@@ -3940,6 +3949,279 @@ recovers its planted parity would be a new polynomial decoder.  The preceding
 word-hierarchy pseudo-solution does not automatically rule out every
 relaxation of this different lift.
 
+The first-order Shor relaxation of this lift is not that decoder.  Give every
+occurrence `f_(i,m)=m*Y_i mod N` its own exact multiplication tree; separate
+trees remain equivalent at rank one because they use the same shared powers.
+Strengthen the ordinary first-order complex Shor constraints for every gate
+`v=a*b` to include
+
+```text
+L(v) = L(a*b),
+L(v*conj(a)) = L(b),
+L(v*conj(b)) = L(a),
+```
+
+together with conjugates, unit diagonals, the analogous squaring identities,
+and `u_(n-1)=p`.  A feasible witness for either `p` can be realized by actual
+unit-circle random variables at the level of these moments.  Choose
+`alpha_p^2=p` and put
+
+```text
+u_(n-1) = p,
+u_(n-2) = alpha_p*epsilon,   epsilon uniform in {+1,-1},
+u_0,...,u_(n-3) independent Haar phases.
+```
+
+Then `E[u_(r+1)]=E[u_r^2]`, every nonfixed shared power has mean zero, and
+the displayed first-order consequences hold.  For an occurrence coefficient
+`a_(i,m)`, let `s_(i,m)=sign(a_(i,m))`.  When its binary frequency has at
+least four set bits below `n-1`, choose a balanced tree whose root children
+are private.  With an independent Haar phase `R_(i,m)`, set
+
+```text
+w_(i,m) = s_(i,m),
+A_(i,m) = R_(i,m),
+B_(i,m) = s_(i,m)*conj(R_(i,m)).
+```
+
+Here `A,B` are the root children.  Give every lower private node an
+independent Haar phase, except that a gate incident to the fixed leaf
+`u_(n-1)` is made pointwise correct.  The root and fixed-leaf gates then hold
+pointwise; every other displayed Shor identity is `0=0`.  The moment matrix is
+positive because these are genuine jointly distributed random variables,
+although the deliberately decoupled lower gates do not hold pointwise.
+
+This construction applies with high probability.  For fixed `m`, put
+`t=v_2(m)`.  The frequency `m*Y_i` is uniform on `2^t*Z_N`, and
+
+```text
+Pr[wt_(0,...,n-2)(m*Y_i)<=3]
+ = 2*sum_(j=0)^3 choose(n-1-t,j)/2^(n-t)
+ = O(n^3*2^t/N).
+```
+
+Since `2^t<=m<=J`, the union failure probability over all `q*J`
+occurrences is
+
+```text
+O(q*J^2*n^3/N) = o(1).
+```
+
+Both parity relaxations therefore attain the same separable upper bound
+
+```text
+U_J = sum_(i,m) |a_(i,m)|
+    = 2*q*sum_(m<=J) rho^m/m.
+```
+
+Including the removed constant, their value is
+
+```text
+-q*ln(1+rho^2)+U_J.
+```
+
+At `1-rho=Theta(1/sqrt(ln n))` this is `Theta(q*ln ln n)`.  In contrast,
+uniform truncation control at `J=Theta(ln^(3/2) n)` gives
+
+```text
+max_k G_J(k)
+ <= q*ln(1+lambda)
+    +2*q*rho^(J+1)/[(J+1)*(1-rho)]
+ = O(q).
+```
+
+Thus even the strengthened first-order Shor lift has a growing integrality
+gap and no planted parity gap.
+
+Order two is a real boundary rather than an already refuted algorithm.  For a
+degree-four pseudoexpectation and every quadratic gate `g=v-a*b`, the order-
+two localizers imply
+
+```text
+L(|g|^2) = 0.
+```
+
+Hence `g` is null against every admissible degree-two multiplier, and the
+first-order random-variable witness fails because its broken gates have
+`E[|v-a*b|^2]=2`.  If a saturated root obeys
+
+```text
+w=A*B,
+A=A_1*A_2,
+B=B_1*B_2,
+L(w)=s,
+```
+
+then one balanced sequence of legal substitutions forces
+
+```text
+L(A_1*A_2*B_1*B_2) = s.
+```
+
+The substitutions need not be balanced.  For example, substituting
+`A=A_1*A_2` and then `A_1=C_1*C_2`, with multiplier `A_2*B`, also forces
+
+```text
+L(C_1*C_2*A_2*B) = s.
+```
+
+What is exact is the frontier-size limit: a gate substitution adds one
+factor, and expanding a frontier of four would require a degree-three
+multiplier and a degree-five moment.  Thus no legal sequence directly exposes
+more than four factors, although it may follow one branch asymmetrically.  A
+balanced tree of depth at least four keeps every such frontier on private
+internal nodes instead of the shared `u_r` leaves.  Requiring every frequency
+to have at least sixteen set bits below the top bit makes the crude failure
+probability only
+
+```text
+O(q*J^2*n^15/N).
+```
+
+This is an exact propagation limit, not a proof of a second-order integrality
+gap: a globally Hankel-consistent PSD completion could still cut the
+first-order witness.  The order-two SDP is polynomial size--its degree-two
+monomial matrix has `O(V^2)` rows for `V=O(n*q*J)`--and is now the first
+specific low-level planted relaxation left genuinely unresolved.
+
+Natural exact message passing encounters a different sharp barrier.  Keep
+only the `m=1` product tree for each sample and contract its private nodes to
+one term vertex.  The resulting graph minor is
+
+```text
+B = ({u_0,...,u_(n-2)}, {1,...,q}, E),
+(r,i) in E iff bit r of Y_i is 1.
+```
+
+For uniform labels and `q=12*n`, this is
+`G_bip(n-1,12*n,1/2)`.  A balanced-separator union bound gives
+
+```text
+tw(B) = Omega(n)
+```
+
+with failure `exp(-Omega(n^2))`: after deleting fewer than `n/4` vertices,
+two large anticomplete sides would expose `Omega(n^2)` independent possible
+crossing edges, while there are only `3^(13*n)` candidate partitions.
+Therefore generic exact variable elimination or tabular tensor contraction
+of the natural local factor graph has exponential width.  Algebraically
+substituting every `u_r=u_0^(2^r)` collapses the graph, but leaves one variable
+with `N/2` feasible roots.  This is a contraction/domain tradeoff, not a
+lower bound against structured arithmetic compression.
+
+Exact coefficient-table sum--product also becomes exponential before a
+linear fraction of the samples.  After `j` likelihood factors, two distinct
+ternary exponent words collide only if some nonzero
+
+```text
+c in {-2,-1,0,1,2}^j
+```
+
+satisfies `c dot Y=0 mod N`.  Each fixed relation has probability at most
+`2/N`, so
+
+```text
+Pr[any collision after j factors] <= 2*(5^j-1)/N.
+```
+
+For every fixed `epsilon>0`, at
+
+```text
+j = floor((1/log_2(5)-epsilon)*n)
+```
+
+the exact sparse message has, with high probability,
+
+```text
+3^j
+ = 2^((log_2(3)/log_2(5)-epsilon*log_2(3))*n+O(1))
+```
+
+nonzero residues.  Switching to a dense residue table uses `N` states.  This
+rules out only exact coefficient-table or character-basis BP.
+
+The exact radix message already shows why a scalar recursion is insufficient.
+If
+
+```text
+W(k) = sum_(r in Z_N) A_r*omega^(k*r),
+k = a+2^t*s,
+M = 2^(n-t),
+```
+
+then character orthogonality gives
+
+```text
+Z_t(a)
+ := sum_(s=0)^(M-1) W(a+2^t*s)
+  = M*sum_(ell=0)^(2^t-1)
+      A_(ell*M)*exp(2*pi*i*a*ell/2^t).
+```
+
+In particular,
+
+```text
+Z_1(0) = H*(A_0+A_H),
+Z_1(1) = H*(A_0-A_H).
+```
+
+Thus the first parity split already needs the two subgroup coefficients;
+deeper bit messages need the corresponding growing coefficient family rather
+than one Markovian scalar.
+
+Nor does the uniform bitwise BP initialization supply an inverse-polynomial
+seed.  Write `k=sum_j b_j*2^j`, fix the parity bit `b_0`, and for one sample
+write
+
+```text
+Y=2^v*y,   y odd,
+m=n-v,
+r_star=m-1.
+```
+
+With all free-bit incoming messages uniform, and apart from its known
+likelihood coefficient of magnitude at most one, the phase part of the
+factor-to-bit harmonic is
+
+```text
+C_r
+ = exp(i*phi_0*b_0)
+   *product_(j=1,j!=r)^(n-1) (1+exp(i*phi_j))/2,
+phi_j = 2*pi*Y*2^j/N.
+```
+
+It is exactly zero for `r!=r_star`, because the product retains the factor
+with `exp(i*phi_(r_star))=-1`.  For `r=r_star` and `m>=2`,
+
+```text
+|C_(r_star)|
+ = 2^(2-m)/|sin(2*pi*y/2^m)|,
+Pr[|C_(r_star)|>=eta] = O(n/(N*eta)).
+```
+
+Here the displayed probability is unconditional over uniform `Y`; conditional
+on `m` the corresponding bound is `O(1/(2^m*eta))`.  The union bound over
+polynomially many samples makes every first-round bias smaller than any
+inverse polynomial with high probability.  This blocks the uniform or
+linearized BP start, not seeded or strongly nonlinear BP.
+
+Finally, exact memoization does not identify many repeated residual
+subproblems.  At a middle prefix `k=a+2^t*s`, `t=floor(n/2)`, the functions
+`F_a(s)=G_J(a+2^t*s)` are pairwise distinct even up to additive constants when
+the signed public frequencies modulo `M=2^(n-t)` are nonzero, distinct, and
+include an odd frequency.  Their Fourier coefficients carry the phases
+`omega_N^(a*f)`, so equality forces `a=a'`.  The alias-free event fails with
+probability only
+
+```text
+O(q^2*J^3/M)+2^(-q).
+```
+
+Thus an ordered exact decision diagram or memoized backward-square-root
+search has width `2^floor(n/2)` at the middle cut.  The residual functions
+still have polynomial sparse-Fourier descriptions, so a new algebraic
+optimizer remains outside this result.
+
 There is also an efficient spectral filter that makes the normalization
 obstruction especially transparent.  Let `Shift` denote cyclic translation
 on `Z_N` and define the known sparse circulant
@@ -4475,11 +4757,88 @@ moment edge: the union bound rigorously excludes wrong-parity codewords below
 it, while showing that the correlated minimum is actually attained near
 `x_star` would require a separate second-moment or random-code argument.
 
+The Euclidean objective is not a new hidden primitive; it has the exact
+Fourier expansion
+
+```text
+D(k) := sum_i Delta_i(k)^2
+ = q*pi^2/3
+   +4*sum_(m>=1) (-1)^m*C_m(k)/m^2,
+
+C_m(k)
+ = sum_i S_i^m*cos(2*pi*m*k*Y_i/N).
+```
+
+This follows from
+
+```text
+wrap(theta)^2
+ = pi^2/3+4*sum_(m>=1) (-1)^m*cos(m*theta)/m^2.
+```
+
+Its first nonconstant term is exactly `-4*T_k`, where `T_k` is the sparse-
+circulant correlation score above.  Under the planted density,
+
+```text
+E[D(d)]/q
+ = pi^2/3-2*lambda+O(M_d^(-2))
+ = mu_lambda+O(M_d^(-2)),
+```
+
+so the leading constant mean advantage comes from that first harmonic; all
+higher finite-grid aliases contribute only `O(M_d^(-2))`.  Higher odd aliases
+do not invalidate the opposite-parity certificate.  A relation
+`m*k=+/-d mod N` with odd `m` preserves parity.  More directly, if `d` is
+even, every opposite-parity `k` is odd and `k*Y-H*b` is uniform on `Z_N`; if
+`d` is odd, every nonzero opposite-parity `k` is even and the planted cosine
+cancels over the preimages of `gcd(k,N)`, leaving the uniform law on
+`gcd(k,N)*Z_N=<k,H>`.  The zero candidate has the uniform two-point law on
+`{0,H}`.  This is the exact alias justification behind the stratified union
+bound.
+
+There is a useful exponential-time dimension tradeoff.  Retain only
+`m=c*n` independent observations and let `x_c` solve
+
+```text
+I(x_c) = ln(2)/c.
+```
+
+The same proof certifies parity recovery whenever `x_c>mu_1`, equivalently
+
+```text
+c > c_0
+  := ln(2)/I(mu_1)
+   = 2.3253827537....
+```
+
+An `alpha`-approximate solver suffices whenever
+`alpha^2*mu_1<x_c`.  Thus an exact exponential lattice experiment can use
+only slightly more than `2.326*n` observations instead of `12*n`, but its
+dimension remains linear in `n`; this is not a polynomial or subexponential
+decoder.
+
+The dual lattice makes the half-turn relation reappear explicitly.  For any
+periodic `F` on `Z_N^q`, Fourier expansion gives
+
+```text
+sum_(k in Z_N) (-1)^k*F(k*Y-t)
+ = N*sum_(z:z dot Y=H mod N)
+       hat(F)(z)*exp(-2*pi*i*z dot t/N).
+```
+
+For `t=H*b`, the final phase is `(-1)^(z dot b)`.  Equivalently, subtracting
+the two parity-coset theta series cancels the zero relations and retains the
+half-turn relations.  A dual or Poisson decoder must therefore find or
+coherently aggregate those relations; bounded total Fourier word order
+reduces to the earlier low-word barrier.
+
 The standard lattice routes checked here do not realize that interface in
 polynomial time:
 
-- exact cyclic scanning costs `O(q*N)`, and generic exact CVP is exponential
-  in `q=Theta(n)`;
+- exact cyclic scanning costs `O(q*N)`;
+  [Durr--Hoyer minimum finding](https://arxiv.org/abs/quant-ph/9607014)
+  reduces this to `O(q*sqrt(N))` arithmetic work only in the black-box
+  objective model, while generic exact CVP is exponential in `q=Theta(n)`;
 - LLL followed by Babai nearest-plane has an exponential worst-case
   approximation factor, far above `1.3448`; see [On Lovasz' lattice reduction
   and the nearest lattice point problem](https://doi.org/10.1007/BF02579403);
@@ -4494,7 +4853,10 @@ polynomial time:
 - phase unwrapping has no narrow-error promise, because the planted residual
   density `(1+lambda*cos(theta))/(2*pi)` has support on the entire circle;
 - a proper dyadic reduction of one observation is exactly sign-independent
-  for an odd secret, so 2-adic lifting has no single-sample base case.
+  for an odd secret, so 2-adic lifting has no single-sample base case;
+- the one-bit hidden-number algorithms cited below use chosen
+  multiplier queries and, in the closest advice-based form, modulus-dependent
+  advice rather than one passive random sample block.
 
 Modulo `N*Z^q`, the lattice has only the `N` cyclic torus codewords; the
 infinite lattice also contains every vector `N*e_i`.  It is not a generic
@@ -4659,8 +5021,11 @@ coefficient at normalized scale `1/N`.  Generic SDP solvers do not optimize
 the exact `N/2`-atom parity SDP in polynomial time under their stated input
 parameters.  The two most compact new positive interfaces are instead the
 polynomial-size repeated-squaring unit-modulus QCQP and the typical rank-one
-high-order two-coset CVP gap `alpha<1.3448`; no polynomial planted solver is known for
-either.
+high-order two-coset CVP gap `alpha<1.3448`; no polynomial planted solver is
+known for either.  The QCQP's strengthened first-order Shor relaxation has an
+explicit parity-blind gap, and natural exact BP has exponential width or
+support.  Its order-two moment relaxation, however, remains a concrete
+polynomial-size opening rather than a refuted route.
 
 This is not a no-go theorem.  A distribution-specific collective circuit
 could conceivably decode only the parity without exposing a reusable fibre

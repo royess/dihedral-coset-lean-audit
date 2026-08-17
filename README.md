@@ -189,7 +189,13 @@ SDP interfaces either retain square-root dimension dependence or require
 stronger low-rank input, Gibbs preparation, or implicit-oracle assumptions.
 An exact repeated-squaring lift does compress the
 search to a polynomial-size nonconvex unit-modulus QCQP, which is now a
-concrete positive arithmetic target rather than a decoder.  Taking a signed
+concrete positive arithmetic target rather than a decoder.  Its strengthened
+first-order Shor relaxation is parity-blind with a growing integrality gap;
+the polynomial-size order-two relaxation is the first low level not resolved
+by the present pseudo-solution.  With high probability, natural exact factor-
+graph elimination has `Omega(n)` treewidth, coefficient BP develops
+exponentially many residues, and uniform bitwise BP has no inverse-polynomial
+first-round seed.  Taking a signed
 spectral trace does not bypass normalization: the ideal trace ratio is
 `(-1)^d`, while both normalized traces are only `2/N`; polynomial traces,
 determinants, and resolvents reduce to the same signed half-turn relation
