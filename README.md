@@ -167,8 +167,12 @@ table-free rejection and a direct-predicate Cartesian Johnson walk return to
 certificate leaves `M^(1-o(1))` expected blocks alive.  Conversely, a
 certified factor-`C` interval log-sum-exp oracle would enumerate the rare row
 in `O(C*u*log M)` expected calls.  It is exactly an implicit Gaussian-KDE
-block-sum problem.  Cancellation-blind Bessel truncation is exponential and
-rejection-based quantum tilting returns to `sqrt(M/k)`.  Yet Kac--Rice gives
+block-sum problem.  Black-box point-query implementations require `Omega(s)`
+classical or `Omega(sqrt(s))` quantum queries per size-`s` block.  Even after
+residue
+aggregation, cancellation-blind Bessel certification must retain
+`(1-o(1))*N` residues, while rejection-based quantum tilting returns to
+`sqrt(M/k)`.  Yet Kac--Rice gives
 only `M^o(1)` expected crossings and accepted indices, so the implicit
 partition-sum or sparse output-sensitive root locator remains the precise
 opening.
@@ -288,12 +292,17 @@ whitener has diagonal-ratio exponent `1.5095`.  The regularized
 degree-symmetric leading surrogate has an exact polynomial-size spectral
 optimizer.  Its diagonal rules out the retuned point and leaves a possible
 sub-square-root interval only at `0.02073134<p<0.02079354`; omitted covariance
-and exact-signal terms remain open.
+and exact-signal terms remain open.  An exact Pascal--Cholesky reduction shows
+that a fractional-moment gain `delta>0.00013414` would close the surrogate at
+the window center.
 Bucket-sum-only random rehash medians contain no information beyond the
 original path sum;
 a fixed positive pair-overlap law can still give either sign of prediction
-correlation, so nonlinear progress requires control of the residual odd
-half-turn clusters.  A
+correlation.  Actual near-miss modular triples have
+`N^(0.280916...+o(1))` expected retained incidences, and a span-clean local
+marginal is anti-majority for every `0<lambda<=1`.  This remains a local
+first-moment statement; nonlinear progress requires global control of the
+residual odd half-turn clusters.  A
 new Parseval
 argument makes one part rigorous: against the conventional adversarial
 `STAT` oracle, the uniform-secret average parity advantage of any adaptive

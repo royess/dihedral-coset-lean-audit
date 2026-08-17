@@ -121,12 +121,18 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   diagonal alone puts the retuned point at `0.502611...` and leaves a possible
   sub-square-root window only for
   `0.02073134<p<0.02079354`; omitted covariance and exact-signal terms still
-  prevent a full lower bound.
+  prevent a full lower bound.  An exact Pascal--Cholesky reduction shows that
+  a fractional-moment gain `delta>0.00013414` at the window center would close
+  the surrogate; proving that gain is the remaining spectral lemma.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
-  prediction correlation, so the residual odd half-turn clusters remain the
-  precise nonlinear obstacle.
+  prediction correlation.  More sharply, actual near-miss modular triples
+  have `N^(0.280916...+o(1))` expected retained incidences and, conditionally
+  on a span-clean incidence, give a local three-character anti-majority for
+  every `0<lambda<=1`.  This is not a high-probability or full-path failure
+  theorem, but it makes residual odd half-turn clusters the precise nonlinear
+  obstacle.
   Direct importance sampling of the exact Bayesian coefficient ratio has
   relative variance `Theta(N)` once its posterior is sharp.  At `q=12*n`,
   for a nondegenerate secret, a Hellinger bound shows that the posterior is in
@@ -150,9 +156,12 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   sided local even-moment certificate leaves `M^(1-o(1))` expected blocks
   alive.  A certified factor-`C` interval log-sum-exp oracle would, conversely,
   enumerate the rare row in `O(C*u*log M)` expected calls.  This is exactly an
-  implicit Gaussian-KDE problem.  Cancellation-blind Fourier--Bessel
-  certification needs exponentially many terms, and rejection-based quantum
-  tilting cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives only
+  implicit Gaussian-KDE problem.  Black-box point-query implementations need
+  `Omega(s)` classical or `Omega(sqrt(s))` quantum queries on a size-`s`
+  block.  Even after residue aggregation, cancellation-blind Fourier--Bessel
+  certification must retain `(1-o(1))*N` residues, and rejection-based
+  quantum tilting cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
+  only
   `M^o(1)` expected crossings and accepted integer positions at the ANN cap
   scale: output volume is small, but the required implicit partition-sum or
   output-sensitive root locator remains open.  The exact
@@ -2224,6 +2233,35 @@ enumerator.  An additive `O(log n)` approximation to `log Z_I` is enough,
 provided that it is certified on the upper side.  A merely one-sided upper
 bound with no approximation ratio does not control the tree size.
 
+In the unrestricted black-box point-value model, point sampling cannot
+implement this oracle.  Fix a block of size `s` and a threshold `T>C*s`.
+Compare the positive weight vectors
+
+```text
+w_a^(0)=1,
+w_a^(j)=1+(T-1)*1[a=j].
+```
+
+A certified factor-`C` estimate must be below `T` on the first input and at
+least `T` on every spiked input.  On any classical random tape that returns
+the correct low answer, leaving one position unqueried gives an identical
+transcript on the corresponding spike.  An always-certified algorithm whose
+factor guarantee succeeds with probability `1-delta` therefore uses at least
+`(1-delta)*s` expected point queries on the low input.  If both sides may fail
+with probability `delta<1/2`, coupling to a uniformly random spike gives
+
+```text
+E_0[number of distinct queries] >= (1-2*delta)*s.
+```
+
+Here `E_0` is expectation on the all-one input.  The quantum point-query
+version contains unstructured search and needs `Omega(sqrt(s))` queries by
+the [BBBV hybrid bound](https://arxiv.org/abs/quant-ph/9701001).  These bounds
+cover sampling, pointwise importance weighting, and sketches whose only
+query-time access is through sampled point values.  The spike family is not
+asserted to lie in the trigonometric-orbit promise class, and the bounds do
+not cover non-black-box aggregation of that known orbit.
+
 This oracle is exactly an implicit Gaussian-kernel density query.  Put
 `R=||g||`,
 
@@ -2285,9 +2323,113 @@ Moreover a constant fraction of the `kappa_i` lie in a fixed positive
 interval, so the largest normalized multi-index atom is `exp(-Omega(q))`.
 Consequently any term-by-term Bessel certificate that bounds its remainder
 only by raw absolute coefficient mass must retain `exp(Omega(q))` terms just
-to reduce the tail below `exp(u^2)`.  This is a barrier only to that
-cancellation-blind expansion; aggregation by `m dot Y`, an arithmetic
-circuit for the partition sum, or another implicit KDE method remains open.
+to reduce the tail below `exp(u^2)`.
+
+Even aggregation by `m dot Y mod N` stays exponentially dense if the final
+tail bound is cancellation-blind.  Conditional on the radii, let the
+independent centered Skellam variables `D_i` have the normalized Bessel law
+above and define
+
+```text
+p_Y(r) = Pr[sum_i D_i*Y_i=r mod N].
+```
+
+Use the unnormalized finite Fourier transform.  For `k!=0`, let
+`L=N/gcd(N,k)>=2`, which is a power of two, and let `D_i'` be an independent
+copy.  Character orthogonality gives exactly
+
+```text
+E_Y[|hat(p_Y)(k)|^2]
+  = product_i Pr[L divides D_i-D_i']
+  <= product_i rho_i,
+rho_i = (1+exp(-4*kappa_i))/2.
+```
+
+The inequality uses only that congruence modulo `L` implies equal parity.
+Parseval and Cauchy--Schwarz therefore imply
+
+```text
+E_Y[sum_r |p_Y(r)-1/N|^2] <= product_i rho_i,
+E_Y[TV(p_Y,Unif)] <= (1/2)*sqrt(N*product_i rho_i).
+```
+
+Put
+
+```text
+eta_gamma
+  = E_R[-ln((1+exp(-4*sqrt(gamma*ln(2)/6)*R))/2)],
+```
+
+where `R` is Rayleigh.  The law of large numbers gives
+`-q^(-1)sum_i ln(rho_i)->eta_gamma`.  Numerical quadrature gives
+
+```text
+eta_(5/49) = 0.226382267136...,
+12*eta_(5/49)-ln(2) = 2.023440025067...,
+eta_(1/9) = 0.234276170904...,
+12*eta_(1/9)-ln(2) = 2.118166870289....
+```
+
+With high probability over the radii, writing
+`Delta_gamma=12*eta_gamma-ln(2)`, the conditional expectation obeys
+
+```text
+E_Y[TV(p_Y,Unif)]
+  <= exp[-(Delta_gamma/2-o(1))*n].
+```
+
+Markov's inequality now makes `p_Y` exponentially close to uniform in total
+variation with high probability for both split exponents.  In fact,
+`Delta_gamma/2>ln(2)` in both cases.  Choosing any fixed
+`ln(2)<xi<Delta_gamma/2` gives, with high probability,
+
+```text
+TV(p_Y,Unif) <= exp(-xi*n) = o(1/N),
+p_Y(r) = (1+o(1))/N uniformly in r.
+```
+
+The raw absolute Bessel mass aggregated at residue `r` is
+`exp(K)*p_Y(r)`.  If a method retains a residue set `S` and certifies the
+omitted tail only by triangle inequality, reducing that charge below
+`exp(u^2)` requires
+
+```text
+p_Y(S) > 1-exp(u^2-K) = 1-o(1).
+```
+
+Exponential total-variation closeness gives
+`p_Y(S)<=|S|/N+o(1)`, so necessarily `|S|>=(1-o(1))*N` for this raw-mass
+certificate.
+
+The same conclusion holds for an actual interval triangle bound at the two
+displayed split exponents.  For an interval `I` of length `s<=M`, put
+
+```text
+D_I(r) = sum_(a in I) exp(2*pi*i*r*a/N).
+```
+
+It has exactly `gcd(s,N)-1<=s-1=o(N)` nonzero-residue zeros.  Every other
+residue satisfies `|D_I(r)|>=sin(pi/N)`.  The corresponding omitted-tail
+charge is
+
+```text
+exp(K)*sum_(r notin S) p_Y(r)*|D_I(r)|.
+```
+
+At `gamma=5/49` and `gamma=1/9`, respectively,
+
+```text
+(K-u^2)/ln(N) -> 2.151725818115...,
+(K-u^2)/ln(N) -> 2.236059058626....
+```
+
+Both limits exceed two.  Uniform pointwise flatness therefore makes even one
+omitted nonzero-kernel residue charge more than `exp(u^2)`.  Only the `o(N)`
+kernel zeros can be omitted, so an interval certificate must again retain
+`(1-o(1))*N` residues.  Thus aggregation does not rescue a
+cancellation-blind Bessel certificate.  Complex phase cancellation, an
+arithmetic partition-sum circuit, and another implicit KDE method remain
+open.
 
 Exponential tilting also fails to help if it is implemented only by quantum
 rejection sampling.  Let `0<=w_a<=1`, assume every one of the `k` marked
@@ -6687,6 +6829,125 @@ to be disjoint degree-`t` monomials keeps `Z` homogeneous of degree `t` and
 moves only the residual to degree `3*t`.  This is a likelihood
 counterexample, not a claim that the modular coefficient counts realize it.
 
+The actual modular path geometry realizes the same sign reversal locally, at
+least in an exponentially large first moment.  Work at the apparent density
+
+```text
+p = 0.020766264718...,
+a = 3*(H_2(p)+p) = 0.499463451...,
+K = N^(a+o(1)),       t=12*p*n.
+```
+
+In each block, consider an ordered triple of signed exact-`r` words.  Allow
+only coordinate patterns `v in {0,+1,-1}^3` whose coordinate sum is ternary.
+Grouping by `|supp(v)|=0,1,2,3`, the numbers of allowed patterns are
+
+```text
+g = (1,6,6,6).
+```
+
+Let the total masses of these four groups be
+
+```text
+x_0=1-2*p+y,       x_1=x_2=p-y,       x_3=y.
+```
+
+Each individual pattern in group `j` has mass `x_j/g_j`.  Every row then has
+support density `p`, while the coordinatewise sum has support density `p`.
+The per-coordinate type entropy is
+
+```text
+E_type = -sum_(j=0)^3 x_j*log_2(x_j/g_j).
+```
+
+It is maximized when
+
+```text
+(p-y)^2 = 6*y*(1-2*p+y).
+```
+
+At the displayed `p`,
+
+```text
+y = 0.0000744449112...,
+E_type = 0.398275541393....
+```
+
+An `O(1)` coordinate switch replaces two singleton patterns for two rows by
+one opposite-sign two-row pattern and one zero pattern.  It preserves all
+three row weights but reduces the resultant support from `t` to `t-2`.
+Write the switched words as `z_1,z_2,z_3` and their ternary sum as `w`.
+If all three words pass the Wagner filters, then
+
+```text
+z_j dot Y = H,       w dot Y = 3*H = H mod N.
+```
+
+The type contains linearly many singleton patterns for every row in both
+filtered halves.  Restricting to triples with the corresponding unit minors
+makes their three low-bit and three full-modulus equations jointly uniform.
+Their joint retention probability is therefore exactly
+
+```text
+K^(-3)*N^(-3) = N^(-3*(a+1)+o(1)).
+```
+
+The number of switched ordered triples is `N^(12*E_type+o(1))`, so the
+expected number of retained incidences is
+
+```text
+N^(12*E_type-3*(a+1)+o(1))
+  = N^(0.28091614349...+o(1)).
+```
+
+There is an exact local likelihood consequence.  Put `T_j=supp(z_j)` and
+`U_j=product_(i in T_j)S_i`.  Singleton patterns make the three characters
+independent over `F_2`.  The largest other support in their seven-element
+span has size
+
+```text
+|T_i triangle T_j|
+  = [16*(p-y)+o(1)]*n
+  = 0.3310691169...*n+o(n).
+```
+
+The allowed pattern types imply that the only automatic ternary rows in this
+span are `0`, `+/-z_j`, and `+/-w`.  Conditional on the three retained paths,
+a different orientation on one of the seven span supports hits `0` or `H`
+with probability at most `4*K/N`.  A union bound over all such orientations
+fails with probability at most
+
+```text
+N^(a+0.331070-1+o(1)) = N^(-0.169467...+o(1)).
+```
+
+Call the complementary event span-clean.  Let `Pi` denote uniform Walsh
+projection onto the character span of `T_1,T_2,T_3`.  On this event,
+marginalizing the exact likelihood onto `(U_1,U_2,U_3)` gives
+
+```text
+Pi*A_0 = 1,
+Pi*A_H = 2*c*(U_1+U_2+U_3)+2*c_w*U_1*U_2*U_3,
+c = (lambda/2)^t,       c_w=(lambda/2)^(t-2).
+```
+
+Thus every individual character has positive parity correlation `2*c`, but
+with `Maj_3=(U_1+U_2+U_3-U_1*U_2*U_3)/2`,
+
+```text
+E[B*Maj_3(U) | Y]
+  = 3*c-c_w
+  = c*(3-4/lambda^2) < 0,       0<lambda<=1.
+```
+
+This removes the caveat that the three-character reversal is merely an
+abstract likelihood example: actual retained modular paths realize it in
+their local marginal, and the expected number of span-clean incidences has
+the same `N^(0.280916...+o(1))` exponent.  It is still only a first-moment
+count, not a high-probability theorem, and it does not determine
+the sign of the full exponentially large path sum.  It rules out a global
+MLR argument based only on coefficient positivity and pair overlap.
+
 Generic Boolean hypercontractivity cannot fill the gap.  For a degree-`t`
 Walsh polynomial it gives
 
@@ -7153,7 +7414,112 @@ gives
 
 Consequently no regularized signed choice in this surrogate can beat the
 square-root exponent at that retuned point.  The tiny interval around the
-original apparent point still requires an asymptotic resolvent bound.
+original apparent point still requires an asymptotic resolvent bound, but the
+remaining lemma has an exact polynomial interpretation.
+
+Temporarily adjoin degree zero and write `c_r=choose(b,r)`.  The extended
+normalized one-block matrix `C_full` has the exact Pascal--Cholesky
+factorization
+
+```text
+C_full = T*T^T,
+T_(r,j) = 2^(-r/2)*sqrt(c_r/c_j)*choose(r,j),
+           0<=j<=r<=t.
+```
+
+Moreover `h_full=T*e_0` and
+
+```text
+(h_full)_r = sqrt(c_r)*2^(-r/2).
+```
+
+After deleting degree zero, the cutoff principal block is
+`C_cut=h_cut*h_cut^T+G*G^T`, where `h_cut=((h_full)_r)_(r=1)^t` and
+`G=T_({1,...,t},{1,...,t})`.  This `C_cut` and `h_cut` are the `C` and `h`
+used in the preceding spectral formula.  Equivalently, assign coefficient
+`w_r` to every oriented degree-`r` template and put
+
+```text
+P(x) = sum_(r=1)^t c_r*w_r*x^r.
+```
+
+Then exactly
+
+```text
+v^T*w = P(1),
+w^T*E*w = sum_(r=1)^t c_r*2^r*w_r^2,
+w^T*B*w
+  = sum_(j=0)^t P^(j)(1)^2/[j!^2*c_j].
+```
+
+Thus the cutoff resolvent is a weighted coefficient-versus-derivative
+Christoffel problem for polynomials satisfying `P(0)=0` and `P(1)=1`.
+Without the cutoff, the same matrix is the radial symmetric-power compression
+of
+
+```text
+[[1,1/sqrt(2)],
+ [1/sqrt(2),1]],
+```
+
+but the low-degree ball is not invariant, so the full Krawtchouk spectrum
+cannot be substituted into the cutoff problem.
+
+There is also a sharp sufficient fractional-moment lemma.  Define
+
+```text
+H_cut = h_cut^T*h_cut = sum_(r=1)^t choose(b,r)*2^(-r),
+M_half = h_cut^T*C_cut^(-1/2)*h_cut.
+```
+
+Scalar arithmetic--geometric mean applied by functional calculus gives
+
+```text
+C_cut^(tensor 4)+rho*I
+  >= 2*sqrt(rho)*(C_cut^(1/2))^(tensor 4),
+R_min >= sqrt(rho)/M_half^4.
+```
+
+At the dangerous center `p_*=0.0207662647183...`, put
+
+```text
+a = 3*(H_2(p_*)+p_*),
+d_exp = 12*(H_2(p_*)-p_*)-1.
+```
+
+The defining equation for `p_*` gives
+
+```text
+d_exp=a=0.499463451082....
+```
+
+Taking `k=a` makes
+
+```text
+rho = N^(1+a+o(1)),
+H_cut^4 = N^(1+a+o(1)).
+```
+
+Consequently a bound
+
+```text
+M_half <= H_cut^(1/2)*N^(-delta+o(1)),
+delta > (1/2-a)/4 = 0.000134137230...,
+```
+
+would imply `R_min>=N^(4*delta+o(1))` and close the surrogate at the window
+center.  The known exact inverse moment is only
+
+```text
+h_cut^T*C_cut^(-1)*h_cut
+  = (A_(b,t)-1)/A_(b,t),
+A_(b,t) = sum_(r=0)^t choose(b,r).
+```
+
+Cauchy--Schwarz then gives
+`M_half<=sqrt(H_cut*(A_(b,t)-1)/A_(b,t))`, with no strict exponential gain.
+Proving the tiny displayed fractional-moment gap is the precise remaining
+resolvent problem; finite-size evidence is not used as a proof here.
 
 Its scope is important.  `B` contains only the compatible leading
 automatic-zero component, and the formula assigns `q_0^2` to every generic
@@ -7588,12 +7954,18 @@ Gram cutoff whitener has diagonal-ratio exponent `1.5095`.  The regularized
 degree-symmetric leading surrogate has an exact polynomial-size spectral
 optimizer.  Its diagonal rules out the retuned point and confines any
 sub-square-root window to `0.02073134<p<0.02079354`, but omitted covariances
-and extra half-turn orientations leave the full statistic open.
+and extra half-turn orientations leave the full statistic open.  An exact
+Pascal--Cholesky reduction isolates the missing surrogate lemma as a
+fractional-moment gain `delta>0.00013414` at the window center.
 Bucket-sum-only rehash medians are only margin
 transforms of the same path sum, while a positive three-character likelihood
 model shows that fixed
-pair overlap and linear signal can coexist with either prediction sign.  A
-nonlinear theorem must therefore control the residual odd half-turn clusters.
+pair overlap and linear signal can coexist with either prediction sign.
+Actual near-miss modular triples go farther: they have
+`N^(0.280916...+o(1))` expected retained incidences and each span-clean local
+marginal is anti-majority.  This remains an expectation/local statement, not
+a high-probability failure of the full path sum.  A nonlinear theorem must
+therefore control or compensate the residual odd half-turn clusters.
 The
 theorems still leave open circuits that exploit the internal Boolean modular
 arithmetic beyond the orbit algebra or compute the weighted ternary
@@ -7613,8 +7985,11 @@ surrogates and the displayed `o(log M)` one-sided local moment certificate do
 not provide it.  A polynomial-time certified interval log-sum-exp oracle with
 polynomial multiplicative slack would enumerate the rare row in expected
 polynomial time; it is exactly an implicit Gaussian-KDE block-sum primitive.
-Cancellation-blind Bessel expansion is exponential and rejection-based
-quantum tilting returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
+Point-query implementations cost `Omega(s)` classically and
+`Omega(sqrt(s))` quantumly on a size-`s` block.  Even residue-aggregated
+cancellation-blind Bessel certification must keep `(1-o(1))*N` residues, and
+rejection-based quantum tilting returns to `sqrt(M/k)`.  On the other hand,
+Kac--Rice gives
 only `M^o(1)` expected rare-cap crossings and accepted indices, so the
 partition-sum oracle or output-sensitive threshold-root locator remains a
 sharply defined positive opening.  The

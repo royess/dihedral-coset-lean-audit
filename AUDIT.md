@@ -121,8 +121,12 @@ degree `Omega(log M)`, and the displayed `o(log M)` one-sided local moment
 certificate leaves `M^(1-o(1))` expected blocks alive.  A certified
 factor-`C` interval log-sum-exp oracle would instead enumerate the rare row in
 `O(C*u*log M)` expected calls; this is an implicit Gaussian-KDE block-sum
-primitive.  Cancellation-blind Bessel truncation is exponential and
-rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives only
+primitive.  Black-box point-query implementations require `Omega(s)`
+classical or `Omega(sqrt(s))` quantum queries on a size-`s` block.  Even
+residue-aggregated
+cancellation-blind Bessel certification must retain `(1-o(1))*N` residues,
+and rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives
+only
 `M^o(1)` expected crossings and accepted indices, leaving the implicit
 partition-sum or sparse output-sensitive root locator open.  The exact
 Bayesian answer is the ratio
@@ -230,11 +234,16 @@ whitener has diagonal-ratio exponent `1.5095`.  The regularized
 degree-symmetric leading surrogate has an exact polynomial-size spectral
 optimizer.  Its diagonal rules out the retuned point and leaves a possible
 sub-square-root interval only at `0.02073134<p<0.02079354`; omitted covariance
-and exact-signal terms remain open.
+and exact-signal terms remain open.  An exact Pascal--Cholesky reduction shows
+that a fractional-moment gain `delta>0.00013414` would close the surrogate at
+the window center.
 Bucket-sum-only random rehash medians contain only the original path-sum
 information, while a fixed
 positive pair-overlap law can yield either sign of prediction correlation;
-the residual odd half-turn clusters are the precise nonlinear obstacle.
+actual near-miss modular triples have `N^(0.280916...+o(1))` expected retained
+incidences and a span-clean local anti-majority marginal.  This is not a
+high-probability full-path failure theorem; residual odd half-turn clusters
+remain the precise nonlinear obstacle.
 Parseval now gives a sharp
 statistical-query boundary: against
 the conventional adversarial `STAT` oracle, polynomially many adaptive
