@@ -114,7 +114,9 @@ nearest neighbor.  Assuming ideal
 coherent QRAM for a data-dependent ANN table gives conditional time and space
 `N^(23/49+o(1))`, asymptotically approaching
 `N^(7/15+epsilon+o(1))` for fixed `epsilon>0`; ordinary-gate QROM does not
-inherit that bound.  The exact Bayesian answer is the ratio of two coefficients of
+inherit that bound.  Without a stored bucket index or algebraic bucket
+inverter, table-free rejection and a direct-predicate Cartesian Johnson walk
+return to `sqrt(N)`.  The exact Bayesian answer is the ratio of two coefficients of
 a weighted ternary subset-sum polynomial under a uniform secret prior; direct
 likelihood filtering exposes
 an at-most-`O(1/N)` useful-posterior heralding probability in that normalized
@@ -204,8 +206,12 @@ secret before the final modulus, limiting polynomial no-reuse recursion to
 `o(n)` removed bits.  At visibility one, a four-list Wagner sum has apparent runtime
 `N^0.499463`, but overlap-induced zero relations make its parity-signal-
 normalized second moment at least `N^(0.0073173+o(1))`; optimistic
-independent-replica raw-second-moment accounting is `N^0.5026116`.  This only
-invalidates that raw SNR argument.  Parseval now gives a sharp
+independent-replica raw-second-moment accounting is `N^0.5026116`.  On this
+fixed support-weight/filter orbit, uniform weighting minimizes the ensemble
+ratio among all data-independent real linear weights, excluding thinning, signed
+reweighting, codes, and designs as repairs of that SNR argument.  Nonlinear
+and data-adaptive routes remain open.
+Parseval now gives a sharp
 statistical-query boundary: against
 the conventional adversarial `STAT` oracle, polynomially many adaptive
 `STAT(1/poly(n))` queries have uniform-secret average parity advantage at most

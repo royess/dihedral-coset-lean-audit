@@ -106,7 +106,10 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `N^0.499463`, but overlap-induced zero relations make its parity-signal-
   normalized second moment at least `N^(0.0073173+o(1))`; optimistic
   independent-replica raw-second-moment accounting has exponent `0.5026116`.
-  This invalidates that SNR proof, not every generalized-birthday decoder.
+  On this fixed support-weight/filter orbit, the uniform aggregate minimizes the
+  ensemble ratio among all fixed data-independent real linear weights, so thinning,
+  signed reweighting, codes, and designs do not repair that SNR proof.
+  Data-adaptive and nonlinear generalized-birthday decoders remain open.
   Direct importance sampling of the exact Bayesian coefficient ratio has
   relative variance `Theta(N)` once its posterior is sharp.  At `q=12*n`,
   for a nondegenerate secret, a Hellinger bound shows that the posterior is in
@@ -122,7 +125,10 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   Conditional on an ideal coherent QRAM implementation of a
   data-dependent ANN table, it gives `N^(23/49+o(1))` time and space, with
   parameters approaching `N^(7/15+epsilon+o(1))` for every fixed
-  `epsilon>0`; no corresponding ordinary-gate bound follows.  The exact
+  `epsilon>0`; no corresponding ordinary-gate bound follows.  Without a
+  stored or algebraically invertible bucket index, rejection-based filters
+  and a direct-predicate Cartesian Johnson walk both return exactly to the
+  `sqrt(N)` scale.  The exact
   grouped triangle envelope is
   identical on `H/poly(n)` prefixes with high probability, while one exact
   high-bit elimination can turn one Fourier mode into a dense spectrum.
@@ -1961,6 +1967,110 @@ boundary is discussed by
 explicit-list evidence is not a lower bound on this structured implicit
 instance.  The result above is a coherent-QRAM time--space interface, not a
 polynomial decoder or an ordinary-circuit repair.
+
+### Table-free filters and direct product walks return to square-root scale
+
+The coherent-QRAM hypothesis above can be isolated more sharply.  On the
+score-gap event, let `P(a,b)` be direct verification of a near pair.  It is
+true only on the constant-size planted set coming from `d,-d`.  Fix `b` and
+a coherently computable hash or filter whose candidate bucket
+
+```text
+U_b = {a in [M] : h(A_a)=h(B_b)}
+```
+
+has size `B`.  Preparing the uniform state on `U_b` by rejection from the
+uniform `a` state costs `Theta(sqrt(M/B))` filter evaluations.  Grover search
+for the unique verified neighbor inside `U_b` uses `Theta(sqrt(B))`
+reflections about that bucket state.  Charging its preparation and
+unpreparation gives
+
+```text
+table-free rejection cost per planted query = Theta(sqrt(M)),
+```
+
+independently of the bucket size.  This is simply global Grover search for
+`h(A_a)=h(B_b)` and `P(a,b)`, written in two stages.
+
+Random filters do not change this cancellation.  If a random seed accepts
+the planted pair with probability `p_1`, coherent search over `(seed,a)` has
+marked fraction `p_1/M` and costs `Theta(sqrt(M/p_1))`.  Searching jointly
+over `(seed,a,b)` costs `Theta(sqrt(N/p_1))`.  Since `p_1<=1`, on-the-fly
+filter evaluation alone cannot improve the square-root exponent.  Stored
+inverse buckets change the model, as would a new algebraic preimage
+enumerator.
+
+This distinction is exact for the ANN construction.  A filter-incidence bit
+is easy to compute: for a fixed Gaussian filter `g`,
+
+```text
+<g,A_a>
+```
+
+is a `q`-term trigonometric sum in `a`.  The preprocessing table instead
+materializes the inverse row `{a:<g,A_a> >= u}`.  In the spherical-filter
+analysis underlying the ANN tradeoff, the update cap has measure
+`M^(-1+o(1))`, so a row contains only `M^o(1)` orbit points on average.  The
+missing primitive is locating those rare indices, not evaluating membership.
+No output-sensitive inverse-row algorithm follows from the sparse
+trigonometric representation.  See the spherical-filter analysis of
+[Laarhoven](https://arxiv.org/abs/1511.07527).
+
+A simpler zero-threshold calculation also rules out interval compression as
+a general substitute.  For a standard Gaussian `g`, put
+
+```text
+X_a = <g,A_a>,
+R = q^(-1)*sum_i cos(2*pi*Y_i/N).
+```
+
+The adjacent Gaussian pair `(X_a,X_(a+1))` has correlation `R`.  Uniform
+labels satisfy `Pr[|R|>0.1]<=2*exp(-q/200)`.  Conditional on the complementary
+event, an adjacent sign changes with probability at least
+`acos(0.1)/pi=0.468115...`.  If `C` counts changes along `0<=a<M`, then
+
+```text
+Pr_g[C >= 0.23*(M-1)]
+  >= (0.468115-0.23)/(1-0.23) > 0.309.
+```
+
+Thus even one random-hyperplane bucket needs `Omega(M)` consecutive-index
+runs with constant probability.  This last statement concerns zero-level
+hyperplanes, not the rare ALRW caps; it blocks only run/interval
+representations, not every possible symbolic inverse.
+
+There is an independent quantum-walk cancellation.  Consider the product
+of Johnson graphs `J(M,r) x J(L,s)`.  A fixed planted pair marks exactly the
+fraction
+
+```text
+epsilon = (r/M)*(s/L) = r*s/N
+```
+
+of subset pairs.  If markedness is checked by direct Grover search over the
+`r*s` resident pairs, its cost is `C=Theta(sqrt(r*s))`.  The
+[MNRS quantum-walk implementation](https://arxiv.org/abs/quant-ph/0608026)
+
+```text
+S + epsilon^(-1/2)*(delta^(-1/2)*U+C)
+```
+
+pays the checking contribution
+
+```text
+epsilon^(-1/2)*C = Theta(sqrt(N))
+```
+
+for every `r,s`.  A constant number of planted pairs changes only constants.
+Consequently, an unbalanced split or a direct Cartesian walk does not remove
+the square-root cost.  A faster walk needs a coherent dictionary with
+genuinely sub-Grover checking or new score algebra--precisely the resource
+hidden in the QRAM ANN table.
+
+These are exact barriers for rejection/amplification, inverse-row scanning,
+and direct-predicate product-walk implementations.  They are not an
+unrestricted lower bound for the random trigonometric instance.  A succinct
+algebraic bucket enumerator or a different non-black-box walk remains open.
 
 There is, however, a rigorous barrier for the broad subclass of algorithms
 that access these examples only through statistical queries.  Let
@@ -5942,21 +6052,141 @@ the random variable `B*Z` is this ratio minus one, so its coefficient of
 variation is at least `N^(0.00365866+o(1))`.  This is much larger than the
 apparent `N^0.0005365` saving below `sqrt(N)`.
 
-Even under the optimistic counterfactual that independent replicas of this
-four-list statistic were freely available, the raw second-moment accounting
-has formal cost exponent
+This inflation is not repaired by a fixed data-independent linear weighting
+of the path family.  The direct overlap proof starts with nonnegative weights.
+Put `b=3*n` and let
 
 ```text
-min_p [a+max(F(p),2*beta-m)]
-  = 0.502611585079... > 1/2.
+Omega_(b,r) = {z in {0,+1,-1}^b : |supp(z)|=r},
+Omega = Omega_(b,r)^4,
 ```
+
+and first assign deterministic weights `w_z>=0`, independent of `(d,Y,S)`.
+Let
+`A_z` be the same two low-bit filters and final half-turn condition, and put
+
+```text
+Z_w = sum_(z in Omega) w_z*1[A_z]*product_(i in supp(z)) S_i,
+W = sum_z w_z.
+```
+
+When `K*2^t=o(N)`, the two orientations `z,-z` give
+
+```text
+E[B*Z_w] = 2^(1-t)*W/(K*N)*(1+o(1)).
+```
+
+Define the overlap kernel
+
+```text
+K_ov(z,z') = 4^|supp(z) intersect supp(z')|
+```
+
+when the two orientations agree on every shared coordinate, and set it to
+zero otherwise.  Its one-coordinate matrix, indexed by `0,+1,-1`, is
+
+```text
+[[1,1,1],
+ [1,4,0],
+ [1,0,4]].
+```
+
+The eigenvalues are `4,(5+sqrt(17))/2,(5-sqrt(17))/2`, so the matrix is
+positive semidefinite.  The fixed-weight kernel is its principal tensor
+submatrix.  Signed-coordinate flips and coordinate permutations within each
+block act transitively, and its normalized constant row sum is `G^4`.
+Consequently
+
+```text
+w^T*K_ov*w >= G^4*W^2.
+```
+
+Compatible path pairs supply the same automatic zero relation, while their
+joint filter probability is at least `1/(K^2*N^2)`; coincident filter forms
+only increase it.  On the diagonal the empty symmetric difference has one
+zero word rather than a distinct `+/-` pair, but
+`Pr[A_z]=1/(K*N)` more than compensates for that factor when `K*N>=2`.
+Therefore
+
+```text
+E[Z_w^2]/E[B*Z_w]^2 >= G^4*(1-o(1))/2
+                            = N^(F(p)+o(1))/2.
+```
+
+Zero weights include arbitrary fixed support/orientation sublists,
+constant-intersection codes, and designs.  The conclusion also holds
+seed-by-seed for random nonnegative thinning chosen independently of the
+data.
+
+In fact, ensemble symmetry removes the nonnegative restriction.  Write
+`X_z=1[A_z]*product_(i in supp(z))S_i`, let `h=E[B*X]`, and let
+`C_path=E[X*X^T]`.  Coordinate permutations within each block and simultaneous
+sign flips of a template coordinate and its public label preserve the matched
+ensemble and all three filters.  They act transitively on `Omega`.  Therefore
+
+```text
+h = h_0*1,
+C_path*1 = lambda_0*1.
+```
+
+The matrix `C_path` is positive semidefinite.  For any fixed real weights,
+write `P_Omega=|Omega|` and `w=(W/P_Omega)*1+u`, where `u` is orthogonal to
+`1`.  Then
+
+```text
+w^T*C_path*w
+  = lambda_0*W^2/P_Omega+u^T*C_path*u
+  >= lambda_0*W^2/P_Omega.
+```
+
+Since `E[B*Z_w]=h_0*W`, the relative second moment is no smaller than that of
+the uniform weighting and hence obeys the same `G^4/2` lower bound.  If
+`W=0`, its ensemble parity signal is exactly zero.  Thus signed fixed weights
+and every data-independent random seed are covered as well.  At visibility
+`lambda`, the direct kernel calculation replaces `4^C` by
+`(4/lambda^2)^C`; paper-scale `lambda=1-o(1)` changes only the `o(1)`
+exponent.  Data-dependent weights and nonlinear clipping or median
+postprocessing remain outside the theorem.  So do mixtures of different
+support degrees and filter randomizations that change `A_z` instead of merely
+weighting the fixed orbit.
+
+The formal linear-whitening repair is circular.  Conditional on the public
+labels, its parity-contrast vector and parity-averaged monomial Gram matrix
+are exactly
+
+```text
+h_T = 2^(-|T|)*R_T(H),
+Gamma_(T,U) = 2^(-|T triangle U|)*R_(T triangle U)(0).
+```
+
+Optimal whitening uses `Gamma^dagger*h`, so forming either object requires
+the same half-turn and zero signed-subset coefficients.  Centering under an
+iid Rademacher reference instead makes the wrong distribution orthogonal;
+centering under the matched product law needs the hidden secret.  This is a
+circularity observation, not a lower bound on nonlinear whitening.
+
+The list-size and low-bit modulus can also be retuned within this class.  If
+the per-block sublist exponent is `a'` and `K=N^(k+o(1))`, the expected pass
+cost exponent is `max(a',2*a'-k)` and the retained-path exponent is
+`m'=4*a'-k-1`.  Optimizing the optimistic raw-repeat cost over `k` and every
+`a'<=3*(H_2(p)+p)` returns the same cusp
+
+```text
+min_(p, 0<=a'<=3*(H_2(p)+p)) {
+  a'+max(F(p),1+2*beta(p)-3*a',0) }
+    = 0.502611585079....
+```
+
+The value `0.502611585079...` already assumes the optimistic counterfactual
+that independent replicas of this weighted statistic are freely available
+and that raw second-moment averaging suffices.
 
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
 not prove that `sign(Z)` fails, and it does not exclude clipping or different
-nonlinear aggregation.  The theorem only invalidates the independent-
-relation SNR argument for this precise Wagner aggregate; it is not a lower
-bound on generalized-birthday decoding.
+nonlinear aggregation.  The theorem rules out fixed data-independent linear
+weighting as a repair of this Wagner SNR calculation.  It is not a lower
+bound on data-adaptive or nonlinear generalized-birthday decoding.
 
 Directly Fourier transforming a polynomial-size classical sample table has
 the same limitation.  Any normalized amplitude state supported on `M` known
@@ -6364,9 +6594,10 @@ case before the final modulus, the visibility follows
 to beat `sqrt(N)`,
 but its overlap-induced zero relations make the parity-signal-normalized
 second moment at least `N^(0.0073173+o(1))`; even optimistic independent-
-replica raw-second-moment accounting has exponent `0.5026116`.  This rejects
-only that raw SNR proof; nonlinear generalized-birthday aggregation remains
-open.  The
+replica raw-second-moment accounting has exponent `0.5026116`.  On the fixed
+support-weight/filter orbit this rejects every data-independent real weighting
+as a repair of that SNR proof; data-adaptive and nonlinear generalized-birthday
+aggregation remains open.  The
 theorems still leave open circuits that exploit the internal Boolean modular
 arithmetic beyond the orbit algebra or compute the weighted ternary
 coefficient ratio by a new method.  In the noisy high-visibility regime, the
@@ -6378,7 +6609,9 @@ logarithmic-dimensional bichromatic nearest-neighbor formulation.  With
 ideal coherent-QRAM access to an ANN table,
 it yields a genuine `N^(23/49+o(1))` time--space bound and approaches
 `N^(7/15+epsilon+o(1))` for fixed `epsilon>0`; direct ordinary-gate QROM loses
-the exponent.  The
+the exponent.  Table-free rejection filters and direct-predicate Cartesian
+Johnson walks return to `sqrt(N)` unless inverse buckets or markedness have a
+new succinct implementation.  The
 grouped triangle envelope stays identical on `H/poly(n)` prefixes with high
 probability, and exact high-bit elimination can become Fourier-dense in one
 step.  These radix routes do not certify polynomial pruning, while scalar

@@ -160,7 +160,9 @@ QRAM access to a data-dependent ANN table,
 this gives a conditional `N^(23/49+o(1))` time--space algorithm and approaches
 `N^(7/15+epsilon+o(1))` for every fixed `epsilon>0`.  Direct ordinary-gate
 QROM compilation loses the exponent, so this is not an ordinary-circuit
-decoder.
+decoder.  Without a stored or algebraically invertible bucket index,
+table-free rejection and a direct-predicate Cartesian Johnson walk return to
+`sqrt(N)`.
 Its exact Bayesian
 decision under a uniform secret prior is the ratio of the zero and half-turn
 coefficients of a weighted
@@ -264,7 +266,10 @@ formally reaches runtime `N^0.499463`, but shared supports create automatic
 zero relations and make its parity-signal-normalized second moment at least
 `N^(0.0073173+o(1))`.  Even optimistic independent-replica averaging has
 formal raw-second-moment exponent `0.5026116`; this is a barrier for that SNR
-analysis, not a general birthday-decoding lower bound.  A
+analysis.  On this fixed support-weight/filter orbit, uniform weighting
+minimizes the ensemble ratio among all data-independent real linear weights,
+so thinning, signed reweighting, codes, and designs do not fix it.  Data-adaptive and
+nonlinear birthday decoders remain open.  A
 new Parseval
 argument makes one part rigorous: against the conventional adversarial
 `STAT` oracle, the uniform-secret average parity advantage of any adaptive

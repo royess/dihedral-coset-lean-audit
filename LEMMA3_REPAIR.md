@@ -666,7 +666,9 @@ neighbor.  Ideal coherent QRAM
 for a data-dependent ANN table then gives a conditional
 `N^(23/49+o(1))` time--space algorithm, approaching
 `N^(7/15+epsilon+o(1))` for fixed `epsilon>0`; ordinary-gate QROM does not
-preserve this exponent.  The exact Bayesian parity rule is the ratio of the
+preserve this exponent.  Without a stored bucket index or algebraic bucket
+inverter, table-free rejection and a direct-predicate Cartesian Johnson walk
+return to `sqrt(N)`.  The exact Bayesian parity rule is the ratio of the
 half-turn and zero coefficients of a weighted ternary subset-sum generating
 function under a uniform secret prior.  Coherent likelihood filtering
 prepares a useful posterior only
@@ -756,7 +758,10 @@ their visibility after `ell` levels is
 `N^0.499463` runtime, but shared-support zero relations make its parity-signal-
 normalized second moment at least `N^(0.0073173+o(1))`; optimistic
 independent-replica raw-second-moment accounting has exponent `0.5026116`.
-This is a route-specific SNR failure, not a generalized-birthday lower bound.
+On this fixed support-weight/filter orbit, uniform weighting minimizes the
+ensemble ratio among all data-independent real linear weights, so thinning,
+signed reweighting, codes, and designs do not repair it.  Data-adaptive and nonlinear
+generalized-birthday routes remain open.
 A
 normalized-Fourier/Parseval argument now proves that,
 against the conventional adversarial `STAT` oracle, every adaptive
