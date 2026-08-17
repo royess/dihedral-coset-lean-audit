@@ -176,11 +176,17 @@ multi-index importance sampling still needs `N^(4.303...-o(1))` or
 splits.  The unweighted, untruncated full-spectrum Fourier `L_2` certificate
 cannot prune.  The phase-averaged zero residue is amplified by
 `N^(0.78...+o(1))` to `N^(0.80...+o(1))` over a uniform energy share.  Even
-after adaptive exact retention, positive-diagonal global-Fourier weighted
-tails leave the whole interval tree unprunable when the retained-set exponent
-is below
-`0.3774...` or `0.3661...` at the two splits; non-diagonal phase cancellation
-remains open.  Rejection-based quantum tilting returns to `sqrt(M/k)`.
+after adaptive exact Fourier retention, positive-diagonal global-Fourier
+tails leave the whole interval tree unprunable below retained-set exponents
+`0.3774...` or
+`0.3661...`.  More generally, an adaptive `N^r`-dimensional subspace of
+orthonormal-family coherence `N^eta` and a non-diagonal ellipsoid of condition
+`N^chi` cannot prune an `N^sigma` interval when
+`r+sigma+2*eta+chi<R_*`, where
+`R_*=4*sqrt((1-rho)*gamma)-4*gamma`; the incoherent,
+well-conditioned whole-tree budgets are `0.4795...` and `0.4772...` at the two
+splits.  Localization or ill-conditioning remains open.  Rejection-based
+quantum tilting returns to `sqrt(M/k)`.
 Yet Kac--Rice gives
 only `M^o(1)` expected crossings and accepted indices, so the implicit
 partition-sum or sparse output-sensitive root locator remains the precise
@@ -302,21 +308,26 @@ degree-symmetric leading surrogate has an exact polynomial-size spectral
 optimizer.  Its diagonal confines the only possible sub-square-root interval
 to `0.02073134<p<0.02079354`.  An explicit hypergeometric-tail rank-two
 certificate gives `delta>0.000205` uniformly there and puts that entire window
-above `0.50020`, closing the named surrogate at the square-root scale;
-omitted covariance and exact-signal terms remain open.  The exact `{z,-z}`
-raw second-moment block makes the omitted correction indefinite, so no direct
-PSD promotion is possible before orientation quotienting; the radial exact
-problem is open.
+above `0.50020`, closing the named surrogate at the square-root scale.  The
+exact `{z,-z}` block makes direct PSD promotion fail before orientation
+quotienting.  After the quotient, exact filter classification gives
+`C_+>=(2-o(1))*S_+`, and extra half-turn signal is dual-norm negligible.  The
+bound therefore holds for the complete ensemble raw-second-moment problem
+with fixed data-independent orbit-constant weights; conditional,
+public-label-adaptive, and nonlinear performance remains open.
 Bucket-sum-only random rehash medians contain no information beyond the
 original path sum;
 a fixed positive pair-overlap law can still give either sign of prediction
 correlation.  A second-moment theorem gives `N^(0.280916...-o(1))` distinct
 span-clean local anti-majority marginals with high probability for every
 `0<lambda<=1`.  Their entire certified Fourier spectrum contributes only
-`N^(-0.108737...+o(1))` to any bounded predictor.  Positive-coefficient
-five-bit completions with the same local marginal realize either global sign,
-so these facts do not determine the Wagner sign; its outside odd spectrum
-remains uncontrolled.  A
+`N^(-0.108737...+o(1))` to any bounded predictor.  At visibility one, the
+typical full path layer has Wick fourth moment and contributes at least
+`(2/sqrt(3)-o(1))*2^(-t)*sqrt(M_path/2)=N^(-o(1))` before the outside
+spectrum is added.
+Nevertheless, the actual modular instance `N=16,Y=(1,2,3,5,6,7)` has Wagner
+correlation `lambda^2*(7*lambda^2-8)/32<0`; it is highly atypical and does not
+settle the random-instance sign.  A
 new Parseval
 argument makes one part rigorous: against the conventional adversarial
 `STAT` oracle, the uniform-secret average parity advantage of any adaptive

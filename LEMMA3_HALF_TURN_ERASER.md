@@ -122,11 +122,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   possible sub-square-root window to `0.02073134<p<0.02079354`.  An explicit
   hypergeometric-tail rank-two certificate gives the stronger uniform gain
   `delta>0.000205` and puts that entire window above `0.50020`, closing the
-  named surrogate at the square-root scale.  Omitted covariance and exact-
-  signal terms still prevent a full lower bound.  The exact `{z,-z}` block
-  makes the omitted correction explicitly indefinite, so a PSD promotion
-  fails before quotienting orientations; the radial exact problem remains
-  open.
+  named surrogate at the square-root scale.  The exact `{z,-z}` block makes
+  the omitted correction indefinite before quotienting orientations.  After
+  the quotient, exact filter classification and Gershgorin give
+  `C_+>=(2-o(1))*S_+`, while extra half-turn signal is dual-norm negligible.
+  Thus the same lower bound holds for the complete ensemble raw-second-moment
+  problem with fixed data-independent orbit-constant weights.  Conditional,
+  public-label-adaptive, and nonlinear sign performance remains open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -134,9 +136,15 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `N^(0.280916...-o(1))` distinct span-clean local anti-majority marginals
   with high probability for every `0<lambda<=1`.  Their entire certified
   Fourier spectrum contributes only `N^(-0.108737...+o(1))` to any bounded
-  predictor.  Exact positive-coefficient five-bit completions with the same
-  local marginal realize either full-sign correlation, so this is not a
-  full-path failure theorem; the outside odd spectrum remains uncontrolled.
+  predictor.  At visibility one, the typical full path layer has Wick fourth
+  moment and supplies
+  at least `(2/sqrt(3)-o(1))*2^(-t)*sqrt(M_path/2)=N^(-o(1))`
+  positive Wagner correlation before the outside spectrum is added.  Yet the
+  actual modular instance
+  `N=16,Y=(1,2,3,5,6,7)` has correlation
+  `lambda^2*(7*lambda^2-8)/32<0`, and abstract positive-coefficient
+  completions realize either sign.  The modular example is highly atypical;
+  neither result settles the random-instance Wagner sign.
   Direct importance sampling of the exact Bayesian coefficient ratio has
   relative variance `Theta(N)` once its posterior is sharp.  At `q=12*n`,
   for a nondegenerate secret, a Hellinger bound shows that the posterior is in
@@ -169,11 +177,17 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `O(exp(u^2))` at the two splits.  The unweighted, untruncated full-spectrum
   Fourier `L_2` bound cannot prune.  The phase-averaged zero
   residue is amplified by `N^(0.78...+o(1))` to `N^(0.80...+o(1))` over a
-  uniform energy share.  Even after adaptive exact retention, positive-
-  diagonal global-Fourier weighted tails cannot prune a leaf when the
-  retained-set exponent is below `0.5815...` or `0.5883...`, nor the whole
-  interval tree below `0.3774...` or `0.3661...`, at the two splits.
-  Non-diagonal phase cancellation remains open.
+  uniform energy share.  Even after adaptive exact Fourier retention,
+  positive-diagonal global-Fourier tails cannot prune the whole interval tree
+  below retained-set exponents `0.3774...` or `0.3661...`.  More generally, an
+  arbitrary
+  adaptive retained subspace of dimension `N^r`, orthonormal-family coherence
+  `N^eta`, and a non-diagonal tail ellipsoid of condition `N^chi` cannot prune
+  an interval of length `N^sigma` when `r+sigma+2*eta+chi<R_*`, where
+  `R_*=4*sqrt((1-rho)*gamma)-4*gamma`.  At `rho=2/5`, the incoherent
+  well-conditioned whole-tree budgets are `0.4795...` and `0.4772...` at the
+  two splits.  Translation-invariant ellipsoids are diagonal in the Fourier
+  basis; localized or ill-conditioned phase cancellation remains open.
   Rejection-based quantum tilting
   cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
   only
@@ -2624,10 +2638,121 @@ which gives `0.3774984207...` and `0.3661288923...` at the two splits.
 Taking fixed `rho` down toward `sqrt(ln(2)/6)` improves these limiting values
 to `0.4258939416...` and `0.4166295405...`.  This covers global-Fourier
 positive-diagonal Cauchy, equivalently diagonal-ellipsoidal, tail
-certificates, including phase-aware adaptive mode retention.  It does not
-cover non-diagonal quadratic certificates or control variates, correlated
-phase cancellation, a window-adapted transform, or a new implicit arithmetic
-oracle.
+certificates, including phase-aware adaptive mode retention.
+
+There is a resource-bounded extension to genuinely non-diagonal and
+window-adaptive ellipsoids.  Use the unnormalized time-domain inner product,
+put
+
+```text
+f_a = exp(u*X_a),       F = max_a f_a,       v_I = 1_I,
+```
+
+and grant each interval `I` any orthonormal family
+`psi_1,...,psi_k`.  The family, its dimension, and everything below may depend
+on the entire row and on `I`.  Let
+
+```text
+P = sum_j psi_j psi_j^*,       g = P*f,       h = (1-P)*f,
+c = P*v_I,                     d = (1-P)*v_I,
+mu = sqrt(N)*max_(j,a)|psi_j(a)|.
+```
+
+For any positive-definite Hermitian `Q` on `range(1-P)`, Cauchy gives the
+certified one-sided upper bound
+
+```text
+Z_I = Re(c^*g+d^*h) <= U_I,
+U_I = Re(c^*g)+R_Q,
+R_Q = sqrt(h^*Q*h)*sqrt(d^*Q^(-1)*d).
+```
+
+Suppose, for `s=|I|=N^(sigma+o(1))`, that
+
+```text
+k <= N^(r+o(1)),       mu <= N^(eta+o(1)),
+cond(Q) <= N^(chi+o(1)).
+```
+
+The projection estimates are pathwise:
+
+```text
+|(P*f)_(a_*)| <= mu*sqrt(k/N)*||f||,
+|c^*g| <= s*mu*sqrt(k/N)*||f||,
+||d||^2 >= s*(1-k*s*mu^2/N).
+```
+
+Here `a_*` is any maximizer of `f`.  On the same high-probability event as
+above,
+
+```text
+F >= N^(alpha-o(1)),       ||f|| <= N^(1/2+2*gamma+o(1)),
+alpha = 2*sqrt((1-rho)*gamma).
+```
+
+Spectral comparison also gives
+
+```text
+R_Q >= cond(Q)^(-1/2)*||h||*||d||.
+```
+
+Consequently, if
+
+```text
+r+sigma+2*eta+chi < R_*(rho,gamma),
+R_*(rho,gamma) = 4*sqrt((1-rho)*gamma)-4*gamma,
+```
+
+then the retained value at `a_*` is `o(F)`, `||d||^2=(1-o(1))*s`, and
+
+```text
+R_Q >= N^(alpha+sigma/2-chi/2-o(1)).
+```
+
+The exponent of this radius exceeds both the retained-center exponent and
+the threshold exponent `2*gamma`.  Therefore `U_I>exp(u^2)` and `I` cannot be
+pruned.  This conclusion is uniform over all adaptive choices satisfying the
+three resource bounds.
+
+For every interval in a row of length `M=N^gamma`, it is enough that
+
+```text
+r+2*eta+chi < R_*(rho,gamma)-gamma.
+```
+
+At `rho=2/5`, the leaf budgets `R_*` are `0.5815800533...` and
+`0.5883511145...`, while the whole-tree budgets are `0.4795392370...` and
+`0.4772400034...` at the two splits.  As fixed `rho` decreases toward
+`sqrt(ln(2)/6)`, the limiting whole-tree budgets become `0.5279347579...` and
+`0.5277406516...`.
+
+The resource qualifications are necessary.  A unit vector supported on
+`L=N^sigma` coordinates has `mu>=sqrt(N/L)`, so genuine localization pays
+`2*eta>=1-sigma` and escapes the displayed condition because `R_*<1`.
+Likewise, unrestricted conditioning collapses the certificate to exact
+evaluation.  For `d!=0`, let `P_d=d*d^*/||d||^2` and
+
+```text
+Q_epsilon = P_d+epsilon*(1-P_d),       0<epsilon<=1.
+```
+
+Then `cond(Q_epsilon)=1/epsilon` and exactly
+
+```text
+R_(Q_epsilon)^2
+  = |d^*h|^2
+    +epsilon*(||d||^2*||h||^2-|d^*h|^2).
+```
+
+Thus `inf_(Q>0) R_Q=|d^*h|`; evaluating the first quadratic form already
+contains the exact residual target.  Finally, a Fourier-basis ellipsoid that
+is invariant under every physical cyclic translation is necessarily
+diagonal: invariance under
+`U_b=diag(exp(2*pi*i*r*b/N))` forces every off-diagonal entry of `Q` to vanish.
+The earlier diagonal theorem therefore exhausts translation-invariant
+ellipsoids.  What remains open is a succinct localized or ill-conditioned
+window-adapted construction, a correlated control variate, or a new implicit
+arithmetic oracle.
 
 The phase-averaged coefficient energy is not uniform across residues, so one
 cannot strengthen this observation by simply assigning `1/N` of the energy
@@ -7359,6 +7484,153 @@ Thus outside paths carry `1-o(1)` of the uniform `L_2` energy.  This still
 does not compare signs: without a small-ball estimate, a small quadratic
 component can change `sign(Z)` on a large set.
 
+The uniform-Walsh fourth moment of the full retained path layer is nevertheless
+Gaussian to leading order.  Put `M=|V|=M_path/2`.  Exactly,
+
+```text
+E_U[Z^2] = 4*M,
+E_U[Z^4] = 16*E_add(V),
+```
+
+where `E_add(V)` counts ordered quadruples satisfying
+`T_1 triangle T_2 triangle T_3 triangle T_4=empty`.  The nontrivial part is
+to show that only the three pairings contribute on the `M^2` scale.
+
+For four oriented paths, let `L` and `R` be their first- and second-half path
+matrices.  Put `R_L=ker_Q(L^T)` and `R_R=ker_Q(R^T)`, with dimensions `h`
+and `g`.  If the saturated common integer relation lattice contains a vector
+whose coordinate sum is odd, the joint target event is empty.  Otherwise put
+`c_rel=dim_Q(R_L intersect R_R)`.  The joint filter probability obeys
+
+```text
+Pr[all four retained]
+  <= O(1)*(K*N)^(-4)*K^(h+g-c_rel)*N^c_rel.
+```
+
+Full-rational-rank but mod-two-singular matrices change only the constant
+Smith index.  Under the even-support condition, the per-coordinate maximum
+signed-type entropies are
+
+```text
+deficiency       0              1              2              3
+entropy       0.439772227223  0.398275541393  0.332975634051  0.166487817025
+```
+
+These values also have a short analytic certificate.  Put
+`x_4=y`, `x_2=2*(p-y)`, and `x_0=1-2*p+y`, and let `Ent_3` denote ternary
+Shannon entropy.  Then
+
+```text
+e_0 = max_(0<=y<=p) Ent_3(x_0,x_2,y)+x_2*log_2(24)+y*log_2(16),
+e_1 = max_(0<=y<=p) Ent_3(x_0,x_2,y)+x_2*log_2(12)+y*log_2(6),
+e_2 = 2*(H_2(p)+p),
+e_3 = H_2(p)+p.
+```
+
+The first two stationary points respectively satisfy
+
+```text
+(p-y_0)^2 = 9*y_0*(1-2*p+y_0),
+(p-y_1)^2 = 6*y_1*(1-2*p+y_1).
+```
+
+The finite enumeration certificate behind the choice of these four maxima is
+
+```text
+deficiency  candidates  maximizing candidates              next feasible
+1           104         8 additive signed hyperplanes       <= 0.353741899
+2            98        12 signed support-pairing planes      <= 0.187254082
+3            20         8 full-support signed lines          none
+```
+
+Here is an unambiguous reconstruction of the certificate.  Enumerate the 41
+vectors in `{-1,0,1}^4` with even support.  For every independent triple,
+form its primitive cofactor normal, canonicalize its sign, and deduplicate
+the induced zero set.  This gives the 104 hyperplanes.  For every independent
+pair, form its six primitive Pluecker coordinates, canonicalize their sign,
+and deduplicate the induced rational span, giving the 98 planes.  Primitive
+nonzero column directions give the 20 lines.  For each induced column set,
+maximize Shannon entropy subject to total mass one and the four support
+marginals all equal to `p`.  The KKT exponential-family equations reduce the
+maximizing symmetry classes to the formulas above; outward-rounded interval
+evaluation of the remaining candidates gives the displayed next-feasible
+bounds.
+
+The deficiency-zero row comes from the 41 even-support ternary columns.  The
+deficiency-one maximum is an additive hyperplane
+`+/-z_1+/-z_2+/-z_3+/-z_4=0`.  At deficiency two, the maximum occurs only at
+signed versions of the three support pairings; every other feasible plane has
+entropy at most `0.187254081743...`.
+
+Writing these four entropies as `e_h`, the exponent of one rank class is
+
+```text
+Phi(h,g,c_rel)
+  = 6*(e_h+e_g)-4*(a+1)+a*(h+g-c_rel)+c_rel.
+```
+
+Only `(h,g,c_rel)=(2,2,2)` with the same signed pairing plane on both halves
+reaches
+
+```text
+2*m = 0.996780706455....
+```
+
+The all-equal `(3,3,3)` class is only diagonal.  After removing the three
+pairings, the largest remaining upper exponent is
+
+```text
+Phi(2,3,2) = 0.497317255379....
+```
+
+Markov's inequality, the existing concentration of `M_path`, and the global
+two-orientation event therefore give, with high probability,
+
+```text
+E_add(V) = 3*M^2-2*M+o(M^2),
+E_U[Z^4] = (3+o(1))*E_U[Z^2]^2.
+```
+
+Interpolation and Paley--Zygmund now yield the genuine uniform-Walsh bounds
+
+```text
+E_U|Z| >= (2/sqrt(3)-o(1))*sqrt(M),
+
+Pr_U[|Z| >= u*2*sqrt(M)]
+  >= (1-u^2)^2/(3+o(1)),       0<=u<1.
+```
+
+For `c=(lambda/2)^t`, the selected degree-`t` likelihood spectrum is `c*Z`.
+At visibility one and `m=2*beta`, its positive contribution to the Wagner
+correlation is therefore at least
+
+```text
+c*E_U|Z| >= (2/sqrt(3)-o(1))*2^(-t)*sqrt(M) = N^(-o(1)).
+```
+
+With the literal Stirling factors this is inverse-polynomial, approximately
+`n^(-1)` when `K` is normalized as `N^a`, or `n^(-3/4)` when `K` is chosen
+comparable to the actual list size.  Define the negative outside-spectrum
+mass
+
+```text
+N_-(Y)
+  = sum_(T notin V) (lambda/2)^|T|*R_T(H)
+      *(-widehat(sign Z)(T))_+.
+```
+
+Then the exact one-sided criterion is
+
+```text
+E[B*sign(Z) | Y]
+  >= (2/sqrt(3)-o(1))*c*sqrt(M)-N_-(Y).
+```
+
+Only masks in the binary span of `V`, with the required block-parity
+character, can enter `N_-`.  This theorem concerns the uniform Walsh measure,
+not the earlier `A_0`-tilted overlap covariance.  It controls the selected
+positive term but still does not bound the residual negative spectrum.
+
 At visibility one, the existing Hellinger theorem supplies a precise
 compensation result for the Bayes sign, not for the Wagner sign.  Using only
 `6*n` observations gives average conditional parity error
@@ -7414,6 +7686,88 @@ marginal admit either full-sign correlation.  This is an exact likelihood
 counterexample, not a claim that both completions arise from the modular
 instance.  It proves that positivity and local reversals alone cannot imply
 a global MLR rule; the outside odd spectrum must be controlled.
+
+There is also a small actual modular instance with negative Wagner
+correlation.  Take
+
+```text
+N = 16,       Y = (1,2,3,5,6,7).
+```
+
+Indexing the six coordinates by `1,...,6`, the complete exact-weight-four
+half-turn support family is
+
+```text
+T_1=1235,       T_2=1245,       T_3=1346,
+T_4=2356,       T_5=2456,
+```
+
+and `R_(T_j)(8)=2` for every `j`.  Put
+
+```text
+Z = 2*sum_(j=1)^5 chi_(T_j).
+```
+
+It has no ties, and direct Walsh expansion gives
+
+```text
+sign(Z)
+  = -1/4-(chi_34+chi_16)/4
+    +(chi_1235+chi_1245+3*chi_1346
+      +chi_2356+chi_2456)/4.
+```
+
+The actual modular likelihood coefficient is `lambda^2/2` on `chi_34` and
+`chi_16`, and `lambda^4/8` on every selected path.  Therefore
+
+```text
+E[B*sign(Z) | Y]
+  = lambda^2*(7*lambda^2-8)/32 < 0,       0<lambda<=1.
+```
+
+At visibility one the Wagner success probability is `31/64`, while exact
+Bayes correlation and success are
+
+```text
+E_U|A_H| = 89/128,       P_Bayes = 217/256.
+```
+
+For completeness, the full visibility-one half-turn polynomial is
+
+```text
+32*A_H
+  = 16*(chi_34+chi_25+chi_16)
+    +8*(chi_124+chi_135+chi_345+chi_126+chi_236+chi_456)
+    +4*(chi_1235+chi_1245+chi_1346+chi_2356+chi_2456
+       +chi_12346+chi_13456)
+    +5*chi_123456.
+```
+
+The adverse terms are genuine modular three-path cancellations:
+
+```text
+chi_34 = chi_(T_1)*chi_(T_3)*chi_(T_4),
+chi_16 = chi_(T_1)*chi_(T_2)*chi_(T_3).
+```
+
+Scaling the six labels by `N/16` preserves all relation counts for every
+power of two `N>=16`.  There is also a balanced selected-subaggregate lift.
+Place the six scaled nonzero labels in the first block.  For any `r>=4`, add
+a common set of `r-4` zero-labeled coordinates there and `r` common
+zero-labeled coordinates in each other block.  Let `D` be the union of these
+added coordinates, so `|D|=4*r-4`.  The five lifted paths have exact block
+weight `r`, pass every power-of-two low filter `K` dividing `H`, and satisfy
+
+```text
+sign(Z') = chi_D*sign(Z),
+E[B*sign(Z') | Y]
+  = lambda^(4*r-4)*lambda^2*(7*lambda^2-8)/32 < 0.
+```
+
+This is a legal selected four-list subaggregate, not the canonical all-path
+sum.  Its public labels are extremely atypical.  The example rules out a
+deterministic modular positivity theorem, but it does not prove failure on
+random public labels.
 
 Generic Boolean hypercontractivity cannot fill the gap.  For a degree-`t`
 Walsh polynomial it gives
@@ -8160,17 +8514,179 @@ This cancellation also removes the signal: the negative direction is
 anti-invariant under `z -> -z`.  It is projected out by orbit-constant weights
 with `w_z=w_(-z)`, where the pair contributes positively.  The example is not
 an exact-statistic decoder or a radial counterexample.  After quotienting
-`{+/-z}`, a PSD domination theorem or a degree-symmetric cancellation remains
-open.
+`{+/-z}`, however, the complete ensemble Gram can be compared to the leading
+surrogate.
 
-Its scope is important.  `B` contains only the compatible leading
-automatic-zero component, and the formula assigns `q_0^2` to every generic
-distinct pair.  Dependent-filter pairs, additional zero relations, and
-extra half-turn orientations are excluded.  With signed weights, omitted
-covariances need not be a positive-semidefinite lower bound.  The reduction
-therefore proves the lower bound only for the named leading surrogate.  It
-neither constructs a full decoder nor proves a lower bound for the exact
-statistic; exact regularized whitening remains open.
+Write `N=K*M`, where `K` and `M` are even powers of two in the dangerous
+parameter interval, and put `q_0=1/(K*N)`.  Split a template as `z=(a,b)` over
+the first and last two blocks.  For two rows on one half, use four types:
+
+```text
+G    supports differ,
+E    supports agree but the rows are not +/- equal,
+L+   the rows are equal,
+L-   the rows are negatives.
+```
+
+The exact low-filter probabilities are `K^(-2)`, `2*K^(-2)`, `K^(-1)`, and
+`K^(-1)`, respectively.  In type `G` there is a unit `2 by 2` minor.  In type
+`E` the Smith form is `diag(1,2)`; because `K` is even, the two values after
+division by `K` are still independent and uniform on `Z_M`.  Combining the
+two halves with the final conditions gives
+
+```text
+pair type        GG       GE       EE       GL       EL
+J/q_0^2           1        2        4        K       2*K.
+```
+
+If both halves have type `L`, the same-sign case is one `{+/-z}` orbit and
+has `J=q_0`; the opposite half-flip has
+
+```text
+J = 2/N^2 = 2*K^2*q_0^2.
+```
+
+Thus every two-template retention probability is at least `q_0^2`.
+
+Let `S` be the oriented leading surrogate: its diagonal is `q_0`, and a
+compatible off-diagonal pair has entry
+
+```text
+2*q_0^2*k_lambda(z,z'),
+k_lambda(z,z') = (lambda/2)^|T_z triangle T_z'|.
+```
+
+The compatible kernel is PSD because its one-coordinate matrix is
+
+```text
+[[1,lambda/2,lambda/2],
+ [lambda/2,1,0],
+ [lambda/2,0,1]].
+```
+
+Consequently,
+
+```text
+S >= (q_0-2*q_0^2)*I.
+```
+
+Compress the exact Gram `C` and `S` with normalized orbit vectors
+`e_[z]=(e_z+e_(-z))/sqrt(2)`, obtaining `C_+` and `S_+`.  On the diagonal,
+the exact `{z,-z}` block gives `2*q_0=2*S_+`.  For different orbits, the
+automatic relations are `+/-(z-z')` when the common coordinates agree,
+`+/-(z+z')` when they disagree everywhere, and both pairs when the supports
+are disjoint.  At generic joint probability `q_0^2`, their compressed
+contribution is exactly `2*S_+`.  The filter table can only increase that
+probability, while every other zero-relation count is nonnegative.  Hence
+
+```text
+C_+ = 2*S_+ + Delta,
+```
+
+where `Delta` has zero diagonal and entrywise nonnegative off-diagonal
+entries.  It need not be PSD.
+
+Its negative spectrum is nevertheless small.  Let each block cutoff list
+have size `A=N^(a+o(1))`, let the maximum full support be `beta*n`, and write
+`K=N^(k+o(1))`.  A fixed half-template has `A^2` arbitrary partners, at most
+`N^(beta/2+o(1))` same-support partners, and only two type-`L` partners.
+
+For a `GG` pair, the two unit minors parameterize the retained labels by two
+kernel variables and two uniform quotient variables.  Any nonautomatic
+ternary zero form has conditional atom at most `4*K/N`: if it survives on a
+kernel, its image has at least `N/4` elements; if it survives only on the
+quotients, its image has at least `M/4` elements.  If it vanishes identically,
+coefficient comparison leaves only the automatic projective relations above.
+After the factor `2^(-|D|)` and the sum over all orientations, the extra
+contribution of one `GG` pair is at most `4*q_0^2*K/N`.
+
+If `r_Delta` is the maximum row sum of `Delta`, the six pair classes give
+
+```text
+r_Delta/q_0
+  <= N^(2*a-1+o(1))
+     +N^(4*a-2+o(1))
+     +N^(2*a+beta/2-1-k+o(1))
+     +N^(beta-1-k+o(1))
+     +N^(beta/2-1+o(1))
+     +N^(k-1+o(1)).
+```
+
+These terms come from `GL`, extra `GG`, `GE`, `EE`, `EL`, and opposite `LL`,
+respectively.  If
+
+```text
+max(a,2*a-k) <= 1/2-epsilon,       k+beta<1,
+```
+
+then every exponent is negative and `r_Delta=o(q_0)`.  Gershgorin and the
+surrogate diagonal floor therefore imply
+
+```text
+C_+ >= 2*S_+-r_Delta*I >= (2-o(1))*S_+.
+```
+
+At the near-miss center `a=k=0.4994634510817...`, the leading correction is
+
+```text
+r_Delta/q_0 = N^(-0.001073097836...+o(1));
+```
+
+the extra-`GG` term has exponent `-0.002146195673...`.
+
+Extra half-turn orientations do not repair a large signed whitening vector.
+The exact and leading signals satisfy
+
+```text
+h_z = (lambda/2)^t
+        *sum_eta Pr[Ret(z),eta dot Y=H],
+(h_0)_z = 2*q_0*(lambda/2)^t,
+0 <= e_z:=h_z-(h_0)_z <= 2*lambda^t*q_0*K/N.
+```
+
+The last atom bound follows from the same unit-pivot parameterization.  Over
+all `A^4=N^(4*a+o(1))` oriented cutoff templates,
+
+```text
+||e_+||_(S_+^(-1))^2 <= N^(4*a+k-3+o(1)).
+```
+
+The top exact-degree uniform weight gives
+
+```text
+||h_(0,+)||_(S_+^(-1))^2 >= N^(-R_0+o(1)),
+R_0 = max{F(p),D(p,k),0},
+D = 1+k+2*beta-4*a.
+```
+
+In the only dangerous `p` interval, `delta_e=3-4*a-k` obeys
+
+```text
+delta_e-D = 2*(1-k-beta)>0,
+delta_e > 0.249 > F(p).
+```
+
+Thus `e_+` is `o(1)` relative to the leading signal in the dual norm.
+Inverse-matrix order and the triangle inequality finally give
+
+```text
+R_(exact,min)
+  = 1/(h_+^T*C_+^(-1)*h_+)
+  >= (2-o(1))*R_(sur,min).
+```
+
+At the center, the extra-signal dual exponent is
+`4*a+k-3=-0.50268274459...`.  Combining this comparison with the preceding
+fractional-moment theorem promotes the square-root lower bound from the named
+leading surrogate to the complete ensemble raw-second-moment problem for
+fixed data-independent orbit-constant weights.
+
+The ensemble and linear scopes remain essential.  The statement averages
+over random `Y` and parity-averaged signs; it is exact at `lambda=1`, while
+`lambda=1-o(1)` preserves the exponents.  It includes all dependent-filter
+pairs, zero relations, and extra half-turn orientations, but it does not give
+a conditional-on-`Y` Loewner bound, cover `Y`-adaptive signed whitening,
+change the retention rule, or decide nonlinear sign and tail performance.
 
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
@@ -8599,10 +9115,12 @@ optimizer.  Its diagonal confines the only possible sub-square-root window
 to `0.02073134<p<0.02079354`.  An explicit hypergeometric-tail rank-two
 certificate gives `delta>0.000205` uniformly there and raises that entire
 window above `0.50020`, closing the named surrogate at the square-root scale.
-Omitted covariances and extra half-turn orientations leave the full statistic
-open.  The exact `{z,-z}` raw second-moment block makes the omitted correction
-indefinite, ruling out a direct PSD promotion before orientation quotienting.
-The radial exact problem remains open.
+The exact `{z,-z}` block makes direct PSD promotion fail before orientation
+quotienting.  After the quotient, exact filter classification gives
+`C_+>=(2-o(1))*S_+`, and extra half-turn signal is dual-norm negligible.  The
+same bound therefore holds for the complete ensemble raw-second-moment
+problem with fixed data-independent orbit-constant weights.  Conditional,
+public-label-adaptive, and nonlinear sign performance remains open.
 Bucket-sum-only rehash medians are only margin
 transforms of the same path sum, while a positive three-character likelihood
 model shows that fixed
@@ -8610,10 +9128,13 @@ pair overlap and linear signal can coexist with either prediction sign.
 Actual near-miss modular triples go farther: they have
 `N^(0.280916...-o(1))` distinct span-clean local anti-majority marginals with
 high probability.  Their whole certified Fourier spectrum contributes only
-`N^(-0.108737...+o(1))` to any bounded predictor.  Exact positive-coefficient
-five-bit completions with the same local marginal realize either global
-prediction sign.  This is not a failure theorem for the full path sum; the
-outside odd spectrum remains uncontrolled.
+`N^(-0.108737...+o(1))` to any bounded predictor.  At visibility one, the
+typical full path layer has Wick fourth moment and contributes at least
+`(2/sqrt(3)-o(1))*2^(-t)*sqrt(M_path/2)=N^(-o(1))` before its outside
+spectrum.  Yet the
+actual modular instance `N=16,Y=(1,2,3,5,6,7)` has correlation
+`lambda^2*(7*lambda^2-8)/32<0`.  It is highly atypical, so the random-instance
+Wagner sign remains uncontrolled.
 The
 theorems still leave open circuits that exploit the internal Boolean modular
 arithmetic beyond the orbit algebra or compute the weighted ternary
@@ -8640,10 +9161,16 @@ On a low block, optimal iid unbiased single-multi-index importance sampling
 needs `N^(4.303...-o(1))` or `N^(4.472...-o(1))` samples to reach the
 pruning-scale additive RMSE.  The unweighted, untruncated full-spectrum
 Fourier `L_2` bound cannot prune, and the phase-averaged energy is not
-uniformly spread.  Even after adaptive exact mode retention, positive-
-diagonal global-Fourier tails leave every tree node unprunable when the
-retained-set exponent is below `0.3774...` or `0.3661...` at the two splits;
-non-diagonal cancellation remains open.  Rejection-based quantum tilting
+uniformly spread.  Even after adaptive exact Fourier retention, positive-
+diagonal global-Fourier tails leave every tree node unprunable below retained-
+set exponents `0.3774...` or `0.3661...`.  For an arbitrary adaptive
+`N^r`-dimensional
+retained subspace of orthonormal-family coherence `N^eta` and a non-diagonal
+ellipsoid of condition `N^chi`, the broader barrier is
+`r+sigma+2*eta+chi<R_*`, where
+`R_*=4*sqrt((1-rho)*gamma)-4*gamma`; its incoherent, well-conditioned budgets
+are `0.4795...` and `0.4772...`.  Localization or ill-conditioning remains
+open.  Rejection-based quantum tilting
 returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
 only `M^o(1)` expected rare-cap crossings and accepted indices, so the
 partition-sum oracle or output-sensitive threshold-root locator remains a
