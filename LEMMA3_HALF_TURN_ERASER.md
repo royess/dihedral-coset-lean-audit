@@ -123,17 +123,20 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   hypergeometric-tail rank-two certificate gives the stronger uniform gain
   `delta>0.000205` and puts that entire window above `0.50020`, closing the
   named surrogate at the square-root scale.  Omitted covariance and exact-
-  signal terms still prevent a full lower bound.
+  signal terms still prevent a full lower bound.  The exact `{z,-z}` block
+  makes the omitted correction explicitly indefinite, so a PSD promotion
+  fails before quotienting orientations; the radial exact problem remains
+  open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
   prediction correlation.  More sharply, a second-moment theorem gives
   `N^(0.280916...-o(1))` distinct span-clean local anti-majority marginals
-  with high probability for every `0<lambda<=1`.  They touch an exponentially
-  vanishing fraction of all paths, and even an independent-witness fiction
-  has signal-to-noise `N^(-0.108737...+o(1))`; this is not a full-path failure
-  theorem.  Residual odd half-turn clusters remain the precise nonlinear
-  obstacle.
+  with high probability for every `0<lambda<=1`.  Their entire certified
+  Fourier spectrum contributes only `N^(-0.108737...+o(1))` to any bounded
+  predictor.  Exact positive-coefficient five-bit completions with the same
+  local marginal realize either full-sign correlation, so this is not a
+  full-path failure theorem; the outside odd spectrum remains uncontrolled.
   Direct importance sampling of the exact Bayesian coefficient ratio has
   relative variance `Theta(N)` once its posterior is sharp.  At `q=12*n`,
   for a nondegenerate secret, a Hellinger bound shows that the posterior is in
@@ -166,7 +169,11 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `O(exp(u^2))` at the two splits.  The unweighted, untruncated full-spectrum
   Fourier `L_2` bound cannot prune.  The phase-averaged zero
   residue is amplified by `N^(0.78...+o(1))` to `N^(0.80...+o(1))` over a
-  uniform energy share, so weighted phase-aware tails remain open.
+  uniform energy share.  Even after adaptive exact retention, positive-
+  diagonal global-Fourier weighted tails cannot prune a leaf when the
+  retained-set exponent is below `0.5815...` or `0.5883...`, nor the whole
+  interval tree below `0.3774...` or `0.3661...`, at the two splits.
+  Non-diagonal phase cancellation remains open.
   Rejection-based quantum tilting
   cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
   only
@@ -2505,8 +2512,122 @@ sum_r |A_r|^2 = N^(-1)*sum_a exp(2*u*X_a) >= 1.
 The Cauchy certificate for a length-`s` interval is consequently at least
 `sqrt(N*s)`.  Both displayed split exponents have `gamma<1/4`, so even for a
 leaf this is larger than `exp(u^2)=N^(2*gamma+o(1))`.  This rules out only the
-untruncated, unweighted full-spectrum `L_2` bound.  A weighted tail bound or
-an algorithm that first evaluates selected phase cancellations remains open.
+untruncated, unweighted full-spectrum `L_2` bound.  In fact, arbitrary
+positive diagonal weights and a large adaptive set of exactly retained modes
+still do not suffice.
+
+Let `Pr[G>=u]=N^(-gamma)` and fix
+`rho>sqrt(ln(2)/6)`; `rho=2/5` is convenient.  Conditional on the public
+frequencies,
+
+```text
+Cov(X_a,X_(a+s))
+  = q^(-1)*sum_i cos(2*pi*s*Y_i/N).
+```
+
+Hoeffding and a union bound give
+
+```text
+Pr[max_(s!=0) Cov(X_0,X_s)>rho]
+  <= exp[-(6*rho^2-ln(2))*n].
+```
+
+On the complementary event, Slepian comparison with
+
+```text
+Z_a = sqrt(rho)*H_0+sqrt(1-rho)*G_a.
+```
+
+Here `H_0` and all `G_a` are independent standard normals.  Slepian's
+inequality then shows, with high probability over the Gaussian filter row,
+that
+
+```text
+max_a X_a >= [sqrt(1-rho)-o(1)]*sqrt(2*ln(N)).
+```
+
+Mills' estimate gives `u^2=2*gamma*ln(N)+O(ln ln N)`.  Therefore, if
+`F=max_a exp(u*X_a)`, then
+
+```text
+F >= N^(alpha-o(1)),
+alpha = 2*sqrt((1-rho)*gamma).
+```
+
+Parseval also gives
+
+```text
+||A||_2^2 = N^(-1)*sum_a exp(2*u*X_a),
+E[||A||_2^2 | Y] = exp(2*u^2).
+```
+
+Markov with a subexponential slack hence yields
+`||A||_2<=N^(2*gamma+o(1))` with high probability.
+
+Now let `S_I` be any data-dependent set of at most `N^r` exactly retained
+frequencies for an interval `I`, and assign arbitrary positive diagonal
+weights `w_r` to the remaining tail.  Its Cauchy radius is
+
+```text
+C_(S_I,w)(I)
+  = [sum_(r notin S_I) w_r*|A_r|^2]^(1/2)
+    *[sum_(r notin S_I) |D_I(r)|^2/w_r]^(1/2)
+  >= sum_(r notin S_I) |A_r|*|D_I(r)|.
+```
+
+The infimum over the weights is exactly the last weighted `l_1` tail.  For a
+fixed interval length `s`, `|D_I(r)|` is translation invariant.  Choose a
+translate `J` containing a maximizer of `exp(u*X_a)`.  It need not lie inside
+the searched row: it is used only to lower-bound the global-Fourier tail
+radius, whose Dirichlet magnitudes depend on interval length but not location.
+Positivity gives `Z_J>=F`, while Cauchy bounds the exactly retained
+contribution as
+
+```text
+B_s := s*sqrt(|S_I|)*||A||_2
+     <= N^(sigma+r/2+2*gamma+o(1)),
+|G_(S_I)(J)|, |G_(S_I)(I)| <= B_s,
+s <= N^sigma.
+```
+
+It follows pathwise, even though `S_I` and the weights may be chosen
+separately for each interval, that
+
+```text
+C_(S_I,w)(I) >= F-|G_(S_I)(J)|,
+Re G_(S_I)(I)+C_(S_I,w)(I) >= F-2*B_s.
+```
+
+Thus no absolute or one-sided diagonal-Cauchy certificate can prune an
+interval whenever
+
+```text
+sigma+r/2+2*gamma < alpha.
+```
+
+For a leaf this permits every
+
+```text
+r < r_leaf = 4*sqrt((1-rho)*gamma)-4*gamma.
+```
+
+At `rho=2/5`, `r_leaf` is `0.5815800533...` for `gamma=5/49` and
+`0.5883511145...` for `gamma=1/9`.  More strongly, all intervals in the
+searched row have `sigma<=gamma`.  Hence the entire interval tree is
+unprunable when
+
+```text
+r < r_all = 4*sqrt((1-rho)*gamma)-6*gamma,
+```
+
+which gives `0.3774984207...` and `0.3661288923...` at the two splits.
+Taking fixed `rho` down toward `sqrt(ln(2)/6)` improves these limiting values
+to `0.4258939416...` and `0.4166295405...`.  This covers global-Fourier
+positive-diagonal Cauchy, equivalently diagonal-ellipsoidal, tail
+certificates, including phase-aware adaptive mode retention.  It does not
+cover non-diagonal quadratic certificates or control variates, correlated
+phase cancellation, a window-adapted transform, or a new implicit arithmetic
+oracle.
 
 The phase-averaged coefficient energy is not uniform across residues, so one
 cannot strengthen this observation by simply assigning `1/N` of the energy
@@ -7178,43 +7299,121 @@ N^(0.280916143490...-o(1))
 
 distinct span-clean local anti-majority marginals with high probability.
 
-This still does not determine the sign of the full path sum.  The analogous
-two-path second moment gives the total number `M_path` of retained exact-`t`
-paths as
+The local spectrum is in fact too small to determine any bounded global
+predictor.  Let `X_cl` be the number of distinct clean spans, let
+
+```text
+c = (lambda/2)^t,       c_w = (lambda/2)^(t-2),
+```
+
+and let `C_cl` be the union of the four distinct Walsh characters
+`T_1,T_2,T_3,W` from every clean span.  By span-cleanliness, their exact
+half-turn likelihood coefficients are `2*c` and `2*c_w`, respectively.  A
+character shared by several spans is counted only once.  Therefore
+
+```text
+||P_(C_cl) A_H||_2^2 <= 4*X_cl*(3*c^2+c_w^2).
+```
+
+For every statistic `|f|<=1`, Parseval and the exact parity identity give
+
+```text
+|<P_(C_cl) A_H,f>_U|
+  <= 2*sqrt(X_cl)*sqrt(3*c^2+c_w^2)
+  = N^(-0.108737104871...+o(1))
+```
+
+at paper-scale visibility.  In particular,
+
+```text
+E[B*sign(Z) | Y]
+  = <P_(C_cl^perp) A_H,sign(Z)>_U
+    +O(N^(-0.108737104871...+o(1))).
+```
+
+This is a deterministic conditional statement on a clean public instance;
+it uses neither independence nor a tail estimate.  The whole certified local
+anti-majority spectrum is exponentially negligible for any bounded global
+predictor.
+
+The analogous two-path second moment gives the total number `M_path` of
+retained exact-`t` paths as
 
 ```text
 M_path = N^(m+o(1)) with high probability,
 m = 3*a-1 = 0.498390353227....
 ```
 
-The clean triples touch at most `3*X` path incidences, an exponentially
-vanishing fraction
+On the global two-orientation event, write
+`Z=2*sum_(T in V) chi_T`, where `|V|=M_path/2`.  The clean triples touch at
+most `3*X_cl` supports, so their exact uniform quadratic-energy fraction is
+at most
 
 ```text
-3*X/M_path <= N^(-0.217474209738+o(1)).
+||P_(V_cl)Z||_2^2/||Z||_2^2
+  <= 6*X_cl/M_path
+  = N^(-0.217474209738...+o(1)).
 ```
 
-At paper-scale visibility, one local correlation has magnitude
+Thus outside paths carry `1-o(1)` of the uniform `L_2` energy.  This still
+does not compare signs: without a small-ball estimate, a small quadratic
+component can change `sign(Z)` on a large set.
+
+At visibility one, the existing Hellinger theorem supplies a precise
+compensation result for the Bayes sign, not for the Wagner sign.  Using only
+`6*n` observations gives average conditional parity error
+`N^(-0.245112...+o(1))` for nondegenerate secrets.  Markov therefore gives,
+with high probability over the public instance,
 
 ```text
-c = (lambda/2)^t = N^(-beta+o(1)),
-beta = 12*p = 0.249195176616....
+C_Y := E_U|A_H| = 1-o(1).
 ```
 
-Even under the optimistic fiction that all `X` local witnesses were
-independent, their aggregate signal-to-noise ratio would be only
+Applying the spectral bound to `f_*=sign(A_H)` yields
 
 ```text
-c*sqrt(X)
-  = N^(-0.108737104871+o(1)).
+<P_(C_cl^perp) A_H,f_*>_U = 1-o(1).
 ```
 
-Locally `Pi_tau*Z=2*(U_1+U_2+U_3)`, but Walsh projection and sign do not
-commute.  The outside-span component and the remaining odd clusters can
-still determine `sign(Z)`.  The theorem therefore proves high-probability
-abundance of local anti-majority spans, not failure of the full-path sign.
-It rules out a global MLR argument based only on coefficient positivity and
-pair overlap.
+Outside likelihood relations therefore supply essentially all optimal Bayes
+correlation and compensate spectrally for the local reversals.  This does not
+say that outside exact-`t` Wagner paths make `sign(Z)` correct.
+
+There is also an exact finite completion showing that the same local reversal
+is compatible with either global prediction sign.  Let `x_1,...,x_5` be
+independent Walsh characters, put `Z_5=sum_i x_i`, and choose `0<a<=1/27`.
+Both experiments use `A_0=1` and the same positive path statistic.  Define
+
+```text
+A_H^(+) = a*sum_(i=1)^5 x_i+4*a*x_1*x_2*x_3,
+A_H^(-) = A_H^(+)
+  +2*a*sum_(J subset [5], |J|=3, J!={1,2,3}) product_(j in J)x_j.
+```
+
+The coefficient `l_1` norm is at most one, so
+`Pr[x | B=b]=2^(-5)*(1+b*A_H)` is valid, and every displayed odd Walsh
+coefficient is nonnegative.  The two laws have the identical local
+projection
+
+```text
+P_(span{x_1,x_2,x_3}) A_H
+  = a*(x_1+x_2+x_3)+4*a*x_1*x_2*x_3,
+E[B*Maj_3(x_1,x_2,x_3)] = -a/2.
+```
+
+Five-bit majority has singleton Fourier coefficient `3/8` and triple
+coefficient `-1/8`.  Consequently
+
+```text
+E_+[B*sign(Z_5)] = 11*a/8 > 0,
+E_-[B*sign(Z_5)] = -7*a/8 < 0.
+```
+
+Thus the same positive path sum and the same clean local anti-majority
+marginal admit either full-sign correlation.  This is an exact likelihood
+counterexample, not a claim that both completions arise from the modular
+instance.  It proves that positivity and local reversals alone cannot imply
+a global MLR rule; the outside odd spectrum must be controlled.
 
 Generic Boolean hypercontractivity cannot fill the gap.  For a degree-`t`
 Walsh polynomial it gives
@@ -7920,6 +8119,50 @@ hypergeometric fractional-moment certificate handles all of `I`.  Together
 they close the asymptotic sub-square-root window for the named regularized
 degree-symmetric leading surrogate.
 
+The leading surrogate cannot be promoted to the exact raw second-moment
+matrix by simply adding a positive-semidefinite correction.  For a retained
+oriented template `z`, let
+
+```text
+X_z = 1[Ret(z)]*product_(i in supp(z)) S_i,
+q_0 = Pr[Ret(z)] = 1/(K*N).
+```
+
+The low-filter equations are invariant under sign, and `-H=H mod N`.
+Therefore
+
+```text
+Ret(-z)=Ret(z),       supp(-z)=supp(z),       X_(-z)=X_z
+```
+
+pointwise.  The exact raw second-moment block on `{z,-z}` is
+
+```text
+q_0*[[1,1],[1,1]].
+```
+
+The compatible-orientation surrogate calls the two orientations
+incompatible because they disagree on every shared coordinate, so its block
+is `q_0*I_2`.  The omitted correction is
+
+```text
+q_0*[[0,1],[1,0]],
+```
+
+with eigenvalues `+/-q_0`.  The antisymmetric weight `(1,-1)` has exact
+variance zero, while the surrogate charges `2*q_0`.  More generally, the
+exact-minus-surrogate correction has zero diagonal, and every nonzero
+symmetric zero-diagonal matrix is indefinite.  Thus neither a direct Loewner
+comparison nor an `o(1)` universal Gershgorin sacrifice can justify the
+upgrade before quotienting duplicate orientations.
+
+This cancellation also removes the signal: the negative direction is
+anti-invariant under `z -> -z`.  It is projected out by orbit-constant weights
+with `w_z=w_(-z)`, where the pair contributes positively.  The example is not
+an exact-statistic decoder or a radial counterexample.  After quotienting
+`{+/-z}`, a PSD domination theorem or a degree-symmetric cancellation remains
+open.
+
 Its scope is important.  `B` contains only the compatible leading
 automatic-zero component, and the formula assigns `q_0^2` to every generic
 distinct pair.  Dependent-filter pairs, additional zero relations, and
@@ -8357,18 +8600,20 @@ to `0.02073134<p<0.02079354`.  An explicit hypergeometric-tail rank-two
 certificate gives `delta>0.000205` uniformly there and raises that entire
 window above `0.50020`, closing the named surrogate at the square-root scale.
 Omitted covariances and extra half-turn orientations leave the full statistic
-open.
+open.  The exact `{z,-z}` raw second-moment block makes the omitted correction
+indefinite, ruling out a direct PSD promotion before orientation quotienting.
+The radial exact problem remains open.
 Bucket-sum-only rehash medians are only margin
 transforms of the same path sum, while a positive three-character likelihood
 model shows that fixed
 pair overlap and linear signal can coexist with either prediction sign.
 Actual near-miss modular triples go farther: they have
 `N^(0.280916...-o(1))` distinct span-clean local anti-majority marginals with
-high probability.  They touch only an exponentially vanishing path fraction,
-and even an independent-witness fiction has
-`N^(-0.108737...+o(1))` signal-to-noise.  This is not a failure theorem for the
-full path sum.  A nonlinear theorem must therefore control or compensate the
-residual odd half-turn clusters.
+high probability.  Their whole certified Fourier spectrum contributes only
+`N^(-0.108737...+o(1))` to any bounded predictor.  Exact positive-coefficient
+five-bit completions with the same local marginal realize either global
+prediction sign.  This is not a failure theorem for the full path sum; the
+outside odd spectrum remains uncontrolled.
 The
 theorems still leave open circuits that exploit the internal Boolean modular
 arithmetic beyond the orbit algebra or compute the weighted ternary
@@ -8395,8 +8640,11 @@ On a low block, optimal iid unbiased single-multi-index importance sampling
 needs `N^(4.303...-o(1))` or `N^(4.472...-o(1))` samples to reach the
 pruning-scale additive RMSE.  The unweighted, untruncated full-spectrum
 Fourier `L_2` bound cannot prune, and the phase-averaged energy is not
-uniformly spread; weighted phase-aware tails remain open.  Rejection-based
-quantum tilting returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
+uniformly spread.  Even after adaptive exact mode retention, positive-
+diagonal global-Fourier tails leave every tree node unprunable when the
+retained-set exponent is below `0.3774...` or `0.3661...` at the two splits;
+non-diagonal cancellation remains open.  Rejection-based quantum tilting
+returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
 only `M^o(1)` expected rare-cap crossings and accepted indices, so the
 partition-sum oracle or output-sensitive threshold-root locator remains a
 sharply defined positive opening.  The
