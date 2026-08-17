@@ -55,6 +55,19 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   DP/trellis implementations scale exponentially in the total number of
   peeled modulus bits, however, and therefore expose only `O(log n)` bits at
   polynomial cost;
+- controlled phase-calibrated fixed-point amplification approximately
+  prepares or erases a specified
+  balanced fibre modulo `R` in `O(sqrt(R)*log(1/epsilon))` arithmetic-oracle
+  calls.  Combining a coarse DP chart modulo `B` with residual amplification
+  still costs `O*(sqrt(N*B))` ordinary gates; only an ideal preloaded QRAM
+  changes this to a nonstandard `O*(N^(1/3))` preprocessing/online
+  time--memory tradeoff, which remains exponential;
+- the ordinary-checksum branch is a polynomial-bond MPS for each fixed
+  secret, but this does not make its parity measurement a polynomial-bond
+  MPO.  After averaging even against odd secrets, the residual half-turn
+  kernel has `M=N/T` asymptotically flat operator-Schmidt sectors across a
+  balanced cut.  Constant-relative-Frobenius MPO approximation therefore
+  needs `Omega(M)` bond dimension on typical high-density branches;
 - after the triangular checksum chart, a final-half-turn matching whose logical moves
   have Hamming radius `w` covers at most `D_w/M` expected mass, where
   `D_w=sum_(j=1)^w choose(K,j)` and `M` is the residual modulus.  In particular,
@@ -102,7 +115,12 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   remain too loose to certify polynomial pruning, and every scalar polynomial
   in `G_J` below the displayed `Theta(n/log n)`
   threshold has exactly zero half-turn Fourier coefficient with high
-  probability.  At the same parameters,
+  probability.  A stronger natural group-moment/SOS relaxation also has a
+  rank-one pseudo-solution that aligns every observed factor in both parity
+  classes until the moment matrix is already exponential.  A sparse
+  circulant/QSVT filter can mark the two high-correlation modes efficiently,
+  but obtaining constant conditional mass there has postselection probability
+  only `O(q/N)` for the natural sparse-data state.  At the same parameters,
   in the matched passive model with a nondegenerate secret, ordinary
   absolute-weight sign reweighting has average-sign magnitude at most
   `N^(-4.06843+epsilon)` with high probability for every fixed
@@ -2048,6 +2066,169 @@ sum_(C_T(x)=C) omega_(N/T)^(d*B dot x)|x>
 where `zeta` is an `R_C`-th root.  This is a coherent sum of product vectors,
 not a classical mixture or a single product state.
 
+### A polynomial-bond checksum state still has an exponential-bond parity kernel
+
+The preceding MPS is small for each fixed secret, but the even-versus-odd
+mixture restores the residual modular constraint.  Put `M=N/T`, assume `M`
+is even, and write
+
+```text
+S_C = {x : A dot x=C},
+eta = |S_C|,
+h(x) = B dot x mod M,
+|psi_d> = eta^(-1/2) * sum_(x in S_C) omega_M^(d*h(x)) |x>.
+```
+
+The original secret average reduces to the uniform even or odd average modulo
+`M`.  If
+
+```text
+|u_s> = sum_(x in S_C : h(x)=s) |x>,
+```
+
+then the exact parity-difference operator is
+
+```text
+K_C = rho_0-rho_1
+    = (2/eta) * sum_(s<M/2)
+        (|u_s><u_(s+M/2)| + |u_(s+M/2)><u_s|).
+```
+
+Thus its sign swaps the normalized residual half-turn fibres, and
+
+```text
+||K_C||_1 = (4/eta) * sum_(s<M/2)
+  sqrt(eta_s*eta_(s+M/2)).
+```
+
+This is exactly the original missing operation inside the checksum branch.
+The small bond of each `|psi_d>` has not removed it.
+
+There is also an exact cut decomposition.  Split the coordinates into left
+and right parts.  For left ordinary sums `p,q` and residual difference `r`,
+define
+
+```text
+L_(p,q,r) = sum_(u,v : A_L dot u=p, A_L dot v=q,
+                        B_L dot (u-v)=r) |u><v|,
+```
+
+and define `R_(p,q,r)` analogously.  Then
+
+```text
+K_C = (2/eta) * sum_(p,q,r)
+  L_(p,q,r) tensor R_(C-p,C-q,M/2-r).
+```
+
+Different triples have disjoint matrix-entry supports on both sides, so after
+normalizing nonzero factors this is already an operator-Schmidt
+decomposition.  If `ell_(p,q,r)=||L_(p,q,r)||_F^2` and `rr` is the analogous
+right count, its exact Schmidt coefficients are
+
+```text
+sigma_(p,q,r) = (2/eta) *
+  sqrt(ell_(p,q,r)*rr_(C-p,C-q,M/2-r)).
+```
+
+The random high quotients make these coefficients flat in `r`.  A useful
+estimate behind that statement is the following.  For fixed Boolean sets
+`X,Y`, iid-uniform coefficients in `Z_M`, and
+
+```text
+Z_r = |{(x,y) in X cross Y : B dot (x-y)=r}|,
+```
+
+character Parseval and a fourth-moment count give
+
+```text
+E_B sum_r |Z_r-|X|*|Y|/M|^2
+  <= |X|*|Y|*min(|X|,|Y|).
+```
+
+Hence, when both sets have size at least `S`, simultaneous relative
+`epsilon`-flatness fails with probability at most
+
+```text
+M^2/(epsilon^2*S).
+```
+
+For a balanced split of `q=12*n`, `T=poly(n)`, and a Born-typical ordinary
+checksum, all but negligible branch weight lies on half-checksum slices of
+size `2^(6*n)/poly(n)`.  The last bound can therefore be unioned over the
+`poly(n)` bulk low-checksum pairs while `M^2<=2^(2*n)`.  Applying the same
+threshold estimate and Markov to the exceptional slice pairs shows that their
+total squared-Schmidt mass is `o(1/M)`.  On the resulting event,
+
+```text
+||K_C||_F^2 = (4/M)*(1+o(1)),
+
+inf_(operator-Schmidt-rank(X)<=D)
+  ||K_C-X||_F^2/||K_C||_F^2
+    >= 1-D/M-o(1).
+```
+
+Thus constant-relative-Frobenius approximation needs
+`D=Omega(M)=2^(n-O(log n))`; the displayed squared-residual statement is used
+for `D<=M`.  This is a tensor-network obstruction, not a circuit lower bound:
+the residue needs only `log M` qubits, and a different arithmetic circuit
+could in principle manipulate it without approximating `K_C` in Frobenius
+norm.
+
+### Coarse fibre synthesis gives a square-root and time--memory tradeoff
+
+Dynamic programming is not the fastest way to prepare one specified coarse
+fibre.  Starting from the uniform cube, compute `f_Y(x) mod R`, mark a target
+`t`, and use fixed-point amplitude amplification.  On the simultaneous
+fibre-flatness event the marked fraction is `(1+o(1))/R`, so controlled
+preparation, and its controlled inverse, use
+
+```text
+O(sqrt(R)*log(1/epsilon))
+```
+
+arithmetic-oracle calls.  Applying the same schedule to `t` and `t+R/2`
+aligns both branches with common uniform-cube garbage up to `epsilon` for a
+standalone modulus-`R` half-turn problem.  In the original modulus-`N`
+problem, the two full half-turn fibres have the same coarse residue modulo
+`B<N` and differ by `M/2` in the quotient, as in the hybrid below.  At `R=N`
+the direct construction recovers the existing `Theta(sqrt(N))` route rather
+than a polynomial decoder.  A heralded unknown-count sampler can be exact
+conditionally, but it is not a fixed reusable unitary with a clean inverse.
+The fixed-point response can be chosen real and nonnegative on the marked
+subspace, with the same phase schedule on both controls, so its inverse does
+not insert an uncontrolled relative branch phase.
+
+There is a more explicit hybrid.  Rank a common low-residue fibre modulo
+`B`, put `M=N/B`, and mark inside its rank interval the indices whose full
+quotient equals `u` or `u+M/2`.  Each set has fraction about `1/M`.  Inverting
+the corresponding fixed-point sampler maps both full fibres to the same
+uniform rank interval.  Without QRAM, however, every residual membership
+query in this hardwired-table realization uses the known coherent unrank and
+rerank circuit of size `O(poly(q)*B)`.  Its ordinary gate count is therefore
+
+```text
+O*(B*sqrt(N/B)) = O*(sqrt(N*B)),
+```
+
+Here `O*` suppresses factors polynomial in `q` and logarithmic in the target
+precision.  The expression is minimized at `B=1`.  With an ideal preloaded
+QRAM of `O*(B)` words, online lookup can be polylogarithmic and the online cost
+is `O*(sqrt(N/B))`.  Charging both preprocessing and online time gives the
+nonstandard optimum
+
+```text
+B=N^(1/3),       preprocessing + online time = O*(N^(1/3)).
+```
+
+This is a real exponential time--memory tradeoff, not a polynomial circuit.
+In a clean membership-oracle model without instance-dependent preprocessing
+or advice, the square-root dependence is tight even when all fibre sizes are
+exactly known: encode an unknown permutation by `f_pi(a,b)=pi(a)`.  A clean
+fibre synthesizer reveals `pi^(-1)(t)`, so it would invert a permutation and
+needs `Omega(sqrt(R))` oracle queries.  The argument does not lower-bound
+circuits that exploit the explicit modular arithmetic of the public labels,
+nor a bare two-outcome test with unspecified garbage.
+
 Neither chart iterates to a polynomial full decoder.  Refining the modular
 chart to total modulus `2^L` costs `O(poly(k)*2^L)` by the same residue DP.
 Successive ordinary digit sums accumulate a product trellis, while the
@@ -3558,6 +3739,129 @@ This is a scoped algebraic barrier.  It does not exclude branching,
 nonpolynomial arithmetic, or a new implicit optimizer for the sparse
 high-frequency score.
 
+The natural parity-constrained group-moment hierarchy has a stronger
+integrality gap.  Let
+
+```text
+Word_L = {sum_(nu<=ell) sign_nu*m_nu*e_(i_nu) :
+          ell<=L, sign_nu in {+1,-1}, 1<=m_nu<=J}.
+```
+
+Consider the event that no nonzero `a` in `Word_(4*L)` satisfies
+
+```text
+a dot Y = 0 or H mod N.
+```
+
+For parity sign `p` in `{+1,-1}`, put `phi_i=0` when `S_i=+1` and
+`phi_i=pi` when `S_i=-1`.  On this event the truncated moments
+
+```text
+y_(a dot Y+h*H) = exp(i*a dot phi)*p^h,
+a in Word_(2*L), h in {0,1},
+```
+
+are well defined.  The order-`L` group-moment matrix indexed by `Word_L` is
+the rank-one matrix `v*v^dagger`, it satisfies `y_H=p`, and it obeys all
+visible equal-frequency, conjugacy, and unit-character identities.  Thus both
+parity-constrained relaxations have a feasible pseudo-moment point that aligns
+every observed factor separately.  Its value per factor is
+
+```text
+-ln(1+rho^2)
+ +2*sum_(m<=J) (-1)^(m+1)*rho^m/m
+ = ln(1+lambda) + truncation remainder.
+```
+
+For a fixed nonzero coefficient vector, the probability of either forbidden
+residue is at most `8*L*J/N`.  A multiset count therefore gives
+
+```text
+Pr[pseudo-moment construction fails]
+ <= (8*L*J/N) * choose(2*q*J+4*L,4*L).
+```
+
+If `J=(ln n)^kappa` and `L=c*n/ln ln n`, the logarithmic exponent is
+
+```text
+(4*c*kappa-ln 2)*n+o(n).
+```
+
+Hence the pseudo-solution exists with high probability for
+`c<ln(2)/(4*kappa)`.  At the `kappa=3/2` truncation used above, any fixed
+`c<ln(2)/6` works, while the explicit moment index set already has size at
+least
+
+```text
+choose(q,L)*(2*J)^L = exp(kappa*c*n+o(n)).
+```
+
+In the high-visibility limit, for a nondegenerate secret whose phase order
+tends to infinity, score concentration and the Hellinger event make the true
+planted maximum `q*(1-ln 2)+o(q)`.  The pseudo-value is
+`q*ln 2+o(q)`, leaving the natural-log gap
+
+```text
+(2*ln 2-1)*q+o(q).
+```
+
+This rules out only the explicit natural word/frequency-sum moment hierarchy
+before it reaches exponential size.  It does not exclude an implicit
+compression, an SDP supplied with long arithmetic relations, or a different
+lift.
+
+There is also an efficient spectral filter that makes the normalization
+obstruction especially transparent.  Let `Shift` denote cyclic translation
+on `Z_N` and define the known sparse circulant
+
+```text
+Corr = (1/2) * sum_i S_i*(Shift^(Y_i)+Shift^(-Y_i)).
+```
+
+Its Fourier eigenvalue at `k` is the correlation score
+
+```text
+T_k = sum_i S_i*cos(2*pi*k*Y_i/N).
+```
+
+For a nondegenerate secret, `lambda>=0.9`, and `q=12*n`, one has
+`E[T_d]=q*lambda/2` and `T_(-d)=T_d`.  For every generic false candidate the
+mean is zero and the one-sample variance is `1/2`.  Bernstein at `0.3*q`
+gives
+
+```text
+Pr[|T_k|>0.3*q] <= 2*exp(-0.075*q),
+```
+
+so a union bound over `N` candidates succeeds with probability
+`1-exp(-Omega(n))`; the fixed exceptional candidates `0,H` have the same
+conclusion from a separate tail bound.  Meanwhile `T_d>=0.4*q` with
+probability `1-exp(-Omega(n))`.  A standard block encoding of `Corr/q` and a
+bounded QSVT threshold polynomial can therefore mark the two top modes using
+`poly(n,log(1/epsilon))` gates.
+
+Marking is not decoding.  If an input spectral state is
+`|v>=sum_k alpha_k|k>` and a bounded postselected filter has conditional mass
+at least `c` on `{d,-d}`, then its success probability `s` obeys exactly
+
+```text
+c*s <= |alpha_d|^2+|alpha_(-d)|^2.
+```
+
+A cycle-position state has right-hand side `2/N`.  For the natural sparse
+data state `v_y=sum_(i:Y_i=y)S_i`, collision-free public labels and standard
+concentration give target mass `Theta(q/N)`; the exact formula without the
+collision simplification is
+
+```text
+(|vhat(d)|^2+|vhat(-d)|^2)/(N*||v||^2).
+```
+
+Thus even a perfect QSVT correlation filter needs
+`Omega(sqrt(N/q))` amplification from that state.  This is a limitation of
+spectral filtering, power iteration, and Lanczos-style state conversion, not
+of a parity circuit that avoids preparing the top eigenspace.
+
 There is no linear cross-parity control-variate shortcut in the matched
 ensemble.  With `p=(-1)^d`, set
 
@@ -3869,7 +4173,15 @@ reversible rank/unrank modulo `R` in `O(poly(q)*R)` size, and an ordinary
 small-integer checksum leaves a fresh linear high-label phase on a
 polynomial-bond knapsack support.  These are real polynomial preprocessors
 for `R=poly(n)`.  Their known refinement cost is exponential in the total
-peeled modulus bits, reaching `O(poly(q)*N)` at full fibre resolution.  Over
+peeled modulus bits, reaching `O(poly(q)*N)` at full fibre resolution.
+Fixed-point amplification gives the sharper `O*(sqrt(R))` approximate
+controlled coarse-fibre sampler at constant error, but coarse DP plus residual
+amplification does not beat `sqrt(N)` in ordinary gate count; the
+`O*(N^(1/3))` hybrid needs ideal
+exponential QRAM/advice.  Although each ordinary-checksum state has polynomial
+MPS bond, parity averaging produces `M=N/T` flat residual-difference sectors,
+so constant-relative-Frobenius MPO approximation needs `Omega(M)` bond on
+typical branches.  Over
 iid public high labels, the final-half-turn graph of every `O(log n)`-local
 logical matching still has only exponentially small expected Born-weighted
 coverage.
@@ -3932,7 +4244,12 @@ implicit global optimizer for that random high-frequency polynomial.  The
 radix envelopes analyzed here remain too loose to certify polynomial
 pruning, while scalar polynomials in `G_J` below the
 displayed `Theta(n/log n)` threshold have no half-turn harmonic at all with
-high probability.
+high probability.  The natural parity-constrained group-moment/SOS hierarchy
+also has a factor-aligning rank-one pseudo-solution until its explicit moment
+matrix is exponential.  Conversely, a sparse circulant/QSVT circuit can mark
+the two correlation peaks efficiently, but the natural sparse-data input has
+only `Theta(q/N)` weight there, so this route still pays
+`Omega(sqrt(N/q))` amplification.
 
 This is not a no-go theorem.  A distribution-specific collective circuit
 could conceivably decode only the parity without exposing a reusable fibre

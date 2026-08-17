@@ -119,7 +119,18 @@ On the clean cube, coarse modular fibres are nevertheless exactly rankable: resi
 reversible chart modulo `R` in `O(poly(q)*R)` size, and an ordinary-integer
 checksum leaves a fresh linear quotient on a small-knapsack support.  These
 are polynomial preprocessors for `R=poly(n)`, but their known refinement cost
-is exponential in the total number of peeled bits.  After the triangular
+is exponential in the total number of peeled bits.  Phase-calibrated
+fixed-point amplification improves approximate controlled fibre synthesis to
+`O*(sqrt(R))` arithmetic queries, where `O*` suppresses polynomial factors in
+`n` and logarithmic factors in the target precision.
+Coarse DP modulo `B` followed by residual amplification still costs
+`O*(sqrt(N*B))` ordinary gates; an ideal preloaded QRAM gives only an
+exponential `O*(N^(1/3))` preprocessing/online time--memory tradeoff.
+Moreover, the ordinary-checksum pure state has polynomial MPS bond while its
+even-minus-odd kernel has `M=N/T` asymptotically flat operator-Schmidt
+sectors.  Constant-relative-Frobenius MPO compression therefore needs
+`Omega(M)` bond on typical branches, without implying a general circuit lower
+bound.  After the triangular
 checksum chart, every `O(log n)`-local final-half-turn matching has
 exponentially small expected Born-weighted coverage over the iid public high
 labels at the stated parameters.
@@ -165,7 +176,13 @@ polynomial global optimizer for that expansion would decode `{d,-d}`, but
 the radix envelopes analyzed here remain too loose to certify polynomial
 pruning.  Every scalar polynomial in `G_J` below the
 displayed `Theta(n/log n)` threshold has zero half-turn Fourier coefficient
-with high probability.
+with high probability.  The natural parity-constrained group-moment/SOS
+hierarchy has a rank-one pseudo-solution aligning every factor in both parity
+classes until its explicit moment matrix is already exponential, with
+high-visibility gap `(2*ln 2-1)*q+o(q)`.  A sparse circulant/QSVT filter can
+mark the two correlation modes in polynomial time, but from the natural
+sparse-data state its target spectral mass is only `Theta(q/N)`, so this
+state-conversion route still needs `Omega(sqrt(N/q))` amplification.
 Pair products
 provide an exact passive smaller-modulus recursion, but
 if `lambda_pass` is the initial visibility, then along nondegenerate levels--

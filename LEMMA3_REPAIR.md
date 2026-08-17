@@ -620,6 +620,16 @@ fibres do admit exact canonical charts: residue-DP rank/unrank has size
 `O(poly(q)*R)` modulo `R`, and an ordinary checksum keeps a fresh linear
 quotient on a small-knapsack support.  These are polynomial for `R=poly(n)`,
 but the known trellis cost is exponential in the total peeled modulus bits.
+Phase-calibrated fixed-point amplification approximately prepares a balanced
+fibre in `O*(sqrt(R))` queries at constant error, where `O*` suppresses
+polynomial factors in `n` and logarithmic factors in precision.  Coarse DP
+plus residual amplification costs `O*(sqrt(N*B))` ordinary gates.  Ideal
+preloaded QRAM changes this only to an exponential `O*(N^(1/3))`
+preprocessing/online time--memory tradeoff.
+The ordinary-checksum pure state has polynomial MPS bond, but its parity
+difference has `M=N/T` asymptotically flat operator-Schmidt sectors and needs
+`Omega(M)` bond for constant-relative-Frobenius MPO approximation on typical
+branches; this is not a general circuit lower bound.
 Every `O(log n)`-local final-half-turn matching after the triangular checksum
 chart also has exponentially small expected Born-weighted coverage over the
 iid public high labels at the stated parameters.  A classical
@@ -671,7 +681,12 @@ expansion.  Optimizing it would decode `{d,-d}`, but the radix envelopes
 analyzed here remain too loose to certify polynomial pruning.  Scalar
 polynomials in `G_J` below the displayed
 `Theta(n/log n)` threshold have no half-turn Fourier component with high
-probability.
+probability.  The natural parity-constrained group-moment/SOS hierarchy also
+has a factor-aligning rank-one pseudo-solution until its explicit matrix is
+exponential.  A sparse-circulant/QSVT correlation filter can mark the two
+correct modes in polynomial time, but their input mass is only `Theta(q/N)`
+for the natural sparse-data state, so this filter still needs
+`Omega(sqrt(N/q))` amplification.
 Pair products give an exact passive
 recursion to smaller 2-adic moduli.  Writing their initial visibility as `lambda_pass`,
 along nondegenerate levels, including an odd secret before the final modulus,

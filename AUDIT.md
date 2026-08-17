@@ -79,7 +79,16 @@ easier but still insufficient: exact residue-DP rank/unrank costs
 `O(poly(q)*R)` modulo `R`, and an ordinary checksum preserves a fresh linear
 quotient on a small-knapsack fibre.  Polynomial `R` removes only `O(log n)`
 bits; refinement to the half-turn scale is exponential in this trellis
-realization.  Every `O(log n)`-local final matching after the triangular
+realization.  Phase-calibrated fixed-point amplification approximately
+synthesizes a balanced fibre in `O*(sqrt(R))` queries at constant error, where
+`O*` suppresses polynomial factors in `n` and logarithmic factors in
+precision.  Coarse DP plus residual search costs `O*(sqrt(N*B))` ordinary
+gates; ideal preloaded QRAM yields only an exponential `O*(N^(1/3))`
+time--memory tradeoff.  The ordinary-checksum
+state itself has polynomial MPS bond, while the parity-difference kernel has
+`M=N/T` flat operator-Schmidt sectors and needs `Omega(M)` bond for
+constant-relative-Frobenius MPO approximation on typical branches.  This is
+not a general circuit lower bound.  Every `O(log n)`-local final matching after the triangular
 checksum chart has exponentially small expected Born-weighted coverage over
 the iid public high labels at the stated parameters.  A reversible basis
 preprocessor plus one Hadamard yields an RMSS finder whenever it has
@@ -120,7 +129,12 @@ likelihood gives a precise constructive optimizer interface.  The radix
 envelopes analyzed here remain too loose to certify polynomial pruning, and
 scalar polynomials in `G_J` below the
 displayed `Theta(n/log n)` threshold cannot create its half-turn harmonic with
-high probability.
+high probability.  The natural parity-constrained group-moment/SOS hierarchy
+also admits a factor-aligning rank-one pseudo-solution until its explicit
+matrix is exponential.  A polynomial sparse-circulant/QSVT correlation filter
+can mark `{d,-d}`, but its target input mass is only `Theta(q/N)` on the
+natural sparse-data state, retaining an `Omega(sqrt(N/q))` state-conversion
+cost.
 An exact pair-product
 recursion creates passive samples over smaller 2-adic moduli.  Writing its
 initial visibility as `lambda_pass`, the visibility is
