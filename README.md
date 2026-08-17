@@ -186,7 +186,11 @@ state-conversion route still needs `Omega(sqrt(N/q))` amplification.
 The same sparse score has an exact parity-constrained circulant SDP, but its
 Fourier form is still maximization over `N/2` atoms; sparse PSD separation is
 the original parity-restricted optimizer, and faithful group-algebra
-representations still need `N/2` dimensions.  The standard quantum
+representations still need `N/2` dimensions.  The full quotient state
+simplex also has exact PSD extension size `N/2`; at the displayed hierarchy
+depth, truncated character sketches and constant-relative-Frobenius low-rank
+approximations remain exponential.
+The standard quantum
 SDP interfaces either retain square-root dimension dependence or require
 stronger low-rank input, Gibbs preparation, or implicit-oracle assumptions.
 An exact repeated-squaring lift does compress the
@@ -196,9 +200,16 @@ first-order Shor relaxation is parity-blind with a growing integrality gap.
 At order two, Hankel transport enforces harmonic squaring for aligned
 occurrence trees, so that witness fails in the aligned-tree formulation; a
 polynomial Laurent phase-closure test gives a conditional
-pseudo-moment certificate.  A randomized sixteen-bucket reassociation makes
-an exact cut-dissociation event exponentially likely, but a missing closure-
-interpolation lemma prevents a parity-blindness theorem.  An exact expander
+pseudo-moment certificate.  On a typical no-short-relation event, every
+single cycle has exponentially small planted correlation, and any nonlinear
+cycle syndrome of odd-support rank below `(1/10-epsilon)*n` remains
+exponentially parity-blind.  Saturated `tau_(i,m)=S_i^m` phase-certificate
+feasibility therefore has no high-probability planted gap; the unsaturated
+SDP value gap remains open.  A randomized sixteen-bucket reassociation makes
+an exact cut-dissociation event exponentially likely, but an exact balanced-
+depth-four counterexample proves that this event alone does not control
+repeated Hankel interpolation.  A stronger random condition remains open.
+An exact expander
 identity buffer separately proves lift non-invariance for a redundant
 quadratic formulation.  Neither construction settles the fixed aligned
 arithmetic lift or produces a planted gap.  With high probability, natural

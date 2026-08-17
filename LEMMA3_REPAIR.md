@@ -690,7 +690,10 @@ for the natural sparse-data state, so this filter still needs
 The same score defines an exact sparse parity-constrained SDP, but its Fourier
 form remains optimization over `N/2` atoms; PSD separation is the same
 parity-restricted optimizer, and faithful group-algebra representations need
-`N/2` dimensions.  The generic quantum SDP
+`N/2` dimensions.  The quotient state simplex itself has exact PSD extension
+size `N/2`; at the displayed hierarchy depth, truncated character sketches
+and direct low-rank approximations remain exponential.  The generic quantum
+SDP
 interfaces checked here retain square-root dimension dependence or require
 stronger input, preparation, or oracle assumptions.  A compact repeated-
 squaring construction instead gives an exact polynomial-size nonconvex unit-
@@ -699,9 +702,16 @@ decoder.  Its strengthened first-order Shor relaxation is parity-blind with a
 growing integrality gap.  At polynomial-size order two, harmonic squaring is
 enforced for aligned occurrence trees and that witness fails in the aligned-
 tree formulation; a finite Laurent phase closure
-gives a conditional pseudo-moment certificate.  A randomized sixteen-bucket
-reassociation has an exponentially likely cut-dissociation event, but its
-closure-interpolation lemma is unproved.  An exact expander identity buffer
+gives a conditional pseudo-moment certificate.  On typical labels, every
+single cycle is exponentially uncorrelated with the planted parity, and any
+nonlinear cycle syndrome below the displayed linear odd-support-rank threshold
+remains parity-blind.  This rules out a high-probability planted saturated-
+feasibility gap for the `tau_(i,m)=S_i^m` phase certificate but not an
+unsaturated SDP value gap.  A randomized sixteen-
+bucket reassociation has an exponentially likely cut-dissociation event, but
+an exact balanced-depth-four counterexample shows that the event alone does
+not control repeated Hankel interpolation.  A stronger random condition
+remains open.  An exact expander identity buffer
 shows that the gap is not invariant under exact redundant lifts.  Neither
 result settles the fixed aligned arithmetic lift or supplies a planted gap.
 With high probability, natural exact factor-graph elimination has `Omega(n)` treewidth,
