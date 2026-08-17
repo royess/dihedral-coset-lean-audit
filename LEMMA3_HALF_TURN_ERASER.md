@@ -128,7 +128,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `C_+>=(2-o(1))*S_+`, while extra half-turn signal is dual-norm negligible.
   Thus the same lower bound holds for the complete ensemble raw-second-moment
   problem with fixed data-independent orbit-constant weights.  Conditional,
-  public-label-adaptive, and nonlinear sign performance remains open.
+  whole-radial Loewner promotion fails because low-degree blocks are typically
+  empty.  On `E_short`, however, every nonzero-signal public-label-adaptive
+  signed weighting supported on at most `N^(1/20-epsilon)` distinct supports
+  has Rayleigh ratio at least `N^(1/20+epsilon-o(1))`.  The full fixed optimizer
+  still needs explicit
+  mixed-degree signal and four-template concentration lemmas, and nonlinear
+  sign performance remains open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -142,9 +148,12 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   positive Wagner correlation before the outside spectrum is added.  Yet the
   actual modular instance
   `N=16,Y=(1,2,3,5,6,7)` has correlation
-  `lambda^2*(7*lambda^2-8)/32<0`, and abstract positive-coefficient
-  completions realize either sign.  The modular example is highly atypical;
-  neither result settles the random-instance Wagner sign.
+  `lambda^2*(7*lambda^2-8)/32<0`.  Moreover, at visibility one the actual
+  residual `A_H-c*Z` has uniform `L_1` norm `1+o(1)`, and asymptotic nonnegative-
+  coefficient likelihood completions with the exact Rademacher-sum law of
+  `Z` and `o(M)` prescribed local reversals realize either full sign.  These are
+  information-sufficiency obstructions: the modular example is highly
+  atypical, and the random-instance outside signed spectrum remains open.
   Direct importance sampling of the exact Bayesian coefficient ratio has
   relative variance `Theta(N)` once its posterior is sharp.  At `q=12*n`,
   for a nondegenerate secret, a Hellinger bound shows that the posterior is in
@@ -187,7 +196,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `R_*=4*sqrt((1-rho)*gamma)-4*gamma`.  At `rho=2/5`, the incoherent
   well-conditioned whole-tree budgets are `0.4795...` and `0.4772...` at the
   two splits.  Translation-invariant ellipsoids are diagonal in the Fourier
-  basis; localized or ill-conditioned phase cancellation remains open.
+  basis.  Random-orbit Gaussian-KDE source blocks are nevertheless
+  `(1+o(1))*I`, and the actual Gaussian-query family has near-full `L_2`
+  numerical rank against every feature span fixed before the query.  Thus
+  standard localized FGT, Hermite, Taylor, and separated features need
+  `s/N^o(1)` dimensions for a factor-`poly(n)` certificate.  A feature span
+  chosen after inspecting the row, a scalar partition-sum algorithm, or a
+  succinct ill-conditioned construction remains open.
   Rejection-based quantum tilting
   cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
   only
@@ -2730,7 +2745,31 @@ The resource qualifications are necessary.  A unit vector supported on
 `L=N^sigma` coordinates has `mu>=sqrt(N/L)`, so genuine localization pays
 `2*eta>=1-sigma` and escapes the displayed condition because `R_*<1`.
 Likewise, unrestricted conditioning collapses the certificate to exact
-evaluation.  For `d!=0`, let `P_d=d*d^*/||d||^2` and
+evaluation.  If
+
+```text
+x = Q^(1/2)*h,       y = Q^(-1/2)*d,
+```
+
+then exactly
+
+```text
+R_Q/|d^*h| = 1/|cos angle(x,y)|,       d^*h != 0.
+```
+
+If `Q*d=lambda_Q*d` and
+`h=(d^*h)*d/||d||^2+h_perp`, this becomes
+
+```text
+R_Q^2
+  = |d^*h|^2+(||d||^2/lambda_Q)*h_perp^*Q*h_perp.
+```
+
+In particular, with no retained subspace, `d=1_I` and `d^*h=Z_I`.
+Any aligned construction returning `R_Q<=C*Z_I` has already returned a
+factor-`C` upper estimate of the desired partition sum, and
+`d^*Q*h=lambda_Q*Z_I`.  This is a circularity identity, not a computational
+lower bound.  For `d!=0`, let `P_d=d*d^*/||d||^2` and
 
 ```text
 Q_epsilon = P_d+epsilon*(1-P_d),       0<epsilon<=1.
@@ -2751,8 +2790,143 @@ diagonal: invariance under
 `U_b=diag(exp(2*pi*i*r*b/N))` forces every off-diagonal entry of `Q` to vanish.
 The earlier diagonal theorem therefore exhausts translation-invariant
 ellipsoids.  What remains open is a succinct localized or ill-conditioned
-window-adapted construction, a correlated control variate, or a new implicit
+row-adaptive construction, a correlated control variate, or a new implicit
 arithmetic oracle.
+
+### Localized Gaussian-kernel features still have full numerical rank
+
+The standard geometric localization escape can itself be tested.  Write
+
+```text
+C_t = <A_0,A_t>
+    = (1/q)*sum_i cos(2*pi*t*Y_i/N).
+```
+
+For every fixed `sqrt(ln(2)/6)<rho<1/2`, Hoeffding and a union bound give
+
+```text
+Pr[max_(t!=0) C_t>rho]
+  <= (N-1)*exp(-q*rho^2/2)
+  <= exp(-(6*rho^2-ln(2))*n).
+```
+
+Let `R=(1+o(1))*sqrt(2*q)` be the Gaussian filter norm and use the exact KDE
+scaling
+
+```text
+y_a = sqrt(u*R)*A_a,
+K_(a,b) = exp(-||y_a-y_b||^2/2).
+```
+
+On its intersection with the usual Gaussian-norm concentration event,
+
+```text
+K_(a,a) = 1,
+K_(a,b) <= N^(-delta_gamma(rho)+o(1)),       a!=b,
+delta_gamma(rho) = (1-rho)*sqrt(48*gamma/ln(2)).
+```
+
+Therefore every source subset `I` of size `s<=N^gamma` obeys
+
+```text
+||K_I-I_s||_op <= N^(gamma-delta_gamma(rho)+o(1)) = o(1)
+```
+
+at both relevant splits.  Every eigenvalue is `1+o(1)`, so the fixed-error
+numerical rank is exactly `s`.  At `rho=2/5`, the two `delta_gamma` values are
+`1.594946429481...` and `1.664324030502...`.  Equivalently, distinct source
+points are separated by squared distance at least
+`3.189892858962...*ln(N)` or `3.328648061004...*ln(N)`.  In particular, every
+bandwidth-`O(1)`, and more generally `o(sqrt(log N))`-diameter, geometric
+source cluster is a singleton.
+
+This also rules out a termwise-certified separated kernel representation.
+If a rank-`k` matrix `K_tilde` satisfies
+
+```text
+K_(a,b) <= K_tilde_(a,b) <= C*K_(a,b),       C=N^o(1),
+```
+
+at all source-point queries, then `K_tilde` is strictly diagonally dominant
+and hence nonsingular.  Thus `k>=s`.  The quantifier is important: this is a
+uniform-query theorem for individual kernels or arbitrary nonnegative source
+weights.
+It does not lower-bound an oracle tailored only to the all-one scalar KDE
+sum; indeed `K_I*1=(1+o(1))*1` on these special queries.
+
+There is a distribution-matched version for the actual Gaussian query.
+For `a in I`, put
+
+```text
+f_I(g)_a = exp(u*<g,A_a>).
+```
+
+Its exact `L_2(g)` second-moment matrix is
+
+```text
+Sigma_(a,b)
+  = E_g[f_a(g)*f_b(g)]
+  = exp(u^2*(1+C_(a-b))).
+```
+
+The diagonal is `exp(2*u^2)`, while every normalized off-diagonal entry is
+at most `N^(-2*gamma*(1-rho)+o(1))`.  Since `rho<1/2`, uniformly for
+`s<=N^gamma`,
+
+```text
+Sigma_I = exp(2*u^2)*(I_s+o_op(1)).
+```
+
+At `rho=2/5`, the two operator errors are `N^(-1/49+o(1))` and
+`N^(-1/45+o(1))`.  Let `V=V(Y,I)` be any `k`-dimensional linear space chosen
+before seeing `g`.  Even if the coefficient rule is an arbitrary nonlinear
+function of `g`, every `v(g) in V` satisfies
+
+```text
+E_g[||f_I(g)-v(g)||_2^2]
+  >= (1-o(1))*(s-k)*exp(2*u^2).
+```
+
+If it also gives a coordinatewise factor certificate
+
+```text
+f_I(g) <= v(g) <= C*f_I(g),
+```
+
+then scaling by `2/(C+1)` yields
+
+```text
+k >= (4*C/(C+1)^2-o(1))*s.
+```
+
+Thus even `C=poly(n)` requires `k=s/N^o(1)`.  This covers standard fixed
+localized, wavelet, Hermite, Taylor, FGT, and separated-feature spaces.  It
+does not cover a feature span selected after inspecting the full row, or a
+nonlinear algorithm designed only to compute the scalar `Z_I`.
+
+A final degree check reaches the same boundary for termwise polynomial FGT.
+If a degree-`D` polynomial satisfies
+
+```text
+exp(x) <= P_D(x) <= C*exp(x),       -B<=x<=B,
+```
+
+then Chebyshev extrapolation from `[-B,0]` to `B` gives
+
+```text
+D >= (B-ln(C))/ln(3+sqrt(8)).
+```
+
+For the triangle-certified orbit range
+
+```text
+B = (sqrt(12*pi*gamma/ln(2))+o(1))*ln(N),
+```
+
+`C=poly(n)` requires `D>=0.92635*n` and `D>=0.96664*n` at the two splits.
+The standard `2*q`-variable feature table is therefore exponential.  This
+still leaves an orbit-specific scalar approximation using phase cancellation
+outside the theorem.
 
 The phase-averaged coefficient energy is not uniform across residues, so one
 cannot strengthen this observation by simply assigning `1/N` of the energy
@@ -7651,41 +7825,109 @@ Outside likelihood relations therefore supply essentially all optimal Bayes
 correlation and compensate spectrally for the local reversals.  This does not
 say that outside exact-`t` Wagner paths make `sign(Z)` correct.
 
-There is also an exact finite completion showing that the same local reversal
-is compatible with either global prediction sign.  Let `x_1,...,x_5` be
-independent Walsh characters, put `Z_5=sum_i x_i`, and choose `0<a<=1/27`.
-Both experiments use `A_0=1` and the same positive path statistic.  Define
+The residual is not small in any ordinary uniform-`L_1` sense.  With
 
 ```text
-A_H^(+) = a*sum_(i=1)^5 x_i+4*a*x_1*x_2*x_3,
+s_Y = c*E_U|Z|,       C_Y = E_U|A_H|,       R=A_H-c*Z,
+```
+
+the two triangle inequalities give exactly
+
+```text
+C_Y-s_Y <= E_U|R| <= C_Y+s_Y.
+```
+
+At visibility one, on the current high-probability event, `C_Y=1-o(1)`.  The
+Wick lower bound, Cauchy upper bound, and literal list-size Stirling factors
+give
+
+```text
+s_Y = Theta(n^(-1))                 when K=N^a,
+s_Y = Theta(n^(-3/4))               when K tracks the actual list size.
+```
+
+Hence `E_U|R|=1+o(1)` with high probability.  This excludes every route that
+treats `R` as a uniform-`L_1` small perturbation of `c*Z`.  It does not bound
+the signed projection `<R,sign(Z)>`, and therefore does not decide the
+Wagner sign.
+
+An asymptotic likelihood completion shows that even the exact Rademacher-sum
+law, its Gaussian-leading moments, and many prescribed local reversals do not
+contain the missing sign information.  Let `M>=7` be odd, take independent
+Walsh characters
+`x_1,...,x_M`, and put `Z=sum_i x_i`.  Then
+
+```text
+E_U[Z^2] = M,       E_U[Z^4] = 3*M^2-2*M.
+```
+
+For `f=sign(Z)`, set
+
+```text
+alpha_M = 2^(-(M-1))*choose(M-1,(M-1)/2).
+```
+
+Its singleton coefficient is `alpha_M`, while every triple coefficient is
+`-alpha_M/(M-2)`.  Fix any family `C_3` of `L<=M` distinct triples, and put
+
+```text
+epsilon = 1/(4*M^2),       b_3 = 12*epsilon/M,
+
+A_H^(+) = epsilon*sum_i x_i
+          +4*epsilon*sum_(T in C_3) x_T,
+
 A_H^(-) = A_H^(+)
-  +2*a*sum_(J subset [5], |J|=3, J!={1,2,3}) product_(j in J)x_j.
+          +b_3*sum_(|T|=3,T notin C_3) x_T,
+A_0 = 1.
 ```
 
-The coefficient `l_1` norm is at most one, so
-`Pr[x | B=b]=2^(-5)*(1+b*A_H)` is valid, and every displayed odd Walsh
-coefficient is nonnegative.  The two laws have the identical local
-projection
+All odd Fourier coefficients are nonnegative.  Moreover,
 
 ```text
-P_(span{x_1,x_2,x_3}) A_H
-  = a*(x_1+x_2+x_3)+4*a*x_1*x_2*x_3,
-E[B*Maj_3(x_1,x_2,x_3)] = -a/2.
+||hat(A_H^(+))||_1
+  = epsilon*(M+4*L) <= 5/(4*M) < 1,
+
+||hat(A_H^(-))||_1
+  <= epsilon*(2*M^2-M-8) < 1/2.
 ```
 
-Five-bit majority has singleton Fourier coefficient `3/8` and triple
-coefficient `-1/8`.  Consequently
+Thus, with `Pr[B=+/-1]=1/2`, the conditional laws
+`Pr[x|B=b]=2^(-M)*(1+b*A_H^(+/-)(x))` define two valid balanced
+experiments.  They have the same unconditional base-uniform law and moments
+for `Z`, and the same projection on every prescribed triple.  Each such
+projection is
 
 ```text
-E_+[B*sign(Z_5)] = 11*a/8 > 0,
-E_-[B*sign(Z_5)] = -7*a/8 < 0.
+epsilon*(x_i+x_j+x_k)+4*epsilon*x_i*x_j*x_k,
 ```
 
-Thus the same positive path sum and the same clean local anti-majority
-marginal admit either full-sign correlation.  This is an exact likelihood
-counterexample, not a claim that both completions arise from the modular
-instance.  It proves that positivity and local reversals alone cannot imply
-a global MLR rule; the outside odd spectrum must be controlled.
+so its local three-bit-majority correlation is `-epsilon/2` in both models.
+Nevertheless, their full correlations with `sign(Z)` are
+
+```text
+rho_+
+  = alpha_M*epsilon*(M-4*L/(M-2)) > 0,
+
+rho_-
+  = alpha_M*epsilon
+      *(2-M-4*L*(M-3)/(M*(M-2))) < 0.
+```
+
+For `L=o(M)`, both magnitudes are
+`(sqrt(2/pi)/4+o(1))*M^(-3/2)`.  When `L=0`, the second likelihood has the
+exact nonlinear form
+
+```text
+A_H^(-)/epsilon = Z*(2*Z^2/M-5+4/M),
+```
+
+which is anti-MLR on the central Gaussian margins.  In the actual Wagner
+layer, `X_cl/M=N^(-0.217474...+o(1))`, so the proved local clusters likewise
+touch only `o(M)` of the paths.  This comparison is information-scale only:
+the completion above is not asserted to be the same random modular law.
+It proves that the full distribution of `Z`, Wick moments, nonnegative
+likelihood coefficients, and a sublinear family of local reversals still do
+not determine the global prediction sign.
 
 There is also a small actual modular instance with negative Wagner
 correlation.  Take
@@ -8688,6 +8930,129 @@ pairs, zero relations, and extra half-turn orientations, but it does not give
 a conditional-on-`Y` Loewner bound, cover `Y`-adaptive signed whitening,
 change the retention rule, or decide nonlinear sign and tail performance.
 
+### What can and cannot hold conditional on the public labels
+
+A full quenched radial-matrix promotion is impossible.  The four-block degree
+tuple `(1,1,1,1)` contains only
+
+```text
+P_low = (2*b)^4 = poly(n)
+```
+
+oriented templates.  Each is retained with probability
+`q_0=N^(-(1+k)+o(1))`, so
+
+```text
+Pr_Y[some low-degree template is retained] <= P_low*q_0=o(1).
+```
+
+With probability `1-o(1)`, that entire conditional Gram block and its signal
+row are zero.  The corresponding ensemble radial block has positive
+diagonal, with total diagonal mass `q_0*P_low`.  Hence no fixed constant
+`c>0` can make a whole-space statement
+of the form
+
+```text
+C_rad(Y) >= c*C_(rad,ensemble)
+```
+
+hold with high probability.  Degree symmetry alone does not remove this
+obstruction; some retained-mass diffuseness or a restriction to the single
+optimizer Rayleigh quotient is necessary.
+
+There is nevertheless a genuinely conditional signed theorem for sparse
+adaptive families.  Recall `E_short`, on which no nonempty signed `0` or `H`
+relation has size at most `s_0=floor(n/10)`, and put
+
+```text
+delta_n = 2^(-floor(s_0/2)) = N^(-1/20+o(1)).
+```
+
+The existing Hamming packing argument gives, uniformly for every support
+`T`,
+
+```text
+2^(-|T|)*R_T(0) <= delta_n,
+2^(-|T|)*R_T(H) <= delta_n.
+```
+
+After deduplicating supports, let `F(Y)` be any public-label-adaptive family
+of at most
+
+```text
+M_F <= N^(1/20-epsilon)
+```
+
+distinct retained supports.  Its exact conditional parity-averaged Gram and
+signal obey
+
+```text
+Gamma_F(Y) >= (1-M_F*delta_n)*I = (1-o(1))*I,
+||h_F(Y)||_2 <= sqrt(M_F)*delta_n.
+```
+
+Indeed, every off-diagonal Gram entry is at most `delta_n`, every diagonal is
+one, and Gershgorin applies.  Therefore every real signed weight vector with
+nonzero signal satisfies
+
+```text
+(w^T*Gamma_F(Y)*w)/(w^T*h_F(Y))^2
+  >= (1-o(1))/(M_F*delta_n^2)
+  >= N^(1/20+epsilon-o(1)).
+```
+
+This is uniform on `E_short`, allows arbitrary `Y`-adaptive signed whitening
+inside `F(Y)`, and already includes dependent filters and every extra zero or
+half-turn relation.  It rules out sparse signed adaptive repair up to the
+displayed `N^0.05` scale, not the full `N^(0.498...)` retained family.
+
+For the one deterministic degree-symmetric resolvent optimizer, the missing
+quenched statement is narrower.  Put into `E_ng(Y)` the entire actual
+contribution of every non-generic pair class
+`GE,EE,GL,EL,opposite-LL`, including its generic baseline, together with all
+nonautomatic `GG` zero relations.  This matrix has zero diagonal and
+entrywise nonnegative off-diagonal entries.  The six ensemble row counts above
+and `2*|uv|<=u^2+v^2` give, for every deterministic `w`,
+
+```text
+E_Y[|w^T*E_ng(Y)*w|] <= O(r_Delta)*||w||_2^2.
+```
+
+If `r_Delta/q_0=N^(-delta+o(1))`, the surrogate diagonal floor and Markov give
+
+```text
+Pr[|w^T*E_ng(Y)*w|
+      > N^(-delta/2+o(1))*w^T*S_+*w]
+  <= N^(-delta/2+o(1)).
+```
+
+At the center, `delta=0.001073097836...`.  Thus non-generic filters and all
+extra zero relations are no longer the numerator obstacle for this fixed
+optimizer.  The conditional signal remains random and must be controlled
+separately.  Write `h_Y` for its exact conditional signal vector and
+`bar(h)=E_Y[h_Y]`.  For a fixed `w` with `w^T*bar(h)!=0`, a sufficient
+concentration package is
+
+```text
+Var_Y[sum_z w_z^2*Ret(z)]
+  = o(q_0^2*||w||_2^4),
+
+Var_Y[the automatic compatible quadratic]
+  = o((w^T*S_+*w)^2),
+
+Var_Y[w^T*h_Y]
+  = o((w^T*bar(h))^2).
+```
+
+Chebyshev and the Markov estimate would then give the desired fixed-Rayleigh
+comparison.  The first condition reduces to the exact `G/E/L` pair table.
+The second is an explicit mixed-degree four-template type enumeration; the
+existing exact-degree Wick calculation does not prove it.  The third is a
+separate signed signal-concentration lemma.  The earlier `Good(Y)` theorem
+applies only to the fixed exact-degree family and cannot be reused for this
+mixed-degree cutoff.  The empty low-degree block above shows why such
+concentration hypotheses are indispensable.
+
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
 not prove that `sign(Z)` fails, and it does not exclude clipping or different
@@ -9119,9 +9484,15 @@ The exact `{z,-z}` block makes direct PSD promotion fail before orientation
 quotienting.  After the quotient, exact filter classification gives
 `C_+>=(2-o(1))*S_+`, and extra half-turn signal is dual-norm negligible.  The
 same bound therefore holds for the complete ensemble raw-second-moment
-problem with fixed data-independent orbit-constant weights.  Conditional,
-public-label-adaptive, and nonlinear sign performance remains open.
-Bucket-sum-only rehash medians are only margin
+problem with fixed data-independent orbit-constant weights.  A whole-space
+conditional radial Loewner comparison fails on typically empty low-degree
+blocks.  Conversely, `E_short` gives an exact conditional Rayleigh lower
+bound `N^(1/20+epsilon-o(1))` for every nonzero-signal public-label-adaptive
+signed weighting supported on at most `N^(1/20-epsilon)` distinct supports.
+The fixed full optimizer
+still needs mixed-degree signal and four-template concentration lemmas, and
+nonlinear sign performance remains open.  Bucket-sum-only rehash medians are
+only margin
 transforms of the same path sum, while a positive three-character likelihood
 model shows that fixed
 pair overlap and linear signal can coexist with either prediction sign.
@@ -9133,8 +9504,12 @@ typical full path layer has Wick fourth moment and contributes at least
 `(2/sqrt(3)-o(1))*2^(-t)*sqrt(M_path/2)=N^(-o(1))` before its outside
 spectrum.  Yet the
 actual modular instance `N=16,Y=(1,2,3,5,6,7)` has correlation
-`lambda^2*(7*lambda^2-8)/32<0`.  It is highly atypical, so the random-instance
-Wagner sign remains uncontrolled.
+`lambda^2*(7*lambda^2-8)/32<0`.  At visibility one the actual residual has
+uniform `L_1` norm `1+o(1)`, and asymptotic nonnegative-coefficient likelihood
+completions with the exact Rademacher-sum `Z` law and `o(M)` local reversals
+realize either sign.
+These are information-sufficiency obstructions; the modular example is
+highly atypical, so the random-instance Wagner sign remains uncontrolled.
 The
 theorems still leave open circuits that exploit the internal Boolean modular
 arithmetic beyond the orbit algebra or compute the weighted ternary
@@ -9169,8 +9544,12 @@ retained subspace of orthonormal-family coherence `N^eta` and a non-diagonal
 ellipsoid of condition `N^chi`, the broader barrier is
 `r+sigma+2*eta+chi<R_*`, where
 `R_*=4*sqrt((1-rho)*gamma)-4*gamma`; its incoherent, well-conditioned budgets
-are `0.4795...` and `0.4772...`.  Localization or ill-conditioning remains
-open.  Rejection-based quantum tilting
+are `0.4795...` and `0.4772...`.  Random-orbit KDE source blocks are
+`(1+o(1))*I`, and every query-independent feature span needs
+`s/N^o(1)` dimensions for a factor-`poly(n)` approximation under the actual
+Gaussian query law.  A span chosen after the row, a scalar partition-sum
+algorithm, or a succinct ill-conditioned construction remains open.
+Rejection-based quantum tilting
 returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
 only `M^o(1)` expected rare-cap crossings and accepted indices, so the
 partition-sum oracle or output-sensitive threshold-root locator remains a

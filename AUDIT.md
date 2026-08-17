@@ -137,8 +137,10 @@ generally, an adaptive `N^r`-dimensional subspace of orthonormal-family
 coherence `N^eta` and a non-diagonal ellipsoid of condition `N^chi` cannot
 prune an `N^sigma` interval when `r+sigma+2*eta+chi<R_*`, where
 `R_*=4*sqrt((1-rho)*gamma)-4*gamma`; the incoherent, well-conditioned whole-tree
-budgets are `0.4795...` and `0.4772...` at the two splits.  Localization or
-ill-conditioning remains open.
+budgets are `0.4795...` and `0.4772...` at the two splits.  Random-orbit KDE
+blocks are `(1+o(1))*I`, and every feature span fixed before the Gaussian
+query needs `s/N^o(1)` dimensions for a factor-`poly(n)` certificate.
+Row-adaptive scalar or ill-conditioned constructions remain open.
 Rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives
 only
 `M^o(1)` expected crossings and accepted indices, leaving the implicit
@@ -254,8 +256,12 @@ exact `{z,-z}` block makes direct PSD promotion fail before orientation
 quotienting.  After the quotient, exact filter classification gives
 `C_+>=(2-o(1))*S_+`, and extra half-turn signal is dual-norm negligible.  The
 bound therefore holds for the complete ensemble raw-second-moment problem
-with fixed data-independent orbit-constant weights; conditional,
-public-label-adaptive, and nonlinear performance remains open.
+with fixed data-independent orbit-constant weights.  Whole-radial conditional
+Loewner promotion fails on empty low-degree blocks, but every nonzero-signal
+`Y`-adaptive signed weighting supported on at most `N^(1/20-epsilon)` distinct
+supports has Rayleigh ratio at least `N^(1/20+epsilon-o(1))` on `E_short`.
+The full optimizer and
+nonlinear performance remain open.
 Bucket-sum-only random rehash medians contain only the original path-sum
 information, while a fixed
 positive pair-overlap law can yield either sign of prediction correlation.
@@ -267,8 +273,12 @@ moment and contributes at least
 `(2/sqrt(3)-o(1))*2^(-t)*sqrt(M_path/2)=N^(-o(1))` before its
 outside spectrum.
 Yet the actual modular instance `N=16,Y=(1,2,3,5,6,7)` has Wagner correlation
-`lambda^2*(7*lambda^2-8)/32<0`; it is highly atypical and does not settle the
-random-instance sign.
+`lambda^2*(7*lambda^2-8)/32<0`.  The actual residual has uniform `L_1` norm
+`1+o(1)` at visibility one, while asymptotic nonnegative-coefficient
+completions with the exact Rademacher-sum `Z` law and `o(M)` local reversals
+realize either sign.  These are
+information-sufficiency obstructions and do not settle the random modular
+sign.
 Parseval now gives a sharp
 statistical-query boundary: against
 the conventional adversarial `STAT` oracle, polynomially many adaptive
