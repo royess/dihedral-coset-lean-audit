@@ -144,6 +144,8 @@ the original parity-restricted optimizer, and a faithful group-algebra
 representation needs `N/2` dimensions.  Its full quotient state simplex has
 exact PSD extension size `N/2`; at the displayed hierarchy depth, truncated
 character sketches and direct low-rank approximations are still exponential.
+With high probability, the standard Cayley/chordal Fourier-SOS construction
+also needs a frequency set and PSD block of size at least `21*N/116`.
 The generic quantum
 SDP interfaces examined here retain square-root dimension dependence or
 assume stronger low-rank input, Gibbs preparation, or implicit oracles.  A
@@ -167,8 +169,12 @@ pins, a sign-conflicting loop forces the one-sided separable-ceiling deficit
 remain open.  A randomized sixteen-bucket
 reassociation has an exponentially likely cut-dissociation event, but an
 exact balanced-depth-four counterexample shows that the event alone is
-insufficient under repeated Hankel interpolation.  A random condition
-controlling every completed-closure conflict remains open.  An exact expander
+insufficient under repeated Hankel interpolation.  The full completed-closure
+provenance lattice is exactly computable for a fixed compiler, but its random
+odd-support rank remains open.  The larger semantic row lattice has typical
+parity-even odd-support rank `q-1` and a parity loop of root-pin width at most
+`2*q`; under the matched-sign law its coherent pins usually fail in both
+sectors.  An exact expander
 identity buffer independently
 proves that the order-two gap is not invariant under exact redundant lifts.  These
 results do not settle the fixed aligned arithmetic lift or yield a planted

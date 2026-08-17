@@ -137,7 +137,9 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   quotient state space is an `(N/2-1)`-simplex whose universal exact PSD lift
   also needs size `N/2`; at the displayed hierarchy depth, truncated
   character sketches are already exponential, and the sparse circulant has
-  exponential stable rank.
+  exponential stable rank.  With high probability, the standard
+  Cayley/chordal Fourier-SOS construction likewise needs a frequency set and
+  PSD block of size at least `21*N/116`.
   Standard sparse-input
   quantum SDP solvers retain
   square-root dependence on that dimension; polylogarithmic-dimension and
@@ -171,8 +173,12 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   A randomized sixteen-bucket reassociation has an exponentially likely
   degree-four cut-dissociation event, but an exact balanced-depth-four
   counterexample proves that this event alone does not control repeated
-  Hankel interpolation.  A random condition controlling every completed-
-  closure conflict remains open.  An exact
+  Hankel interpolation.  The completed closure's formal provenance lattice
+  is exactly HNF/SNF-computable for every fixed compiler, but a random bound
+  on its odd-support rank remains open.  Full semantic row normalization can
+  be strictly stronger: its typical parity-even odd-support rank is `q-1`, and
+  it contains a parity loop of root-pin width at most `2*q`.  Under the
+  matched-sign law, the coherent pins usually fail in both sectors.  An exact
   expander identity buffer does prove lift non-invariance for a redundant
   quadratic formulation.  Neither result proves parity blindness, or a
   planted gap, for the fixed aligned arithmetic lift.  With
@@ -1814,6 +1820,12 @@ The chosen-query sparse-FFT procedures examined here choose or randomly
 access structured time-domain locations used by their filters; here the
 algorithm receives a one-pass set of uncontrollable random locations and one
 Bernoulli observation at each.
+The closest sample-pattern result found,
+[Nakos--Song--Wang](https://arxiv.org/abs/1909.11123), genuinely uses
+iid-uniform time indices, but its runtime is comparable to the full FFT and
+its input consists of values of one fixed signal with an `l_infinity/l_2`
+Fourier-tail guarantee.  It therefore matches passive sample complexity, not
+polylogarithmic decoding or the present one-draw Bernoulli observation model.
 Almost all locations are distinct when `q=poly(n)`, and a prescribed spacing
 or repeated location occurs with probability only `O(q^2/N)`.  One-bit hidden
 number algorithms likewise assume oracle access to chosen multipliers (and,
@@ -4191,25 +4203,84 @@ filter efficiently.  This includes the direct Gibbs/QSVT postselection
 architecture, but not a structured nonuniform input or a circuit that avoids
 top-space preparation.
 
-Even a classical exact chordal conversion is generically large here.  The
-first-harmonic Cayley graph has normalized nontrivial eigenvalues
+Even a classical exact chordal Fourier-SOS conversion is generically large
+here.  Fix one parity and use its `H=N/2`-point coordinate `x`.  Let `E_J^na` be
+the event that all `2*q*J` signed occurrences `+/-m*Y_i`, `1<=m<=J`, are
+nonzero and pairwise distinct modulo `H`.  The same occurrence union bound
+gives
 
 ```text
-lambda_k = (1/q)*sum_i cos(2*pi*k*Y_i/N).
+Pr[not E_J^na] <= 4*q^2*J^3/H.
 ```
 
-Hoeffding and a union bound give
+On `E_J^na`, the simple first-harmonic graph
 
 ```text
-Pr[max_(k!=0) |lambda_k|>1/2]
- <= 2*(N-1)*exp(-q/8).
+X = Cay(Z_H,{+/-Y_1,...,+/-Y_q})
 ```
 
-At `q=12*n` this tends to zero exponentially.  On the additional
-overwhelmingly likely no-loop/no-generator-collision event, the associated
-simple graph is a constant expander and has linear treewidth; an exact chordal
-cover has an `Omega(N)` clique.  This only excludes the evident
-Cayley/chordal SDP conversion.
+is a subgraph of the full truncated-score support graph.  Its normalized
+adjacency eigenvalues are
+
+```text
+mu_r = (1/q)*sum_i cos(2*pi*r*Y_i/H).
+```
+
+For every `r!=0`, Hoeffding and a union bound give
+
+```text
+Pr[max_(r!=0) |mu_r|>2/5]
+ <= 2*(H-1)*exp(-2*q/25).
+```
+
+At `q=12*n`, the total failure probability is therefore at most
+
+```text
+4*q^2*J^3/H
+ + exp[-(24/25-ln 2)*n+O(1)].
+```
+
+On the complementary event, every `1/2`-balanced vertex separator `Z` of
+`X` has size at least `21*H/58`.  Here is the constant calculation.  Put
+`z=|Z|/H`; a union `A` of components of `X-Z` can be chosen with normalized
+size `a in [(1-z)/3,1/2]`.  For the remaining set `B`, put `b=1-z-a`.
+There are no `A`--`B` edges, so expander mixing gives
+
+```text
+a*b <= (2/5)^2*(1-a)*(1-b)
+     = (4/25)*(a*b+z),
+z >= (21/4)*a*b.
+```
+
+Concavity of `a*(1-z-a)` on the displayed interval gives
+
+```text
+a*b >= min{2*(1-z)^2/9,(1-2*z)/4}.
+```
+
+The first term rules out `z<=1/4`; the second then gives `58*z>=21`.
+Every width-`w` tree decomposition has a centroid bag of size at most `w+1`
+whose deletion is `1/2`-balanced.  Hence
+
+```text
+tw(X) >= 21*H/58-1.
+```
+
+Treewidth is monotone under adding edges, so the same lower bound holds for
+the full support graph.  In the chordal construction of
+[Fawzi--Saunderson--Parrilo](https://arxiv.org/abs/1503.01207), every maximal
+clique of the chordal cover must have a translate inside the Fourier-SOS
+frequency set.  Thus that set, and its corresponding Hermitian PSD block,
+has size at least
+
+```text
+21*H/58 = 21*N/116.
+```
+
+This is an exponential lower bound only for their universal chordal-cover
+construction.  Their condition is sufficient, not necessary: it does not
+exclude a smaller certificate tailored to one slack `t-G_J`, a nonchordal or
+approximate lift, or a different optimizer.
 
 There is nevertheless a genuine polynomial-size arithmetic lift.  Put
 `z=omega_N^k` and introduce unit-modulus variables
@@ -4436,6 +4507,47 @@ localizer.  Since `|R_2|=O(V^2)`, this sufficient certificate is checkable in
 polynomial time for `V=O(n*q*J)`.  Conversely, every feasible order-two
 matrix with saturated targets must respect the same generated identities, so
 a phase-conflicting loop proves that those particular targets are impossible.
+
+The completed closure's entire formal pin-provenance lattice is also exactly
+computable; it is not necessary to enumerate long proof trees.  Let `C=R_2`
+be the Laurent columns and give every primitive identity `s` its Laurent
+difference `delta_s` and a formal pin-provenance vector
+`b_s in Z^(P_pin)`, where `P_pin` indexes the finite root and parity phase-pin
+generators.  Let
+`R` be the least reachable set of differences containing zero and the
+primitive differences and closed under inversion and every admissible
+transitivity triple witnessed by columns `A,B,C in C`:
+
+```text
+A/B=alpha,    B/C=beta,    A/C=gamma.
+```
+
+Hankel transport is already absorbed by identifying all column pairs with
+the same Laurent difference.  Choose one derivable provenance `r_alpha` for
+each `alpha in R`, with `r_0=0`, and form the integer lattice `K` generated by
+
+```text
+b_s-r_(delta_s),
+-r_alpha-r_(-alpha),
+r_alpha+r_beta-r_gamma
+```
+
+over all primitive seeds, inversions, and admissible transitivity triples.
+Then `K` is exactly the set of formal provenances of all completed zero-
+difference closure loops, including long proofs compressed by repeated
+Hankel transport.  Indeed, the derivable provenances at any fixed difference
+`alpha` form a coset of the zero-loop lattice.  Every displayed generator is
+the difference of two valid derivations, while structural induction reduces
+every derivation at `alpha` to `r_alpha` modulo `K`.
+
+There are `O(V^2)` Laurent columns and only polynomially many column triples.
+Representatives can be chosen with polynomial bit length, so HNF/SNF of the
+displayed generator matrix computes the exact global closure-loop lattice and
+its mod-two odd-support image for any fixed compiler.  This is a fixed-
+instance symbolic algorithm, not a random bound on that image.  It must also
+be distinguished from ordinary gate-row normalization, which computes all
+rank-one semantic consequences and can strictly strengthen the raw order-two
+closure.
 
 A useful coherent proposal pins
 
@@ -4992,15 +5104,100 @@ sparse-score problem.  It also does not solve the bounded-word question in
 the explicit hierarchy: a Smith-normal-form basis need not exhibit the
 shortest modular relation.
 
+Full semantic normalization is not parity-blind under the coherent pins.  It
+is a semantic strengthening of the raw order-two closure, and the buffer
+example shows that this strengthening can be strict.  It already suffices to
+use the first-harmonic roots `w_i=z^(Y_i)`.  Define
+
+```text
+L_sem = {(a,h) in Z^q x Z : a dot Y = h*H mod N}
+```
+
+and put `y=Y mod 2`.  If some `Y_j` is odd, then the exact mod-two image is
+
+```text
+{(a mod 2,h mod 2):(a,h) in L_sem}
+ = y^perp x F_2.
+```
+
+The forward inclusion follows by reducing the congruence modulo two.  For
+the converse, take `t in y^perp` and `b in F_2`.  The number
+`b*H-t dot Y` is even, and odd `Y_j` is invertible modulo `H`; choose `z_0`
+such that
+
+```text
+z_0*Y_j = (b*H-t dot Y)/2 mod H
+```
+
+and set `a=t+2*z_0*e_j`.  Thus the parity-even semantic cycles have odd-
+support rank `q-1`, and including the parity coordinate gives rank `q`.
+This holds with probability `1-2^(-q)` over iid public labels.
+
+One explicit relation is `(H*e_j,1) in L_sem`.  Since `H` is even, the
+coherent pins `w_i=S_i` give loop phase `p`, so full semantic normalization
+always rejects `p=-1` when an odd label exists.  For `p=+1`, let
+`s_i=(1-S_i)/2`.  Compatibility is equivalent to
+
+```text
+s in (y^perp)^perp = span(y).
+```
+
+For `y!=0`, the only compatible sign patterns are therefore all `S_i=+1`
+and `S_i=(-1)^(Y_i)` for every `i`; `z=+1` and `z=-1` show sufficiency and
+also satisfy every higher coherent pin `tau_(i,m)=S_i^m`.  Under the matched
+sign law and a fixed nondegenerate secret, the exact conditional probability
+of compatibility for `p=+1` is
+
+```text
+product_i [1+lambda*cos(theta_i)]/2
+ + product_i [1+lambda*(-1)^(Y_i)*cos(theta_i)]/2,
+theta_i = 2*pi*d*Y_i/N.
+```
+
+After averaging over iid labels, the joint probability of compatibility and
+`y!=0` is
+
+```text
+2^(1-q)-2*4^(-q) <= 2^(1-q).
+```
+
+Hence full semantic saturation typically rejects the coherent pins in both
+sectors; it does not produce a planted parity decoder.
+
+There is even a typical linear-width semantic parity loop.  Modulo `H`, the
+number of nonempty subsets `T` satisfying
+
+```text
+sum_(i in T) Y_i = H/2 mod H
+```
+
+has mean `(2^q-1)/H` and variance at most that mean.  Distinct nonempty
+binary incidence rows have a two-by-two minor of determinant `+/-1`, so their
+subset sums are pairwise independent.  Chebyshev therefore gives
+
+```text
+Pr[no such T] <= H/(2^q-1).
+```
+
+For such a subset, `a_i=2*1_(i in T)` and `h=1` define a relation in `L_sem`
+of root-pin width at most `2*q`; its coherent loop phase is again `p`.  At
+`q=12*n`, failure is `2^(-11*n+O(1))`.  This does not contradict the proved
+`Theta(n/log n)` raw-closure provenance theorem: the loop has linear width,
+and semantic row normalization need not make it visible to order-two Hankel
+closure.
+
 The order-two SDP is polynomial size--its degree-two monomial matrix has
 `O(V^2)` rows--but the exact results now point in both directions: aligned
 harmonics rule out the first-order witness, while acceptance of coherent pins
 for both parity hypotheses constructs explicit common pseudo-moments.  The
 randomized sixteen-bucket compiler has a rigorous exponentially likely
 cut-dissociation event, but the exact counterexample above shows that the
-event alone is insufficient under repeated Hankel interpolation.  A random
-dissociation condition controlling every completed-closure conflict without
-a root-pin-width bound remains open.  The
+event alone is insufficient under repeated Hankel interpolation.  The formal
+provenance lattice makes every completed conflict polynomially computable on
+a fixed instance, but a random bound on its odd-support rank remains open.
+The larger semantic row lattice instead has typical parity-even odd-support
+rank `q-1`; under the matched-sign law it usually rejects the coherent pins in
+both sectors.  The
 expander buffer independently proves lift non-invariance for a redundant
 formulation.  Proving a planted parity gap, or parity blindness for the fixed
 aligned arithmetic compiler, remains the first specific low-level relaxation
@@ -5808,6 +6005,8 @@ The passive-measurement comparison uses a different access model from the
 chosen-query sparse-Fourier and hidden-number results below:
 
 - [Sparse Fourier Transform in Any Constant Dimension with Nearly-Optimal Sample Complexity in Sublinear Time](https://arxiv.org/abs/1604.00845)
+- [(Nearly) Sample-Optimal Sparse Fourier Transform in Any Dimension;
+  RIPless and Filterless](https://arxiv.org/abs/1909.11123)
 - [A Sublinear Algorithm of Sparse Fourier Transform for Nonequispaced Data](https://arxiv.org/abs/math/0502357)
 - [Solving Hidden Number Problem with One Bit Oracle and Advice](https://doi.org/10.1007/978-3-642-03356-8_20)
 - [The Multivariate Hidden Number Problem](https://eprint.iacr.org/2015/111)
@@ -5948,7 +6147,9 @@ the exact `N/2`-atom parity SDP in polynomial time under their stated input
 parameters.  Its full quotient state simplex has exact PSD extension size
 `N/2`, truncated character evaluation remains exponential at the displayed
 hierarchy depth, and direct low-rank or Gibbs filtering retains exponential
-rank or normalization.
+rank or normalization.  The standard Cayley/chordal Fourier-SOS route also
+needs a frequency set and PSD block of size at least `21*N/116` with high
+probability.
 The two most compact new positive interfaces are instead the
 polynomial-size repeated-squaring unit-modulus QCQP and the typical rank-one
 high-order two-coset CVP gap `alpha<1.3448`; no polynomial planted solver is
@@ -5970,8 +6171,11 @@ forces the one-sided separable-ceiling deficit `D>=2/R_C`.  Long compressed
 proofs and the two-sector optimum difference remain open.  A randomized
 sixteen-bucket reassociation has an exponentially likely cut-dissociation
 event, but an exact depth-four counterexample shows that the event alone is
-insufficient; a random condition controlling every completed-closure
-conflict remains open.  An
+insufficient.  The full completed-closure provenance lattice is exactly
+computable for each fixed compiler, although its random odd-support rank
+remains open.  The larger semantic row lattice has typical parity-even odd-
+support rank `q-1` and a parity loop of root-pin width at most `2*q`; under the
+matched-sign law it usually rejects the coherent pins in both sectors.  An
 exact expander identity buffer does show explicit lift non-invariance.  The
 fixed aligned compiler and any planted parity gap remain concrete polynomial-
 size openings.
