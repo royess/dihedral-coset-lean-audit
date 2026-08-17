@@ -136,11 +136,16 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   time solver for that compact arithmetic lift remains a concrete positive
   opening.  Its strengthened first-order Shor relaxation is nevertheless
   parity-blind and has value `Theta(q*ln ln n)` above the true `O(q)` range.
-  Order two is polynomial size and can propagate a saturated root only to a
-  frontier of at most four factors; depth-four private trees keep that direct
-  frontier away from the shared leaves, but no globally consistent planted-
-  gap or pseudo-solution theorem is known.  With high probability, the natural local
-  factor graph has `Omega(n)` treewidth, exact coefficient BP develops
+  Order two is polynomial size and can propagate a saturated root to a
+  frontier of at most four factors.  More importantly, its Hankel identities
+  exactly reassociate compatible overlapping product-tree gates and lift
+  aligned harmonic relations such as `w_(i,2m)=w_(i,m)^2`; in that aligned-
+  tree formulation, the first-order independent-harmonic witness therefore
+  cannot extend.  A finite Laurent phase-closure
+  test gives an explicit conditional order-two pseudo-moment certificate,
+  but no high-probability acceptance or planted-gap theorem is known.  With
+  high probability, the natural local factor graph has `Omega(n)` treewidth,
+  exact coefficient BP develops
   exponentially many residues, and uniform bitwise BP has no inverse-
   polynomial first-round seed; these are structured-relaxation/message-
   passing barriers only;
@@ -4065,24 +4070,166 @@ The substitutions need not be balanced.  For example, substituting
 L(C_1*C_2*A_2*B) = s.
 ```
 
-What is exact is the frontier-size limit: a gate substitution adds one
+What is exact is the direct frontier-size limit: a gate substitution adds one
 factor, and expanding a frontier of four would require a degree-three
-multiplier and a degree-five moment.  Thus no legal sequence directly exposes
-more than four factors, although it may follow one branch asymmetrically.  A
-balanced tree of depth at least four keeps every such frontier on private
-internal nodes instead of the shared `u_r` leaves.  Requiring every frequency
-to have at least sixteen set bits below the top bit makes the crude failure
-probability only
+multiplier and a degree-five moment.  Thus no single substitution sequence
+directly exposes more than four factors, although it may follow one branch
+asymmetrically.  A balanced tree of depth at least four keeps that direct
+frontier on private internal nodes instead of the shared `u_r` leaves.
+Requiring every frequency to have at least sixteen set bits below the top bit
+makes the crude failure probability only
 
 ```text
 O(q*J^2*n^15/N).
 ```
 
-This is an exact propagation limit, not a proof of a second-order integrality
-gap: a globally Hankel-consistent PSD completion could still cut the
-first-order witness.  The order-two SDP is polynomial size--its degree-two
-monomial matrix has `O(V^2)` rows for `V=O(n*q*J)`--and is now the first
-specific low-level planted relaxation left genuinely unresolved.
+The direct frontier bound is not a buffer theorem.  Hankel transport can
+reassociate compatible overlapping product-tree gates without expanding the
+whole trees to all of their leaves.  It also lifts squaring through a product
+gate.  Suppose
+
+```text
+v=a*b,       v'=a'*b',
+[a']=[a^2],  [b']=[b^2].
+```
+
+Here brackets denote columns in the order-two moment Gram matrix.  Gate
+rotations and Hankel transport give
+
+```text
+[a'*b]=[v*a],   [a*b']=[v*b],
+[a'*conj(v)]=[a*conj(b)]=[v*conj(b')],
+```
+
+and a final transport gives `[a'*b']=[v^2]`.  Since `[v']=[a'*b']`, aligned
+trees for `m*Y_i` and `2*m*Y_i`, with identity padding for the dropped top bit
+under modular wrap, therefore obey exactly
+
+```text
+[w_(i,2m)] = [w_(i,m)^2].
+```
+
+This matters for the first-order witness.  Its independently saturated root
+signs are
+
+```text
+s_(i,m) = sign(a_(i,m)) = (-1)^(m+1)*S_i^m.
+```
+
+But `s_(i,2m)=-1` whereas `s_(i,m)^2=1`, so that witness is inconsistent at
+order two whenever the two occurrence trees are aligned.  The isolated first-
+two-harmonic block of one sample has the following exact optimum, hence this
+is an upper bound on its contribution in every global feasible point:
+
+```text
+max_(|z|=1) [2*rho*Re(z)-rho^2*Re(z^2)]
+ = rho^2+1/2,    rho>=1/2,
+ = 2*rho-rho^2,  rho<1/2.
+```
+
+Thus order two removes a real part of the artificial first-order gap.  It
+does not by itself supply a parity decoder: harmonic consistency is local to
+one sample, while the wanted bit is carried by an exact public-label half-
+turn relation.
+
+There is an exact finite certificate for the remaining completion question.
+Let `R_2` be the reduced Laurent monomials of degree at most two in all QCQP
+variables.  Start with the labelled column identities `[v]=[a*b]` for every
+gate, `[u_(n-1)]=p*[1]`, and any proposed unit-phase root pins.  Repeatedly
+close these identities under inversion, transitivity, and Hankel transport:
+whenever one admissible column pair with Laurent difference `gamma` has phase
+`xi`, every other admissible pair with the same difference receives phase
+`xi`.  If no pair receives conflicting phases, put one orthogonal unit vector
+on each connected component and use the accumulated phases inside that
+component.  The resulting block-rank-one Gram matrix is PSD, has unit
+diagonal, is Hankel, and satisfies every order-two gate and fixed-variable
+localizer.  Since `|R_2|=O(V^2)`, this sufficient certificate is checkable in
+polynomial time for `V=O(n*q*J)`.  Conversely, every feasible order-two
+matrix with saturated targets must respect the same generated identities, so
+a phase-conflicting loop proves that those particular targets are impossible.
+
+A useful coherent proposal pins
+
+```text
+tau_(i,m) = S_i^m.
+```
+
+It respects every deterministic same-sample harmonic identity and gives the
+feasible objective value
+
+```text
+B_J = q*[-ln(1+rho^2)
+          +2*sum_(m<=J) (-1)^(m+1)*rho^m/m]
+    = q*ln(1+lambda)+O(q*rho^(J+1)/J)
+```
+
+whenever the phase closure accepts the pins for the chosen parity.  If both
+parity closures accept, this value is common to them.  If one
+enforces only the rigorously derived aligned doublings, there is a stronger
+conditional candidate.  Write `m=2^t*l` with `l` odd and put
+
+```text
+tau_(i,l) = S_i*exp(i*pi/3),
+tau_(i,2^t*l) = tau_(i,l)^(2^t).
+```
+
+The odd term has cosine `1/2`, while every doubled term has cosine `-1/2`;
+after multiplying by the alternating coefficient sign, every harmonic
+contributes `rho^m/m`.  If both Laurent closures accept these pins, the two
+parities have the common feasible value
+
+```text
+D_J = q*[-ln(1+rho^2)+sum_(m<=J) rho^m/m]
+    = Theta(q*ln ln n)
+```
+
+at the paper-scale visibility.  Extra addition, cross-odd-chain, or public-
+label arrows are precisely what can obstruct this candidate.
+
+If one also sets `w_(i,0)=1` and adds the valid root identities
+`w_(i,a+b)=w_(i,a)*w_(i,b)` for `a,b>=0` and `a+b<=J`, and the
+closure accepts coherent maximizing pins for both parities, the root moment
+block is Toeplitz.  The trigonometric moment theorem then bounds every sample
+by `max_theta g_J(theta)`, where
+
+```text
+g_J(theta) = -ln(1+rho^2)
+ +2*sum_(m<=J) (-1)^(m+1)*rho^m*cos(m*theta)/m.
+```
+
+Choose `theta_*` in `argmax_theta g_J(theta)` and pin
+`tau_(i,m)=(S_i*exp(i*theta_*))^m`.  These coherent pins attain the ceiling,
+so the two strengthened relaxations have exactly the same optimum
+`q*max_theta g_J(theta)`.  Uniformly,
+
+```text
+|max_theta g_J(theta)-ln(1+lambda)|
+ <= 2*rho^(J+1)/[(J+1)*(1-rho)].
+```
+
+For the simpler displayed pins, a labelled closure loop that uses root pins
+with signed multiplicities `c_(i,m)` has logical exponent
+
+```text
+a_i = sum_m m*c_(i,m),
+sum_i a_i*Y_i = h*H mod N,   h in Z.
+```
+
+Its loop phase is `product_i S_i^(a_i)*p^h`.  When every `a_i=0`, all
+deterministic harmonic, carry, and reassociation aliases are therefore phase-
+consistent.  A conflict must contain a nonzero public-label relation.  What
+remains unproved is that every possible low-width Laurent
+loop has a sparse enough coefficient vector for the existing no-short-
+relation bound to exclude it.  Independently permuting or buffering
+occurrence trees can change which loops the order-two closure sees, so this
+is also formulation-dependent.
+
+The order-two SDP is polynomial size--its degree-two monomial matrix has
+`O(V^2)` rows--but the exact results now point in both directions: aligned
+harmonics rule out the first-order witness, while acceptance of coherent pins
+for both parity hypotheses constructs explicit common pseudo-moments.  Proving
+typical closure acceptance, or proving a planted parity gap in a strengthened
+formulation, remains the first specific low-level relaxation opening.
 
 Natural exact message passing encounters a different sharp barrier.  Keep
 only the `m=1` product tree for each sample and contract its private nodes to
@@ -5024,8 +5171,11 @@ polynomial-size repeated-squaring unit-modulus QCQP and the typical rank-one
 high-order two-coset CVP gap `alpha<1.3448`; no polynomial planted solver is
 known for either.  The QCQP's strengthened first-order Shor relaxation has an
 explicit parity-blind gap, and natural exact BP has exponential width or
-support.  Its order-two moment relaxation, however, remains a concrete
-polynomial-size opening rather than a refuted route.
+support.  At order two, aligned harmonic identities invalidate the first-
+order witness in the aligned-tree formulation, while a finite Laurent closure
+supplies an exact conditional pseudo-moment certificate.  Typical certificate
+acceptance versus a planted parity gap remains a concrete polynomial-size
+opening.
 
 This is not a no-go theorem.  A distribution-specific collective circuit
 could conceivably decode only the parity without exposing a reusable fibre

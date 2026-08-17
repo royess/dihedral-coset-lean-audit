@@ -190,9 +190,12 @@ stronger low-rank input, Gibbs preparation, or implicit-oracle assumptions.
 An exact repeated-squaring lift does compress the
 search to a polynomial-size nonconvex unit-modulus QCQP, which is now a
 concrete positive arithmetic target rather than a decoder.  Its strengthened
-first-order Shor relaxation is parity-blind with a growing integrality gap;
-the polynomial-size order-two relaxation is the first low level not resolved
-by the present pseudo-solution.  With high probability, natural exact factor-
+first-order Shor relaxation is parity-blind with a growing integrality gap.
+At order two, Hankel transport enforces harmonic squaring for aligned
+occurrence trees, so that witness fails in the aligned-tree formulation; a
+polynomial Laurent phase-closure test gives a conditional
+pseudo-moment certificate, but typical acceptance versus a planted parity
+gap remains unresolved.  With high probability, natural exact factor-
 graph elimination has `Omega(n)` treewidth, coefficient BP develops
 exponentially many residues, and uniform bitwise BP has no inverse-polynomial
 first-round seed.  Taking a signed

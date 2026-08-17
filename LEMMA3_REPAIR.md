@@ -694,8 +694,11 @@ stronger input, preparation, or oracle assumptions.  A compact repeated-
 squaring construction instead gives an exact polynomial-size nonconvex unit-
 modulus QCQP; a proved planted solver for that lift would be a new positive
 decoder.  Its strengthened first-order Shor relaxation is parity-blind with a
-growing integrality gap, while the polynomial-size order-two relaxation is
-the first low level not settled by the current witness.  With high
+growing integrality gap.  At polynomial-size order two, harmonic squaring is
+enforced for aligned occurrence trees and that witness fails in the aligned-
+tree formulation; a finite Laurent phase closure
+gives a conditional pseudo-moment certificate, but typical acceptance versus
+a planted parity gap remains unresolved.  With high
 probability, natural exact factor-graph elimination has `Omega(n)` treewidth,
 coefficient BP develops exponential support, and uniform bitwise BP has no
 inverse-polynomial first-round seed.  Signed spectral traces do not already

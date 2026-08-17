@@ -141,8 +141,12 @@ SDP interfaces examined here retain square-root dimension dependence or
 assume stronger low-rank input, Gibbs preparation, or implicit oracles.  A
 repeated-squaring construction gives a genuinely polynomial-
 size exact unit-modulus QCQP, but its strengthened first-order Shor
-relaxation is parity-blind with a growing gap.  The polynomial-size order-two
-relaxation remains unresolved.  With high probability, the natural exact
+relaxation is parity-blind with a growing gap.  At polynomial-size order two,
+Hankel transport enforces harmonic squaring for aligned occurrence trees and
+invalidates that witness in the aligned-tree formulation.  A finite Laurent
+phase closure gives an exact conditional pseudo-
+moment certificate, but neither typical certificate acceptance nor a planted
+parity gap is proved.  With high probability, the natural exact
 factor graph has `Omega(n)` treewidth, coefficient BP has exponential support,
 and uniform bitwise BP has no inverse-polynomial first-round seed; these
 statements do not cover a different arithmetic compression.
