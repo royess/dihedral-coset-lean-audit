@@ -126,12 +126,15 @@ probability for every fixed `epsilon>0`; this does not lower-bound a direct
 arithmetic coefficient algorithm.  At visibility `1-Theta(1/log n)`, a
 uniformly accurate `poly(n)`-sparse trigonometric expansion of the log
 likelihood gives a precise constructive optimizer interface.  The radix
-envelopes analyzed here remain too loose to certify polynomial pruning, and
-scalar polynomials in `G_J` below the
+grouped triangle envelope is identical on `H/poly(n)` prefixes with high
+probability, while exact high-bit elimination can become Fourier-dense.
+These radix routes do not certify polynomial pruning, and scalar polynomials
+in `G_J` below the
 displayed `Theta(n/log n)` threshold cannot create its half-turn harmonic with
 high probability.  The natural parity-constrained group-moment/SOS hierarchy
-also admits a factor-aligning rank-one pseudo-solution until its explicit
-matrix is exponential.  A polynomial sparse-circulant/QSVT correlation filter
+also admits a coherent sample-aligning rank-one pseudo-solution until its
+explicit matrix is exponential; the same point blocks the displayed
+bounded-word SOHS certificates.  A polynomial sparse-circulant/QSVT correlation filter
 can mark `{d,-d}`, but its target input mass is only `Theta(q/N)` on the
 natural sparse-data state, retaining an `Omega(sqrt(N/q))` state-conversion
 cost.
@@ -155,11 +158,18 @@ predictor has exponentially small planted correlation, and every nonlinear
 cycle syndrome below the displayed linear odd-support-rank threshold remains
 parity-blind.  This excludes a high-probability planted saturated-feasibility
 gap for the `tau_(i,m)=S_i^m` phase certificate, not an unsaturated SDP value
-gap.  A randomized sixteen-bucket
+gap.  For those coherent pins, with high probability, every expanded proof
+below the displayed `Theta(n/log n)` net root-pin-width threshold is
+phase-consistent for both parities in every standard phase-one multiplication-
+tree layout.  Separately, using objective-coefficient phases as the reference
+pins, a sign-conflicting loop forces the one-sided separable-ceiling deficit
+`D>=2/R_C`.  Long compressed proofs and the two-sector optimum difference
+remain open.  A randomized sixteen-bucket
 reassociation has an exponentially likely cut-dissociation event, but an
 exact balanced-depth-four counterexample shows that the event alone is
-insufficient under repeated Hankel interpolation.  A stronger random
-condition remains open.  An exact expander identity buffer independently
+insufficient under repeated Hankel interpolation.  A random condition
+controlling every completed-closure conflict remains open.  An exact expander
+identity buffer independently
 proves that the order-two gap is not invariant under exact redundant lifts.  These
 results do not settle the fixed aligned arithmetic lift or yield a planted
 gap.  With high probability, the natural exact

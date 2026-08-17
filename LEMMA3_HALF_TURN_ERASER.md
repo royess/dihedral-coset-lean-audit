@@ -111,13 +111,17 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   At paper-scale visibility below one, the complete log likelihood nevertheless
   has a uniformly accurate `poly(n)`-sparse trigonometric representation.
   Thus passive decoding reduces constructively to a sparse high-frequency
-  optimizer or partition algorithm.  The radix envelopes analyzed below
-  remain too loose to certify polynomial pruning, and every scalar polynomial
-  in `G_J` below the displayed `Theta(n/log n)`
+  optimizer or partition algorithm.  The exact grouped triangle envelope is
+  identical on `H/poly(n)` prefixes with high probability, while one exact
+  high-bit elimination can turn one Fourier mode into a dense spectrum.
+  These analyzed radix routes do not certify polynomial pruning.  Every
+  scalar polynomial in `G_J` below the displayed `Theta(n/log n)`
   threshold has exactly zero half-turn Fourier coefficient with high
   probability.  A stronger natural group-moment/SOS relaxation also has a
-  rank-one pseudo-solution that aligns every observed factor in both parity
-  classes until the moment matrix is already exponential.  A sparse
+  rank-one pseudo-solution that coherently aligns each sample likelihood
+  factor in both parity classes until the moment matrix is already
+  exponential; the same point blocks bounded-word SOHS certificates below
+  the displayed gap.  A sparse
   circulant/QSVT filter can mark the two high-correlation modes efficiently,
   but obtaining constant conditional mass there has postselection probability
   only `O(q/N)` for the natural sparse-data state.  At the same parameters,
@@ -156,11 +160,19 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   syndrome whose odd-support span has rank below `(1/10-epsilon)*n` remains
   exponentially parity-blind.  Saturated `tau_(i,m)=S_i^m` phase-certificate
   feasibility therefore has no high-probability planted gap, although the
-  unsaturated SDP value gap remains open.
+  unsaturated SDP value gap remains open.  For those coherent pins, every
+  expanded closure proof below the displayed `Theta(n/log n)` net root-pin-
+  width threshold is phase-consistent for both parities with high probability
+  in every standard phase-one multiplication-tree layout.  Separately, with
+  objective-coefficient phases as the reference pins, an exposed sign-
+  conflicting loop forces the exact one-sided separable-ceiling deficit
+  `D>=2/R_C`.  Neither statement controls a long compressed proof or the
+  difference of the two SDP optima.
   A randomized sixteen-bucket reassociation has an exponentially likely
   degree-four cut-dissociation event, but an exact balanced-depth-four
   counterexample proves that this event alone does not control repeated
-  Hankel interpolation.  A stronger random condition remains open.  An exact
+  Hankel interpolation.  A random condition controlling every completed-
+  closure conflict remains open.  An exact
   expander identity buffer does prove lift non-invariance for a redundant
   quadratic formulation.  Neither result proves parity blindness, or a
   planted gap, for the fixed aligned arithmetic lift.  With
@@ -3755,17 +3767,94 @@ evaluator was found.  At `lambda=1`, likelihood factors can vanish and no
 uniform finite log truncation exists, so this uniformly controlled reduction
 uses the noisy high-visibility regime rather than the clean endpoint.
 
-The two elementary radix envelopes analyzed here do not yet yield a
-polynomial pruning theorem.  On a prefix
-`k=a+2^ell*u`, exact maximization is the same sparse problem on the residual
-group `Z_(N/2^ell)` with prefix-dependent phases.  The harmonic triangle envelope has
-`Theta(n log log n)` slack,
-and even the factorwise envelope remains a linear amount above the planted
-score.  These two envelope bounds therefore remain too loose to certify a
-polynomial pruning rule for the early prefix family.  Exact elimination of
-one high bit also destroys sparsity: even
-`max_b cos(2*pi*(u+b*H)/N)=|cos(pi*u/H)|` has all `H` Fourier coefficients
-nonzero.
+The power-of-two domain does not itself provide a smaller exact quotient.
+Fix a parity and write its `H=N/2` candidates as `k=k_0+2*x`, with
+`x in Z_H`.  Let `T=2*q*J` count all signed harmonic occurrences.  Except
+with probability
+
+```text
+2^(-q)+J*T^2/H,
+```
+
+all signed occurrences are nonzero and pairwise distinct modulo `H`, and at
+least one first-harmonic `Y_i` is odd.  Its coefficient cannot cancel.
+Consequently the Fourier support has gcd one with `H`, so the score has full
+period `H`.  HNF/SNF normalization therefore leaves one large cyclic
+`2`-primary factor rather than splitting the search into smaller CRT
+components.  This only blocks exact convolution-preserving quotients; it
+does not exclude a nonhomomorphic or instance-specific compression.
+
+The elementary radix triangle envelope can be analyzed exactly.  Remove the
+constant from the fixed-parity score and write
+
+```text
+g(x) = sum_(s in Z_H) c_s*exp(2*pi*i*s*x/H).
+```
+
+For a prefix `x=b+2^t*y`, put `M=H/2^t`.  The residual coefficients are
+
+```text
+C_(b,r) = sum_(s=r mod M) c_s*exp(2*pi*i*b*s/H),
+g_b(y) = sum_(r in Z_M) C_(b,r)*exp(2*pi*i*r*y/M).
+```
+
+If the `T` signed frequencies are distinct and nonzero modulo `M`, their
+grouped triangle envelope is independent of the prefix:
+
+```text
+U_b = sum_r |C_(b,r)|
+    = sum_s |c_s|
+    = U_J,
+U_J = 2*q*sum_(m<=J) rho^m/m.
+```
+
+For any two signed frequencies, a nontrivial collision modulo `M` has
+probability at most `O(J/M)`.  Choose a dyadic
+`M_0 in [n^6,2*n^6]`.  Then
+
+```text
+Pr[an alias or zero frequency modulo M_0]
+ = O(J*T^2/M_0) = o(1).
+```
+
+Injectivity modulo `M_0` implies injectivity at every larger dyadic residual
+modulus.  Thus, with high probability, all `H/M_0` prefixes reached before
+the final `O(log n)` bits have exactly the same triangle certificate `U_J`.
+At the paper-scale visibility, `U_J=Theta(q*ln ln n)`, whereas the maximum
+truncated score is `O(q)`.  A branch-and-bound method using this certificate
+therefore cannot prune any of those exponentially many prefixes.  The
+factorwise envelope analyzed earlier also retains linear slack.  These are
+lower bounds only for the two displayed envelopes, not for a stronger joint
+prefix certificate.
+
+Exact high-bit elimination fails to preserve Fourier sparsity.  Split `g`
+into its even- and odd-frequency parts `E` and `O`.  Pairing `x` with
+`x+H/2` gives
+
+```text
+max{g(x),g(x+H/2)} = E(x)+|O(x)|.
+```
+
+Eliminating the absolute value explicitly introduces `O(x)^2`.  With high
+probability `Theta(q)` first-harmonic frequency residues are odd.  Outside a signed
+four-term collision event of probability `O(q^4/H)`, their pair sums and
+differences give `Omega(q^2)` distinct modes in `O^2`.
+
+There is an exact one-mode version of the same nonclosure.  For dyadic
+`M>=2`, eliminating one bit from `cos(pi*u/M)` on `Z_(2*M)` produces
+`f(u)=|cos(pi*u/M)|` on `Z_M`.  With the unnormalized DFT convention,
+
+```text
+f_hat(r)
+ = (-1)^r*sin(pi/M)
+   /[cos(2*pi*r/M)-cos(pi/M)],    r in Z_M,
+```
+
+and every one of these `M` coefficients is nonzero.  Thus explicit exact
+elimination can become dense in one step.  An arithmetic circuit may keep
+`|O|` implicit, but the next radix message is then no longer a sparse
+trigonometric polynomial.  This is not a lower bound on a different implicit
+optimizer.
 
 There is a sharper parity-only limitation for low-order processing.  Let
 
@@ -3824,8 +3913,8 @@ a in Word_(2*L), h in {0,1},
 are well defined.  The order-`L` group-moment matrix indexed by `Word_L` is
 the rank-one matrix `v*v^dagger`, it satisfies `y_H=p`, and it obeys all
 visible equal-frequency, conjugacy, and unit-character identities.  Thus both
-parity-constrained relaxations have a feasible pseudo-moment point that aligns
-every observed factor separately.  Its value per factor is
+parity-constrained relaxations have a feasible pseudo-moment point that
+coherently aligns every sample likelihood factor.  Its value per factor is
 
 ```text
 -ln(1+rho^2)
@@ -3864,6 +3953,38 @@ planted maximum `q*(1-ln 2)+o(q)`.  The pseudo-value is
 ```text
 (2*ln 2-1)*q+o(q).
 ```
+
+The same pseudo-point also blocks a bounded-word sum-of-Hermitian-squares
+certificate.  Suppose an identity
+
+```text
+t-G_J = sum_j h_j^dagger*h_j
+```
+
+uses factors supported inside the admissible `Word_L` range, with the
+pseudo-functional defined on all displayed products.  Applying the positive
+pseudo-functional forces
+
+```text
+t >= B_J,
+B_J = q*[-ln(1+rho^2)
+          +2*sum_(m<=J) (-1)^(m+1)*rho^m/m].
+```
+
+The alternating-series remainder gives
+
+```text
+B_J = q*ln(1+lambda)+R_J,
+|R_J| <= 2*q*rho^(J+1)/(J+1).
+```
+
+Thus at high visibility this bounded-word certificate cannot beat
+`q*ln 2+o(q)`, while the typical true maximum is
+`q*(1-ln 2)+o(q)`.  This is a lower bound witnessed by one pseudo-point, not
+an equality for the hierarchy optimum.  In particular, the much larger
+absolute-coefficient value `U_J` belongs to the private-occurrence
+first-order lift and, in the present `J>=2`, `rho>0` regime, is not a
+feasible value of this natural word quotient.
 
 This rules out only the explicit natural word/frequency-sum moment hierarchy
 before it reaches exponential size.  It does not exclude an implicit
@@ -4392,6 +4513,106 @@ existing no-short-relation bound to exclude it.  Independently regrouping or
 buffering occurrence trees can change which loops the order-two closure sees,
 so this is also formulation-dependent.
 
+A compiler-independent theorem is available when width is measured in the
+expanded root-pin provenance rather than in the completed closure graph.  Let
+
+```text
+A_R = {a != 0 : a=sum_(nu<=ell) epsilon_nu*m_nu*e_(i_nu),
+       1<=ell<=R, epsilon_nu in {+1,-1}, 1<=m_nu<=J},
+```
+
+and let `E_R^pin` be the event that
+
+```text
+a dot Y is not 0 or H mod N    for every a in A_R.
+```
+
+Expand two competing derivations of one Laurent column identity into their
+primitive seeds and cancel inverse uses.  If `c_(i,m)` is the resulting net
+signed multiplicity, call `sum_(i,m)|c_(i,m)|` the root-pin width.  Tag a use
+of root pin `(i,m)` by
+`+/-m*e_i`, tag a parity pin by `+/-1` in a separate integer `h`, and tag
+every standard phase-one gate or unit identity by zero.  Inversion negates
+the tag, transitivity adds tags, and every Hankel transport copies the whole
+provenance.  A conflicting closed proof of root-pin width at most `R` would
+therefore satisfy
+
+```text
+a dot Y = h*H mod N,
+loop phase = product_i S_i^(a_i)*p^h,
+a in A_R or a=0.
+```
+
+On `E_R^pin`, a nonzero `a` is impossible.  If `a=0`, then
+`h*H=0 mod 2*H`, so `h` is even and the loop phase is one.  Hence, for the
+coherent pins `tau_(i,m)=S_i^m`, every conflict of root-pin width at most
+`R` is excluded for both parities, for every multiplication-tree layout or
+coloring built from those standard identities.  This includes arbitrarily
+many repeated Hankel transports; the bound concerns their expanded net pin
+provenance, not the number of edges in the saturated closure graph.
+
+The event holds through a nearly linear proof width.  For fixed nonzero `a`,
+put `g=gcd(a_1,...,a_q,N)`.  Since `||a||_infinity<=R*J`,
+
+```text
+Pr_Y[a dot Y in {0,H}] <= 2*g/N <= 2*R*J/N.
+```
+
+The crude word count gives
+
+```text
+|A_R| <= (R+1)*(2*q*J)^R,
+Pr[not E_R^pin]
+ <= [2*R*J*(R+1)/N]*(2*q*J)^R.
+```
+
+Thus for every fixed `epsilon>0`, taking
+
+```text
+R <= (1-epsilon)*n*ln(2)/ln(2*q*J)
+```
+
+makes the failure probability `2^(-epsilon*n+O(log n))` in the stated
+`q=12*n`, polylogarithmic-`J` regime.  This is
+`R=Theta(n/log n)`.  No theorem here bounds the root-pin provenance of every
+completed-closure conflict, so a long proof compressed by transport remains
+outside the result.
+
+The same provenance gives a quantitative statement without saturating the
+root moments.  Let a feasible order-two Gram have unit columns, let
+`y_j=<1,w_j>`, and fix hypothetical unit pins `tau_j`.  For a formal closure
+loop `C`, let `n_j` count all primitive pin-edge occurrences of pin `j`, with
+multiplicity in an explicit telescoping derivation before net cancellation,
+and let `sigma_C` be its formal loop phase.  Put
+
+```text
+d_j = 1-Re(conj(tau_j)*y_j).
+```
+
+Hankel transport preserves the pin residual norm:
+
+```text
+||[M]-tau_j*[N]||^2 = 2*d_j
+```
+
+whenever the transported quotient `M/N` is `w_j`.  Telescoping around the
+loop and applying weighted Cauchy--Schwarz gives, for arbitrary `a_j>0`,
+
+```text
+D = sum_j a_j*d_j,
+R_C = sum_j n_j^2/a_j,
+D >= |1-sigma_C|^2/(2*R_C).
+```
+
+When the `tau_j` are the objective coefficient phases and the `a_j` are
+their magnitudes, `D` is the deficit from the separable objective ceiling.
+A sign-conflicting loop therefore forces `D>=2/R_C`.  For an isolated
+`t`-cycle with first-harmonic weight `a_j=2*rho` and `n_j=1`, this gives
+`D>=4*rho/t`, consistent with the exact cycle penalty below.  This theorem
+identifies a one-sided loss from a chosen reference ceiling.  It does not
+bound `|Opt_+-Opt_-|`: parity-even harmonic conflicts may lower both sectors,
+and the other parity need not attain the reference ceiling.
+
 An odd closure cycle is not automatically a planted decoder.  Let
 
 ```text
@@ -4670,7 +4891,8 @@ This counterexample refutes the deterministic implication
 `D4 => no conflicting loop`.  It does not refute a high-probability theorem
 with stronger public-label dissociation: the construction has the sparse
 occurrence-level identity `F_S=F_(T_0)+F_(T_1)`.  Proving that an augmented
-random event blocks every repeated-transport interpolation remains open.  The
+random event controls every completed-closure conflict, without a root-pin-
+width bound, remains open.  The
 example also does not show that a uniformly random compiler coloring fails
 with nonnegligible probability.
 
@@ -4776,8 +4998,9 @@ harmonics rule out the first-order witness, while acceptance of coherent pins
 for both parity hypotheses constructs explicit common pseudo-moments.  The
 randomized sixteen-bucket compiler has a rigorous exponentially likely
 cut-dissociation event, but the exact counterexample above shows that the
-event alone is insufficient under repeated Hankel interpolation.  A stronger
-random dissociation condition remains open.  The
+event alone is insufficient under repeated Hankel interpolation.  A random
+dissociation condition controlling every completed-closure conflict without
+a root-pin-width bound remains open.  The
 expander buffer independently proves lift non-invariance for a redundant
 formulation.  Proving a planted parity gap, or parity blindness for the fixed
 aligned arithmetic compiler, remains the first specific low-level relaxation
@@ -5706,12 +5929,16 @@ coefficient ratio by a new method.  In the noisy high-visibility regime, the
 log likelihood itself now has a uniformly accurate polynomial-size sparse
 trigonometric representation, so one especially concrete opening is an
 implicit global optimizer for that random high-frequency polynomial.  The
-radix envelopes analyzed here remain too loose to certify polynomial
-pruning, while scalar polynomials in `G_J` below the
+grouped triangle envelope stays identical on `H/poly(n)` prefixes with high
+probability, and exact high-bit elimination can become Fourier-dense in one
+step.  These radix routes do not certify polynomial pruning, while scalar
+polynomials in `G_J` below the
 displayed `Theta(n/log n)` threshold have no half-turn harmonic at all with
 high probability.  The natural parity-constrained group-moment/SOS hierarchy
-also has a factor-aligning rank-one pseudo-solution until its explicit moment
-matrix is exponential.  Conversely, a sparse circulant/QSVT circuit can mark
+also has a coherent sample-aligning rank-one pseudo-solution until its
+explicit moment matrix is exponential, and the same point blocks the
+displayed bounded-word SOHS certificates.  Conversely, a sparse
+circulant/QSVT circuit can mark
 the two correlation peaks efficiently, but the natural sparse-data input has
 only `Theta(q/N)` weight there, so this route still pays
 `Omega(sqrt(N/q))` amplification.  Signed spectral traces, moments,
@@ -5734,10 +5961,17 @@ make every single closure-cycle predictor exponentially unbiased; even a
 nonlinear cycle syndrome remains blind while its odd-support rank is below
 `(1/10-epsilon)*n`.  This rules out a high-probability planted saturated-
 feasibility gap for the `tau_(i,m)=S_i^m` phase certificate, not an
-unsaturated SDP value gap.  A randomized
+unsaturated SDP value gap.  For those coherent pins, every expanded proof
+below the displayed `Theta(n/log n)` net root-pin-width threshold is
+nevertheless phase-consistent for both parities with high probability in
+every standard phase-one multiplication-tree layout.  Separately, using
+objective-coefficient phases as the reference pins, a sign-conflicting loop
+forces the one-sided separable-ceiling deficit `D>=2/R_C`.  Long compressed
+proofs and the two-sector optimum difference remain open.  A randomized
 sixteen-bucket reassociation has an exponentially likely cut-dissociation
 event, but an exact depth-four counterexample shows that the event alone is
-insufficient; an augmented random condition remains open.  An
+insufficient; a random condition controlling every completed-closure
+conflict remains open.  An
 exact expander identity buffer does show explicit lift non-invariance.  The
 fixed aligned compiler and any planted parity gap remain concrete polynomial-
 size openings.

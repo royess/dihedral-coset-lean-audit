@@ -677,13 +677,15 @@ average-sign magnitude at most `N^(-4.06843+epsilon)` with high probability
 for every fixed `epsilon>0`; this does not lower-bound a direct arithmetic
 computation of the coefficient ratio.  For visibility `1-Theta(1/log n)`, the
 log likelihood has a uniformly accurate polynomial-size sparse trigonometric
-expansion.  Optimizing it would decode `{d,-d}`, but the radix envelopes
-analyzed here remain too loose to certify polynomial pruning.  Scalar
-polynomials in `G_J` below the displayed
+expansion.  Optimizing it would decode `{d,-d}`, but the grouped triangle
+envelope is identical on `H/poly(n)` prefixes with high probability, while
+exact high-bit elimination can become Fourier-dense.  These radix routes do
+not certify polynomial pruning.  Scalar polynomials in `G_J` below the displayed
 `Theta(n/log n)` threshold have no half-turn Fourier component with high
 probability.  The natural parity-constrained group-moment/SOS hierarchy also
-has a factor-aligning rank-one pseudo-solution until its explicit matrix is
-exponential.  A sparse-circulant/QSVT correlation filter can mark the two
+has a coherent sample-aligning rank-one pseudo-solution until its explicit
+matrix is exponential; the same point blocks the displayed bounded-word
+SOHS certificates.  A sparse-circulant/QSVT correlation filter can mark the two
 correct modes in polynomial time, but their input mass is only `Theta(q/N)`
 for the natural sparse-data state, so this filter still needs
 `Omega(sqrt(N/q))` amplification.
@@ -707,11 +709,17 @@ single cycle is exponentially uncorrelated with the planted parity, and any
 nonlinear cycle syndrome below the displayed linear odd-support-rank threshold
 remains parity-blind.  This rules out a high-probability planted saturated-
 feasibility gap for the `tau_(i,m)=S_i^m` phase certificate but not an
-unsaturated SDP value gap.  A randomized sixteen-
+unsaturated SDP value gap.  For those coherent pins, with high probability,
+every expanded proof below the displayed `Theta(n/log n)` net root-pin-width
+threshold is phase-consistent for both parities in every standard phase-one
+multiplication-tree layout.  Separately, using objective-coefficient phases
+as the reference pins, a sign-conflicting loop forces the one-sided
+separable-ceiling deficit `D>=2/R_C`.  Long compressed proofs and the
+two-sector optimum difference remain open.  A randomized sixteen-
 bucket reassociation has an exponentially likely cut-dissociation event, but
 an exact balanced-depth-four counterexample shows that the event alone does
-not control repeated Hankel interpolation.  A stronger random condition
-remains open.  An exact expander identity buffer
+not control repeated Hankel interpolation.  A random condition controlling
+every completed-closure conflict remains open.  An exact expander identity buffer
 shows that the gap is not invariant under exact redundant lifts.  Neither
 result settles the fixed aligned arithmetic lift or supplies a planted gap.
 With high probability, natural exact factor-graph elimination has `Omega(n)` treewidth,
