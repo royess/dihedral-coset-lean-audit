@@ -194,9 +194,14 @@ consecutive point queries recover the row.  Yet the exponentiated row has all
 surely.  Exact open-boundary TT/MPS needs bond at least `sqrt(N/2)`, and its
 scalar block moment recurrence has full order.  Shared factor-`poly(n)` scalar
 features for all blocks need rank `N^(1-gamma-o(1))` at source queries and
-`N^(1/49-o(1))` or `N^(1/45-o(1))` at Gaussian root blocks.  One-block adaptive
-arithmetic, approximation, and succinct scalar-evaluable ill-conditioned
-certificates remain open.
+`N^(1/49-o(1))` or `N^(1/45-o(1))` at Gaussian root blocks.  Every one-block
+subtraction-free positive formula fixed before the query needs at least
+`|I|` exponential leaves for any global finite-factor approximation.
+Conversely, a typical rare-cap row has an `N^o(1)` near-cap support whose
+sparse prefix sums approximate every interval additively within
+`exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  Locating that support
+output-sensitively, and
+query-adaptive arithmetic with cancellation, remain open.
 Rejection-based quantum
 tilting returns to `sqrt(M/k)`.
 Yet Kac--Rice gives
@@ -334,8 +339,11 @@ proves pair diffuseness
 and leading-signal concentration.  A 49-column four-template certificate puts
 quadratic relative variance at most `N^(-0.310083...+o(1))`.  Extra half-turn
 signal is `o_p(q_0)`.  Thus that fixed deterministic resolvent has conditional
-Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  A conditional
-optimizer, `Y`-adaptive weights, and nonlinear performance remain open.
+Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  On the
+deterministic reference-mass bulk `p_r^(0)>=N^(-1/10)`, uniform matrix and signal
+concentration gives the same ratio for the fully `Y`-adaptive signed radial
+optimizer.  Exponentially light empty cells obstruct a whole-space
+comparison; nonlinear performance remains open.
 Bucket-sum-only random rehash medians contain no information beyond the
 original path sum;
 a fixed positive pair-overlap law can still give either sign of prediction
@@ -351,14 +359,18 @@ correlation `lambda^2*(7*lambda^2-8)/32<0`.  The actual residual has uniform
 `L_1` norm `1+o(1)` at visibility one, while asymptotic nonnegative-coefficient
 completions with the exact Rademacher-sum `Z` law and `o(M)` local reversals
 realize either sign.  The exact remaining Wagner projection depends only on
-`r(z)=E[R|Z=z]`; small regression energy or nonpositive signed-margin
-covariance would imply positive correlation, but neither is proved.
+`r(z)=E[R|Z=z]`.  Nonpositive signed-margin covariance would imply positive
+correlation but remains unproved; the sixth-moment result refutes the small-
+regression sufficient condition.
 The certified clean-cluster residual sector is exponentially negligible at
 that scale.  A separate automatic order-three family gives
-`<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  This is not
-the orthogonal `P_3` coefficient; without a sixth-moment upper bound it decides
-neither regression energy nor sign.  The all-degree mixed closure tail remains
-open.
+`<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  A new
+sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
+exponential lower bound for `||E[R|Z]||_2` and for at least one available
+degree-two-or-three orthogonal coefficient.  Small regression is therefore
+false, but neither the individual `P_3` coefficient nor the Wagner sign is
+determined.  The
+all-degree signed projection remains open.
 These are information-sufficiency obstructions and do not settle the random
 modular sign.  A
 new Parseval

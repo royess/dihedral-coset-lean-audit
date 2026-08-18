@@ -136,8 +136,11 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   and leading-signal concentration.  A 49-column four-template certificate
   puts quadratic relative variance at most `N^(-0.310083...+o(1))`.  Extra
   half-turn signal is `o_p(q_0)`.  Thus that fixed resolvent has conditional
-  Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  A conditional
-  optimizer, `Y`-adaptive weights, and nonlinear statistics remain open.
+  Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  On the
+  deterministic reference-mass bulk `p_r^(0)>=N^(-1/10)`, uniform matrix and signal
+  concentration gives the same ratio for the fully `Y`-adaptive signed radial
+  optimizer.  Exponentially light empty cells obstruct a whole-space
+  comparison; nonlinear statistics remain open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -155,15 +158,19 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   residual `A_H-c*Z` has uniform `L_1` norm `1+o(1)`, and asymptotic nonnegative-
   coefficient likelihood completions with the exact Rademacher-sum law of
   `Z` and `o(M)` prescribed local reversals realize either full sign.  Exactly,
-  the unresolved Wagner projection depends only on `r(z)=E[R|Z=z]`; a small
-  regression energy or nonpositive signed-margin covariance is sufficient for
-  positive correlation, but neither property is proved for random labels.
+  the unresolved Wagner projection depends only on `r(z)=E[R|Z=z]`.
+  Nonpositive signed-margin covariance would imply positive correlation but
+  remains unproved; the sixth-moment result refutes the small-regression
+  sufficient condition.
   The entire known clean-cluster residual sector is exponentially negligible
   at this regression scale.  A different automatic order-three family gives
-  `<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  This is not
-  the orthogonal `P_3` coefficient; without a sixth-moment upper bound it does
-  not decide regression energy or sign.  The all-degree mixed closure tail
-  remains open.  These are
+  `<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  A new
+  sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
+  exponential lower bound for `||E[R|Z]||_2` and for at least one available
+  degree-two-or-three orthogonal coefficient.  Small regression is therefore
+  false, but neither the individual `P_3` coefficient nor the Wagner sign is
+  determined.  The
+  all-degree signed projection remains open.  These are
   information-sufficiency obstructions: the modular example is highly
   atypical, and the random-instance outside signed spectrum remains open.
   Direct importance sampling of the exact Bayesian coefficient ratio has
@@ -222,9 +229,14 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   representations need bond at least `sqrt(N/2)`, and the scalar block moment
   recurrence has full order.  A shared factor-`poly(n)` scalar feature family
   for all blocks needs rank `N^(1-gamma-o(1))` at source queries and
-  `N^(1/49-o(1))` or `N^(1/45-o(1))` at Gaussian root blocks.  One-block
-  adaptive arithmetic, approximation, and succinct scalar-evaluable
-  ill-conditioned certificates remain open.
+  `N^(1/49-o(1))` or `N^(1/45-o(1))` at Gaussian root blocks.  Every one-block
+  subtraction-free positive formula fixed before the query needs at least
+  `|I|` exponential leaves for any global finite-factor approximation.
+  Conversely, a typical rare-cap row has an `N^o(1)` near-cap support whose
+  sparse prefix sums approximate every interval additively within
+  `exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  Locating that support
+  output-sensitively, and
+  query-adaptive arithmetic with cancellation, remain open.
   Rejection-based quantum tilting
   cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
   only
@@ -3241,6 +3253,130 @@ rank of one realized row is not an obstruction.  The theorems above concern
 simultaneous block families with query-independent separated features.  They
 do not lower-bound one fixed block, query-adaptive cores, nonlinear arithmetic
 circuits, phase cancellation, or output-sensitive root location.
+
+**A global positive-formula barrier for one block.**  Call a subtraction-free
+exponential formula any binary formula whose leaves are
+
+```text
+c*exp(<b,g>),       c>0, b in R^(2*q),
+```
+
+and whose internal gates are `+` and `*`.  Its structure and constants may
+depend on `Y,I,u`, but are fixed before `g` is seen.  On the event that some
+public frequency is odd, the following holds simultaneously for every
+nonempty `I subset Z_N`, with `s=|I|`: if a finite `C` satisfies
+
+```text
+Z_I(u;g) <= P_I(g) <= C*Z_I(u;g)       for every real g,
+```
+
+then the formula for `P_I` has at least `s` leaf occurrences and at least
+`s-1` binary gates.  The event has probability `1-2^(-q)=1-N^(-12)`.
+
+To prove this, put `lambda_a=u*A_a` and let `S(F)` be the finite exponent
+support of a positive exponential polynomial.  For every direction `theta`,
+
+```text
+lim_(t->infinity) t^(-1)*log(F(t*theta))
+  = max_(b in S(F)) <b,theta>.
+```
+
+The global factor inequality therefore forces
+
+```text
+conv(S(P_I)) = conv{lambda_a:a in I}.
+```
+
+Project to the cosine--sine plane of an odd `Y_j`.  Up to a fixed reflection,
+the target exponents become
+
+```text
+(u*S_j/sqrt(q))
+  *(cos(2*pi*Y_j*a/N),-sin(2*pi*Y_j*a/N)),       a in I.
+```
+
+They are `s` distinct points on one circle, and every one is a vertex of the
+projected Newton polygon.  Positive coefficients prevent cancellation.  At
+an addition gate the polygon is the convex hull of a union; at a
+multiplication gate it is a Minkowski sum.  In the plane, either operation
+has at most the sum of the two child vertex counts.  A leaf has one vertex,
+so induction proves the lower bound.
+
+This includes products and arbitrary finite global-factor approximation.  It
+does not cover DAG sharing, subtraction or complex cancellation, division or
+log gates, a formula chosen after seeing `g`, or approximation only on a
+bounded or high-probability set of Gaussian queries.
+
+**Uniform near-cap sparsification.**  There is also a positive structural
+reduction at the threshold scale.  Let `M=N^gamma`, choose `u` by
+`barPhi(u)=1/M`, fix a constant `A>0`, and put
+
+```text
+delta=n^(-A),
+L=sqrt(2*(2*A+3)*ln(n)),
+H={0<=a<M:X_a>=u-L},
+T_u=exp(u^2).
+```
+
+Conditional on arbitrary public labels, only the standard-normal marginal of
+each `X_a` is needed.  With probability at least `1-2*delta`, simultaneously,
+
+```text
+|H| <= delta^(-1)*M*barPhi(u-L) = N^o(1),
+R := sum_(0<=a<M) exp(u*X_a)*1[X_a<u-L]
+   <= B := delta^(-1)*M*exp(u^2/2)*Phi(-L),
+B/T_u = O(n^(-A-5/2)/sqrt(ln(n))).
+```
+
+On this single event, every interval, indeed every subset
+`I subset {0,...,M-1}`, obeys
+
+```text
+S_I := sum_(a in I intersect H) exp(u*X_a),
+0 <= Z_I(u)-S_I <= B.
+```
+
+Thus `U_I=S_I+B` is a simultaneous certified additive upper estimate.
+Gaussian tilting gives exactly
+
+```text
+E[exp(u*G)*1[G<u-L]] = exp(u^2/2)*Phi(-L).
+```
+
+Markov controls `R`.  A second Markov bound controls `|H|`, while Mills gives
+
+```text
+M*barPhi(u-L)
+  <= (u^2+1)/(u*(u-L))*exp(u*L-L^2/2)
+  = N^o(1).
+```
+
+Finally,
+
+```text
+M*exp(-u^2/2) < sqrt(2*pi)*(u+1/u),
+Phi(-L) <= phi(L)/L,
+```
+
+which yields the displayed `B/T_u` bound.  Every interval remainder is a
+nonnegative sub-sum of the same global `R`, so no union bound over intervals
+is needed.
+
+Once the sorted set `H` and its values are known, an `N^o(1)`-size prefix
+table answers every interval in logarithmic time.  Locating `H` remains the
+hard primitive.  Its expected size is `N^o(1)`, and Kac--Rice gives at most
+
+```text
+M*exp(-(u-L)^2/2)
+  = O(u*exp(u*L-L^2/2))
+  = N^o(1)
+```
+
+expected continuous crossings because the centered derivative prefactor is
+at most one.  No known algorithm isolates those crossings in time polynomial
+in `q,log(N)` and their actual number.  This is an output-sensitive near-cap
+reduction, not a completed table-free enumerator and not a multiplicative
+approximation when `Z_I` is small.
 
 The phase-averaged coefficient energy is not uniform across residues, so one
 cannot strengthen this observation by simply assigning `1/N` of the energy
@@ -8248,8 +8384,9 @@ brackets
 ```
 
 whose exponent at the cusp is `0.249195176618...`.  These energy, covariance,
-and monotonicity statements are exact sufficient interfaces, not properties
-currently proved for the random modular law.
+and monotonicity statements are exact sufficient interfaces.  The sixth-
+moment theorem below refutes the small-energy interface; covariance and
+monotonicity remain unproved for the random modular law.
 
 The actual clean anti-majority sector is too small even at this sharper
 regression scale.  At visibility one, let `R_cl` be the part of the residual
@@ -8451,11 +8588,168 @@ This is a raw cubic moment, not `<R,P_3(Z)>`.  The exact orthogonal polynomial
      /sqrt(E_U[(Z/sigma)^6]).
 ```
 
-Thus a sixth-moment Wick bound would refute the small-regression condition,
-whereas that condition would force
-`E_U[(Z/sigma)^6]>=N^(0.04278463147...-o(1))`.  No such sixth-moment estimate
-is proved here, and the cubic moment alone gives no sign or covariance
-conclusion.
+The required sixth moment is in fact Wick.  Continue on the exact cusp and
+write `M_V=|V|=N^(m+o(1))`, where
+
+```text
+p = 0.020766264718131...,
+a = 0.499463451078382...,
+m = 0.498390353235145....
+```
+
+With high probability,
+
+```text
+E_U[Z^6] = (15+o(1))*sigma^6.
+```
+
+Here is a finite-rank certificate.  An ordered sextuple contributes precisely
+when its six supports have zero binary symmetric difference.  Let `h,g` be
+the rational relation deficiencies of its left and right `6*n` halves, and
+let `R_L,R_R` be their rational relation spaces.  If the saturated common
+integer relation lattice contains a vector of odd coefficient sum, the joint
+target event is empty.  Otherwise put `c_rel=dim_Q(R_L intersect R_R)`.  The
+joint filtering probability is at most
+
+```text
+O(1)*(K*N)^(-6)*K^(h+g-c_rel)*N^c_rel.
+```
+
+If `e_h` is the largest per-coordinate signed-type entropy for deficiency
+`h`, the corresponding class exponent is
+
+```text
+Phi(h,g,c_rel)
+  = 6*(e_h+e_g)-6*(a+1)+a*(h+g-c_rel)+c_rel.
+```
+
+There are `365` even-support ternary columns.  Put
+
+```text
+A = H_2(p)+p = a/3,
+Q_even(x) = 1+60*x^2+240*x^4+64*x^6.
+```
+
+The Gibbs bound and the trivial dimension bound give
+
+```text
+e_h <= min(e_even,(6-h)*A),
+
+e_even
+  = log_2(Q_even(x))-6*p*log_2(x)
+  = 0.704890309500...,
+
+x = 0.0331261049654....
+```
+
+These inequalities leave only `(h,g,c_rel)=(2,2,2)` and `(3,3,3)` at the
+Wick scale `3*m`.  For `h=2`, a four-dimensional rational subspace meets the
+ternary cube in at most `81` columns.  Its weight-two columns form a rank-at-
+most-four root subsystem of `D_6`.  If their number is `r_2`, then
+`r_2<=24`, while all other nonzero columns number at most `80-r_2`.  For
+`0<x<=1` this gives
+
+```text
+e_2 <= min_(0<x<=1)
+         [log_2(1+24*x^2+56*x^4)-6*p*log_2(x)]
+     = 0.622714196350...,
+
+x = 0.0522708948831....
+```
+
+Consequently
+
+```text
+Phi(2,2,2)
+  <= 1.474716551882...
+   = 3*m-0.020454507824....
+```
+
+The next remaining finite class, `(2,3,2)`, has the larger gap
+`0.260495528373...`.  In the critical `(3,3,3)` class, equality
+`e_3=3*A` forces the full product measure on three independent ternary rows.
+Every rational linear form taking that cube back into `{0,+/-1}` is then zero
+or a signed coordinate.  Positive row marginals exclude zero; even support
+therefore forces three signed pairs, exactly the Wick configurations.  Every
+nonpair three-dimensional subspace omits at least one cube point.  Since the
+smallest product atom has mass `(p/2)^3`, its entropy loses at least
+
+```text
+kappa_3 = -log_2(1-(p/2)^3)
+        = 0.00000161495324209....
+```
+
+Thus every nonpair class has a uniform exponent gap at least
+
+```text
+eta_6
+  = min(0.020454507824...,6*kappa_3)
+  = 0.00000968971945....
+```
+
+The method-of-types polynomial factors and fixed Smith indices are
+`N^o(1)`.  Hence the expected number of nonpair zero-XOR sextuples is at most
+`N^(3*m-eta_6+o(1))`, and Markov makes it `o(M_V^3)` with high probability.
+The exact even-multiplicity count is
+
+```text
+M_V+15*M_V*(M_V-1)+15*M_V*(M_V-1)*(M_V-2)
+  = 15*M_V^3-30*M_V^2+16*M_V.
+```
+
+Since `Z=2*sum_(T in V) chi_T`, this proves the sixth-moment display.
+
+The regression consequence is now unconditional on any extra moment
+hypothesis.  Put `X=Z/sigma` and
+
+```text
+A_3 = <R,X^3>_U
+    >= N^(0.021392315733...+o(1)).
+```
+
+Write `mu_j=E_U[X^j]` and
+
+```text
+G_3 = X^3-mu_3-mu_4*X.
+```
+
+Because `R` is orthogonal to `1` and `X`, `<R,G_3>_U=A_3`.  The fourth- and
+sixth-moment theorems give
+
+```text
+||G_3||_2^2
+  = mu_6-mu_3^2-mu_4^2
+  <= 6+o(1).
+```
+
+Therefore
+
+```text
+||E_U[R | Z]||_2
+  >= A_3/sqrt(6+o(1))
+  >= N^(0.021392315733...+o(1)).
+```
+
+Equivalently, when both `P_2,P_3` exist as exact law-dependent orthonormal
+polynomials,
+
+```text
+<R,P_2(Z)>_U^2+<R,P_3(Z)>_U^2
+  >= A_3^2/(6+o(1)),
+
+max_(j in {2,3}) |<R,P_j(Z)>_U|
+  >= A_3/sqrt(12+o(1)).
+```
+
+If the law of `Z` has only three support points, `G_3` lies entirely in the
+`P_2` direction and the stronger bound
+`|<R,P_2(Z)>_U|>=A_3/sqrt(6+o(1))` holds instead.
+
+Thus the earlier small-regression sufficient condition fails by an
+exponential factor.  The theorem does not isolate the `P_3` coefficient:
+the law of `Z` need not be symmetric.  Nor does a large degree-two-or-three
+regression coefficient determine `<R,sign(Z)>`, its signed-margin covariance,
+or the Wagner sign.  Those remain all-degree sign-projection questions.
 
 For orientation only, the generic full-rank scale `M^(j/2)/N` has exponents
 
@@ -10083,12 +10377,322 @@ recomputed from `Y`, arbitrary near-optimal weights, nonlinear statistics, or
 a changed retention rule.  The earlier `Good(Y)` theorem is still restricted
 to a fixed exact-degree family and is not used here.
 
+This quenched statement extends to low-entropy public model selection.  At the
+dangerous center put
+
+```text
+delta_ng=0.001073097836...,
+delta_4=0.310083007153...,
+delta_H=0.247682708....
+```
+
+Let `W_n` be a deterministic finite dictionary of radial coefficient arrays.
+For `w in W_n`, set `x=E_4^(1/2)*w`, `D_w=||x||_2^2`, and normalize
+`ell^T*x=v_4^T*w=1`.  Call the dictionary certificate-admissible when,
+uniformly over `w`,
+
+```text
+J(w)=w^T*(B_4+rho*E_4)*w <= N^(F+o(1)),
+p_r(w)=x_r^2/D_w <= N^(4*F+o(1))*p_r^(0),
+s_r(w)=ell_r*|x_r| <= N^(2*F+o(1))*p_r^(0),
+```
+
+and every automatic generic-`GG` edge obeys
+
+```text
+|c_e(w)|
+  <= O(D_w*N^(4*F+o(1))/H_deg)
+     *4^(-|T_z union T_z'|).
+```
+
+These are the exact resolvent envelopes proved above; a near-optimal objective
+value alone does not imply them.  If
+
+```text
+|W_n| <= N^(eta+o(1)),       eta<delta_ng,
+0<zeta<delta_ng-eta,
+```
+
+then, with probability
+
+```text
+1-N^(-(delta_ng-eta-zeta)+o(1)),
+```
+
+simultaneously for every `w in W_n`,
+
+```text
+mu_Y(w)=2*q_0*(1+O(N^(-zeta+o(1)))),
+Num_Y(w)=4*q_0^2*J(w)*(1+O(N^(-zeta+o(1)))),
+R_Y(w)=J(w)*(1+O(N^(-zeta+o(1)))).
+```
+
+Indeed, the leading-signal variance has exponent at least `0.469121...`, the
+extra-orientation first moment has exponent `delta_H`, and the four-template
+relative variance has exponent `delta_4`.  For the only bottleneck,
+
+```text
+E_Y[|w^T*E_ng(Y)*w|]
+  <= N^(-delta_ng+o(1))*4*q_0^2*J(w).
+```
+
+Chebyshev at relative threshold `N^(-zeta)` costs twice `zeta`; Markov costs
+one `zeta`.  A union bound over `W_n` gives the displayed probability.
+Consequently every public-label-measurable selector `w_hat(Y) in W_n` obeys
+
+```text
+R_Y(w_hat(Y)) >= (1-o(1))*J_*
+               = (2-o(1))*R_(sur,min).
+```
+
+Thus even an `N^(eta)` candidate search with `eta<0.001073097836...` cannot
+beat the deterministic surrogate optimum.  A concrete covered family is a
+grid of deterministic ridge parameters satisfying
+
+```text
+rho_theta/rho=N^o(1),
+y_theta=(C_4+rho_theta*I)^(-1)*ell,
+w_theta=E_4^(-1/2)*y_theta/(ell^T*y_theta).
+```
+
+The coordinate resolvent proof is uniform on such a grid.  In particular,
+every `poly(n)` grid is covered.
+
+The finite dictionary can be enlarged to a whole polynomial-dimensional
+bulk subspace.  Continue at visibility one and the dangerous center.  In the
+`E_4`-normalized radial coordinates, put
+
+```text
+x = E_4^(1/2)*w,                  ell = E_4^(-1/2)*v_4,
+calM = C_4+rho*I.
+```
+
+In this paragraph write
+
+```text
+J(x)=x^T*calM*x,       J_*=min_(ell^T*x=1) J(x).
+```
+
+After quotienting the two opposite orientations, write the complete exact
+conditional numerator and signal as
+
+```text
+Num_Y(w) = x^T*A_Y*x,             mu_Y(w) = g_Y^T*x.
+```
+
+Their deterministic targets are
+
+```text
+A_0 = 4*q_0^2*calM,               g_0 = 2*q_0*ell.
+```
+
+The factor `4` belongs to the complete post-quotient conditional numerator;
+the named uncompressed leading surrogate has numerator `2*q_0^2*calM`.
+Define the height-cutoff bulk
+
+```text
+B = {r in {1,...,t}^4:p_r^(0)>=N^(-1/10)}
+```
+
+and let `P_B` denote coordinate projection.  Then, with probability
+
+```text
+1-N^(-0.000536548918...+o(1)),
+```
+
+one has simultaneously
+
+```text
+||P_B*(A_Y-A_0)*P_B||_op = o(q_0),
+
+||(g_Y-g_0)_B||_2
+  <= 2*q_0*N^(-0.01+o(1))*||ell_B||_2.
+```
+
+Consequently the fully signed optimizer recomputed after observing all public
+labels satisfies
+
+```text
+min_(supp(x) subset B, g_Y^T*x != 0)
+  x^T*A_Y*x/(g_Y^T*x)^2
+    = (1+o_p(1))*J_*
+    = (2+o_p(1))*R_(sur,min).
+```
+
+This is a uniform conditional theorem on the whole bulk, not a net or a
+finite-model-selection statement.
+
+For the numerator comparison, it suffices to test `e_r` and `e_r+e_u`.
+There are only `O(t^8)=N^o(1)` such vectors, and polarization recovers every
+compressed entry.  For any such test vector `x`, with `D=||x||_2^2`,
+
+```text
+p_r(x) = x_r^2/D <= N^(1/10+o(1))*p_r^(0).
+```
+
+The coefficient identity
+
+```text
+sqrt(p_r^(0))/sqrt(P_r)
+  = 2^(-|r|)/sqrt(H_deg)
+```
+
+therefore gives, for every automatic generic-`GG` edge,
+
+```text
+|c_e(x)|
+  <= O(D*N^(1/10+o(1))/H_deg)
+     *4^(-|T_z union T_z'|).
+```
+
+The two-edge penalty in the 49-column calculation is now `N^(1/5)`.  Before
+this penalty, the smallest full-rank nonunit-Smith margin is
+
+```text
+delta_(4,base)
+  = 0.310083007153...+8*F
+  = 0.368621632433....
+```
+
+Thus every one- or two-cell test has relative quadratic-variance exponent
+
+```text
+delta_4(B)
+  = delta_(4,base)-1/5
+  = 0.168621632433....
+```
+
+Moreover,
+
+```text
+E_Y[x^T*Q_Y*x] <= q_0*N^(F+o(1))*D.
+```
+
+Take
+
+```text
+tau_A = delta_ng/2 = 0.000536548918....
+```
+
+Chebyshev at absolute threshold `q_0*N^(-tau_A)*D` has exponent
+
+```text
+delta_4(B)-2*F-2*tau_A
+  = 0.152913878277...,
+```
+
+while the non-generic Markov bound has exponent
+`delta_ng-tau_A=0.000536548918...`.  A polynomial union bound and
+polarization give the operator estimate.  Since
+
+```text
+A_0 >= 4*q_0^2*rho*I = (2-o(1))*q_0*I,
+```
+
+the additive estimate is a multiplicative Loewner comparison on the bulk.
+
+For the signal, test coordinate `r` using `x=e_r/ell_r`.  The pre-envelope
+two-template margin and the bulk point-mass penalty give
+
+```text
+delta_(sig,base)
+  = 0.469121041...+4*F
+  = 0.498390353640...,
+
+delta_sig(B)
+  = delta_(sig,base)-1/5
+  = 0.298390353640....
+```
+
+Also
+
+```text
+J(e_r/ell_r) <= N^(1/10+o(1)),
+```
+
+so the extra-orientation first-moment decay is
+
+```text
+delta_H(B) = 0.201341372295....
+```
+
+Chebyshev and Markov at `tau_g=0.01`, followed by a polynomial union bound,
+give the Euclidean signal estimate above.  Since `q_0*H_deg=N^o(1)` and
+`A_0>=(2-o(1))*q_0*I`, its squared `A_0^(-1)` dual norm is at most
+`N^(-0.02+o(1))`.  The squared `A_0^(-1)` dual norm of the deterministic
+signal is at least `N^(-F-o(1))`.  Since `0.01>F/2`, the perturbation is
+relatively negligible.
+
+It remains to verify that the bulk keeps the deterministic optimum.  The
+discarded reference mass is at most `N^(-1/10+o(1))`.  The exact resolvent
+coordinate envelopes give
+
+```text
+||x_*^out||_2^2/||x_*||_2^2
+  <= N^(4*F-1/10+o(1))
+   = N^(-0.07073068736...+o(1)),
+
+|ell^T*x_*^out|
+  <= N^(2*F-1/10+o(1))
+   = N^(-0.08536534368...+o(1)),
+
+J(x_*^out)/J_*
+  <= N^(5*F-1/10+o(1))
+   = N^(-0.06341335920...+o(1)).
+```
+
+Cauchy--Schwarz in the `calM` inner product controls the cross term.
+Projecting onto `B` and renormalizing the signal changes the objective by
+`o(J_*)`, so the restricted deterministic minimum is `(1+o(1))*J_*`.
+The operator and dual-signal estimates then prove the conditional display.
+
+More generally, the same proof works for a cutoff
+`p_r^(0)>=N^(-kappa)` whenever
+
+```text
+5*F < kappa < 0.176993488056....
+```
+
+The concrete value `kappa=1/10` keeps all margins explicit.
+
+There is also a sharp reason not to seek coefficient-norm stability on the
+whole radial space.  The cells `r^A=(1,1,1,1)` and `r^B=(2,1,1,1)` each
+contain only `poly(n)` oriented templates, so with probability `1-o(1)` both
+are empty after retention.  If `e_A,e_B` are their radial coordinate vectors,
+put
+
+```text
+u_0=(v_4)_(r^B)*e_A-(v_4)_(r^A)*e_B.
+```
+
+On that event,
+
+```text
+v_4^T*u_0 = 0,
+Num_Y(w+t*u_0) = Num_Y(w),
+mu_Y(w+t*u_0) = mu_Y(w)
+```
+
+for every radial `w` and real `t`.  Thus the same normalization, conditional
+numerator, and signal persist although `u_0^T*E_4*u_0>0`.  Conditional
+minimizers are therefore nonunique along an unbounded affine line, or
+minimizing sequences can be made unbounded.  No whole-radial inverse or
+coefficient-norm stability
+theorem can hold before quotienting the conditional nullspace, adding a
+deterministic ridge, or restricting the class.  This does not show that the
+unrestricted conditional optimal value is smaller.  It explains why the
+bulk theorem must omit exponentially light cells: a whole-space operator
+comparison is false, even though arbitrary public-label-adaptive signed
+optimization is now controlled inside the deterministic bulk.  The result
+does not cover nonlinear statistics or a changed retention rule.
+
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
 not prove that `sign(Z)` fails, and it does not exclude clipping or different
 nonlinear aggregation.  The theorem rules out fixed data-independent linear
-weighting as a repair of this Wagner SNR calculation.  It is not a lower
-bound on data-adaptive or nonlinear generalized-birthday decoding.
+weighting and public-label-adaptive signed radial weighting inside the bulk as
+repairs of this Wagner SNR calculation.  It is not a lower bound on
+unrestricted adaptive or nonlinear generalized-birthday decoding.
 
 Directly Fourier transforming a polynomial-size classical sample table has
 the same limitation.  Any normalized amplitude state supported on `M` known
@@ -10524,8 +11128,11 @@ proves pair diffuseness and leading-signal concentration.  A 49-column
 four-template certificate puts quadratic relative variance at most
 `N^(-0.310083...+o(1))`.  Extra half-turn signal is `o_p(q_0)`.  Thus that fixed
 deterministic resolvent has conditional
-Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  A conditional
-optimizer, `Y`-adaptive weights, and nonlinear sign performance remain open.
+Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  On the
+deterministic reference-mass bulk `p_r^(0)>=N^(-1/10)`, uniform matrix and signal
+concentration gives the same ratio for the fully `Y`-adaptive signed radial
+optimizer.  Exponentially light empty cells obstruct a whole-space
+comparison; nonlinear sign performance remains open.
 Bucket-sum-only rehash medians are only margin transforms of the same path
 sum, while a positive three-character likelihood
 model shows that fixed
@@ -10542,15 +11149,18 @@ actual modular instance `N=16,Y=(1,2,3,5,6,7)` has correlation
 uniform `L_1` norm `1+o(1)`, and asymptotic nonnegative-coefficient likelihood
 completions with the exact Rademacher-sum `Z` law and `o(M)` local reversals
 realize either sign.  Exactly, the remaining Wagner projection depends only
-on `r(z)=E[R|Z=z]`; small regression energy or nonpositive signed-margin
-covariance would ensure positive correlation, but neither is proved for
-random labels.
+on `r(z)=E[R|Z=z]`.  Nonpositive signed-margin covariance would ensure
+positive correlation but remains unproved; the sixth-moment result refutes
+the small-regression sufficient condition.
 The certified clean-cluster residual sector is exponentially negligible at
 that regression scale.  A separate automatic order-three family yields
-`<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  This raw cubic
-moment is not the orthogonal `P_3` coefficient; without a sixth-moment upper
-bound it decides neither regression energy nor sign.  The all-degree mixed
-closure tail remains open.
+`<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  A new
+sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
+exponential lower bound for `||E[R|Z]||_2` and for at least one available
+degree-two-or-three orthogonal coefficient.  Small regression is therefore
+false, but neither the individual `P_3` coefficient nor the Wagner sign is
+determined.  The
+all-degree signed projection remains open.
 These are information-sufficiency obstructions; the modular example is
 highly atypical, so the random-instance Wagner sign remains uncontrolled.
 The
@@ -10597,9 +11207,14 @@ cyclic Fourier support is full and every index-bit matricization has maximal
 rank almost surely, forcing `sqrt(N/2)` central bond for exact open-boundary
 TT/MPS or read-once transfer representations.  Shared factor-`poly(n)` scalar
 features for all blocks need rank `N^(1-gamma-o(1))` at source queries and
-`N^(1/49-o(1))` or `N^(1/45-o(1))` at Gaussian root blocks.  One-block adaptive
-arithmetic, approximation, and succinct scalar-evaluable ill-conditioned
-certificates remain open.
+`N^(1/49-o(1))` or `N^(1/45-o(1))` at Gaussian root blocks.  Every one-block
+subtraction-free positive formula fixed before the query needs at least
+`|I|` exponential leaves for any global finite-factor approximation.
+Conversely, a typical rare-cap row has an `N^o(1)` near-cap support whose
+sparse prefix sums approximate every interval additively within
+`exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  Locating that support
+output-sensitively, and
+query-adaptive arithmetic with cancellation, remain open.
 Rejection-based quantum tilting
 returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
 only `M^o(1)` expected rare-cap crossings and accepted indices, so the
