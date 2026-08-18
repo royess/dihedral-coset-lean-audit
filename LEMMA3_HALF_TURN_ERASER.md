@@ -137,10 +137,12 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   puts quadratic relative variance at most `N^(-0.310083...+o(1))`.  Extra
   half-turn signal is `o_p(q_0)`.  Thus that fixed resolvent has conditional
   Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  On the
-  deterministic reference-mass bulk `p_r^(0)>=N^(-1/10)`, uniform matrix and signal
-  concentration gives the same ratio for the fully `Y`-adaptive signed radial
-  optimizer.  Exponentially light empty cells obstruct a whole-space
-  comparison; nonlinear statistics remain open.
+  deterministic reference-mass bulk `p_r^(0)>=N^(-1/10)`, uniform matrix and
+  signal concentration gives the same ratio for the fully `Y`-adaptive signed
+  radial optimizer.  The raw light-cell signal has exponentially small
+  occupancy-diagonal leverage, but an abstract Gram example shows that a light
+  coordinate can still act as a signed control variate through the Schur
+  complement.  Whole-space optimization and nonlinear statistics remain open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -168,10 +170,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
   exponential lower bound for `||E[R|Z]||_2` and for at least one available
   degree-two-or-three orthogonal coefficient.  Small regression is therefore
-  false, but neither the individual `P_3` coefficient nor the Wagner sign is
-  determined.  The
-  all-degree signed projection remains open.  These are
-  information-sufficiency obstructions: the modular example is highly
+  false.  More sharply, two valid nonnegative-Walsh likelihood completions
+  have the same exact symmetric base law, `P_2/P_3` data, and positive raw
+  cubic,
+  but opposite Wagner correlations.  These completions are abstract rather
+  than random modular laws; the all-degree signed projection remains open.
+  These are information-sufficiency obstructions: the modular example is
+  highly
   atypical, and the random-instance outside signed spectrum remains open.
   Direct importance sampling of the exact Bayesian coefficient ratio has
   relative variance `Theta(N)` once its posterior is sharp.  At `q=12*n`,
@@ -234,9 +239,12 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `|I|` exponential leaves for any global finite-factor approximation.
   Conversely, a typical rare-cap row has an `N^o(1)` near-cap support whose
   sparse prefix sums approximate every interval additively within
-  `exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  Locating that support
-  output-sensitively, and
-  query-adaptive arithmetic with cancellation, remain open.
+  `exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  The continuous
+  term-separable interval envelope still forces `Omega(M)` terminal cells,
+  and enumerating all critical points costs `Omega(M)` with constant
+  probability.  Root
+  conditioning needs only polynomially many bits; output-sensitive structured
+  threshold-root counting and query-adaptive cancellation remain open.
   Rejection-based quantum tilting
   cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
   only
@@ -3377,6 +3385,157 @@ at most one.  No known algorithm isolates those crossings in time polynomial
 in `q,log(N)` and their actual number.  This is an output-sensitive near-cap
 reduction, not a completed table-free enumerator and not a multiplicative
 approximation when `Z_I` is small.
+
+Three scoped facts sharpen the remaining near-cap location primitive.  Take
+iid uniform public labels, an independent Gaussian filter row, and centered
+representatives `nu_i in [-1/2,1/2)` of `Y_i/N`.  Write
+
+```text
+X(t)=q^(-1/2)*sum_i R_i*cos(2*pi*nu_i*t-phi_i),
+```
+
+where the `R_i` are iid Rayleigh variables.  Put `v=u-L`, take `q=12*n`,
+and suppose `0<gamma<=1/9`.  For a real interval `J`, define the continuous
+term-separable envelope
+
+```text
+U_sep(J)=q^(-1/2)*sum_i sup_(t in J)
+           R_i*cos(2*pi*nu_i*t-phi_i).
+```
+
+With probability `1-exp(-Omega(q))`, simultaneously for every interval of
+length at least six,
+
+```text
+U_sep(J)>v.
+```
+
+Indeed, every term with `|nu_i|>=1/6` completes a full period and has
+supremum `R_i`; every remaining supremum is at least `-R_i`.  Hence
+
+```text
+U_sep(J)>=q^(-1/2)*[
+  sum_(|nu_i|>=1/6) R_i-sum_(|nu_i|<1/6) R_i].
+```
+
+The signed Rayleigh summands are iid subexponential and have mean
+
+```text
+[(2/3)-(1/3)]*E[R_i]+O(1/N)
+  = sqrt(pi/2)/3+o(1).
+```
+
+Bernstein concentration makes the lower bound at least
+`sqrt(pi/2)*sqrt(q)/6`, while Mills gives
+
+```text
+u/sqrt(q) -> sqrt(gamma*ln(2)/6)
+           <= sqrt(ln(2)/54)
+           < sqrt(pi/2)/6.
+```
+
+Thus recursive interval pruning whose empty-cell certificate is no stronger
+than this canonical continuous sum of exact term ranges must refine the whole
+row to intervals shorter than six.  It processes `Omega(M)` terminal
+intervals, independently of the actual near-cap output size.  This statement
+does not cover exact discrete term maxima or a joint cancellation certificate.
+
+Enumerating every critical point before checking its height is also not
+output-sensitive.  Conditional on the labels, the adjacent derivative
+correlation is
+
+```text
+rho_Y=Cov(X'(a),X'(a+1))/Var(X'(a))
+     =sum_i nu_i^2*cos(2*pi*nu_i)/sum_i nu_i^2.
+```
+
+The exact integrals
+
+```text
+E[nu^2]=1/12,
+E[nu^2*cos(2*pi*nu)]=-1/(2*pi^2)
+```
+
+and concentration give `rho_Y<=-1/2` except with probability
+`exp(-Omega(q))`.  Each adjacent Gaussian pair then changes sign with
+probability at least
+
+```text
+acos(-1/2)/pi=2/3.
+```
+
+If `C_der` counts these changes on `0,...,floor(M)-1`, then
+
+```text
+E[C_der | Y]>=(2/3)*(floor(M)-1).
+```
+
+Since `0<=C_der<=floor(M)-1`, the bounded reverse-Markov estimate gives
+
+```text
+Pr[C_der>=(floor(M)-1)/3 | Y]>=1/2.
+```
+
+Almost surely every sign change supplies a distinct zero of `X'` in its open
+unit interval.  Thus, with probability `1/2-o(1)`, a method that first
+isolates every derivative root emits and processes `Omega(M)` critical
+points.  This is not a lower bound for a root counter applied directly to
+`X-v`.
+
+Numerical conditioning is not the obstruction.  Put
+
+```text
+K_v=M*phi(v),
+epsilon_0=n^(-(B+3))/K_v,
+epsilon_1=n^(-(B+3))/sqrt(K_v)
+```
+
+for any fixed `B>0`.  Mills gives
+
+```text
+log(K_v)=u*L-L^2/2+O(log(n))=O(sqrt(n*log(n))),
+K_v=N^o(1).
+```
+
+Using the exact standard-normal marginal at each integer point and
+`v*epsilon_0=o(1)`, a union bound gives
+
+```text
+Pr[min_(0<=a<M)|X(a)-v|<=epsilon_0]
+  = O(n^(-(B+3))).
+```
+
+On the typical label event, `Var(X')=Theta(1)` and stationarity makes `X(t)`
+independent of `X'(t)`.  Kac--Rice bounds the expected number of level-`v`
+roots with `|X'|<=epsilon_1` by
+
+```text
+O(M*phi(v)*epsilon_1^2)=O(n^(-(2*B+6))).
+```
+
+Nondegeneracy excludes multiple roots almost surely.  Rayleigh concentration
+also gives
+
+```text
+sup_t |X''(t)|
+  <= pi^2*q^(-1/2)*sum_i R_i
+  = O(sqrt(q))
+```
+
+with exponentially high probability.  Consecutive simple level crossings
+have opposite derivative signs, so their distance is at least
+
+```text
+2*epsilon_1/O(sqrt(q))
+  = exp(-O(sqrt(n*log(n)))).
+```
+
+Therefore, with failure at most `O(n^(-(B+3)))+exp(-Omega(q))`, polynomially
+many bits suffice to classify every integer point and isolate every
+continuous crossing.  If one had a polynomial-time interval root-count oracle
+for the compact trigonometric representation of `X-v`, ordinary bisection
+would be output-sensitive.  The missing primitive is this structured root
+counter, not precision or root separation.
 
 The phase-averaged coefficient energy is not uniform across residues, so one
 cannot strengthen this observation by simply assigning `1/N` of the energy
@@ -8751,6 +8910,120 @@ the law of `Z` need not be symmetric.  Nor does a large degree-two-or-three
 regression coefficient determine `<R,sign(Z)>`, its signed-margin covariance,
 or the Wagner sign.  Those remain all-degree sign-projection questions.
 
+There is an exact same-`P_3` obstruction, even under symmetry and
+nonnegative Walsh likelihood coefficients.  Let odd `M>=11`, take independent
+uniform signs `x_1,...,x_M`, and put
+
+```text
+Z=sum_i x_i,       X=Z/sqrt(M),
+E_k=sum_(S subset [M], |S|=k) product_(i in S) x_i.
+```
+
+Newton's identities give
+
+```text
+E_3 = [Z^3-(3*M-2)*Z]/6,
+
+E_5 = [Z^5-(10*M-20)*Z^3
+       +(15*M^2-50*M+24)*Z]/120.
+```
+
+Set
+
+```text
+c=1/(8*M^3),       b=12*c/M,       d=120*c/M^2,
+
+A_H^(-)=c*E_1+b*E_3,
+A_H^(+)=c*E_1+b*E_3+d*E_5,
+A_0=1.
+```
+
+All nonconstant Walsh coefficients are nonnegative.  Moreover,
+
+```text
+||hat(A_H^(+))||_1
+  = c*[M+2*(M-1)*(M-2)
+       +(M-1)*(M-2)*(M-3)*(M-4)/M]
+  <= c*(M+2*M^2+M^3)
+  = (1+2/M+1/M^2)/8
+  <= 1/2,
+```
+
+and `A_H^(-)` has the smaller coefficient sum.  Hence, with
+`Pr[B=+/-1]=1/2`, both
+
+```text
+Pr[x | B=s]=2^(-M)*(1+s*A_H^(+/-)(x))
+```
+
+are valid balanced experiments.
+
+Put `R^(+/-)=A_H^(+/-)-c*Z`.  The common law of `Z` is exactly symmetric and
+
+```text
+E_U[X^4]=3-2/M,
+E_U[X^6]=15-30/M+16/M^2.
+```
+
+Its exact first orthogonal polynomials under the base-uniform law are
+
+```text
+P_2=(X^2-1)/sqrt(2-2/M),
+
+P_3=E_3/sqrt(choose(M,3))
+   =[X^3-(3-2/M)*X]/sqrt(6-18/M+12/M^2).
+```
+
+Walsh orthogonality therefore gives identical low-degree data:
+
+```text
+<R^(-),P_2>_U=<R^(+),P_2>_U=0,
+
+<R^(-),P_3>_U=<R^(+),P_3>_U
+  = b*sqrt(choose(M,3)),
+
+<R^(-),X^3>_U=<R^(+),X^3>_U
+  = 12*c*(M-1)*(M-2)/M^(3/2)>0.
+```
+
+Nevertheless their majority correlations have opposite signs.  Let
+
+```text
+f=sign(Z),
+alpha_M=2^(-(M-1))*choose(M-1,(M-1)/2).
+```
+
+For every fixed Walsh set of the indicated size, exact binomial cancellation
+gives
+
+```text
+hat(f)_1=alpha_M,
+hat(f)_3=-alpha_M/(M-2),
+hat(f)_5=3*alpha_M/[(M-2)*(M-4)].
+```
+
+Consequently
+
+```text
+<R^(-),f>_U=-2*alpha_M*c*(M-1)<0,
+
+<R^(+),f>_U=alpha_M*c*(M-1)*(1-9/M)>0,
+
+<A_H^(-),f>_U=alpha_M*c*(2-M)<0,
+
+<A_H^(+),f>_U=alpha_M*c*(2*M-10+9/M)>0.
+```
+
+Thus exact symmetry, exact fourth and sixth moments, nonnegative likelihood
+coefficients, residual orthogonality to `{1,Z}`, the exact `P_2/P_3`
+coefficients, and a positive raw cubic still do not determine the residual
+sign projection or
+the Wagner sign.  The alternating odd majority spectrum is the mechanism:
+the positive cubic is adverse, while the positive quintic reverses the sign
+without changing any polynomial datum through degree three.  This is an
+abstract likelihood completion on the same Boolean space, not a claim that
+random modular relation counts realize either completion.
+
 For orientation only, the generic full-rank scale `M^(j/2)/N` has exponents
 
 ```text
@@ -10686,6 +10959,179 @@ comparison is false, even though arbitrary public-label-adaptive signed
 optimization is now controlled inside the deterministic bulk.  The result
 does not cover nonlinear statistics or a changed retention rule.
 
+The omitted light cells nevertheless admit a precise occupancy and leverage
+ledger.  For a radial cell `r=(r_1,...,r_4)`, put
+
+```text
+P_r=product_(j=1)^4 [choose(b,r_j)*2^r_j],
+c_r=2^(-|r|),
+ell_r^2=P_r*c_r^2,
+p_r^(0)=ell_r^2/H_deg,
+lambda_r=q_0*P_r.
+```
+
+Let `N_r(Y)` be its number of retained oriented templates, so that
+`E_Y[N_r]=lambda_r`.  Ignoring the exponent-irrelevant factor two contributed
+by the opposite-orientation quotient, define the one-copy raw occupancy
+diagonal and leading signal in normalized coordinates by
+
+```text
+D_Y=diag_r(N_r/P_r),
+(g_Y^(0))_r=2*c_r*N_r/sqrt(P_r).
+```
+
+For `L_kappa={r:p_r^(0)<N^(-kappa)}`, one has exactly
+
+```text
+(g_L^(0))^T*D_L^dagger*g_L^(0)
+  = 4*sum_(r in L_kappa) c_r^2*N_r.
+```
+
+There are only `t^4=N^o(1)` cells, and therefore
+
+```text
+E_Y[sum_(r in L_kappa) c_r^2*N_r]
+  = q_0*H_deg*sum_(r in L_kappa) p_r^(0)
+  <= N^(-kappa+o(1)).
+```
+
+For every fixed `tau>0`, Markov gives, with failure `N^(-tau+o(1))`,
+
+```text
+(g_L^(0))^T*D_L^dagger*g_L^(0)
+  <= N^(-(kappa-tau)+o(1)).
+```
+
+Thus a light-tail-only quotient using the literal retained diagonal has
+Rayleigh ratio at least `N^(kappa-tau-o(1))`.
+
+The extra half-turn signal is also small in this metric.  Let `e_z(Y)>=0` be
+the extra coefficient of an oriented template after removing its two leading
+orientations, and put
+
+```text
+(e_rad)_r=P_r^(-1/2)*sum_(z in cell r) e_z(Y).
+```
+
+On `E_short`, the packing theorem and the unit-pivot atom bound give
+
+```text
+e_z(Y)<=N^(-1/20+o(1)),
+E_Y[e_z(Y)]<=2*q_0*K/N.
+```
+
+Cauchy--Schwarz inside each occupied cell yields
+
+```text
+e_rad^T*D_Y^dagger*e_rad<=sum_z e_z(Y)^2.
+```
+
+Since the cutoff contains `N^(4*a+o(1))` oriented templates,
+
+```text
+E_Y[1_(E_short)*sum_z e_z(Y)^2]
+  <= N^(-delta_extra+o(1)),
+
+delta_extra=2+1/20-4*a
+           =0.052146195686....
+```
+
+At `kappa=1/10`, on `E_short`, the complete raw light signal therefore has
+occupancy-diagonal leverage at most
+
+```text
+N^(-(0.052146195686...-tau)+o(1))
+```
+
+with additional failure `N^(-tau+o(1))`.  This is `o(N^(-F))` whenever
+`tau<0.052146195686...-F`; the previously proved failure probability for
+`E_short` is smaller at this scale.
+
+Simple occupancy envelopes give two further exact scopes.  For any fixed
+`s>0`, all cells with `lambda_r<=N^(-s)` are empty with probability
+`1-N^(-s+o(1))`.  The total number of occupants in cells with
+`lambda_r<=N^s` is at most `N^(s+tau+o(1))` with failure
+`N^(-tau+o(1))`.  If `s+tau<1/20`, the existing `E_short` theorem therefore
+gives every nonzero-signal weighting supported only on these occupants the
+lower bound
+
+```text
+Rayleigh >= N^(1/10-s-tau-o(1)).
+```
+
+At the dangerous center, the cell geometry explains why reference mass and
+occupancy are distinct.  If `r_j=3*n*x_j+o(n)`, Stirling gives
+
+```text
+log_N(lambda_r)
+  = 3*sum_j [H_2(x_j)+x_j]-(1+a)+o(1),
+
+kappa_r:=-log_N(p_r^(0))
+  = (1+a)-3*sum_j [H_2(x_j)-x_j]+o(1),
+
+log_N(lambda_r)=6*sum_j x_j-kappa_r+o(1).
+```
+
+For example, the boundary cell `(t,t,t,1)` has
+
+```text
+kappa_r=(1+a)/4=0.374865862769...,
+log_N(lambda_r)=2*a-1=-0.001073097843....
+```
+
+It is empty with high probability, but only with that small polynomial
+exponent; other reference-light cells can still have many occupants.
+
+These estimates do not yet extend the bulk optimum.  On the occupied-cell
+quotient, after removing any remaining conditional nullspace, partition the
+exact numerator and signal as
+
+```text
+A_Y=[[A_BB,A_BL],
+     [A_LB,A_LL]],          g_Y=[g_B;g_L],
+
+S_L=A_LL-A_LB*A_BB^(-1)*A_BL,
+r_L=g_L-A_LB*A_BB^(-1)*g_B.
+```
+
+On the bulk event `A_BB` is positive definite.  Because `A_Y` is a true Gram
+matrix and `g_Y` lies in its range, block elimination on the occupied quotient
+gives
+
+```text
+g_Y^T*A_Y^dagger*g_Y
+  = g_B^T*A_BB^(-1)*g_B+r_L^T*S_L^dagger*r_L.
+```
+
+The first term is `(1+o(1))/J_*=N^(-F+o(1))`.  A whole-radial theorem must
+therefore prove the second term `o(N^(-F))`.  The ledger controls `g_L` in
+the metric `D_L`; it controls neither `S_L` nor the bulk-induced term
+`A_LB*A_BB^(-1)*g_B`.
+
+This is a real algebraic distinction.  For `0<epsilon<1`, take
+
+```text
+A_epsilon=[[1,1-epsilon],
+           [1-epsilon,1]],
+g_epsilon=[sqrt(epsilon);0],
+```
+
+with the first coordinate designated bulk.  The raw light signal is zero,
+but
+
+```text
+S_L=2*epsilon-epsilon^2,
+r_L=-(1-epsilon)*sqrt(epsilon),
+r_L^2/S_L -> 1/2,
+```
+
+whereas the bulk dual value is only `epsilon`.  Thus a signal-free light
+coordinate can improve the optimum by acting as a signed control variate.
+This example is not a modular counterexample.  It proves that small expected
+light mass and raw leverage do not replace a probabilistic Schur bound such
+as `S_L>=c*D_L` together with control of the bulk-induced cross signal.
+Occupied light cells remain open precisely at that interface.
+
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
 not prove that `sign(Z)` fails, and it does not exclude clipping or different
@@ -11129,10 +11575,13 @@ four-template certificate puts quadratic relative variance at most
 `N^(-0.310083...+o(1))`.  Extra half-turn signal is `o_p(q_0)`.  Thus that fixed
 deterministic resolvent has conditional
 Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  On the
-deterministic reference-mass bulk `p_r^(0)>=N^(-1/10)`, uniform matrix and signal
-concentration gives the same ratio for the fully `Y`-adaptive signed radial
-optimizer.  Exponentially light empty cells obstruct a whole-space
-comparison; nonlinear sign performance remains open.
+deterministic reference-mass bulk `p_r^(0)>=N^(-1/10)`, uniform matrix and
+signal concentration gives the same ratio for the fully `Y`-adaptive signed
+radial optimizer.  The raw light-cell signal has exponentially small
+occupancy-diagonal leverage, but an abstract Gram example shows that a light
+coordinate can still act as a signed control variate through the Schur
+complement.  Whole-space optimization and nonlinear sign performance remain
+open.
 Bucket-sum-only rehash medians are only margin transforms of the same path
 sum, while a positive three-character likelihood
 model shows that fixed
@@ -11158,13 +11607,14 @@ that regression scale.  A separate automatic order-three family yields
 sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
 exponential lower bound for `||E[R|Z]||_2` and for at least one available
 degree-two-or-three orthogonal coefficient.  Small regression is therefore
-false, but neither the individual `P_3` coefficient nor the Wagner sign is
-determined.  The
-all-degree signed projection remains open.
+false.  More sharply, two valid nonnegative-Walsh likelihood completions have
+the same exact symmetric base law, `P_2/P_3` data, and positive raw cubic, but
+opposite Wagner correlations.  These completions are abstract rather than
+random modular laws; the all-degree signed projection remains open.
 These are information-sufficiency obstructions; the modular example is
 highly atypical, so the random-instance Wagner sign remains uncontrolled.
-The
-theorems still leave open circuits that exploit the internal Boolean modular
+The theorems still leave open circuits that exploit the internal Boolean
+modular
 arithmetic beyond the orbit algebra or compute the weighted ternary
 coefficient ratio by a new method.  In the noisy high-visibility regime, the
 log likelihood itself now has a uniformly accurate polynomial-size sparse
@@ -11212,9 +11662,12 @@ subtraction-free positive formula fixed before the query needs at least
 `|I|` exponential leaves for any global finite-factor approximation.
 Conversely, a typical rare-cap row has an `N^o(1)` near-cap support whose
 sparse prefix sums approximate every interval additively within
-`exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  Locating that support
-output-sensitively, and
-query-adaptive arithmetic with cancellation, remain open.
+`exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  The continuous
+term-separable interval envelope still forces `Omega(M)` terminal cells, and
+enumerating all critical points costs `Omega(M)` with constant probability.
+Root conditioning
+needs only polynomially many bits; output-sensitive structured threshold-root
+counting and query-adaptive cancellation remain open.
 Rejection-based quantum tilting
 returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
 only `M^o(1)` expected rare-cap crossings and accepted indices, so the

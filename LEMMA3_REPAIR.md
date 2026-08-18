@@ -704,9 +704,12 @@ positive formula fixed before the query needs at least
 `|I|` exponential leaves for any global finite-factor approximation.
 Conversely, a typical rare-cap row has an `N^o(1)` near-cap support whose
 sparse prefix sums approximate every interval additively within
-`exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  Locating that support
-output-sensitively, and
-query-adaptive arithmetic with cancellation, remain open.
+`exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  The continuous
+term-separable interval envelope still forces `Omega(M)` terminal cells, and
+enumerating all critical points costs `Omega(M)` with constant probability.
+Root conditioning
+needs only polynomially many bits; output-sensitive structured threshold-root
+counting and query-adaptive cancellation remain open.
 Rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives
 only
 `M^o(1)` expected crossings and accepted indices, so the implicit
@@ -832,9 +835,11 @@ fixed deterministic resolvent has conditional Rayleigh ratio
 `(2+o_p(1))*R_(sur,min)` with high probability.  On the deterministic
 reference-mass bulk
 `p_r^(0)>=N^(-1/10)`, uniform matrix and signal concentration gives the same
-ratio for the fully `Y`-adaptive signed radial optimizer.  Exponentially light
-empty cells obstruct a whole-space comparison; nonlinear performance remains
-open.
+ratio for the fully `Y`-adaptive signed radial optimizer.  The raw light-cell
+signal has exponentially small occupancy-diagonal leverage, but an abstract
+Gram example shows that a light coordinate can still act as a signed control
+variate through the Schur complement.  Whole-space optimization and nonlinear
+performance remain open.
 Bucket-sum-only random rehash medians contain
 only the original path-sum information, while a fixed positive pair-overlap
 law can give either sign of prediction correlation.  A second-moment theorem
@@ -858,9 +863,10 @@ scale.  A separate automatic order-three family gives
 sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
 exponential lower bound for `||E[R|Z]||_2` and for at least one available
 degree-two-or-three orthogonal coefficient.  Small regression is therefore
-false, but neither the individual `P_3` coefficient nor the Wagner sign is
-determined.  The
-all-degree signed projection remains open.  These are
+false.  More sharply, two valid nonnegative-Walsh likelihood completions have
+the same exact symmetric base law, `P_2/P_3` data, and positive raw cubic, but
+opposite Wagner correlations.  These completions are abstract rather than
+random modular laws; the all-degree signed projection remains open.  These are
 information-sufficiency obstructions and do not settle the random modular
 sign.
 A
