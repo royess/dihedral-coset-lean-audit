@@ -152,9 +152,14 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   an unrestricted nonradial theorem; it is not a modular counterexample.
   A multiplicity-corrected centered-Schur interface shows that the full
   linear extension would follow from a centered spectral floor with exponent
-  below `0.044828...` and normalized within-cell row regularity.  Those inputs
-  remain unproved; unrestricted same-cell nonradial weights and nonlinear
-  statistics remain open.
+  below `0.044828...` and normalized within-cell row regularity.  Inside one
+  fixed `Good` exact-degree cell, the PSD orbit-feature Gram `K_orb` has exact
+  level weights `4^(-t)*choose(t,j)*(3^j+(-1)^j)`.  Three explicit hypotheses
+  reduce the missing inputs to central signed-subword occupancy, a centered
+  nonautomatic spectral bound, and normalized row sums.  The displayed
+  `F_8,F_16` diagnostics and fourth-cycle target are not proofs.  Those inputs
+  remain unproved; unrestricted same-cell nonradial weights, mixed cutoffs,
+  and nonlinear statistics remain open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -186,11 +191,15 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   closure expansion makes the cubic formal-level contribution at most
   `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
   closure levels at least five to contribute at least
-  `N^(0.021392...+o(1))`.  The actual automatic quintic alone contributes at
-  least `N^(0.0679559...+o(1))`, so the absolute formal-level mass and its
-  triangle-inequality condition number are exponentially larger still.  This
-  is not an algorithm lower bound and does not determine the level-at-least-
-  seven tail or final Wagner sign.  More sharply, two valid nonnegative-Walsh
+  `N^(0.021392...+o(1))`.  With high probability, the actual automatic
+  quintic, septic, and nonic contributions have signed magnitudes at least
+  `N^(0.0679559...+o(1))`,
+  `N^(0.1365318...+o(1))`, and `N^(0.2246470...+o(1))`, with signs `+,-,+`.
+  Thus the absolute formal-level mass and its triangle-inequality condition
+  number are at least `N^(0.2246470...+o(1))`.  The singleton ledger first
+  fails at level eleven.  This is not an algorithm lower bound and determines
+  neither any fixed-cutoff tail nor the final Wagner sign.  More sharply, two
+  valid nonnegative-Walsh
   likelihood completions
   have the same exact symmetric base law, positive linear signal, and every
   residual projection against polynomials of degree at most `M-1`.  Their
@@ -279,9 +288,16 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   exact minimal recurrence order `2*q+1` with high probability.  An
   adversarial short-arc reduction from Plaisted makes coefficient-uniform
   exact counting NP-hard already for `M=N^(1/9)` and at most `q=12*log_2(N)`
-  rational Laurent terms.  It leaves the iid-Gaussian and simple-root promise
-  open.  Custom sparse/circuit and random approximate real-root locators
-  remain open.
+  rational Laurent terms.  Predetermined windows whose component count plus
+  total length is `N^o(1)` hit the random near-cap only with probability
+  `N^(-gamma+o(1))`; constant success needs `N^(gamma-o(1))` coverage.  In the
+  size-biased cap experiment, with high probability over the labels, a fixed
+  rank-`r` linear sketch with a vanishing-error candidate list needs list size
+  `m^(1-r/(2*q)-o(1))`, so an `m^o(1)` list retains almost all `2*q`
+  coordinates.  These two results do not cover
+  amplitude-adaptive or nonlinear global processing.  The adversarial
+  reduction leaves the iid-Gaussian and simple-root promise open.  Custom
+  sparse/circuit and random approximate real-root locators remain open.
   Rejection-based quantum tilting
   cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
   only
@@ -3422,6 +3438,222 @@ at most one.  No known algorithm isolates those crossings in time polynomial
 in `q,log(N)` and their actual number.  This is an output-sensitive near-cap
 reduction, not a completed table-free enumerator and not a multiplicative
 approximation when `Z_I` is small.
+
+There is a distribution-matched obstruction to nonadaptive local search.
+Put `m=floor(M)`, let `nu_i in [-1/2,1/2)` be the centered representative
+of `Y_i/N`, keep arbitrary public labels fixed, and write
+
+```text
+A_a=q^(-1/2)*(
+  e(2*pi*Y_1*a/N),...,e(2*pi*Y_q*a/N)),
+
+e(theta)=(cos(theta),sin(theta)),
+
+X(t)=q^(-1/2)*sum_i[
+  C_i*cos(2*pi*nu_i*t)+D_i*sin(2*pi*nu_i*t)].
+```
+
+Let `U` be a union of `J_win` compact intervals in `[0,m]`, and let
+`W=Leb(U)`.  The set may depend arbitrarily on the labels and on external
+randomness, but it is fixed before the Gaussian amplitudes are seen.  Then,
+conditional on the labels and `U`,
+
+```text
+Pr_G[sup_(t in U)X(t)>=v]
+  <=J_win*barPhi(v)
+      +[sigma_Y/(2*pi)]*W*exp(-v^2/2)
+  <=J_win*barPhi(v)+(W/2)*exp(-v^2/2),               (PW)
+
+sigma_Y^2=(4*pi^2/q)*sum_i nu_i^2<=pi^2.
+```
+
+Indeed, `X` is a stationary unit-variance Gaussian process, and `X(t)` is
+independent of `X'(t)`.  Kac--Rice gives the exact expected number of
+level-`v` upcrossings in an interval of length `ell`:
+
+```text
+E[N_v^(+)(ell) | Y]
+  =[sigma_Y/(2*pi)]*ell*exp(-v^2/2).
+```
+
+If the left endpoint is below `v` and the interval reaches `v`, its first
+contact is an upcrossing almost surely.  Gaussian nondegeneracy excludes
+level tangencies.  If `sigma_Y=0`, the process is constant and the endpoint
+term alone suffices.  Adding one left-endpoint probability per component
+proves `(PW)`.
+
+At the near-cap scale,
+
+```text
+barPhi(u)=1/M,       v=u-L,
+
+barPhi(v)=M^(-1+o(1)),
+exp(-v^2/2)=M^(-1+o(1)).
+```
+
+Thus any family with `J_win+W=N^o(1)` hits even one near-cap excursion with
+probability at most `N^(-gamma+o(1))`.  Constant hit probability through
+this route requires `J_win+W=N^(gamma-o(1))`.  This covers predetermined
+point grids, Gaussian-independent random grids, and exact local solvers
+called on predetermined windows.  It does not cover windows chosen after
+seeing the Gaussian amplitudes or a global arithmetic counter that infers
+roots outside every explicitly searched window.
+
+A complementary information theorem rules out first applying a fixed linear
+sketch and then materializing a short candidate list.  Put
+
+```text
+calA={0,...,m-1},
+
+p_cap=barPhi(v),
+
+H_v(G)=#{a in calA:<G,A_a>>=v}.
+```
+
+Define the size-biased cap experiment by choosing `J_*` uniformly from
+`calA` and, conditional on `J_*=j`, drawing a standard Gaussian `G` subject
+to `<G,A_j>>=v`.  Equivalently,
+
+```text
+dP_sb/dgamma_(2*q)=H_v(G)/(m*p_cap),
+```
+
+and, conditional on a realized row, `J_*` is uniform among its near-cap
+indices.  This is the ordinary Gaussian row size-biased by its number of cap
+indices, with one such index distinguished.  No contiguity with the
+unconditioned row is asserted.
+
+Let `L_map` be a rank-`r` real linear map fixed after the labels but before
+`G`, let `P_map` project onto its row space, and observe only `Z=L_map*G`.
+A possibly nonlinear decoder returns a list `calL(Z) subset calA` whose size
+is pointwise at most `ell_list`.  Let `0<=delta<=1/2` and use the natural-log
+binary entropy
+
+```text
+h_nat(delta)=-delta*ln(delta)-(1-delta)*ln(1-delta),
+```
+
+with `0*ln(0)=0`.  If
+
+```text
+Pr_sb[J_* in calL(Z)]>=1-delta,
+```
+
+then
+
+```text
+(1-delta)*ln(m/ell_list)-h_nat(delta)
+  <=I(J_*;Z)
+  <=ln(1/p_cap)*(1/m)
+      *sum_(j in calA)||P_map*A_j||_2^2.             (LS)
+```
+
+For the upper bound, fix `j` and put
+
+```text
+beta_j=||P_map*A_j||_2^2.
+```
+
+Under the unconditioned Gaussian law, the only sketch direction affected by
+the cap conditioning can be represented by standard normals `Z_0,W` with
+
+```text
+<G,A_j>=sqrt(beta_j)*Z_0+sqrt(1-beta_j)*W.
+```
+
+For `f(x)=1[x>=v]/p_cap`, the likelihood ratio of `Z_0` is the
+Ornstein--Uhlenbeck smoothing `T_(sqrt(beta_j))f`.  Gaussian entropy decay
+gives
+
+```text
+Ent_gamma(T_(sqrt(beta_j))f)
+  <=beta_j*Ent_gamma(f)
+  =beta_j*ln(1/p_cap).                               (OU)
+```
+
+For completeness, write `sqrt(beta_j)=exp(-t)`.  Along the OU semigroup,
+the entropy derivative is minus Fisher information.  Gaussian logarithmic
+Sobolev, `I>=2*Ent`, and Gronwall prove `(OU)`; indicator likelihoods follow
+by smoothing.  This is the entropy-decay form of
+[Gross's Gaussian log-Sobolev theorem](https://doi.org/10.2307/2373688).
+Using the unconditioned sketch law as a reference measure and averaging over
+`j` proves the mutual-information upper bound.  List Fano gives the lower
+bound: if `E=1[J_* notin calL(Z)]`, then
+
+```text
+H(J_* | Z)
+  <=h_nat(delta)+(1-delta)*ln(ell_list)+delta*ln(m).
+```
+
+Equivalently, the general candidate-size consequence is
+
+```text
+ln(ell_list)/ln(m)
+  >=1-
+    {bar(beta)*ln(1/p_cap)+h_nat(delta)}
+      /{(1-delta)*ln(m)},                            (LC)
+
+bar(beta)=(1/m)*sum_j||P_map*A_j||_2^2.
+```
+
+For random public labels, the energy in `(LC)` is explicit.  Define the
+short-orbit frame operator
+
+```text
+Sigma_m=(1/m)*sum_(a=0)^(m-1)A_a*A_a^T.
+```
+
+With probability
+
+```text
+1-O(q^(-2)+q^2/N)                                   (FE)
+```
+
+over the labels,
+
+```text
+||Sigma_m-I_(2*q)/(2*q)||_op
+  =O(q^4/m)=o(1/q).                                 (TF)
+```
+
+Require every residue `2*Y_i`, and every `Y_i-Y_j,Y_i+Y_j` with `i<j`, to
+have centered distance at least `N/q^4` from zero modulo `N`; this also
+excludes exact zeros and collisions.  A union bound over `O(q^2)` residues
+gives `(FE)`.
+On this event every relevant normalized geometric sum is at most
+`q^4/(2*m)` in magnitude.  Product-to-sum identities for the cosine--sine
+blocks then give `(TF)`.  This operator statement is simultaneous for every
+label-dependent projector `P_map`, and hence
+
+```text
+bar(beta)=tr(P_map*Sigma_m)
+         =(1+o(1))*r/(2*q).                          (AE)
+```
+
+Since `p_cap=m^(-1+o(1))`, combining `(LC)` and `(AE)` for `delta=o(1)`
+gives
+
+```text
+ell_list>=m^(1-r/(2*q)-o(1)).                       (LT)
+```
+
+There is an exact version requiring no frame event.  If the sketch consists
+of any fixed `k` complete cosine--sine Gaussian mode pairs, then
+`beta_j=k/q` for every `j`, so, again for `delta=o(1)`,
+
+```text
+ell_list>=m^(1-k/q-o(1)).                           (MP)
+```
+
+Thus an `m^o(1)` candidate list with vanishing error requires retaining
+`(2-o(1))*q` linear coordinates, or `(1-o(1))*q` complete mode pairs, before
+the list is formed.  This is an information--candidate-size obstruction, not
+a running-time lower bound: reading all `2*q=O(log(N))` amplitudes is
+polynomial.  It does not cover a sketch chosen from the observed amplitudes,
+nonlinear compression, a method that uses all modes without materializing a
+candidate list, a direct interval root counter, or aggregate winding.  The law
+is specifically the displayed size-biased cap experiment, not the ordinary
+row conditioned only on having a nonempty cap.
 
 Several scoped facts sharpen the remaining near-cap location primitive.  The
 first is an exact discrete barrier, stronger than the continuous interval
@@ -9636,6 +9868,390 @@ the cancellation.  Nor does `(Q55)` determine the sign of the level-at-least-
 seven tail.  There is no matching upper bound on `C_3`, so the adverse cubic
 mass may itself supply all the negative compensation required by `(Q56)`.
 
+The same fixed-type proof closes the next two alternating formal levels.
+Work at visibility one.  The counting statements below are unconditional in
+the public labels and hold with high probability; intersect them with `Good`
+only when converting tuples into formal closure levels.  Retain
+
+```text
+p=0.020766264718131...,
+a=0.499463451078382...,
+m=0.498390353235145...,
+K=N^(a+o(1)),               M_V=N^(m+o(1)).
+```
+
+For a fixed odd `j`, let `g_(j,k)` be the number of signed `j`-row coordinate
+columns with exactly `k` nonzero entries and ternary row sum.  Thus
+
+```text
+g_(j,k)=choose(j,k)*choose(k,k/2),                 k even,
+
+g_(j,k)=2*choose(j,k)*choose(k,(k-1)/2),           k odd.
+```
+
+A nonzero resultant coordinate contributes a factor `1/2` in its half-turn
+coefficient.  Put
+
+```text
+b_(j,k)=2^(-1[k odd])*g_(j,k),
+
+Q_j(z)=sum_(k=0)^j b_(j,k)*z^k,
+
+z*Q_j'(z)/Q_j(z)=j*p.                              (JN0)
+```
+
+The last equation has a unique positive solution: its left side is strictly
+increasing in `log(z)`, with derivative equal to the variance of `k` under
+the associated Gibbs law.  Define
+
+```text
+x_k=b_(j,k)*z^k/Q_j(z),
+
+delta_j=sum_(k odd)x_k,
+
+h_j=-sum_k x_k*log_2(x_k)
+      +sum_(k>=1)x_k*log_2(g_(j,k)),
+
+phi_j=h_j-delta_j
+     =log_2(Q_j(z))-j*p*log_2(z).                   (JN1)
+```
+
+Give every signed pattern in group `k` mass `x_k/g_(j,k)`.  Then every row
+has support density `p`, while the ternary resultant has support density
+`delta_j`.  Bounded rounding changes only `O_j(1)` coordinates per block and
+preserves all row weights.
+
+Fix the rounded type in each of the four `3*n`-coordinate blocks, and let
+`X_j` count retained ordered oriented `j`-tuples.  The singleton atoms give
+unit minors in both filtered halves, so one tuple has retention probability
+`K^(-j)*N^(-j)`.  Consequently,
+
+```text
+E_Y[X_j]=N^(12*h_j-j*(a+1)+o(1)).                  (JN2)
+```
+
+There is one common second-moment ledger for `j=7,9`.  For a pair of tuples,
+put
+
+```text
+d_L=2*j-rank_Q([L_tau;L_sigma]),
+d_R=2*j-rank_Q([R_tau;R_sigma]),
+```
+
+and let `c_rel` be the dimension of the intersection of the saturated left
+and right rational relation spaces.  A common relation that does not
+annihilate the odd half-turn target
+makes the joint event empty.  Every compatible class obeys
+
+```text
+Pr[E_tau and E_sigma]
+  <=O_j(1)*K^(-(2*j-d_L))*N^(-(2*j-d_R))
+      *(K/N)^(d_R-c_rel).
+```
+
+Relative to independent retention, its arithmetic gain is at most
+
+```text
+K^(d_L+d_R-c_rel)*N^c_rel.                          (JN3)
+```
+
+Let
+
+```text
+s_j=x_1/g_(j,1)
+```
+
+be the mass of one signed singleton atom.  A `d`-dimensional rational
+relation image separates `2*d` signed singleton atoms from zero.  Its entropy
+is therefore at least
+
+```text
+e_d=-(1-2*d*s_j)*log_2(1-2*d*s_j)
+      -2*d*s_j*log_2(s_j),       e_0=0.             (JN4)
+```
+
+Indeed, the relation space has injective projections onto both tuples: a
+one-sided relation is impossible because every signed singleton occurs
+linearly often.  Independent projected columns and their negative singleton
+atoms give `2*d` distinct nonzero image values, while the zero column gives
+one more.  The mutual-information bound loses at least `6*e_d` in a
+`6*n`-coordinate half.  Thus a rational class contributes to the normalized
+second moment with base-`N` exponent at most
+
+```text
+Theta_j(d_L,d_R,c_rel)
+  =a*(d_L+d_R-c_rel)+c_rel
+      -6*(e_(d_L)+e_(d_R)).                         (JN5)
+```
+
+There is also a binary ledger.  If a stack has full rational rank but is
+singular modulo two, a rank-`d` binary relation image separates `d` singleton
+support atoms, each of mass `2*s_j`, from zero.  Its entropy is at least
+
+```text
+f_d=-(1-2*d*s_j)*log_2(1-2*d*s_j)
+      -d*(2*s_j)*log_2(2*s_j).                      (JN6)
+```
+
+A defect in either half therefore costs at least `6*f_1` in the base-`N`
+pair exponent.  Since `j` is fixed and all matrix entries lie in
+`{0,+1,-1}`, every nonzero Smith invariant is `O_j(1)`.  It supplies only a
+constant probability gain and cannot offset `(JN6)`.
+
+For `j=7`, the exact column counts are
+
+```text
+g=(1,14,42,210,210,420,140,70),
+b=(1,7,42,105,210,210,140,35),
+
+Q_7(z)
+  =1+7*z+42*z^2+105*z^3+210*z^4
+      +210*z^5+140*z^6+35*z^7.
+```
+
+The saddle and type are
+
+```text
+z=0.0191518918811...,
+
+x=(0.869387530782...,
+   0.116552911946...,
+   0.0133932526082...,
+   0.000641265315...,
+   0.0000245628879...,
+   0.000000470425774...,
+   0.00000000600636238...,
+   0.0000000000287583007...),
+
+delta_7=0.117194647716...,
+h_7=1.148623163616...,
+phi_7=1.031428515900....
+```
+
+Therefore
+
+```text
+E_Y[X_7]=N^(3.287233805843...+o(1)).                 (S71)
+```
+
+Here
+
+```text
+s_7=0.00832520799616...,
+
+(e_1,...,e_7)
+  =(0.138846404518...,
+    0.277286049698...,
+    0.415311928836...,
+    0.552916789590...,
+    0.690093120840...,
+    0.826833138579...,
+    0.963128770766...).
+```
+
+Exhausting
+
+```text
+0<=d_L,d_R<=7,       0<=c_rel<=min(d_L,d_R)
+```
+
+outside the independent class gives
+
+```text
+Theta_7(d_L,d_R,c_rel)<=-0.166693403137....
+```
+
+The worst class is `(d_L,d_R,c_rel)=(1,1,1)`, and the binary ledger gives
+
+```text
+6*f_1=0.733175931154....
+```
+
+Hence
+
+```text
+Var_Y(X_7)/E_Y[X_7]^2
+  <=N^(-0.166693403137...+o(1)),
+
+X_7=N^(3.287233805843...+o(1))                      (S72)
+```
+
+with high probability.
+
+For `j=9`, the corresponding data are
+
+```text
+g=(1,18,72,504,756,2520,1680,2520,630,252),
+
+b=(1,9,72,252,756,1260,1680,1260,630,126),
+
+Q_9(z)
+  =1+9*z+72*z^2+252*z^3+756*z^4
+      +1260*z^5+1680*z^6+1260*z^7
+      +630*z^8+126*z^9.
+```
+
+The saddle statistics are
+
+```text
+z=0.0186538109122...,
+
+delta_9=0.141899554399...,
+h_9=1.472114111535...,
+phi_9=1.330214557137...,
+
+s_9=0.00780711142363....
+```
+
+Thus
+
+```text
+E_Y[X_9]=N^(4.170198278715...+o(1)).                 (N91)
+```
+
+The same finite enumeration gives
+
+```text
+Theta_9(d_L,d_R,c_rel)<=-0.0805150446606...,
+```
+
+again with worst class `(1,1,1)`, while
+
+```text
+6*f_1=0.696303910786....
+```
+
+Consequently,
+
+```text
+Var_Y(X_9)/E_Y[X_9]^2
+  <=N^(-0.0805150446606...+o(1)),
+
+X_9=N^(4.170198278715...+o(1))                      (N92)
+```
+
+with high probability.  The septic and nonic conclusions hold simultaneously
+by a finite union bound.
+
+Every counted tuple has a ternary resultant `w` satisfying
+
+```text
+|supp(w)|=(12*delta_j+o(1))*n,
+w dot Y=j*H=H mod N.
+```
+
+On `Good`, a formal unordered `j`-subset has at most `2^j*j!` oriented ordered
+realizations.  The two resultants `w,-w` give
+
+```text
+h_(triangle A)>=2^(1-|supp(w)|).
+```
+
+It follows that
+
+```text
+C_j
+  >=X_j*2^(1-|supp(w)|)/(2^j*j!)
+  =N^(12*phi_j-j*(a+1)+o(1)).                       (JN7)
+```
+
+In particular,
+
+```text
+C_7>=N^(1.880898033256...+o(1)),
+C_9>=N^(2.467403625933...+o(1)).                    (JN8)
+```
+
+The exact majority coefficients are
+
+```text
+a_7=-15*alpha_V/
+      [(M_V-2+epsilon_V)*(M_V-4+epsilon_V)
+       *(M_V-6+epsilon_V)]
+    =-N^(-7*m/2+o(1)),
+
+a_9=105*alpha_V/
+      [(M_V-2+epsilon_V)*(M_V-4+epsilon_V)
+       *(M_V-6+epsilon_V)*(M_V-8+epsilon_V)]
+    =N^(-9*m/2+o(1)).
+```
+
+Therefore the actual alternating terms obey
+
+```text
+-a_7*C_7>=N^(0.1365317969...+o(1)),
+
+ a_9*C_9>=N^(0.2246470364...+o(1)).                 (JN9)
+```
+
+This strengthens the termwise conditioning barrier.  With `P_+`, `N_-` as
+above and
+
+```text
+S_formal=sum_(j odd)|a_j|*C_j,
+```
+
+one has `rho_Y=P_+-N_-`, `|rho_Y|<=1`, and `P_+>=a_9*C_9`.  Hence
+
+```text
+S_formal=P_++N_-
+        =2*P_+-rho_Y
+        >=2*a_9*C_9-1
+        >=N^(0.2246470364...+o(1)).                 (JN10)
+```
+
+Independent termwise relative estimates therefore need precision
+`N^(-0.2246470364...+o(1))` for a triangle-inequality guarantee of `O(1)`
+absolute error.  This remains a conditioning statement, not an algorithm
+lower bound.
+
+The new levels still do not determine a fixed-cutoff tail sign.  The positive
+nonic mass forces equally large total negative mass, but the uncontrolled
+cubic or septic terms may supply all of it.  Conversely, the negative septic
+mass may be compensated by the uncontrolled quintic term.  There are lower
+bounds but no matching upper bounds on these earlier same-sign classes.
+
+The singleton proof first fails at `j=11`.  Its saddle gives
+
+```text
+z=0.0182160184957...,
+delta_11=0.164001364437...,
+h_11=1.794464057772...,
+phi_11=1.630462693335...,
+s_11=0.00734459764487....
+```
+
+The first-moment calculation predicts
+
+```text
+E_Y[X_11]=N^(5.039470731401...+o(1)),
+
+C_11 scale=N^(3.071454358155...+o(1)),
+
+|a_11|*C_11 scale=N^(0.3303074154...+o(1)).
+```
+
+However, `(JN5)` now has maximum
+
+```text
++0.190431621292...
+```
+
+at `(d_L,d_R,c_rel)=(11,11,11)`.  Replacing the crude full-rank image bound
+by the exact identity `H(A*V)=H(V)=h_11` repairs that class, but
+`(d_L,d_R,c_rel)=(10,10,10)` still has exponent
+
+```text
++0.152267623874....
+```
+
+Several lower common deficiencies are also positive.  The mod-two loss
+remains harmless, since `6*f_1=0.662877634130...`; the obstruction is rational
+projection entropy.  Proving septic-style concentration at level eleven
+therefore needs a sharper classification of rank-`d` projections of the
+signed column law.  The displayed `j=11` scale is only a saddle prediction,
+not a high-probability closure theorem.
+
 There is an exact same-`P_3` obstruction, even under symmetry and
 nonnegative Walsh likelihood coefficients.  Let odd `M>=11`, take independent
 uniform signs `x_1,...,x_M`, and put
@@ -11308,6 +11924,303 @@ centered-signal identity, `(CES)`, and the implication
 `(CS2)`, or `(RR)`, for the actual random retained buckets.  The off-cell
 `Xi` estimate and coherence alone do not imply either condition.
 
+### A fixed-cell automatic-orbit feature interface
+
+There is a more explicit sufficient interface inside one cell.  Work at
+visibility one, condition on `Good`, and fix one exact four-degree cell in
+which every retained support has exactly one retained `{z,-z}` orbit.  Thus
+`m_T=1`.  Let `O` be its set of retained orbits, put `m_cell=|O|`, and assume
+that every support has the same total size `t>=1`.
+
+First factor the local overlap matrix.  For orthonormal `e_0,e_1,e_2`, put
+
+```text
+r_0=e_0,
+r_s=e_0+e_1+s*sqrt(2)*e_2,       s in {+1,-1}.
+```
+
+The Gram matrix of `r_0,r_+,r_-` is exactly
+
+```text
+[[1,1,1],
+ [1,4,0],
+ [1,0,4]].
+```
+
+Equivalently, normalize the two nonzero states by
+
+```text
+psi_0=e_0,
+psi_s=r_s/2=(1/2)*psi_0+v_s,
+
+v_s=(1/2)*e_1+s*(1/sqrt(2))*e_2.
+```
+
+Then
+
+```text
+v_s perpendicular psi_0,
+||v_s||_2^2=3/4,
+<v_+,v_->=-1/4.
+```
+
+Thus a shorthand `r_s=c+s*d` is valid with `c=e_0+e_1` and
+`d=sqrt(2)*e_2`; it would be false with `c=r_0`.
+
+For an oriented ternary row `z`, define
+
+```text
+Psi_z=tensor_i psi_(z_i).
+```
+
+For two rows of support size `t`, put
+
+```text
+K_+(z,u)=<Psi_z,Psi_u>.
+```
+
+Writing `T_z=supp(z)`, one has exactly
+
+```text
+K_+(z,u)
+  =2^(-|T_z triangle T_u|)
+     *1[z_i=u_i on T_z intersect T_u].
+```
+
+Define the orbit feature and its Gram by
+
+```text
+Phi_[z]=(Psi_z+Psi_(-z))/sqrt(2),
+
+K_orb([z],[u])
+  =<Phi_[z],Phi_[u]>
+  =K_+(z,u)+K_+(z,-u).
+```
+
+This is independent of the chosen orbit representatives.  Moreover,
+`K_orb` is positive semidefinite and has unit diagonal.
+
+For distinct retained supports, every nonzero term in `K_+(z,u)` gives the
+two automatic zero words `+/-(z-u)`.  A term in `K_+(z,-u)` similarly gives
+`+/-(z+u)`.  Hence the exact automatic part of the conditional Gram is
+
+```text
+Gamma_auto=2*K_orb-I_(m_cell).                      (AO)
+```
+
+The subtraction corrects the diagonal: the empty relation occurs once,
+whereas every nonempty automatic relation occurs with both signs.
+
+The orbit feature has an exact orthogonal level decomposition.  Expand each
+active coordinate as
+
+```text
+psi_(z_i)=(1/2)*psi_0+v_(z_i).
+```
+
+For `J subset T_z`, let `Psi_(z,J)` be the tensor term using `v_(z_i)` on
+`J` and `(1/2)*psi_0` on `T_z\J`.  Terms for different `J` are orthogonal.
+If `|J|=j`, then
+
+```text
+||Psi_(z,J)||_2^2=3^j*4^(-t),
+<Psi_(z,J),Psi_(-z,J)>=(-1)^j*4^(-t).
+```
+
+Let `K_j` be the Gram of the orbit-symmetrized level-`j` features.  Its
+diagonal is
+
+```text
+w_j=4^(-t)*choose(t,j)*(3^j+(-1)^j).                (FW)
+```
+
+Every `w_j` is positive.  With `L_j=K_j/w_j`, each `L_j` is positive
+semidefinite with unit diagonal, and
+
+```text
+K_orb=sum_(j=0)^t w_j*L_j,       sum_(j=0)^t w_j=1. (FD)
+```
+
+The weights are a binomial law plus a signed correction:
+
+```text
+w_j=Pr[Bin(t,3/4)=j]+4^(-t)*choose(t,j)*(-1)^j.
+```
+
+For the central window
+
+```text
+J_t={j:|j-3*t/4|<=t^(2/3)},
+w_J=sum_(j in J_t)w_j,
+```
+
+Hoeffding and the total variation of the signed correction give
+
+```text
+1-w_J<=2*exp(-2*t^(1/3))+2^(-t)=o(1).              (BT)
+```
+
+Let `Gamma` be the complete conditional Gram on this cell and define the
+nonautomatic remainder
+
+```text
+E_rem=Gamma-Gamma_auto.
+```
+
+On `Good`, `E_rem` has zero diagonal and entrywise nonnegative off-diagonal
+entries, although it need not be positive semidefinite.  Put
+
+```text
+q_cell=m_cell^(-1/2)*1,
+P_cell=I_(m_cell)-q_cell*q_cell^T,
+A_cell=q_cell^T*Gamma*q_cell.
+```
+
+Let `U_cell` be any isometry onto `q_cell^perp`, and write
+
+```text
+B_cell=q_cell^T*Gamma*U_cell,
+C_cell=U_cell^T*Gamma*U_cell.
+```
+
+Consider the following three fixed-cell hypotheses:
+
+```text
+||sum_(j in J_t)w_j*L_j-w_J*I_(m_cell)||_op=o(1),  (MO1)
+
+||P_cell*E_rem*P_cell||_op=o(1),                   (MO2)
+
+m_cell^(-1)*||P_cell*K_orb*1||_2^2
+  +m_cell^(-1)*||P_cell*E_rem*1||_2^2=o(A_cell).   (MO3)
+```
+
+The right side of `(MO3)` is the actual radial quadratic scale.  An
+unnormalized `o(1)` row-sum condition would not suffice when `A_cell`
+depends polynomially on `N`.
+
+Conditions `(MO1)` and `(BT)`, with positivity of all omitted feature
+levels, imply
+
+```text
+K_orb
+  >=sum_(j in J_t)w_j*L_j
+  >=(1-o(1))*I_(m_cell).
+```
+
+Equation `(AO)` therefore gives
+
+```text
+Gamma_auto>=(1-o(1))*I_(m_cell).
+```
+
+Using `(MO2)` on the centered subspace yields
+
+```text
+C_cell=U_cell^T*(Gamma_auto+E_rem)*U_cell
+  >=(1-o(1))*I.                                    (CS1-0)
+```
+
+This is `(CS1)` with `sigma=0`.
+
+For the cross block, `P_cell*q_cell=0` and `(AO)` give
+
+```text
+||B_cell||_2^2
+  =||P_cell*Gamma*q_cell||_2^2
+
+  =m_cell^(-1)
+     *||2*P_cell*K_orb*1+P_cell*E_rem*1||_2^2
+
+  <=8*m_cell^(-1)*||P_cell*K_orb*1||_2^2
+     +2*m_cell^(-1)*||P_cell*E_rem*1||_2^2
+
+  =o(A_cell).
+```
+
+Since `Gamma` has nonnegative entries and unit diagonal, `A_cell>=1`.
+Combining the last display with `(CS1-0)` proves
+
+```text
+||A_cell^(-1/2)*B_cell*C_cell^(-1/2)||_op^2
+  <=||B_cell||_2^2/[A_cell*lambda_min(C_cell)]
+  =o(1).                                           (CS2-cell)
+```
+
+Thus `(MO1)`--`(MO3)` imply the centered spectral floor and normalized row
+regularity required by the multiplicity-corrected Schur interface.
+
+These hypotheses are not yet proved for the actual retained buckets.  Two
+overlap exponents only diagnose their plausibility.  For `A_overlap>1`, put
+
+```text
+F_(A_overlap)(p)=12*max_(0<=xi<=p) [
+    p*H_2(xi/p)
+   +(1-p)*H_2((p-xi)/(1-p))
+   -H_2(p)+xi*log_2(A_overlap)].
+```
+
+At the dangerous center,
+
+```text
+F_8 =0.046133452937...,
+F_16=0.088461022044....
+```
+
+For two independent uniformly signed full-cell rows, with total support
+intersection `C_tot`,
+
+```text
+E_sign[K_orb^2 | C_tot=c]=2*8^c*16^(-t),
+```
+
+for `c>0`; the disjoint case differs only by an absolute factor.  Hence the
+signed pair-square diagnostic has exponent
+
+```text
+m_exp-4*beta+F_8=-0.452256900298...,
+
+m_exp=3*a-1=0.498390353235....
+```
+
+Dropping sign compatibility gives the weaker diagnostic
+
+```text
+m_exp-4*beta+F_16=-0.409929331191....
+```
+
+These negative exponents do not prove `(MO1)`: actual occupancy is filter-
+correlated, and an operator statement requires more than an independent-pair
+average.
+
+The ideal centered fourth-cycle arithmetic would be
+
+```text
+2*F_16-m_exp=-0.321468309148....
+```
+
+Thus, if a separate four-orbit enumeration proved
+
+```text
+Tr[(P_cell*E_rem*P_cell)^4]
+  <=N^(2*F_16-m_exp+o(1)),
+```
+
+then
+
+```text
+||P_cell*E_rem*P_cell||_op
+  <=N^(-0.080367077287...+o(1)).
+```
+
+This trace estimate is only a target.  `F_16` controls a two-row unsigned
+square-overlap sum; it does not classify four jointly retained rows or prove
+cancellation after centering.  Likewise, `Good` controls the half-turn
+representations of individual retained supports, not these nonautomatic
+zero-relation cycles.  The entire interface is restricted to visibility one,
+one fixed exact-degree cell, and its occupied quotient.  It neither proves
+`(MO1)`--`(MO3)` in the random model nor extends to a mixed cutoff, the full
+`Y`-adaptive nonradial space, or nonlinear statistics.
+
 For the one deterministic degree-symmetric resolvent optimizer, the missing
 quenched statement is narrower.  Put into `E_ng(Y)` the entire actual
 contribution of every non-generic pair class
@@ -12926,8 +13839,14 @@ same-cell algebraic witness with `Xi=0` shows that these inputs do not imply
 an unrestricted nonradial theorem; it is not a modular counterexample.
 A multiplicity-corrected centered-Schur interface shows that the full linear
 extension would follow from a centered spectral floor with exponent below
-`0.044828...` and normalized within-cell row regularity.  Those inputs remain
-unproved; unrestricted same-cell nonradial weights and nonlinear sign
+`0.044828...` and normalized within-cell row regularity.  Inside one fixed
+`Good` exact-degree cell, the PSD orbit-feature Gram `K_orb` has exact level
+weights `4^(-t)*choose(t,j)*(3^j+(-1)^j)`.  Three explicit hypotheses reduce
+the missing inputs to central signed-subword occupancy, a centered
+nonautomatic
+spectral bound, and normalized row sums.  The displayed `F_8,F_16` diagnostics
+and fourth-cycle target are not proofs.  Those inputs remain unproved;
+unrestricted same-cell nonradial weights, mixed cutoffs, and nonlinear sign
 performance remain open.
 Bucket-sum-only rehash medians are only margin transforms of the same path
 sum, while a positive three-character likelihood
@@ -12958,11 +13877,15 @@ false.  For the actual modular law at visibility one, the exact alternating
 closure expansion makes the cubic formal-level contribution at most
 `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
 closure levels at least five to contribute at least
-`N^(0.021392...+o(1))`.  The actual automatic quintic alone contributes at
-least `N^(0.0679559...+o(1))`, so the absolute formal-level mass and its
-inequality condition number are exponentially larger still.  This is not an
-algorithm lower bound and does not determine the level-at-least-seven tail or
-final Wagner sign.  More sharply, two valid nonnegative-Walsh likelihood
+`N^(0.021392...+o(1))`.  With high probability, the actual automatic quintic,
+septic, and nonic contributions have signed magnitudes at least
+`N^(0.0679559...+o(1))`,
+`N^(0.1365318...+o(1))`, and `N^(0.2246470...+o(1))`, with signs `+,-,+`.
+Thus the absolute formal-level mass and its triangle-inequality condition
+number are at least `N^(0.2246470...+o(1))`.  The singleton ledger first fails
+at level eleven.  This is not an algorithm lower bound and determines neither
+any fixed-cutoff tail nor the final Wagner sign.  More sharply, two valid
+nonnegative-Walsh likelihood
 completions have
 the same exact symmetric base law, positive linear signal, and every residual
 projection against polynomials of degree at most `M-1`.  Their conditional
@@ -13037,9 +13960,17 @@ Markov--Lukacs/SOS conversions have `Omega(N)` size, while the threshold
 sequence along every dyadic stride `s<=M` has exact minimal recurrence order
 `2*q+1` with high probability.  An adversarial short-arc reduction from
 Plaisted makes coefficient-uniform exact counting NP-hard already for
-`M=N^(1/9)` and at most `q=12*log_2(N)` rational Laurent terms.  It leaves the
-iid-Gaussian and simple-root promise open.  Custom sparse/circuit and random
-approximate real-root locators remain open.
+`M=N^(1/9)` and at most `q=12*log_2(N)` rational Laurent terms.  Predetermined
+windows whose component count plus total length is `N^o(1)` hit the random
+near-cap only with probability `N^(-gamma+o(1))`; constant success needs
+`N^(gamma-o(1))` coverage.  In the size-biased cap experiment, with high
+probability over the labels, a fixed rank-`r` linear sketch with a vanishing-
+error candidate list needs list size `m^(1-r/(2*q)-o(1))`, so an `m^o(1)`
+list retains almost all `2*q` coordinates.  These two results do not cover
+amplitude-adaptive or nonlinear global processing.  The adversarial
+reduction leaves the iid-Gaussian and
+simple-root promise open.  Custom sparse/circuit and random approximate
+real-root locators remain open.
 Rejection-based quantum tilting
 returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
 only `M^o(1)` expected rare-cap crossings and accepted indices, so the

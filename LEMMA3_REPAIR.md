@@ -721,9 +721,17 @@ Markov--Lukacs/SOS conversions have `Omega(N)` size, while the threshold
 sequence along every dyadic stride `s<=M` has exact minimal recurrence order
 `2*q+1` with high probability.  An adversarial short-arc reduction from
 Plaisted makes coefficient-uniform exact counting NP-hard already for
-`M=N^(1/9)` and at most `q=12*log_2(N)` rational Laurent terms.  It leaves the
-iid-Gaussian and simple-root promise open.  Custom sparse/circuit and random
-approximate real-root locators remain open.
+`M=N^(1/9)` and at most `q=12*log_2(N)` rational Laurent terms.  Predetermined
+windows whose component count plus total length is `N^o(1)` hit the random
+near-cap only with probability `N^(-gamma+o(1))`; constant success needs
+`N^(gamma-o(1))` coverage.  In the size-biased cap experiment, with high
+probability over the labels, a fixed rank-`r` linear sketch with a vanishing-
+error candidate list needs list size `m^(1-r/(2*q)-o(1))`, so an `m^o(1)`
+list retains almost all `2*q` coordinates.  These two results do not cover
+amplitude-adaptive or nonlinear global processing.  The adversarial
+reduction leaves the iid-Gaussian and
+simple-root promise open.  Custom sparse/circuit and random approximate
+real-root locators remain open.
 Rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives
 only
 `M^o(1)` expected crossings and accepted indices, so the implicit
@@ -860,9 +868,15 @@ same-cell algebraic witness with `Xi=0` shows that these inputs do not imply
 an unrestricted nonradial theorem; it is not a modular counterexample.
 A multiplicity-corrected centered-Schur interface shows that the full linear
 extension would follow from a centered spectral floor with exponent below
-`0.044828...` and normalized within-cell row regularity.  Those inputs remain
-unproved; unrestricted same-cell nonradial weights and nonlinear performance
-remain open.
+`0.044828...` and normalized within-cell row regularity.  Inside one fixed
+`Good` exact-degree cell, the PSD orbit-feature Gram `K_orb` has exact level
+weights `4^(-t)*choose(t,j)*(3^j+(-1)^j)`.  Three explicit hypotheses reduce
+the missing inputs to central signed-subword occupancy, a centered
+nonautomatic
+spectral bound, and normalized row sums.  The displayed `F_8,F_16` diagnostics
+and fourth-cycle target are not proofs.  Those inputs remain unproved;
+unrestricted same-cell nonradial weights, mixed cutoffs, and nonlinear
+performance remain open.
 Bucket-sum-only random rehash medians contain
 only the original path-sum information, while a fixed positive pair-overlap
 law can give either sign of prediction correlation.  A second-moment theorem
@@ -890,11 +904,15 @@ false.  For the actual modular law at visibility one, the exact alternating
 closure expansion makes the cubic formal-level contribution at most
 `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
 closure levels at least five to contribute at least
-`N^(0.021392...+o(1))`.  The actual automatic quintic alone contributes at
-least `N^(0.0679559...+o(1))`, so the absolute formal-level mass and its
-inequality condition number are exponentially larger still.  This is not an
-algorithm lower bound and does not determine the level-at-least-seven tail or
-final Wagner sign.  More sharply, two valid nonnegative-Walsh likelihood
+`N^(0.021392...+o(1))`.  With high probability, the actual automatic quintic,
+septic, and nonic contributions have signed magnitudes at least
+`N^(0.0679559...+o(1))`,
+`N^(0.1365318...+o(1))`, and `N^(0.2246470...+o(1))`, with signs `+,-,+`.
+Thus the absolute formal-level mass and its triangle-inequality condition
+number are at least `N^(0.2246470...+o(1))`.  The singleton ledger first fails
+at level eleven.  This is not an algorithm lower bound and determines neither
+any fixed-cutoff tail nor the final Wagner sign.  More sharply, two valid
+nonnegative-Walsh likelihood
 completions have
 the same exact symmetric base law, positive linear signal, and every residual
 projection against polynomials of degree at most `M-1`.  Their conditional
