@@ -727,8 +727,15 @@ near-cap only with probability `N^(-gamma+o(1))`; constant success needs
 `N^(gamma-o(1))` coverage.  In the size-biased cap experiment, with high
 probability over the labels, a fixed rank-`r` linear sketch with a vanishing-
 error candidate list needs list size `m^(1-r/(2*q)-o(1))`, so an `m^o(1)`
-list retains almost all `2*q` coordinates.  These two results do not cover
-amplitude-adaptive or nonlinear global processing.  The adversarial
+list retains almost all `2*q` coordinates.  Yet, for every fixed
+`0<gamma<=1/9`, with high probability over the labels the size-biased cap row
+and the ordinary Gaussian row conditioned on a nonempty cap are
+asymptotically singular: their squared
+radii are separated at `s_cut=(s_0+1+a_gamma)/2`, where
+`a_gamma=gamma*ln(2)/12` and `s_0=a_gamma/(1-exp(-a_gamma))`.  Thus the sketch
+theorem does not transfer by a Poisson or contiguity argument.  These results
+do not cover amplitude-adaptive or nonlinear global processing.  The
+adversarial
 reduction leaves the iid-Gaussian and
 simple-root promise open.  Custom sparse/circuit and random approximate
 real-root locators remain open.
@@ -905,13 +912,15 @@ closure expansion makes the cubic formal-level contribution at most
 `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
 closure levels at least five to contribute at least
 `N^(0.021392...+o(1))`.  With high probability, the actual automatic quintic,
-septic, and nonic contributions have signed magnitudes at least
+septic, nonic, and level-eleven contributions have signed magnitudes at least
 `N^(0.0679559...+o(1))`,
-`N^(0.1365318...+o(1))`, and `N^(0.2246470...+o(1))`, with signs `+,-,+`.
+`N^(0.1365318...+o(1))`, `N^(0.2246470...+o(1))`, and
+`N^(0.3303074...+o(1))`, with signs `+,-,+,-`.
 Thus the absolute formal-level mass and its triangle-inequality condition
-number are at least `N^(0.2246470...+o(1))`.  The singleton ledger first fails
-at level eleven.  This is not an algorithm lower bound and determines neither
-any fixed-cutoff tail nor the final Wagner sign.  More sharply, two valid
+number are at least `N^(0.3303074...+o(1))`.  The strengthened projection
+ledger first fails at level thirteen.  This is not an algorithm lower bound
+and determines neither any fixed-cutoff tail nor the final Wagner sign.  More
+sharply, two valid
 nonnegative-Walsh likelihood
 completions have
 the same exact symmetric base law, positive linear signal, and every residual

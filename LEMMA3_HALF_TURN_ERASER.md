@@ -192,13 +192,16 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
   closure levels at least five to contribute at least
   `N^(0.021392...+o(1))`.  With high probability, the actual automatic
-  quintic, septic, and nonic contributions have signed magnitudes at least
+  quintic, septic, nonic, and level-eleven contributions have signed
+  magnitudes at least
   `N^(0.0679559...+o(1))`,
-  `N^(0.1365318...+o(1))`, and `N^(0.2246470...+o(1))`, with signs `+,-,+`.
+  `N^(0.1365318...+o(1))`, `N^(0.2246470...+o(1))`, and
+  `N^(0.3303074...+o(1))`, with signs `+,-,+,-`.
   Thus the absolute formal-level mass and its triangle-inequality condition
-  number are at least `N^(0.2246470...+o(1))`.  The singleton ledger first
-  fails at level eleven.  This is not an algorithm lower bound and determines
-  neither any fixed-cutoff tail nor the final Wagner sign.  More sharply, two
+  number are at least `N^(0.3303074...+o(1))`.  The strengthened projection
+  ledger first fails at level thirteen.  This is not an algorithm lower bound
+  and determines neither any fixed-cutoff tail nor the final Wagner sign.
+  More sharply, two
   valid nonnegative-Walsh
   likelihood completions
   have the same exact symmetric base law, positive linear signal, and every
@@ -294,7 +297,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   size-biased cap experiment, with high probability over the labels, a fixed
   rank-`r` linear sketch with a vanishing-error candidate list needs list size
   `m^(1-r/(2*q)-o(1))`, so an `m^o(1)` list retains almost all `2*q`
-  coordinates.  These two results do not cover
+  coordinates.  Yet, for every fixed `0<gamma<=1/9`, with high probability
+  over the labels the size-biased cap row and the ordinary Gaussian row
+  conditioned on a nonempty cap are
+  asymptotically singular: their squared radii are separated at
+  `s_cut=(s_0+1+a_gamma)/2`, where `a_gamma=gamma*ln(2)/12` and
+  `s_0=a_gamma/(1-exp(-a_gamma))`.  Thus the sketch theorem does not transfer
+  by a Poisson or contiguity argument.  These results do not cover
   amplitude-adaptive or nonlinear global processing.  The adversarial
   reduction leaves the iid-Gaussian and simple-root promise open.  Custom
   sparse/circuit and random approximate real-root locators remain open.
@@ -3654,6 +3663,199 @@ nonlinear compression, a method that uses all modes without materializing a
 candidate list, a direct interval root counter, or aggregate winding.  The law
 is specifically the displayed size-biased cap experiment, not the ordinary
 row conditioned only on having a nonempty cap.
+
+That distinction is intrinsic: the two row laws are asymptotically singular.
+Fix `0<gamma<=1/9`, independent of `n`, and condition on the labels.  Put
+
+```text
+d_G=2*q=24*n,
+a_n=v^2/d_G -> a_gamma=gamma*ln(2)/12,
+c_gamma=ln(m)/d_G -> a_gamma/2.
+```
+
+Let `gamma_(d_G)` denote standard Gaussian measure and define
+
+```text
+pi_Y=Pr_G[H_v(G)>0 | Y],
+
+dP_(sb,Y)/d gamma_(d_G)=H_v(G)/(m*p_cap),
+
+dP_(hit,Y)/d gamma_(d_G)=1[H_v(G)>0]/pi_Y.
+```
+
+The first is the size-biased marginal used above; the second is the ordinary
+Gaussian row conditioned only on a nonempty cap.
+
+The size-biased radius is exact.  Under `P_(sb,Y)`, for every label instance,
+
+```text
+||G||_2^2 = chi^2_(d_G-1)+X_v^2,
+
+X_v has law N(0,1) conditioned on X_v>=v.
+```
+
+Therefore
+
+```text
+||G||_2^2/d_G -> s_sb:=1+a_gamma                 (NR1)
+```
+
+in probability.  The ordinary nonempty-cap law has a different radial
+threshold.  Write
+
+```text
+I_rad(s)=(s-1-ln(s))/2,
+
+s_0=a_gamma/(1-exp(-a_gamma)).                     (NR2)
+```
+
+On the sphere `||G||_2^2=s*d_G`, put `x=a_gamma/s`.  One cap has logarithmic
+probability
+
+```text
+(1/d_G)*ln Pr_sphere[<G,A_j>>=v]
+  =(1/2)*ln(1-x)+o(1).
+```
+
+Hence its union first moment has exponent
+
+```text
+c_gamma+(1/2)*ln(1-a_gamma/s),
+```
+
+which vanishes exactly at `s=s_0`.  A union bound on every sphere, followed
+by the radial large-deviation principle, gives for every label instance
+
+```text
+pi_Y<=exp(-d_G*I_rad(s_0)+o(d_G)).                 (NR3)
+```
+
+The lower exponent needed here uses the correlation ledger.  For a lag
+`0<h<m`, put
+
+```text
+rho_h=(1/q)*sum_i cos(2*pi*h*Y_i/N).
+```
+
+Because
+
+```text
+N/gcd(h,N)>=N/m=N^(1-gamma+o(1)),
+```
+
+the finite phase-grid moment generating function converges uniformly on every
+fixed compact `theta` interval to `I_0(theta)`, the modified Bessel function.
+Thus the random-label rate is
+
+```text
+I_cos(rho)=sup_theta {theta*rho-ln(I_0(theta))},
+
+Pr_Y[rho_h near rho]
+  =exp(-(d_G/2)*I_cos(rho)+o(d_G)).                 (NR4)
+```
+
+No independence among different lags is used.  Two spherical caps of
+correlation `rho` obey
+
+```text
+Pr_sphere[both caps]
+  <=(1-2*x/(1+rho))_+^((d_G-2)/2).
+```
+
+Consequently define the fixed-shell second-moment penalty
+
+```text
+D(x)=sup_(1+rho>2*x) {
+   -(1/2)*I_cos(rho)
+   +(1/2)*ln(1-2*x/(1+rho))
+   -ln(1-x)}.                                      (NR5)
+```
+
+It satisfies
+
+```text
+D(x)=x^4/8+O(x^5).
+```
+
+More explicitly, `I_0(theta)<=exp(theta^2/4)` gives
+`I_cos(rho)>=rho^2`, and a one-variable concavity bound yields, throughout
+the present range,
+
+```text
+D(x)
+  <=x^4/[4*(1-x^2)]+x^6/[2*(1-x^2)^2]
+  <0.251*x^4.                                      (NR6)
+```
+
+For each fixed `s>s_0`, average the shell second moment over the labels.
+Markov with a threshold `exp(d_G*(D+epsilon_n))`, where
+`epsilon_n->0` and `d_G*epsilon_n->infinity`, followed by Paley--Zygmund on
+the sphere, gives with high probability over the labels
+
+```text
+pi_Y
+  >=exp(-d_G*{I_rad(s)+D(a_gamma/s)+o(1)}).
+```
+
+Letting `s` decrease diagonally to `s_0` gives
+
+```text
+pi_Y
+  >=exp(-d_G*{I_rad(s_0)+D(a_gamma/s_0)+o(1)}).     (NR7)
+```
+
+Now put
+
+```text
+s_cut=(s_0+s_sb)/2.
+```
+
+For every fixed `0<gamma<=1/9`, elementary bounds give
+
+```text
+I_rad(s_cut)-I_rad(s_0)
+  >=a_gamma^2*(1-a_gamma)/
+      [8*(2-a_gamma)*(1+a_gamma)]
+  >0.061*a_gamma^2,
+
+D(a_gamma/s_0)<0.251*a_gamma^4.                    (NR8)
+```
+
+Thus the first quantity strictly exceeds the second.  Equations `(NR3)`--
+`(NR8)` imply, with high probability over the labels,
+
+```text
+P_(hit,Y)[||G||_2^2/d_G>=s_cut] -> 0,
+
+P_(sb,Y)[||G||_2^2/d_G>=s_cut] -> 1.               (NR9)
+```
+
+The two conditional row laws are therefore asymptotically singular in total
+variation.  At `gamma=1/9`,
+
+```text
+a_gamma =0.00641802944963...,
+s_0     =1.0032124473143...,
+s_sb    =1.0064180294496...,
+s_cut   =1.0048152383820....
+```
+
+The base-`N` radial rates are
+
+```text
+[24/ln(2)]*I_rad(s_0)   =0.0000891392469...,
+[24/ln(2)]*I_rad(s_cut) =0.0002000644886...,
+
+D(a_gamma/s_0)=2.09400...*10^(-10),
+[24/ln(2)]*D(a_gamma/s_0)=7.25041...*10^(-9).
+```
+
+This is a no-transfer theorem, not a stronger sketch lower bound.  It proves
+that the size-biased information experiment cannot be replaced by ordinary
+conditioning through a Poisson or contiguity argument.  It does not rule out
+a direct analysis of the ordinary nonempty-cap law, adaptive nonlinear use of
+all amplitudes, or a global root counter.  The assertion is for each fixed
+positive `gamma`; it is not uniform when `gamma=gamma_n` tends to zero.
 
 Several scoped facts sharpen the remaining near-cap location primitive.  The
 first is an exact discrete barrier, stronger than the continuous interval
@@ -10205,52 +10407,214 @@ Independent termwise relative estimates therefore need precision
 absolute error.  This remains a conditioning statement, not an algorithm
 lower bound.
 
-The new levels still do not determine a fixed-cutoff tail sign.  The positive
-nonic mass forces equally large total negative mass, but the uncontrolled
-cubic or septic terms may supply all of it.  Conversely, the negative septic
+The levels through nine still do not determine a fixed-cutoff tail sign.  The
+positive nonic mass forces equally large total negative mass, but the
+uncontrolled cubic or septic terms may supply all of it.  Conversely, the
+negative septic
 mass may be compensated by the uncontrolled quintic term.  There are lower
 bounds but no matching upper bounds on these earlier same-sign classes.
 
-The singleton proof first fails at `j=11`.  Its saddle gives
+Weight-two atoms sharpen the projection ledger enough to close formal level
+eleven.  The exact signed-column and coefficient-weighted counts are
 
 ```text
-z=0.0182160184957...,
-delta_11=0.164001364437...,
-h_11=1.794464057772...,
-phi_11=1.630462693335...,
-s_11=0.00734459764487....
+g=(1,22,110,990,1980,9240,9240,23100,11550,13860,2772,924),
+
+b=(1,11,110,495,1980,4620,9240,11550,11550,6930,2772,462),
+
+Q_11(z)
+ =1+11*z+110*z^2+495*z^3+1980*z^4+4620*z^5
+    +9240*z^6+11550*z^7+11550*z^8+6930*z^9
+    +2772*z^10+462*z^11.
 ```
 
-The first-moment calculation predicts
+The positive solution of `z*Q_11'(z)/Q_11(z)=11*p` gives
 
 ```text
-E_Y[X_11]=N^(5.039470731401...+o(1)),
-
-C_11 scale=N^(3.071454358155...+o(1)),
-
-|a_11|*C_11 scale=N^(0.3303074154...+o(1)).
+z=0.0182160184956712...,
+Q_11(z)=1.24009642028454...,
+delta_11=0.164001364437113...,
+h_11=1.79446405777189...,
+phi_11=1.63046269333478....
 ```
 
-However, `(JN5)` now has maximum
+For its fixed Gibbs type, put
 
 ```text
-+0.190431621292...
+q_zero=x_0=1/Q_11(z)=0.806388909477338...,
+
+s_11=x_1/g_(11,1)=z/(2*Q_11(z))
+    =0.00734459764487165...,
+
+q_two=x_2/g_(11,2)=z^2/Q_11(z)
+     =0.000267578653084490....
 ```
 
-at `(d_L,d_R,c_rel)=(11,11,11)`.  Replacing the crude full-rank image bound
-by the exact identity `H(A*V)=H(V)=h_11` repairs that class, but
-`(d_L,d_R,c_rel)=(10,10,10)` still has exponent
+A zero column has mass `q_zero`, every signed singleton `+/-e_i` has mass
+`s_11`, and every balanced weight-two column `e_i-e_l`, `i!=l`, has mass
+`q_two`.  These are actual allowed columns: their support has size two and
+their ternary row sum is zero.
+
+There is now a universal projection-entropy bound.  Let `A_proj` be any
+rational rank-`d` map on the eleven row coordinates.  Choose coordinate
+columns with linearly independent images `u_1,...,u_d`.  Then
 
 ```text
-+0.152267623874....
+0,
++/-u_i,                    1<=i<=d,
+u_i-u_l,                   1<=i,l<=d, i!=l
 ```
 
-Several lower common deficiencies are also positive.  The mod-two loss
-remains harmless, since `6*f_1=0.662877634130...`; the obstruction is rational
-projection entropy.  Proving septic-style concentration at level eleven
-therefore needs a sharper classification of rank-`d` projections of the
-signed column law.  The displayed `j=11` scale is only a saddle prediction,
-not a high-probability closure theorem.
+are all distinct.  In the basis `u_1,...,u_d`, their coefficient vectors are
+`0`, `+/-e_i`, and `e_i-e_l`, which are pairwise distinct in characteristic
+zero.  Their output masses are at least `q_zero`, `s_11`, and `q_two`.
+
+Put
+
+```text
+r_pool(d)=1-2*d*s_11-d*(d-1)*q_two,
+
+tilde(e)_d
+  =-r_pool(d)*log_2(r_pool(d))-2*d*s_11*log_2(s_11)
+      -d*(d-1)*q_two*log_2(q_two),
+
+tilde(e)_0=0.                                      (J11E)
+```
+
+This is a rigorous entropy lower bound, not a residual-bin ansatz.  The
+actual zero-output mass is at least `q_zero>1/2`.  Start instead with the
+pooled vector
+
+```text
+(r_pool(d), s_11 repeated 2*d times,
+      q_two repeated d*(d-1) times).
+```
+
+The actual output law is obtained from this vector by transferring mass from
+the zero coordinate to listed or additional output coordinates.  Throughout
+these transfers the donor remains larger than every recipient because its
+final mass is at least `q_zero>1/2`.  Hence the pooled vector majorizes the
+actual output law, and Schur concavity proves `(J11E)`.  Extra atoms mapping
+onto already listed outputs are included in these transfers.  At `d=11`,
+
+```text
+r_pool(11)=1-x_1-x_2=0.808985199973530...>q_zero,
+```
+
+so the pooling is feasible for every `d<=11`.  Type rounding changes the
+entropy only by `o(1)`.
+
+The values for `d=1,...,11` are
+
+```text
+(tilde(e)_1,...,tilde(e)_11)
+ =(0.125168800978091,
+   0.257121602262058,
+   0.395816993600863,
+   0.541210920465635,
+   0.693256500398597,
+   0.851903818351028,
+   1.01709969802273,
+   1.18878744567676,
+   1.36690656224777,
+   1.55139241875953,
+   1.74217588907945).
+```
+
+For a rational relation space of dimension `d`, its projections onto either
+tuple are injective.  A vector in one kernel would be a one-sided relation,
+which is impossible because the singleton columns give every individual
+tuple full row rank.  Thus `(J11E)` applies on both sides of the mutual-
+information ledger.  Replacing `(JN4)` by `(J11E)`, a class has relative
+exponent at most
+
+```text
+tilde(Theta)_11(d_L,d_R,c_rel)
+  =a*(d_L+d_R-c_rel)+c_rel
+      -6*(tilde(e)_(d_L)+tilde(e)_(d_R)).           (J11T)
+```
+
+Exhausting the 649 nontrivial triples gives
+
+```text
+tilde(Theta)_11<=-0.00256216065871362....
+```
+
+The unique worst class is `(1,1,1)`; the next is `(2,2,2)`, with exponent
+`-0.0865323249879366...`.  The formerly obstructing `(10,10,10)` class is
+already at `-3.62207451433058...`.  For `(11,11,11)`, the exact identity
+`H(A_proj*V)=h_11` is stronger still.
+
+Full-rational-rank but mod-two-singular stacks remain harmless.  A nonzero
+binary relation image separates a singleton support atom of mass `2*s_11`
+from zero, and hence one affected half loses at least
+
+```text
+6*f_1=0.662877634130088...,
+
+f_1=-(1-2*s_11)*log_2(1-2*s_11)
+      -2*s_11*log_2(2*s_11).
+```
+
+All nonzero Smith invariants are `O_11(1)`, so their arithmetic gain is only
+constant.  Consequently,
+
+```text
+Var_Y(X_11)/E_Y[X_11]^2
+  <=N^(-0.00256216065871362...+o(1)),
+
+X_11=N^(5.03947073140052...+o(1))
+```
+
+with high probability.  This concentration is unconditional in `Y` and may
+then be intersected with `Good`.  The same resultant and multiplicity argument
+gives
+
+```text
+C_11>=N^(12*phi_11-11*(a+1)+o(1))
+    =N^(3.07145435815517...+o(1)).
+```
+
+The exact majority coefficient is
+
+```text
+a_11=-945*alpha_V/
+ [(M_V-2+epsilon_V)*(M_V-4+epsilon_V)
+  *(M_V-6+epsilon_V)*(M_V-8+epsilon_V)
+  *(M_V-10+epsilon_V)]
+ =-N^(-11*m/2+o(1)).
+```
+
+Therefore the actual modular level-eleven term is negative and obeys
+
+```text
+-a_11*C_11>=N^(0.330307415361868...+o(1)).          (J11C)
+```
+
+It also sharpens the termwise conditioning barrier.  Since the total negative
+formal mass contains `-a_11*C_11` and `|rho_Y|<=1`,
+
+```text
+sum_(j odd)|a_j|*C_j
+  >=2*(-a_11*C_11)-1
+  >=N^(0.330307415361868...+o(1)).
+```
+
+This actual-modular, visibility-one result concerns formal closure level
+eleven, not original Walsh degree.  It is a cancellation and conditioning
+barrier, not an algorithm lower bound or a fixed-cutoff tail-sign theorem;
+earlier and later positive levels still lack matching upper bounds.
+
+The same singleton-plus-weight-two entropy bound does not automatically close
+level thirteen: its `(1,1,1)` exponent is
+
+```text
++0.0685762060234....
+```
+
+A sharper rank-one projection entropy bound is required there.  This is a
+proof-method obstruction, not evidence that the actual level fails to
+concentrate.
 
 There is an exact same-`P_3` obstruction, even under symmetry and
 nonnegative Walsh likelihood coefficients.  Let odd `M>=11`, take independent
@@ -13878,13 +14242,15 @@ closure expansion makes the cubic formal-level contribution at most
 `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
 closure levels at least five to contribute at least
 `N^(0.021392...+o(1))`.  With high probability, the actual automatic quintic,
-septic, and nonic contributions have signed magnitudes at least
+septic, nonic, and level-eleven contributions have signed magnitudes at least
 `N^(0.0679559...+o(1))`,
-`N^(0.1365318...+o(1))`, and `N^(0.2246470...+o(1))`, with signs `+,-,+`.
+`N^(0.1365318...+o(1))`, `N^(0.2246470...+o(1))`, and
+`N^(0.3303074...+o(1))`, with signs `+,-,+,-`.
 Thus the absolute formal-level mass and its triangle-inequality condition
-number are at least `N^(0.2246470...+o(1))`.  The singleton ledger first fails
-at level eleven.  This is not an algorithm lower bound and determines neither
-any fixed-cutoff tail nor the final Wagner sign.  More sharply, two valid
+number are at least `N^(0.3303074...+o(1))`.  The strengthened projection
+ledger first fails at level thirteen.  This is not an algorithm lower bound
+and determines neither any fixed-cutoff tail nor the final Wagner sign.  More
+sharply, two valid
 nonnegative-Walsh likelihood
 completions have
 the same exact symmetric base law, positive linear signal, and every residual
@@ -13966,8 +14332,15 @@ near-cap only with probability `N^(-gamma+o(1))`; constant success needs
 `N^(gamma-o(1))` coverage.  In the size-biased cap experiment, with high
 probability over the labels, a fixed rank-`r` linear sketch with a vanishing-
 error candidate list needs list size `m^(1-r/(2*q)-o(1))`, so an `m^o(1)`
-list retains almost all `2*q` coordinates.  These two results do not cover
-amplitude-adaptive or nonlinear global processing.  The adversarial
+list retains almost all `2*q` coordinates.  Yet, for every fixed
+`0<gamma<=1/9`, with high probability over the labels the size-biased cap row
+and the ordinary Gaussian row conditioned on a nonempty cap are
+asymptotically singular: their squared
+radii are separated at `s_cut=(s_0+1+a_gamma)/2`, where
+`a_gamma=gamma*ln(2)/12` and `s_0=a_gamma/(1-exp(-a_gamma))`.  Thus the sketch
+theorem does not transfer by a Poisson or contiguity argument.  These results
+do not cover amplitude-adaptive or nonlinear global processing.  The
+adversarial
 reduction leaves the iid-Gaussian and
 simple-root promise open.  Custom sparse/circuit and random approximate
 real-root locators remain open.
