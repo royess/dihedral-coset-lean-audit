@@ -707,12 +707,13 @@ sparse prefix sums approximate every interval additively within
 `exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  Even the sum of exact
 discrete per-frequency maxima exceeds `u` on every nonsingleton cell with high
 probability, forcing a frequency-separable tree to expose all `Theta(M)`
-singletons.  Enumerating all critical points also costs `Omega(M)` with
-constant probability.  A cancellation-aware thick-strip argument count gives
+singletons.  Enumerating all critical points costs `Omega(M)` with high
+probability.  A cancellation-aware thick-strip argument count gives
 `2*rho_freq*ell+O(q)` complex zeros over width `ell`, where
 `rho_freq=max_i|nu_i|`, so thick-strip complex-zero-free pruning
-needs `Omega(M/q)` cells; a thin contour still has `Omega(M)` explicit
-denominator crossings with probability `1/2-o(1)`.  These facts do not block
+needs `Omega(M/q)` cells; every data-adaptive continuous ultra-thin graph
+contour still has `Omega(M)` explicit denominator crossings with high
+probability.  These facts do not block
 direct real root counting or aggregate winding.  Root conditioning needs only
 polynomially many bits.  Standard coefficient-explicit Cayley-transform/Sturm
 and
@@ -836,9 +837,12 @@ second-moment problem with fixed data-independent orbit-constant weights;
 whole-radial conditional Loewner promotion fails on empty low-degree blocks.
 Every nonzero-signal `Y`-adaptive signed weighting supported on at most
 `N^(1/20-epsilon)` distinct supports nevertheless has Rayleigh ratio at least
-`N^(1/20+epsilon-o(1))` on `E_short`.  At visibility one and the dangerous
-center, the exact resolvent equation proves pair diffuseness and leading-signal
-concentration.
+`N^(1/20+epsilon-o(1))` on `E_short`.  The same bound holds when the effective
+`l_1` size is at most `N^(1/20-epsilon)`, even with larger support; a signed-
+mass refinement gives a quantitative bound for dense, predominantly one-sided
+vectors.  At visibility one and the dangerous center, the exact resolvent
+equation proves pair
+diffuseness and leading-signal concentration.
 A 49-column four-template certificate puts quadratic relative variance at most
 `N^(-0.310083...+o(1))`.  Extra half-turn signal is `o_p(q_0)`.  Thus that
 fixed deterministic resolvent has conditional Rayleigh ratio
@@ -848,8 +852,11 @@ reference-mass bulk
 ratio for the fully `Y`-adaptive signed radial optimizer.  A square-correlation
 bound `E[Xi]<=N^(-0.011538...+o(1))` supplies the missing Schur floor, so the
 same ratio holds on the entire occupied-cell quotient.  Empty cells still
-defeat whole-space inverse and coefficient-norm stability; nonradial weights
-and nonlinear performance remain open.
+defeat whole-space inverse and coefficient-norm stability.  An augmented-PSD
+same-cell algebraic witness with `Xi=0` shows that these inputs do not imply
+an unrestricted nonradial theorem; it is not a modular counterexample.
+Unrestricted same-cell nonradial weights and nonlinear performance remain
+open.
 Bucket-sum-only random rehash medians contain
 only the original path-sum information, while a fixed positive pair-overlap
 law can give either sign of prediction correlation.  A second-moment theorem
@@ -873,7 +880,13 @@ scale.  A separate automatic order-three family gives
 sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
 exponential lower bound for `||E[R|Z]||_2` and for at least one available
 degree-two-or-three orthogonal coefficient.  Small regression is therefore
-false.  More sharply, two valid nonnegative-Walsh likelihood completions have
+false.  For the actual modular law at visibility one, the exact alternating
+closure expansion makes the cubic formal-level contribution at most
+`-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
+closure levels at least five to contribute at least
+`N^(0.021392...+o(1))`.  This proves necessary high-order cancellation, not
+the final Wagner sign.  More sharply, two valid nonnegative-Walsh likelihood
+completions have
 the same exact symmetric base law, positive linear signal, and every residual
 projection against polynomials of degree at most `M-1`.  Their conditional
 laws also agree on every proper coordinate subset, but their full and residual

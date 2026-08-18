@@ -131,8 +131,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   whole-radial Loewner promotion fails because low-degree blocks are typically
   empty.  On `E_short`, however, every nonzero-signal public-label-adaptive
   signed weighting supported on at most `N^(1/20-epsilon)` distinct supports
-  has Rayleigh ratio at least `N^(1/20+epsilon-o(1))`.  At visibility one and
-  the dangerous center, the exact resolvent equation proves pair diffuseness
+  has Rayleigh ratio at least `N^(1/20+epsilon-o(1))`.  The same lower bound
+  holds whenever the effective `l_1` size
+  `||w||_1^2/||w||_2^2<=N^(1/20-epsilon)`, even with larger support; a signed-
+  mass refinement gives a quantitative bound for dense, predominantly one-
+  sided vectors.  At
+  visibility one and the dangerous center, the exact resolvent equation proves
+  pair diffuseness
   and leading-signal concentration.  A 49-column four-template certificate
   puts quadratic relative variance at most `N^(-0.310083...+o(1))`.  Extra
   half-turn signal is `o_p(q_0)`.  Thus that fixed resolvent has conditional
@@ -142,8 +147,11 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   radial optimizer.  A square-correlation bound
   `E[Xi]<=N^(-0.011538...+o(1))` supplies the missing Schur floor, so the same
   ratio holds on the entire occupied-cell quotient.  Empty cells still defeat
-  whole-space inverse and coefficient-norm stability; nonradial weights and
-  nonlinear statistics remain open.
+  whole-space inverse and coefficient-norm stability.  An augmented-PSD
+  same-cell algebraic witness with `Xi=0` shows that these inputs do not imply
+  an unrestricted nonradial theorem; it is not a modular counterexample.
+  Unrestricted same-cell nonradial weights and nonlinear statistics remain
+  open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -171,7 +179,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
   exponential lower bound for `||E[R|Z]||_2` and for at least one available
   degree-two-or-three orthogonal coefficient.  Small regression is therefore
-  false.  More sharply, two valid nonnegative-Walsh likelihood completions
+  false.  For the actual modular law at visibility one, the exact alternating
+  closure expansion makes the cubic formal-level contribution at most
+  `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
+  closure levels at least five to contribute at least
+  `N^(0.021392...+o(1))`.  This proves necessary high-order cancellation, not
+  the final Wagner sign.  More sharply, two valid nonnegative-Walsh likelihood
+  completions
   have the same exact symmetric base law, positive linear signal, and every
   residual projection against polynomials of degree at most `M-1`.  Their
   conditional laws also agree on every proper coordinate subset, but their
@@ -245,12 +259,12 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  Even the sum of exact
   discrete per-frequency maxima exceeds `u` on every nonsingleton cell with
   high probability, forcing a frequency-separable tree to expose all
-  `Theta(M)` singletons.  Enumerating all critical points also costs
-  `Omega(M)` with constant probability.  A cancellation-aware thick-strip
+  `Theta(M)` singletons.  Enumerating all critical points costs `Omega(M)`
+  with high probability.  A cancellation-aware thick-strip
   argument count gives `2*rho_freq*ell+O(q)` complex zeros over width `ell`,
   where `rho_freq=max_i|nu_i|`, so thick-strip complex-zero-free pruning needs
-  `Omega(M/q)` cells; a thin contour still has
-  `Omega(M)` explicit denominator crossings with probability `1/2-o(1)`.
+  `Omega(M/q)` cells; every data-adaptive continuous ultra-thin graph contour
+  still has `Omega(M)` explicit denominator crossings with high probability.
   These facts do not block direct real root counting or aggregate winding.
   Root conditioning needs only polynomially many bits.  Standard coefficient-
   explicit Cayley-transform/Sturm and Markov--Lukacs/SOS conversions have
@@ -3625,12 +3639,15 @@ real-axis level-root counter, or an aggregate winding oracle that does not
 isolate the counted zeros.
 
 Enumerating every critical point before checking its height is also not
-output-sensitive.  Conditional on the labels, the adjacent derivative
-correlation is
+output-sensitive, and the obstruction persists for a data-adaptive
+ultra-thin graph contour.  Put `m=floor(M)` and, conditional on the labels,
+normalize
 
 ```text
-rho_Y=Cov(X'(a),X'(a+1))/Var(X'(a))
-     =sum_i nu_i^2*cos(2*pi*nu_i)/sum_i nu_i^2.
+sigma_Y^2=(4*pi^2/q)*sum_i nu_i^2,
+Z_a=X'(a)/sigma_Y,
+r_d=Cov(Z_a,Z_(a+d) | Y)
+   =sum_i nu_i^2*cos(2*pi*nu_i*d)/sum_i nu_i^2.
 ```
 
 The exact integrals
@@ -3640,59 +3657,112 @@ E[nu^2]=1/12,
 E[nu^2*cos(2*pi*nu)]=-1/(2*pi^2)
 ```
 
-and concentration give `rho_Y<=-1/2` except with probability
-`exp(-Omega(q))`.  Each adjacent Gaussian pair then changes sign with
-probability at least
+and concentration give `sigma_Y=Theta(1)` and
 
 ```text
-acos(-1/2)/pi=2/3.
+-0.7<=r_1<=-0.5
 ```
 
-If `C_der` counts these changes on `0,...,floor(M)-1`, then
+except with probability `exp(-Omega(q))`.  A square-correlation estimate
+upgrades this adjacent-pair fact to concentration of the number of sign
+changes.  Indeed, let
 
 ```text
-E[C_der | Y]>=(2/3)*(floor(M)-1).
+A_d=q^(-1)*sum_i nu_i^2*cos(2*pi*nu_i*d).
 ```
 
-Since `0<=C_der<=floor(M)-1`, the bounded reverse-Markov estimate gives
+On `A_0>=1/24`, one has `r_d^2<=576*A_d^2`.  For `d>=2`,
 
 ```text
-Pr[C_der>=(floor(M)-1)/3 | Y]>=1/2.
+Var_Y(A_d)=O(1/q),
+|E_Y A_d|<=C*(d^(-2)+d/N).
 ```
 
-Almost surely every sign change supplies a distinct zero of `X'` in its open
-unit interval.  Thus, with probability `1/2-o(1)`, a method that first
-isolates every derivative root emits and processes `Omega(M)` critical
-points.  This is not a lower bound for a root counter applied directly to
-`X-v`.
-
-A thin-contour Cauchy-index implementation has a related, narrower problem.
-Set `h=M^(-2)` and
+Summation and Markov therefore give
 
 ```text
-A_h(t)=Re(F(t+i*h)),
-B_h(t)=Im(F(t+i*h)).
+sum_(d=2)^(m+1) r_d^2 <= C*M/sqrt(q)                 (SC)
 ```
 
-Termwise Taylor expansion and `sum_i R_i=O(q)` give, with exponentially high
-probability,
+outside probability `O(q^(-1/2)+sqrt(q)/M)+exp(-Omega(q))`.
+
+Let `I_a=1[Z_a*Z_(a+1)<0]` and `C_der=sum_(a=0)^(m-2)I_a`.  The bivariate
+Gaussian sign formula gives `E[I_a | Y]>=2/3`.  After whitening the pair
+`(Z_a,Z_(a+1))`, the centered sign-change indicator is even under global
+sign reversal, so its Hermite rank is at least two.  The Gaussian
+canonical-correlation inequality can be applied with
 
 ```text
-max_(0<=a<=M, a integer)
-  |B_h(a)/h-X'(a)|
-    = O(h^2*sqrt(q))
-    = O(M^(-4)*sqrt(q)).
+Sigma=[[1,r_1],[r_1,1]],
+R_d=[[r_d,r_(d+1)],[r_(d-1),r_d]],
+K_d=Sigma^(-1/2)*R_d*Sigma^(-1/2).
 ```
 
-On the typical label event `Var(X'|Y)=Theta(1)`.  Gaussian
-anti-concentration over the integer points therefore makes all these signs
-agree with those of `X'` outside an `o(1)` event.  The preceding adjacent-
-derivative bound then gives `Omega(M)` distinct unit-interval zeros of `B_h`
-with probability at least `1/2-o(1)`.  Thus a thin-horizontal-contour routine
-that forms `A_h/B_h` and explicitly isolates every denominator zero
-still processes `Omega(M)` crossings.  This does not block the reciprocal
-quotient, direct winding integration, a thicker or adaptive contour, or a
-compact root-count oracle.
+Since `Sigma^(-1/2)` is uniformly bounded, it gives, for `d>=2`,
+
+```text
+|Cov(I_0,I_d | Y)|
+  <=C*(r_(d-1)^2+r_d^2+r_(d+1)^2).
+```
+
+The overlapping case `d=1` is absorbed trivially, and the `r_1` term arising
+at `d=2` contributes only `O(M)`.  Thus `(SC)` implies
+
+```text
+Var(C_der | Y)<=C*M^2/sqrt(q),
+Pr[C_der<(m-1)/2 | Y]=O(q^(-1/2)).                  (DS)
+```
+
+Every counted interval contains a distinct zero of `X'`.  Hence a route that
+first isolates all critical points already costs `Omega(M)` with high
+probability.
+
+The same event treats a continuum of graph contours, without a union bound
+over contours.  Set
+
+```text
+h_*=M^(-1/2)*n^(-2).
+```
+
+For `0<h<=h_*`, termwise Taylor expansion and `sum_i R_i<=3*q` give,
+uniformly in real `t`,
+
+```text
+|Im(F(t+i*h))/h-X'(t)|<=C*h^2*sqrt(q).              (TC)
+```
+
+Since every `X'(a)` is a Gaussian of conditional variance `Theta(1)`, a
+union anti-concentration bound over the integer points gives
+
+```text
+Pr[min_(0<=a<m)|X'(a)|<=C*h_*^2*sqrt(q) | Y]
+  <=C*M*h_*^2*sqrt(q)=O(n^(-7/2)).
+```
+
+Consequently, on one event, simultaneously for every integer `a` and every
+`0<h<=h_*`, the sign of `Im(F(a+i*h))` equals the sign of `X'(a)`.  After
+seeing all labels and Gaussian coefficients, choose any continuous function
+
+```text
+h:[0,m]->(0,h_*].
+```
+
+By `(DS)`, the continuous function `t |-> Im(F(t+i*h(t)))` has a zero in
+`Omega(M)` disjoint unit intervals.  More explicitly, jointly over the
+labels and Gaussian row,
+
+```text
+Pr[for every continuous h:[0,m]->(0,h_*],
+     #{t in [0,m]:Im(F(t+i*h(t)))=0}>=(m-1)/2]
+  >=1-O(n^(-1/2)).
+```
+
+The same holds below the real axis by conjugate symmetry.  Thus an ultra-thin
+graph-contour Cauchy-index routine that explicitly isolates every denominator
+zero still
+processes `Omega(M)` crossings, even when its graph is data-adaptive.  This
+does not block aggregate winding, a non-graph or thicker contour, or a direct
+real-root oracle.
 
 Numerical conditioning is not the obstruction.  Put
 
@@ -9187,6 +9257,123 @@ the law of `Z` need not be symmetric.  Nor does a large degree-two-or-three
 regression coefficient determine `<R,sign(Z)>`, its signed-margin covariance,
 or the Wagner sign.  Those remain all-degree sign-projection questions.
 
+For the actual modular law at visibility one, there is nevertheless an exact
+alternating closure expansion, and it forces an exponentially large
+higher-order compensation.  On the deduplicated two-orientation event, retain
+the notation `V`, `M_V=|V|`, `x_T=chi_T`, `Z=2*sum_(T in V)x_T`, and
+`A_H=c*Z+R`, where `c=2^(-t)`.  Put
+
+```text
+h_D=hat(A_H)(D)=2^(-|D|)*R_D(H)>=0,
+
+E_j(x)=sum_(A subset V, |A|=j) product_(T in A)x_T,
+
+C_j=<A_H,E_j(x)>_U
+   =sum_(A subset V, |A|=j)h_(triangle_(T in A)T)>=0.
+```
+
+Let `epsilon_V=1` when `M_V` is even and `epsilon_V=0` otherwise, and set
+
+```text
+alpha_V
+  = 2^(-(M_V-1))*choose(M_V-1,floor(M_V/2)).
+```
+
+The exact formal-majority coefficients, with `sign(0)=0`, are
+
+```text
+a_(2*r+1)
+  = (-1)^r*alpha_V*(2*r-1)!!
+      /product_(s=1)^r(M_V-2*s+epsilon_V),
+
+a_(k+2)=-k*a_k/(M_V-k-1+epsilon_V).                 (AC)
+```
+
+The last odd level is `M_V` for odd `M_V` and `M_V-1` for even `M_V`; the
+recurrence is used only while `k+2` does not exceed that level.  The formal
+expansion is a pointwise identity on the independent Boolean cube.  It remains
+pointwise valid after substituting the possibly dependent characters
+`x_T=chi_T`.  Hence
+
+```text
+sign(Z)=sum_(j odd)a_j*E_j(x),
+rho_Y=<A_H,sign(Z)>_U=sum_(j odd)a_j*C_j.            (ACS)
+```
+
+This identity includes ties and uses the actual modular closure counts.
+At the cusp, write `M_V=N^(m+o(1))`, where
+`m=0.498390353235...`, and recall
+`c=N^(-beta+o(1))`, `beta=0.249195176618...`.  Since
+`E_1=Z/2` and `<R,Z>_U=0`,
+
+```text
+C_1=<A_H,Z>_U/2=2*c*M_V,
+a_1*C_1=N^(m/2-beta+o(1))=N^o(1).
+```
+
+Newton's identity in the formal variables gives
+
+```text
+E_3=[Z^3-4*(3*M_V-2)*Z]/48.
+```
+
+Consequently,
+
+```text
+C_3
+  = <R,Z^3>_U/48
+      +c*{E_U[Z^4]-4*(3*M_V-2)*E_U[Z^2]}/48.        (C3)
+```
+
+Here `E_U[Z^2]=4*M_V`, and the fourth-Wick theorem gives
+`E_U[Z^4]=48*M_V^2+o(M_V^2)`.  Thus the second term in `(C3)` has magnitude
+at most
+
+```text
+N^(2*m-beta+o(1))=N^(0.747585529852...+o(1)).
+```
+
+The actual automatic-triple theorem above gives
+
+```text
+<R,Z^3>_U>=N^(0.768977845586...+o(1)).
+```
+
+It follows that
+
+```text
+C_3>=N^(0.768977845586...+o(1)),
+
+a_3*C_3<=-N^(gamma_3+o(1)),
+
+gamma_3
+  = 0.768977845586...-3*m/2
+  = 0.021392315733....                                (ADV)
+```
+
+Finally, likelihood validity gives
+
+```text
+|rho_Y|<=E_U[|A_H|]<=E_U[A_0]=1.
+```
+
+Therefore the net higher closure tail satisfies, with high probability,
+
+```text
+T_(>=5):=sum_(j>=5, j odd)a_j*C_j
+        =rho_Y-a_1*C_1-a_3*C_3
+        >=N^(0.021392315733...+o(1)).                 (COMP)
+```
+
+Thus, in the actual random modular model, the cubic closure is adverse and
+exponentially large after majority weighting, while its formal retained-
+character closure-level-at-least-five tail is forced to be positive and
+equally macroscopic so that the total correlation stays bounded.  This
+formal level is not the original Walsh support degree.  The theorem proves
+necessary high-order cancellation, not the final Wagner sign, the sign of
+any individual higher level, or failure of every fixed cutoff beyond level
+three.
+
 There is an exact same-`P_3` obstruction, even under symmetry and
 nonnegative Walsh likelihood coefficients.  Let odd `M>=11`, take independent
 uniform signs `x_1,...,x_M`, and put
@@ -10587,6 +10774,139 @@ inside `F(Y)`, and already includes dependent filters and every extra zero or
 half-turn relation.  It rules out sparse signed adaptive repair up to the
 displayed `N^0.05` scale, not the full `N^(0.498...)` retained family.
 
+The support-size statement has an effective-`l_1` strengthening.  Work after
+deduplicating supports and, for `0<lambda<=1`, write
+
+```text
+h_T = lambda^|T|*2^(-|T|)*R_T(H),
+
+Gamma_(T,U)
+  = lambda^|T triangle U|
+      *2^(-|T triangle U|)*R_(T triangle U)(0).
+```
+
+On `E_short`, for different supports `T,U`,
+
+```text
+0<=Gamma_(T,U)<=delta_n,       Gamma_(T,T)=1,
+0<=h_T<=delta_n.
+```
+
+Let `w` be any public-label-adaptive real vector and put
+
+```text
+kappa_eff(w)=||w||_1^2/||w||_2^2.
+```
+
+Entrywise comparison gives
+
+```text
+w^T*Gamma*w
+  >= ||w||_2^2-delta_n*(||w||_1^2-||w||_2^2)
+   = [1-delta_n*(kappa_eff-1)]*||w||_2^2,
+
+|h^T*w| <= delta_n*||w||_1.
+```
+
+Consequently, whenever `delta_n*(kappa_eff-1)<1` and the signal is nonzero,
+
+```text
+R_Y(w)
+  := (w^T*Gamma*w)/(h^T*w)^2
+  >= [1-delta_n*(kappa_eff-1)]
+       /(delta_n^2*kappa_eff).                         (EL1)
+```
+
+In particular,
+
+```text
+kappa_eff(w) <= N^(1/20-epsilon)
+```
+
+uniformly implies `R_Y(w)>=N^(1/20+epsilon-o(1))`.  Unlike support size,
+`kappa_eff` can stay small when arbitrarily many tiny coefficients are
+nonzero.
+
+There is also a signed-mass refinement.  Write `w=w_+-w_-`, and put
+
+```text
+P_+=||w_+||_1,          P_-=||w_-||_1,
+kappa_cross=2*P_+*P_-/||w||_2^2,
+kappa_dom=max(P_+,P_-)^2/||w||_2^2.
+```
+
+Same-sign off-diagonal entries can only increase the numerator, while the
+opposite-sign terms and the nonnegative signal give
+
+```text
+w^T*Gamma*w >= [1-delta_n*kappa_cross]*||w||_2^2,
+|h^T*w| <= delta_n*max(P_+,P_-).
+```
+
+Thus, if `delta_n*kappa_cross<1` and the signal is nonzero,
+
+```text
+R_Y(w)
+  >= [1-delta_n*kappa_cross]/(delta_n^2*kappa_dom).    (PM)
+```
+
+This covers dense vectors whose signed mass is predominantly one-sided.
+
+These coherence estimates cannot by themselves cover all same-cell
+nonradial directions.  Here is an exact algebraic witness.  Fix
+`0<epsilon_0<=delta<1/2`, and put
+
+```text
+p_0=ceil((1-epsilon_0)/(2*delta)),     q_w=4*p_0,
+c_0=1-epsilon_0,                      a_0=c_0/(2*p_0),
+```
+
+and define
+
+```text
+Gamma_* = [[I_(p_0),a_0*J_(p_0,q_w)],
+           [a_0*J_(q_w,p_0),I_(q_w)]].
+```
+
+It is entrywise nonnegative, has unit diagonal and coherence `a_0<=delta`,
+and its spectrum consists of `1` together with
+`epsilon_0,2-epsilon_0`.  Put `h_*=tau*1`, where
+
+```text
+tau^2
+  = epsilon_0*(2-epsilon_0)
+      /[4*p_0*(1+4*epsilon_0)].
+```
+
+Then `tau<=delta` and
+
+```text
+h_*^T*Gamma_*^(-1)*h_* = 1/4.
+```
+
+Hence the augmented moment matrix
+
+```text
+[[1,h_*^T],[h_*,Gamma_*]]
+```
+
+is positive semidefinite, and the full nonradial optimum is `4`.  If all
+`5*p_0` coordinates are put in one radial cell, however, the off-cell `Xi`
+is zero and the cell-constant Rayleigh ratio is
+
+```text
+R_rad
+  = 4*(9-4*epsilon_0)*(1+4*epsilon_0)
+      /[25*epsilon_0*(2-epsilon_0)]
+  = Theta(epsilon_0^(-1)).
+```
+
+The near-null vector has `kappa_eff=9*p_0/2=Theta(delta^(-1))`, so `(EL1)` is
+sharp up to constants.  This matrix is not an actual modular counterexample.
+It proves only that coherence, entrywise nonnegativity, PSD/range, and the
+off-cell `Xi` estimate do not imply a full nonradial theorem.  Such an
+extension needs a new within-cell centered spectral or row-regularity input.
+
 For the one deterministic degree-symmetric resolvent optimizer, the missing
 quenched statement is narrower.  Put into `E_ng(Y)` the entire actual
 contribution of every non-generic pair class
@@ -11744,8 +12064,9 @@ The concrete `kappa=1/10` lies in this interval.  Empty cells still destroy
 whole-space inverse and coefficient-norm stability, but they have zero signal
 and do not change the quotient optimum.  The result is for visibility one and
 the original retention rule; the exponent bounds persist for
-`lambda=1-o(1)`.  It does not cover nonradial weights, nonlinear statistics,
-or a changed retention rule.
+`lambda=1-o(1)`.  It does not extend the sharp radial comparison to
+unrestricted same-cell nonradial weights, nonlinear statistics, or a changed
+retention rule.
 
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
@@ -11753,8 +12074,8 @@ not prove that `sign(Z)` fails, and it does not exclude clipping or different
 nonlinear aggregation.  The theorem rules out fixed data-independent linear
 weighting and arbitrary public-label-adaptive signed radial weighting on the
 entire occupied quotient as repairs of this Wagner SNR calculation.  It is
-not a lower bound on nonradial adaptive or nonlinear generalized-birthday
-decoding.
+not a lower bound on unrestricted nonradial adaptive or nonlinear
+generalized-birthday decoding.
 
 Directly Fourier transforming a polynomial-size classical sample table has
 the same limitation.  Any normalized amplitude state supported on `M` known
@@ -12185,7 +12506,10 @@ conditional radial Loewner comparison fails on typically empty low-degree
 blocks.  Conversely, `E_short` gives an exact conditional Rayleigh lower
 bound `N^(1/20+epsilon-o(1))` for every nonzero-signal public-label-adaptive
 signed weighting supported on at most `N^(1/20-epsilon)` distinct supports.
-At visibility one and the dangerous center, the exact resolvent equation
+The same bound holds when the effective `l_1` size is at most
+`N^(1/20-epsilon)`, even with larger support; a signed-mass refinement gives
+a quantitative bound for dense, predominantly one-sided vectors.  At
+visibility one and the dangerous center, the exact resolvent equation
 proves pair diffuseness and leading-signal concentration.  A 49-column
 four-template certificate puts quadratic relative variance at most
 `N^(-0.310083...+o(1))`.  Extra half-turn signal is `o_p(q_0)`.  Thus that fixed
@@ -12196,8 +12520,11 @@ signal concentration gives the same ratio for the fully `Y`-adaptive signed
 radial optimizer.  A square-correlation bound
 `E[Xi]<=N^(-0.011538...+o(1))` supplies the missing Schur floor, so the same
 ratio holds on the entire occupied-cell quotient.  Empty cells still defeat
-whole-space inverse and coefficient-norm stability; nonradial weights and
-nonlinear sign performance remain open.
+whole-space inverse and coefficient-norm stability.  An augmented-PSD
+same-cell algebraic witness with `Xi=0` shows that these inputs do not imply
+an unrestricted nonradial theorem; it is not a modular counterexample.
+Unrestricted same-cell nonradial weights and nonlinear sign performance
+remain open.
 Bucket-sum-only rehash medians are only margin transforms of the same path
 sum, while a positive three-character likelihood
 model shows that fixed
@@ -12223,7 +12550,13 @@ that regression scale.  A separate automatic order-three family yields
 sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
 exponential lower bound for `||E[R|Z]||_2` and for at least one available
 degree-two-or-three orthogonal coefficient.  Small regression is therefore
-false.  More sharply, two valid nonnegative-Walsh likelihood completions have
+false.  For the actual modular law at visibility one, the exact alternating
+closure expansion makes the cubic formal-level contribution at most
+`-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
+closure levels at least five to contribute at least
+`N^(0.021392...+o(1))`.  This proves necessary high-order cancellation, not
+the final Wagner sign.  More sharply, two valid nonnegative-Walsh likelihood
+completions have
 the same exact symmetric base law, positive linear signal, and every residual
 projection against polynomials of degree at most `M-1`.  Their conditional
 laws also agree on every proper coordinate subset, but their full and residual
@@ -12283,12 +12616,13 @@ sparse prefix sums approximate every interval additively within
 `exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  Even the sum of exact
 discrete per-frequency maxima exceeds `u` on every nonsingleton cell with high
 probability, forcing a frequency-separable tree to expose all `Theta(M)`
-singletons.  Enumerating all critical points also costs `Omega(M)` with
-constant probability.  A cancellation-aware thick-strip argument count gives
+singletons.  Enumerating all critical points costs `Omega(M)` with high
+probability.  A cancellation-aware thick-strip argument count gives
 `2*rho_freq*ell+O(q)` complex zeros over width `ell`, where
 `rho_freq=max_i|nu_i|`, so thick-strip complex-zero-free pruning
-needs `Omega(M/q)` cells; a thin contour still has `Omega(M)` explicit
-denominator crossings with probability `1/2-o(1)`.  These facts do not block
+needs `Omega(M/q)` cells; every data-adaptive continuous ultra-thin graph
+contour still has `Omega(M)` explicit denominator crossings with high
+probability.  These facts do not block
 direct real root counting or aggregate winding.  Root conditioning needs only
 polynomially many bits.  Standard coefficient-explicit Cayley-transform/Sturm
 and
