@@ -132,9 +132,10 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   empty.  On `E_short`, however, every nonzero-signal public-label-adaptive
   signed weighting supported on at most `N^(1/20-epsilon)` distinct supports
   has Rayleigh ratio at least `N^(1/20+epsilon-o(1))`.  At the dangerous
-  center, extra half-turn signal is `o_p(q_0)`, but the full fixed optimizer
-  still needs optimizer-specific pair-diffuseness and weighted four-template
-  bounds.  Nonlinear sign performance remains open.
+  center, the exact resolvent equation proves pair diffuseness and leading-
+  signal concentration, while extra half-turn signal is `o_p(q_0)`.  Only a
+  weighted four-template bound remains for its conditional quadratic.
+  Nonlinear sign performance remains open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -155,7 +156,10 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   the unresolved Wagner projection depends only on `r(z)=E[R|Z=z]`; a small
   regression energy or nonpositive signed-margin covariance is sufficient for
   positive correlation, but neither property is proved for random labels.
-  These are
+  The entire known clean-cluster residual sector is exponentially negligible
+  at this regression scale.  The remaining term is an all-degree mixed half-
+  turn closure tail; fifth order is the first numerically macroscopic
+  unenumerated level, but that scale is only diagnostic.  These are
   information-sufficiency obstructions: the modular example is highly
   atypical, and the random-instance outside signed spectrum remains open.
   Direct importance sampling of the exact Bayesian coefficient ratio has
@@ -208,7 +212,11 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   full-row adaptive rank is vacuous: one adaptive vector represents the row
   exactly, but its all-one overlap is `Z_I`.  On a generic orbit, `2*q`
   consecutive exact point queries recover the entire row, so arbitrary-spike
-  point-query lower bounds do not transfer.  Scalar arithmetic aggregation
+  point-query lower bounds do not transfer.  Nevertheless the exponentiated
+  row has all `N` cyclic Fourier modes and maximal rank across every index-bit
+  cut almost surely.  Exact open-boundary TT/MPS or read-once transfer
+  representations need bond at least `sqrt(N/2)`, and the scalar block moment
+  recurrence has full order.  Scalar arithmetic aggregation, approximation,
   and succinct scalar-evaluable ill-conditioned certificates remain open.
   Rejection-based quantum tilting
   cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
@@ -3023,6 +3031,115 @@ terms, or general arithmetic circuits.  Second, suppose
 every `psi_j(g)` has support at most `L`.  Positivity of the row forces their
 support union to cover `I`, so `k*L>=|I|`.  This is again a coordinatewise,
 not scalar-only, statement.
+
+The exact orbit row is also maximally complex for the standard linear
+compression formats.  Let `zeta=exp(2*pi*i/N)` and let `E_odd` be the event
+that at least one public frequency is odd.  Then
+
+```text
+Pr[E_odd^c] = 2^(-q) = N^(-12).
+```
+
+On `E_odd`, the orbit points are distinct.  For each residue `r`, define the
+cyclic Fourier coefficient
+
+```text
+F_r(g) = sum_(a=0)^(N-1) f_a(g)*zeta^(-r*a).
+```
+
+It is a nonzero real-analytic function of `g`.  Indeed, along `g=t*A_0`, put
+
+```text
+Delta = 1-max_(a!=0)<A_0,A_a> > 0.
+```
+
+Then, for fixed `r`,
+
+```text
+F_r(t*A_0)/exp(u*t) = 1+O(N*exp(-u*t*Delta)).
+```
+
+Thus a Gaussian `g` has `F_r(g)!=0` for every `r` almost surely.  The
+circulant of all cyclic shifts of `f(g)` is invertible.  Consequently no
+nontrivial exact constant-coefficient cyclic recurrence, even one selected
+after seeing `g`, uses fewer than `N` distinct shifts, and the exact cyclic
+Fourier support has size `N`.  This rules out exact Prony, linear-recurrence,
+and explicit sparse-Fourier aggregation, not extraction of one chosen
+Fourier coefficient.
+
+There is a stronger bit-tensor statement.  Partition the `n` index bits as
+`B` and `B^c`, and reshape the row into a
+
+```text
+2^|B| by 2^(n-|B|)
+```
+
+matrix.  On `E_odd`, its rank is almost surely
+
+```text
+min(2^|B|,2^(n-|B|))
+```
+
+simultaneously for every bit cut.  To prove that the relevant analytic minor
+is not identically zero, choose one odd `Y_i` and complexify only its
+cosine/sine Gaussian pair so that
+
+```text
+u*<g,A_a> = t*zeta^(Y_i*a).
+```
+
+Writing the disjoint-bit decomposition as `a=a_B(p)+a_(B^c)(q)`, a square
+minor becomes
+
+```text
+[exp(t*x_p*y_q)]_(p,q),
+x_p=zeta^(Y_i*a_B(p)),
+y_q=zeta^(Y_i*a_(B^c)(q)).
+```
+
+For an `r` by `r` minor, its lowest nonzero Taylor coefficient is
+
+```text
+t^(r*(r-1)/2)*Vandermonde(x)*Vandermonde(y)
+  /product_(j=0)^(r-1) j!.
+```
+
+Both Vandermonde factors are nonzero.  A complex witness suffices by
+holomorphic continuation, and the real analytic zero set has Gaussian
+measure zero.  There are only finitely many cuts, so the statement holds
+simultaneously.  The same proof applies to any aligned interval of length
+`s=2^m` after using its local index bits.
+
+Therefore every exact natural-bit open-boundary TT/MPS or read-once transfer-
+matrix representation of the summand, even if selected after seeing `g`, needs
+central bond at least
+
+```text
+2^floor(n/2) >= sqrt(N/2),
+```
+
+and at least `sqrt(s/2)` on a dyadic block.  In contrast, the raw score matrix
+`[<g,A_(p,q)>]` has rank at most `2*q` by the angle-addition identities.  The
+entrywise exponential is precisely what changes a tensor-simple score into a
+tensor-maximal summand.  This still does not rule out an arithmetic circuit
+tailored only to the all-one scalar, approximation, or phase cancellation.
+
+Finally, for a fixed block `I` of size `s`, the scores
+`x_a=<g,A_a>` are pairwise distinct almost surely.  Hence
+
+```text
+Z_I(u) = sum_(a in I) exp(u*x_a)
+```
+
+has minimal constant-coefficient differential or Prony-moment recurrence
+order `s`, and its derivative Hankel matrix
+
+```text
+[Z_I^(j+k)(0)]_(0<=j,k<s)
+```
+
+has full Vandermonde rank `s`.  This is an exact scalar-parameter recurrence
+barrier, not a lower bound for evaluation at one prescribed `u`.
 
 The phase-averaged coefficient energy is not uniform across residues, so one
 cannot strengthen this observation by simply assigning `1/N` of the energy
@@ -8033,6 +8150,101 @@ whose exponent at the cusp is `0.249195176618...`.  These energy, covariance,
 and monotonicity statements are exact sufficient interfaces, not properties
 currently proved for the random modular law.
 
+The actual clean anti-majority sector is too small even at this sharper
+regression scale.  At visibility one, let `R_cl` be the part of the residual
+supported only on the outside masks
+
+```text
+W = T_1 triangle T_2 triangle T_3
+```
+
+from the distinct span-clean triples.  Each such mask has exact coefficient
+`2*c_w`, where `c_w=2^(-(t-2))=4*c`, and there are at most `X_cl` distinct
+masks.  Hence
+
+```text
+||R_cl||_2^2 <= 4*c_w^2*X_cl = 64*c^2*X_cl.
+```
+
+Conditional expectation is an orthogonal projection.  Since
+`mu^2>=(4/3-o(1))*M`, it follows that
+
+```text
+||E_U[R_cl | Z]||_2^2/s_Y^2
+  <= (48+o(1))*X_cl/M
+  = N^(-0.217474209737...+o(1)),
+
+|<R_cl,sign(Z)>_U|/s_Y
+  <= (sqrt(48)+o(1))*sqrt(X_cl/M)
+  = N^(-0.108737104868...+o(1)).
+```
+
+Thus the proved `N^(0.280916...-o(1))` local reversals cannot refute either
+the regression-energy condition or the covariance condition at the global
+scale.
+
+More generally, let `R_C=sum_(D in C) a_D*chi_D` be any residual Walsh sector
+and put `E_C=sum_(D in C) a_D^2`.  Parseval and contraction give exactly
+
+```text
+||E_U[R_C | Z]||_2^2 <= E_C,
+|<R_C,sign(Z)>_U| <= sqrt(E_C).
+```
+
+Therefore every certified sector with `E_C=o(c^2*M)` is harmless for both
+interfaces.  If `|C|<=N^(x+o(1))` and
+`max_(D in C)|a_D|<=N^(-eta+o(1))`, the ledger condition `x<2*eta` is
+sufficient at the cusp.  For the clean triples,
+`2*eta-x=0.217474209746...`.
+
+The full regression has an exact all-degree closure description.  For every
+integer `j>=0`, let
+
+```text
+D = T_1 triangle ... triangle T_j.
+```
+
+Then
+
+```text
+<A_H,Z^j>_U
+  = 2^j*sum_((T_1,...,T_j) in V^j) 2^(-|D|)*R_D(H),
+
+<R,Z^j>_U = <A_H,Z^j>_U-c*E_U[Z^(j+1)].
+```
+
+Let `nu` be the exact law of `Z`, let `L_Z=|supp(nu)|`, and let
+`P_0,...,P_(L_Z-1)` be its orthonormal polynomial basis, with
+`P_0=1` and `P_1=Z/sigma`.  Because `<R,1>_U=<R,Z>_U=0`,
+
+```text
+||E_U[R | Z]||_2^2
+  = sum_(j=2)^(L_Z-1) <R,P_j(Z)>_U^2,
+
+<R,sign(Z)>_U
+  = sum_(j=2)^(L_Z-1)
+      <R,P_j(Z)>_U*<sign(Z),P_j(Z)>_U.
+```
+
+This identifies the missing random-instance theorem: a tail bound across all
+mixed half-turn closure levels.  A finite collection of closure moments only
+controls the corresponding finite polynomial projection.  If `L_Z>J+1`, the
+nonzero polynomial `P_(J+1)(Z)` is orthogonal to every degree-`J` test, so a
+degree-`J` enumeration cannot bound the full regression energy without an
+additional tail or monotonicity theorem.
+
+For orientation only, the generic full-rank scale `M^(j/2)/N` has exponents
+
+```text
+j=3: -0.252414470...,
+j=4: -0.0032192935...,
+j=5: +0.245975883....
+```
+
+Thus fifth-order closures are the first numerically macroscopic unenumerated
+level.  This last comparison is diagnostic, not a proved modular
+contribution.
+
 An asymptotic likelihood completion shows that even the exact Rademacher-sum
 law, its Gaussian-leading moments, and many prescribed local reversals do not
 contain the missing sign information.  Let `M>=7` be odd, take independent
@@ -9273,6 +9485,141 @@ automatic quadratic all vanish although their ensemble means are positive.
 The `S` term alone gives relative variance `Theta(1/(P*q_0))`.  This is a
 scalar counterexample to concentration, not merely a matrix-order issue.
 
+The exact dangerous-center resolvent nevertheless satisfies both weighted-
+diffuseness conditions.  For a degree tuple `r=(r_1,...,r_4)`, define
+
+```text
+P_r = product_(j=1)^4 [choose(b,r_j)*2^r_j],
+ell_r = sqrt(P_r)*2^(-|r|),
+H_deg = sum_r ell_r^2 = H_cut^4 = N^(1+a+o(1)),
+p_r^(0) = ell_r^2/H_deg.
+```
+
+In `E_4`-normalized coordinates, the automatic kernel is exactly
+
+```text
+(C_4)_(r,u) = ell_r*ell_u*G_(r,u),
+G_(r,u)
+  = product_(j=1)^4 E[2^|R_j intersect U_j|],
+```
+
+where `R_j,U_j` are uniform supports of degrees `r_j,u_j`.  Monotonicity in
+both degrees gives
+
+```text
+G_(r,u) <= G_(t,t)^4 = N^(F+o(1)),
+F = 0.00731732816....
+```
+
+Thus
+
+```text
+lambda_max(C_4) <= trace(C_4) <= N^(F+o(1))*H_deg.
+```
+
+At `k=a`, the regularizer satisfies
+
+```text
+rho = K*N/2-1 = N^(1+a+o(1)) = H_deg*N^o(1).
+```
+
+Put
+
+```text
+y = (C_4+rho*I)^(-1)*ell,       d=ell^T*y,
+w = E_4^(-1/2)*y/d.
+```
+
+The coordinate resolvent equation, entrywise positivity, and
+`sum_u ell_u*|y_u|<=H_deg/rho` give
+
+```text
+|y_r| <= ell_r*rho^(-1)*N^(F+o(1)).
+```
+
+Spectral order also gives
+
+```text
+d >= H_deg*rho^(-1)*N^(-F-o(1)),
+||y||_2 >= sqrt(H_deg)*rho^(-1)*N^(-F-o(1)).
+```
+
+Consequently the exact optimizer's diagonal degree law and absolute signal
+degree mass obey
+
+```text
+p_r = y_r^2/||y||_2^2 <= N^(4*F+o(1))*p_r^(0),
+s_r = ell_r*|y_r|/d <= N^(2*F+o(1))*p_r^(0).
+```
+
+Every diagonal pair-class mass is therefore at most `N^(8*F+o(1))` times
+its reference mass, and every absolute-signal pair-class mass is at most
+`N^(4*F+o(1))` times its reference mass.
+
+For the reference weight proportional to `2^(-|T|)`, the six relevant class
+masses are
+
+```text
+S=O=N^(-4*a+o(1)),
+GE=N^(-6*H_2(p)+o(1)),
+EE=N^(-12*H_2(p)+o(1)),
+GL=N^(-2*a+o(1)),
+EL=N^(-(6*H_2(p)+2*a)+o(1)).
+```
+
+After applying the exact joint-retention multipliers, the decay margins for
+the exact optimizer are
+
+```text
+class       S          O          GE         EE         GL         EL
+diagonal  .439851728 .940388277 .815790689 1.690120002 .440924826 1.315254140
+signal    .469121041 .969657590 .845060001 1.719389315 .470194138 1.344523452
+```
+
+All are positive.  Hence, for this exact resolvent,
+
+```text
+sum_z w_z^2*I_z / [q_0*sum_z w_z^2] -> 1,
+L_Y/(2*q_0) -> 1
+```
+
+in probability.  This closes the diagonal and leading-signal two-template
+concentration gap at the dangerous center.
+
+Exact optimality is essential.  Radial symmetry and a `1+o(1)` objective gap
+alone do not suffice.  Write `w_*` for the exact optimizer and put
+`C_*=w_*^T*E_4*w_*`.  Add a normalization-preserving radial perturbation `u`
+on two fixed low-degree cells of total oriented size `P=poly(n)`, with
+
+```text
+f = u^T*E_4*u/C_*
+  = sqrt(q_0*P)
+  = N^(-(1+a)/2+o(1)).
+```
+
+The KKT equation kills the objective cross term.  On those fixed low degrees,
+the `B_4` quadratic is only polynomially larger than the `E_4` quadratic, so
+
+```text
+J(w_*+u)-J(w_*)
+  = (1+o(1))*rho*f*C_*
+  <= (1+o(1))*f*J(w_*)
+  = o(J(w_*)).
+```
+
+The perturbation dominates the exact optimizer on those cells and contributes
+`Theta((f*C_*)^2/P)` to the `S` class, while the total diagonal mass remains
+`(1+o(1))*C_*`.  Therefore
+
+```text
+q_0^(-1)*M_S/C^2
+  = Theta(q_0^(-1)*f^2/P)
+  = Theta(1).
+```
+
+Thus neither objective value nor degree symmetry proves concentration; the
+coordinate resolvent equation and positive kernel factorization do.
+
 Extra half-turn orientations do not add another missing concentration lemma
 at the dangerous center.  Write the exact conditional signal as
 `mu_Y=L_Y+H_extra(Y)`.  If the normalized surrogate optimizer obeys
@@ -9314,11 +9661,12 @@ sum_sigma kappa_sigma*W_sigma = o((E_Y[Q_Y])^2).
 
 The two-row `G/E/L` table contains neither these four-row ranks nor their
 optimizer-weighted masses.  The existing exact-degree Wick calculation also
-does not control mixed-degree signed resolvent cancellations.  Thus the fixed
-optimizer still requires its pair-diffuseness bounds and this weighted
-four-template enumeration; no counterexample for that specific optimizer is
-known.  The earlier `Good(Y)` theorem applies only to a fixed exact-degree
-family and cannot be reused for the mixed-degree cutoff.
+does not control mixed-degree signed resolvent cancellations.  The exact
+resolvent argument above closes the pair-diffuseness gap, so only this weighted
+four-template enumeration remains for its conditional quadratic.  No
+counterexample for that specific optimizer is known.  The earlier `Good(Y)`
+theorem applies only to a fixed exact-degree family and cannot be reused for
+the mixed-degree cutoff.
 
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
@@ -9756,9 +10104,10 @@ conditional radial Loewner comparison fails on typically empty low-degree
 blocks.  Conversely, `E_short` gives an exact conditional Rayleigh lower
 bound `N^(1/20+epsilon-o(1))` for every nonzero-signal public-label-adaptive
 signed weighting supported on at most `N^(1/20-epsilon)` distinct supports.
-At the dangerous center, extra half-turn signal is `o_p(q_0)`, but the fixed
-full optimizer still needs optimizer-specific pair-diffuseness and weighted
-four-template bounds.  Nonlinear sign performance remains open.  Bucket-sum-
+At the dangerous center, the exact resolvent equation proves pair diffuseness
+and leading-signal concentration, while extra half-turn signal is `o_p(q_0)`.
+Only its weighted four-template quadratic remains open.  Nonlinear sign
+performance remains open.  Bucket-sum-
 only rehash medians are
 only margin
 transforms of the same path sum, while a positive three-character likelihood
@@ -9779,6 +10128,9 @@ realize either sign.  Exactly, the remaining Wagner projection depends only
 on `r(z)=E[R|Z=z]`; small regression energy or nonpositive signed-margin
 covariance would ensure positive correlation, but neither is proved for
 random labels.
+The certified clean-cluster residual sector is exponentially negligible at
+that regression scale.  The unresolved term is an all-degree mixed half-turn
+closure tail; fifth order is only the first diagnostic macroscopic level.
 These are information-sufficiency obstructions; the modular example is
 highly atypical, so the random-instance Wagner sign remains uncontrolled.
 The
@@ -9820,9 +10172,12 @@ are `0.4795...` and `0.4772...`.  Random-orbit KDE source blocks are
 `s/N^o(1)` dimensions for a factor-`poly(n)` approximation under the actual
 Gaussian query law.  Full-row adaptive rank is vacuous because one adaptive
 vector represents the row but has overlap `Z_I`; on a generic orbit, `2*q`
-exact consecutive point queries already recover the row.  Scalar arithmetic
-aggregation and succinct scalar-evaluable ill-conditioned certificates remain
-open.
+exact consecutive point queries already recover the row.  Yet its exact
+cyclic Fourier support is full and every index-bit matricization has maximal
+rank almost surely, forcing `sqrt(N/2)` central bond for exact open-boundary
+TT/MPS or read-once transfer representations.  Scalar arithmetic aggregation,
+approximation, and succinct scalar-evaluable ill-conditioned certificates
+remain open.
 Rejection-based quantum tilting
 returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
 only `M^o(1)` expected rare-cap crossings and accepted indices, so the

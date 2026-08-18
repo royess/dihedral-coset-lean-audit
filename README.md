@@ -189,8 +189,12 @@ splits.  Random-orbit KDE blocks are `(1+o(1))*I`, and every feature span
 fixed before the Gaussian query needs `s/N^o(1)` dimensions for a factor-
 `poly(n)` certificate.  Full-row adaptive rank is vacuous because one vector
 represents the row but has overlap `Z_I`; on a generic orbit, `2*q` exact
-consecutive point queries recover the row.  Scalar arithmetic aggregation and
-succinct scalar-evaluable ill-conditioned certificates remain open.
+consecutive point queries recover the row.  Yet the exponentiated row has all
+`N` cyclic Fourier modes and maximal rank across every index-bit cut almost
+surely.  Exact open-boundary TT/MPS needs bond at least `sqrt(N/2)`, and its
+scalar block moment recurrence has full order.  Scalar arithmetic aggregation,
+approximation, and succinct scalar-evaluable ill-conditioned certificates
+remain open.
 Rejection-based quantum
 tilting returns to `sqrt(M/k)`.
 Yet Kac--Rice gives
@@ -323,9 +327,10 @@ with fixed data-independent orbit-constant weights.  Whole-radial conditional
 Loewner promotion fails on empty low-degree blocks, but every nonzero-signal
 `Y`-adaptive signed weighting supported on at most `N^(1/20-epsilon)` distinct
 supports has Rayleigh ratio at least `N^(1/20+epsilon-o(1))` on `E_short`.
-At the dangerous center, extra half-turn signal is `o_p(q_0)`, but the full
-optimizer still needs pair-diffuseness and weighted four-template bounds;
-nonlinear performance remains open.
+At the dangerous center, the exact resolvent equation proves pair diffuseness
+and leading-signal concentration, while extra half-turn signal is `o_p(q_0)`.
+Only its weighted four-template quadratic remains open; nonlinear performance
+remains open.
 Bucket-sum-only random rehash medians contain no information beyond the
 original path sum;
 a fixed positive pair-overlap law can still give either sign of prediction
@@ -343,6 +348,9 @@ completions with the exact Rademacher-sum `Z` law and `o(M)` local reversals
 realize either sign.  The exact remaining Wagner projection depends only on
 `r(z)=E[R|Z=z]`; small regression energy or nonpositive signed-margin
 covariance would imply positive correlation, but neither is proved.
+The certified clean-cluster residual sector is exponentially negligible at
+that scale.  The unresolved term is an all-degree mixed half-turn closure
+tail; fifth order is only the first diagnostic macroscopic level.
 These are information-sufficiency obstructions and do not settle the random
 modular sign.  A
 new Parseval
