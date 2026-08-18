@@ -145,8 +145,11 @@ overlap `Z_I`; on a generic orbit, `2*q` exact consecutive point queries
 recover the row.  Yet the exponentiated row has all `N` cyclic Fourier modes
 and maximal rank across every index-bit cut almost surely.  Exact open-boundary
 TT/MPS needs bond at least `sqrt(N/2)`, and its scalar block moment recurrence
-has full order.  Scalar arithmetic aggregation, approximation, and succinct
-scalar-evaluable ill-conditioned certificates remain open.
+has full order.  Shared factor-`poly(n)` scalar features for all blocks need
+rank `N^(1-gamma-o(1))` at source queries and `N^(1/49-o(1))` or
+`N^(1/45-o(1))` at Gaussian root blocks.  One-block adaptive arithmetic,
+approximation, and succinct scalar-evaluable ill-conditioned certificates
+remain open.
 Rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives
 only
 `M^o(1)` expected crossings and accepted indices, leaving the implicit
@@ -266,10 +269,13 @@ with fixed data-independent orbit-constant weights.  Whole-radial conditional
 Loewner promotion fails on empty low-degree blocks, but every nonzero-signal
 `Y`-adaptive signed weighting supported on at most `N^(1/20-epsilon)` distinct
 supports has Rayleigh ratio at least `N^(1/20+epsilon-o(1))` on `E_short`.
-At the dangerous center, the exact resolvent equation proves pair diffuseness
-and leading-signal concentration, while extra half-turn signal is `o_p(q_0)`.
-Only its weighted four-template quadratic remains open; nonlinear performance
-remains open.
+At visibility one and the dangerous center, the exact resolvent equation
+proves pair diffuseness
+and leading-signal concentration.  A 49-column four-template certificate puts
+quadratic relative variance at most `N^(-0.310083...+o(1))`.  Extra half-turn
+signal is `o_p(q_0)`.  Thus that fixed deterministic resolvent has conditional
+Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  A conditional
+optimizer, `Y`-adaptive weights, and nonlinear performance remain open.
 Bucket-sum-only random rehash medians contain only the original path-sum
 information, while a fixed
 positive pair-overlap law can yield either sign of prediction correlation.
@@ -288,8 +294,11 @@ realize either sign.  The exact remaining Wagner projection depends only on
 `r(z)=E[R|Z=z]`; small regression energy or nonpositive signed-margin
 covariance would imply positive correlation, but neither is proved.  The
 certified clean-cluster residual sector is exponentially negligible at that
-scale.  The unresolved term is an all-degree mixed half-turn closure tail;
-fifth order is only the first diagnostic macroscopic level.  These are
+scale.  A separate automatic order-three family gives
+`<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  This is not
+the orthogonal `P_3` coefficient; without a sixth-moment upper bound it decides
+neither regression energy nor sign.  The all-degree mixed closure tail remains
+open.  These are
 information-sufficiency obstructions and do not settle the random modular
 sign.
 Parseval now gives a sharp

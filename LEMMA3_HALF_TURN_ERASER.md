@@ -131,11 +131,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   whole-radial Loewner promotion fails because low-degree blocks are typically
   empty.  On `E_short`, however, every nonzero-signal public-label-adaptive
   signed weighting supported on at most `N^(1/20-epsilon)` distinct supports
-  has Rayleigh ratio at least `N^(1/20+epsilon-o(1))`.  At the dangerous
-  center, the exact resolvent equation proves pair diffuseness and leading-
-  signal concentration, while extra half-turn signal is `o_p(q_0)`.  Only a
-  weighted four-template bound remains for its conditional quadratic.
-  Nonlinear sign performance remains open.
+  has Rayleigh ratio at least `N^(1/20+epsilon-o(1))`.  At visibility one and
+  the dangerous center, the exact resolvent equation proves pair diffuseness
+  and leading-signal concentration.  A 49-column four-template certificate
+  puts quadratic relative variance at most `N^(-0.310083...+o(1))`.  Extra
+  half-turn signal is `o_p(q_0)`.  Thus that fixed resolvent has conditional
+  Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  A conditional
+  optimizer, `Y`-adaptive weights, and nonlinear statistics remain open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -157,9 +159,11 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   regression energy or nonpositive signed-margin covariance is sufficient for
   positive correlation, but neither property is proved for random labels.
   The entire known clean-cluster residual sector is exponentially negligible
-  at this regression scale.  The remaining term is an all-degree mixed half-
-  turn closure tail; fifth order is the first numerically macroscopic
-  unenumerated level, but that scale is only diagnostic.  These are
+  at this regression scale.  A different automatic order-three family gives
+  `<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  This is not
+  the orthogonal `P_3` coefficient; without a sixth-moment upper bound it does
+  not decide regression energy or sign.  The all-degree mixed closure tail
+  remains open.  These are
   information-sufficiency obstructions: the modular example is highly
   atypical, and the random-instance outside signed spectrum remains open.
   Direct importance sampling of the exact Bayesian coefficient ratio has
@@ -216,8 +220,11 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   row has all `N` cyclic Fourier modes and maximal rank across every index-bit
   cut almost surely.  Exact open-boundary TT/MPS or read-once transfer
   representations need bond at least `sqrt(N/2)`, and the scalar block moment
-  recurrence has full order.  Scalar arithmetic aggregation, approximation,
-  and succinct scalar-evaluable ill-conditioned certificates remain open.
+  recurrence has full order.  A shared factor-`poly(n)` scalar feature family
+  for all blocks needs rank `N^(1-gamma-o(1))` at source queries and
+  `N^(1/49-o(1))` or `N^(1/45-o(1))` at Gaussian root blocks.  One-block
+  adaptive arithmetic, approximation, and succinct scalar-evaluable
+  ill-conditioned certificates remain open.
   Rejection-based quantum tilting
   cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
   only
@@ -3140,6 +3147,100 @@ order `s`, and its derivative Hankel matrix
 
 has full Vandermonde rank `s`.  This is an exact scalar-parameter recurrence
 barrier, not a lower bound for evaluation at one prescribed `u`.
+
+There is also a genuinely scalar obstruction when one separated feature space
+must serve many blocks.  On the source-query event above, take
+
+```text
+g_a = R*A_a
+```
+
+and partition `Z_N` into `J=N/s` disjoint blocks `I_j` of size `s`.  If `B` is
+their incidence matrix, the exact KDE identity gives
+
+```text
+S_(a,j) := exp(-u*R)*Z_(I_j)(g_a) = (K*B)_(a,j).
+```
+
+The full source Gram obeys
+
+```text
+||K-I_N||_op <= N^(1-delta_gamma(rho)+o(1)) = o(1)
+```
+
+at both splits because `delta_gamma(rho)>1`.  Since the columns of `B` are
+orthogonal with norm `sqrt(s)`, every singular value of `S` is
+`(1+o(1))*sqrt(s)` and
+
+```text
+srank(S) = (1+o(1))*N/s.
+```
+
+Suppose a shared rank-`k` scalar separation
+
+```text
+T_(a,j) = sum_(ell=1)^k q_ell(g_a)*b_ell(I_j)
+```
+
+satisfies `S_(a,j)<=T_(a,j)<=C*S_(a,j)` entrywise.  Scaling `T` by
+`2/(C+1)` and applying Eckart--Young gives
+
+```text
+k >= (1-o(1))*[4*C/(C+1)^2]*N/s.
+```
+
+For `s=N^gamma` and `C=poly(n)`, this is `N^(1-gamma-o(1))`, with exponents
+`44/49` and `8/9` at the two splits.
+
+The actual Gaussian query law retains a smaller but still exponential shared
+scalar rank.  Strengthen the usual event to
+
+```text
+max_(t!=0)|C_t| <= rho,
+sqrt(ln(2)/6)<rho<1/2.
+```
+
+Its failure probability is at most
+`2*exp(-(6*rho^2-ln(2))*n)`.  For blocks of size `s=N^sigma`, define
+
+```text
+Z_j(g) = sum_(a in I_j) exp(u*<g,A_a>),
+d = s*exp(2*u^2),
+epsilon_N = N^(sigma-2*gamma*(1-rho)+o(1)).
+```
+
+The `L_2(g)` Gram matrix of the `J=N/s` scalar functions satisfies
+
+```text
+G_(j,j) = d*(1+O(epsilon_N)),
+|G_(j,k)| <= d*epsilon_N,       j!=k.
+```
+
+Consequently, when `sigma<2*gamma*(1-rho)`,
+
+```text
+srank{Z_j}
+  >= (1-o(1))*J/(1+J*epsilon_N)
+  = N^(min{1-sigma,2*gamma*(1-rho)-sigma}-o(1)).
+```
+
+At the two relevant splits, `2*gamma*(1-rho)<1`, so the second exponent in the
+minimum applies.  Every pointwise factor-`C` separated representation fixed
+before `g` pays the same `(1-o(1))*4*C/(C+1)^2` factor.  At the root
+`sigma=gamma` and `rho=2/5`, this gives exponents `1/49` and `1/45`.
+
+This shared-feature quantifier is essential.  At a source query,
+
+```text
+||exp(-u*R)*f(g_a)-e_a||_2
+  <= N^(1/2-delta_gamma(rho)+o(1)) = o(1),
+```
+
+and the spike `e_a` has open-boundary TT bond one.  Thus adaptive approximate
+rank of one realized row is not an obstruction.  The theorems above concern
+simultaneous block families with query-independent separated features.  They
+do not lower-bound one fixed block, query-adaptive cores, nonlinear arithmetic
+circuits, phase cancellation, or output-sensitive root location.
 
 The phase-averaged coefficient energy is not uniform across residues, so one
 cannot strengthen this observation by simply assigning `1/N` of the energy
@@ -8233,6 +8334,129 @@ nonzero polynomial `P_(J+1)(Z)` is orthogonal to every degree-`J` test, so a
 degree-`J` enumeration cannot bound the full regression energy without an
 additional tail or monotonicity theorem.
 
+Automatic rank-deficient closures are already macroscopic at order three.
+Consider an ordered triple of retained paths whose coordinatewise signed sum
+is still ternary.  If `k` of the three rows are nonzero at one coordinate, the
+allowed signed-pattern counts are
+
+```text
+g_0,g_1,g_2,g_3 = 1,6,6,6.
+```
+
+Weighting by `2^(-1)` when the resultant coordinate is nonzero changes these
+to `1,3,6,3`.  Put
+
+```text
+Q_3(z) = 1+3*z+6*z^2+3*z^3
+```
+
+and choose the positive `z` satisfying
+
+```text
+z*Q_3'(z)/Q_3(z) = 3*p.
+```
+
+Numerically,
+
+```text
+z = 0.02039948389849...,
+(x_0,x_1,x_2,x_3)
+  = (1,3*z,6*z^2,3*z^3)/Q_3(z)
+  = (0.940096353042...,
+     0.057532441250...,
+     0.002347264218...,
+     0.0000239414893...).
+```
+
+Let `Ent_4` denote four-symbol Shannon entropy.  The resultant support density
+and the signed-type entropy are
+
+```text
+delta_3 = x_1+x_3 = 0.057556382740...,
+h_3 = Ent_4(x_0,x_1,x_2,x_3)
+      +(x_1+x_2+x_3)*log_2(6)
+    = 0.496503732642...,
+phi_3 = h_3-delta_3 = 0.438947349902....
+```
+
+Fix the corresponding rounded type in every block and let `X_3` count its
+retained ordered triples.  Then
+
+```text
+E[X_3] = N^(12*h_3-3*(a+1)+o(1))
+       = N^(1.459654438466...+o(1)).
+```
+
+This count concentrates.  The mass of one signed singleton atom is
+`s_3=x_1/6=0.009588740208...`.  A rational relation of deficiency `h` loses
+at least
+
+```text
+e_h = -(1-2*h*s_3)*log_2(1-2*h*s_3)
+      -2*h*s_3*log_2(s_3),
+
+(e_1,e_2,e_3)
+  = (0.155974573794...,
+     0.311408150558...,
+     0.466289940112...).
+```
+
+For left and right deficiencies `h,g` with common relation dimension `c_rel`,
+all nontrivial classes satisfy
+
+```text
+a*(h+g-c_rel)+c_rel-6*(e_h+e_g)
+  <= -0.372231434452...,
+```
+
+with the worst class `(h,g,c_rel)=(1,1,1)`.  Fixed-size Smith factors change
+only constants.  The second-moment argument therefore gives
+
+```text
+X_3 = N^(1.459654438466...+o(1))
+```
+
+with high probability.
+
+For each such triple, the ternary resultant `w` has
+
+```text
+|supp(w)| = 12*delta_3*n+o(n) > t,
+w dot Y = 3*H = H mod N.
+```
+
+Its two signs supply a residual half-turn coefficient at least
+`2^(1-|supp(w)|)`.  Summing the fixed type, and subtracting the smaller
+selected term `c*E_U[Z^4]`, yields
+
+```text
+<R,Z^3>_U
+  >= N^(12*phi_3-3*(a+1)+o(1))
+  = N^(0.768977845586...+o(1))
+```
+
+with high probability.  Since `sigma^2=4*M`,
+
+```text
+<R,(Z/sigma)^3>_U
+  >= N^(0.021392315733...+o(1)).
+```
+
+This is a raw cubic moment, not `<R,P_3(Z)>`.  The exact orthogonal polynomial
+`P_3` has law-dependent lower powers and normalization.  Cauchy gives only
+
+```text
+||E_U[R | Z]||_2
+  >= N^(0.021392315733...+o(1))
+     /sqrt(E_U[(Z/sigma)^6]).
+```
+
+Thus a sixth-moment Wick bound would refute the small-regression condition,
+whereas that condition would force
+`E_U[(Z/sigma)^6]>=N^(0.04278463147...-o(1))`.  No such sixth-moment estimate
+is proved here, and the cubic moment alone gives no sign or covariance
+conclusion.
+
 For orientation only, the generic full-rank scale `M^(j/2)/N` has exponents
 
 ```text
@@ -8241,9 +8465,8 @@ j=4: -0.0032192935...,
 j=5: +0.245975883....
 ```
 
-Thus fifth-order closures are the first numerically macroscopic unenumerated
-level.  This last comparison is diagnostic, not a proved modular
-contribution.
+Thus the generic full-rank benchmark first becomes macroscopic at fifth order,
+but it is secondary to the proved automatic order-three contribution above.
 
 An asymptotic likelihood completion shows that even the exact Rademacher-sum
 law, its Gaussian-leading moments, and many prescribed local reversals do not
@@ -9641,7 +9864,8 @@ Consequently `H_extra=o_p(q_0)`, and exact-signal concentration reduces to
 the leading two-template diffuseness condition above.
 
 The diagonal plus generic-`GG` automatic quadratic is genuinely a
-four-template problem.  Write it as `Q_Y=sum_e c_e*1[E_e]`.  Atom pairs whose
+four-template problem, but its weighted enumeration can be closed for this
+exact resolvent.  Write it as `Q_Y=sum_e c_e*1[E_e]`.  Atom pairs whose
 combined modular map is surjective with unit Smith factors have zero
 covariance.  For every remaining rank-deficient or nonunit-Smith type class
 `sigma`, define
@@ -9653,20 +9877,211 @@ kappa_sigma
       |Pr(E_e and E_f)-Pr(E_e)*Pr(E_f)|.
 ```
 
-The explicit sufficient condition is
+The required condition is
 
 ```text
 sum_sigma kappa_sigma*W_sigma = o((E_Y[Q_Y])^2).
 ```
 
-The two-row `G/E/L` table contains neither these four-row ranks nor their
-optimizer-weighted masses.  The existing exact-degree Wick calculation also
-does not control mixed-degree signed resolvent cancellations.  The exact
-resolvent argument above closes the pair-diffuseness gap, so only this weighted
-four-template enumeration remains for its conditional quadratic.  No
-counterexample for that specific optimizer is known.  The earlier `Good(Y)`
-theorem applies only to a fixed exact-degree family and cannot be reused for
-the mixed-degree cutoff.
+Put `D_w=sum_z w_z^2` and
+
+```text
+J_* = w_*^T*(B_4+rho*E_4)*w_*.
+```
+
+The quotient identity and the already negligible non-`GG` baselines give
+
+```text
+E_Y[Q_Y] = (1+o(1))*4*q_0^2*J_*
+          >= (2-o(1))*q_0*D_w.
+```
+
+Here `H_deg=q_0^(-1)*N^o(1)`.  These identities supply the normalization in
+the finite entropy calculation below.
+
+For an automatic generic-`GG` edge `e=(z,z')`, the pointwise resolvent bound
+above gives
+
+```text
+|c_e|
+  <= O(D_w*N^(4*F+o(1))/H_deg)
+     *4^(-|T_z union T_z'|).
+```
+
+Thus a pair of automatic-edge coefficients costs at most `N^(8*F+o(1))`
+relative to the explicit reference weight.  If the four rows have rational
+relation deficiencies `h,g` on the two halves and common relation dimension
+`c_rel`, the fixed-row Smith calculation gives
+
+```text
+Pr[all four rows are retained]
+  <= O(q_0^4)*K^(h+g-c_rel)*N^c_rel.
+```
+
+Here is a finite certificate for the weighted entropy step.  At one coordinate
+a compatible edge has the seven states
+
+```text
+S_7={(0,0),(+1,0),(-1,0),(0,+1),(0,-1),(+1,+1),(-1,-1)}.
+```
+
+Two edges therefore give `S_7 times S_7`, a set of 49 four-row columns.  If
+`u(v)` is the number of the two edges active in column `v`, assign weight
+`omega(v)=2^(-2*u(v))`.  Write `Ent` for Shannon entropy.  For an induced
+column set `D`, maximize
+
+```text
+Ent(pi)+sum_(v in D) pi_v*log_2(omega(v))
+```
+
+over probability vectors with each of the four activity marginals at most
+`p`.  Primitive cofactor normals, exact rational row reduction, and primitive
+column directions enumerate respectively 150 hyperplane masks, 131 plane
+masks, and 24 line masks.  Intersect each rational subspace with the 49
+columns, deduplicate by its incidence mask, and discard a mask that forces a
+zero row or equal supports inside either generic edge.  This leaves
+
+```text
+deficiency       1        2        3
+admissible      144       48        0.
+```
+
+The method-of-types overhead is at most `(b+1)^49=N^o(1)`, so the certificate
+is uniform over all degree tuples in the cutoff.  Its three maxima are
+
+```text
+psi_0 = 0.501040705055491...,
+psi_1 = 0.334552888028256...,   next < 0.302377442,
+psi_2 = 0.170689970719526...,   next < 0.166210132.
+```
+
+The maximum `psi_1` occurs on the eight cross-edge endpoint equalities, and
+`psi_2` on the four signed endpoint pairings.  The values have a direct
+one-variable certificate.  Let `x>0` solve
+
+```text
+(1-p)*x^2+(1-2*p)*x-2*p=0,       Z_e=1+x+x^2/2.
+```
+
+Then
+
+```text
+psi_0 = 2*(log_2(Z_e)-2*p*log_2(x)).
+```
+
+For an endpoint equality put
+
+```text
+A_x=(1+x/2)^2,
+r_x=8*p*A_x/[(1-p)*(1+x)^2],
+Z_1=A_x/(1-p),
+psi_1=log_2(Z_1)-p*log_2(r_x)-2*p*log_2(x).
+```
+
+For `y>0` solving `(1-p)*y^2+(1-2*p)*y-8*p=0`, the pairing value is
+
+```text
+Z_2=1+y/4+y^2/8,
+psi_2=log_2(Z_2)-2*p*log_2(y).
+```
+
+A rational class has exponent
+
+```text
+6*(psi_h+psi_g)+a*(h+g-c_rel)+c_rel.
+```
+
+Accordingly its relative-variance exponent is at most
+
+```text
+8*F+6*(psi_h+psi_g)+a*(h+g-c_rel)+c_rel-4*(1+a)+o(1).
+```
+
+The closest class is `(h,g,c_rel)=(1,1,1)`:
+
+```text
+class exponent = 5.514098107421...,
+threshold      = 4*(1+a)-8*F = 5.939315179047...,
+margin         = 0.425217071626....
+```
+
+Full rational rank with a nonunit power-of-two Smith map is also harmless.
+The pointwise bound
+
+```text
+omega(v) <= product_(i=1)^4 2^(-1[v_i != 0])
+```
+
+and a nonzero binary support relation leave at most three free support sets in
+the defective half.  The corresponding exponent is at most
+
+```text
+6*(3*H_2(p)+psi_0) = 5.629232171894...,
+```
+
+leaving margin `0.310083007153...`.  A nonzero fixed-size rational minor makes
+every remaining Smith-index gain only a constant.
+
+The literal atom sum has two further cases.  For a diagonal--automatic pair,
+the local set has 21 columns.  Exact enumeration gives 16 raw and 12
+admissible hyperplanes, no admissible deficiency-two class, and
+
+```text
+psi_DA,0 = 0.375475640118380...,
+psi_DA,1 = 0.208987823091145...,   next < 0.176812377.
+```
+
+The first value is `(H_2(p)-p)+psi_0/2`.  For the second, put
+
+```text
+A_DA=1+x/2,
+r_DA=8*p*A_DA/[(1-p)*(1+x)],
+Z_DA=A_DA/(1-p),
+psi_DA,1=log_2(Z_DA)-p*log_2(r_DA)-p*log_2(x).
+```
+
+The common-relation, one-sided-relation, and Smith class exponents are
+
+```text
+12*psi_DA,1+2*(1+a)              = 5.506780779257...,
+6*(psi_DA,1+psi_DA,0)+(1+a)+a   = 5.505707681421...,
+6*(2*H_2(p)+psi_DA,0)+(1+a)     = 5.500975919499....
+```
+
+Their margins are all above `0.432534...`.  A
+diagonal--diagonal pair is exactly the two-template diffuseness calculation
+already proved above, whose smallest margin is `0.439851...`.  Consequently
+
+```text
+sum_sigma kappa_sigma*W_sigma/(E_Y[Q_Y])^2
+  <= N^(-0.310083007...+o(1)),
+Q_Y/E_Y[Q_Y] -> 1
+```
+
+in probability.  Pair diffuseness, the Markov bound for `E_ng`, and
+`H_extra=o_p(q_0)` now give
+
+```text
+mu_Y = 2*q_0*(1+o_p(1)),
+Num_Y = Q_Y+w_*^T*E_ng(Y)*w_*
+      = (1+o_p(1))*4*q_0^2*J_*.
+```
+
+Therefore, for the fixed deterministic exact resolvent `w_*`,
+
+```text
+R_(conditional,w_*)
+  = (1+o_p(1))*J_*
+  = (2+o_p(1))*R_(sur,min).
+```
+
+Thus the fractional-moment square-root lower bound now holds with high
+probability for that one dangerous-center degree-symmetric resolvent at
+visibility one; `lambda=1-o(1)` preserves the exponents.  This is not a whole-
+matrix conditional Loewner theorem, and it does not cover an optimizer
+recomputed from `Y`, arbitrary near-optimal weights, nonlinear statistics, or
+a changed retention rule.  The earlier `Good(Y)` theorem is still restricted
+to a fixed exact-degree family and is not used here.
 
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
@@ -10104,13 +10519,15 @@ conditional radial Loewner comparison fails on typically empty low-degree
 blocks.  Conversely, `E_short` gives an exact conditional Rayleigh lower
 bound `N^(1/20+epsilon-o(1))` for every nonzero-signal public-label-adaptive
 signed weighting supported on at most `N^(1/20-epsilon)` distinct supports.
-At the dangerous center, the exact resolvent equation proves pair diffuseness
-and leading-signal concentration, while extra half-turn signal is `o_p(q_0)`.
-Only its weighted four-template quadratic remains open.  Nonlinear sign
-performance remains open.  Bucket-sum-
-only rehash medians are
-only margin
-transforms of the same path sum, while a positive three-character likelihood
+At visibility one and the dangerous center, the exact resolvent equation
+proves pair diffuseness and leading-signal concentration.  A 49-column
+four-template certificate puts quadratic relative variance at most
+`N^(-0.310083...+o(1))`.  Extra half-turn signal is `o_p(q_0)`.  Thus that fixed
+deterministic resolvent has conditional
+Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  A conditional
+optimizer, `Y`-adaptive weights, and nonlinear sign performance remain open.
+Bucket-sum-only rehash medians are only margin transforms of the same path
+sum, while a positive three-character likelihood
 model shows that fixed
 pair overlap and linear signal can coexist with either prediction sign.
 Actual near-miss modular triples go farther: they have
@@ -10129,8 +10546,11 @@ on `r(z)=E[R|Z=z]`; small regression energy or nonpositive signed-margin
 covariance would ensure positive correlation, but neither is proved for
 random labels.
 The certified clean-cluster residual sector is exponentially negligible at
-that regression scale.  The unresolved term is an all-degree mixed half-turn
-closure tail; fifth order is only the first diagnostic macroscopic level.
+that regression scale.  A separate automatic order-three family yields
+`<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  This raw cubic
+moment is not the orthogonal `P_3` coefficient; without a sixth-moment upper
+bound it decides neither regression energy nor sign.  The all-degree mixed
+closure tail remains open.
 These are information-sufficiency obstructions; the modular example is
 highly atypical, so the random-instance Wagner sign remains uncontrolled.
 The
@@ -10175,9 +10595,11 @@ vector represents the row but has overlap `Z_I`; on a generic orbit, `2*q`
 exact consecutive point queries already recover the row.  Yet its exact
 cyclic Fourier support is full and every index-bit matricization has maximal
 rank almost surely, forcing `sqrt(N/2)` central bond for exact open-boundary
-TT/MPS or read-once transfer representations.  Scalar arithmetic aggregation,
-approximation, and succinct scalar-evaluable ill-conditioned certificates
-remain open.
+TT/MPS or read-once transfer representations.  Shared factor-`poly(n)` scalar
+features for all blocks need rank `N^(1-gamma-o(1))` at source queries and
+`N^(1/49-o(1))` or `N^(1/45-o(1))` at Gaussian root blocks.  One-block adaptive
+arithmetic, approximation, and succinct scalar-evaluable ill-conditioned
+certificates remain open.
 Rejection-based quantum tilting
 returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
 only `M^o(1)` expected rare-cap crossings and accepted indices, so the
