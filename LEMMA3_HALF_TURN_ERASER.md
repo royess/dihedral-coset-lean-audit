@@ -139,10 +139,11 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  On the
   deterministic reference-mass bulk `p_r^(0)>=N^(-1/10)`, uniform matrix and
   signal concentration gives the same ratio for the fully `Y`-adaptive signed
-  radial optimizer.  The raw light-cell signal has exponentially small
-  occupancy-diagonal leverage, but an abstract Gram example shows that a light
-  coordinate can still act as a signed control variate through the Schur
-  complement.  Whole-space optimization and nonlinear statistics remain open.
+  radial optimizer.  A square-correlation bound
+  `E[Xi]<=N^(-0.011538...+o(1))` supplies the missing Schur floor, so the same
+  ratio holds on the entire occupied-cell quotient.  Empty cells still defeat
+  whole-space inverse and coefficient-norm stability; nonradial weights and
+  nonlinear statistics remain open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -170,12 +171,12 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
   exponential lower bound for `||E[R|Z]||_2` and for at least one available
   degree-two-or-three orthogonal coefficient.  Small regression is therefore
-  false.  More sharply, at every fixed cutoff two valid nonnegative-Walsh
-  likelihood completions have the same exact symmetric base law, positive
-  linear signal, and all residual projections against polynomials through the
-  cutoff, but
-  opposite full and residual Wagner correlations.  These completions are
-  abstract rather than random modular laws; the all-degree signed projection
+  false.  More sharply, two valid nonnegative-Walsh likelihood completions
+  have the same exact symmetric base law, positive linear signal, and every
+  residual projection against polynomials of degree at most `M-1`.  Their
+  conditional laws also agree on every proper coordinate subset, but their
+  full and residual Wagner correlations have opposite signs.  These abstract
+  completions are not random modular laws; the all-degree signed projection
   remains open.
   These are information-sufficiency obstructions: the modular example is
   highly
@@ -9087,13 +9088,14 @@ without changing any polynomial datum through degree three.  This is an
 abstract likelihood completion on the same Boolean space, not a claim that
 random modular relation counts realize either completion.
 
-The obstruction persists through every fixed finite cutoff.  Fix
+The obstruction persists through the maximal proper polynomial cutoff.  Fix
 
 ```text
 D=2*ell+1>=3
 ```
 
-and an odd `M>=2*D+1`.  Continue with the same independent signs, and for
+and an odd `M>=5`, with `3<=D<=M-2`.  Continue with the same independent
+signs, and for
 `0<=r<=(M-1)/2` put
 
 ```text
@@ -9114,23 +9116,12 @@ for odd `k<M`.  Write
 
 ```text
 s=(-1)^ell,
-c=theta_(ell+1)/(32*M),
-u=D/[16*(M-D-1)],
-v=1/8,
+mass_0=1/[8*(1+2/theta_ell+4/theta_(ell+1))],
+c=mass_0/M,
+u=2*mass_0/theta_ell,
+v=4*mass_0/theta_(ell+1),
 a_D=u/choose(M,D),
 b_D=v/choose(M,D+2).
-```
-
-Because
-
-```text
-theta_(ell+1)/theta_ell=D/(M-D-1),
-```
-
-one also has
-
-```text
-u=2*c*M/theta_ell,       v=4*c*M/theta_(ell+1).
 ```
 
 Define
@@ -9146,26 +9137,26 @@ are
 
 ```text
 ||hat(H_0)||_1
-  =theta_(ell+1)/32+D/[16*(M-D-1)],
+  =mass_0+u,
 
 ||hat(H_1)||_1
-  =theta_(ell+1)/32+D/[16*(M-D-1)]+1/8
-  <=7/32.
+  =mass_0+u+v
+  =1/8.
 ```
 
-Here `theta_(ell+1)<=1`, and `M-D-1>=D`.  Thus `H_0,H_1` define valid balanced
-likelihood deviations with the same uniform base law.
+Thus `H_0,H_1` define valid balanced likelihood deviations with the same
+uniform base law.
 
 The symmetric Walsh polynomials `E_k` are mutually orthogonal and are exact
 degree-`k` polynomials in `Z`.  Therefore
 
 ```text
-Proj_(degree<=D) H_0=Proj_(degree<=D) H_1=c*E_1+a_D*E_D,
+Proj_(degree<=D+1) H_0=Proj_(degree<=D+1) H_1=c*E_1+a_D*E_D,
 
-Proj_(degree<=D) R_0=Proj_(degree<=D) R_1=a_D*E_D.
+Proj_(degree<=D+1) R_0=Proj_(degree<=D+1) R_1=a_D*E_D.
 ```
 
-Equivalently, for every `0<=m<=D`,
+Equivalently, for every `0<=m<=D+1`,
 
 ```text
 <H_0,Z^m>_U=<H_1,Z^m>_U,
@@ -9180,7 +9171,7 @@ Their common selected-path and top residual moments are strictly positive:
 ```
 
 Nevertheless both the full and residual majority correlations reverse.  Put
-`h=alpha_M*c*M>0`.  The singleton, degree-`D`, and degree-`D+2`
+`h=alpha_M*mass_0>0`.  The singleton, degree-`D`, and degree-`D+2`
 contributions are respectively
 
 ```text
@@ -9198,14 +9189,24 @@ Hence
 ```
 
 The full pair is `(3*h,-h)` when `s=1` and `(-h,3*h)` when `s=-1`.
-Given any fixed polynomial or orthogonal cutoff `K`, choose an odd
-`D>=max(3,K)`.  The two nonnegative-Walsh likelihoods then have the same base
-law, the same positive linear signal, and identical residual projections
-against polynomials through degree `K`, but opposite full and residual
-majority signs.  This is again an
-abstract completion.  Its degree-`D+2` mass is spread across all
-`choose(M,D+2)` characters and is not asserted to arise from the random
-modular coefficient counts.
+For every proper cutoff `0<=K<=M-1`, one can choose an odd `D` with
+`3<=D<=M-2` and `D+1>=K`.  The two nonnegative-Walsh likelihoods then have
+the same base law, the same positive linear signal, and identical residual
+projections against polynomials through degree `K`, but opposite full and
+residual majority signs.  At the sharp endpoint, take `D=M-2`; the only
+unseen mode is `E_M`.  In fact
+
+```text
+H_1-H_0=b_D*E_M=b_D*product_(i=1)^M x_i.
+```
+
+For either fixed label, marginalizing any one coordinate annihilates this
+term.  The two conditional experiments therefore have identical laws on
+every proper coordinate subset.  Since `Z` has `M+1` support points, degrees
+`0,...,M` span all functions of `Z`, so degree `M-1` is the maximal proper
+polynomial cutoff.  This is again an abstract completion.  Its
+degree-`D+2` mass is spread across all `choose(M,D+2)` characters and is not
+asserted to arise from the random modular coefficient counts.
 
 For orientation only, the generic full-rank scale `M^(j/2)/N` has exponents
 
@@ -11265,9 +11266,8 @@ log_N(lambda_r)=2*a-1=-0.001073097843....
 It is empty with high probability, but only with that small polynomial
 exponent; other reference-light cells can still have many occupants.
 
-These estimates do not yet extend the bulk optimum.  On the occupied-cell
-quotient, after removing any remaining conditional nullspace, partition the
-exact numerator and signal as
+The ledger alone does not extend the bulk optimum.  On the occupied-cell
+quotient, partition the exact numerator and signal as
 
 ```text
 A_Y=[[A_BB,A_BL],
@@ -11286,9 +11286,10 @@ g_Y^T*A_Y^dagger*g_Y
   = g_B^T*A_BB^(-1)*g_B+r_L^T*S_L^dagger*r_L.
 ```
 
-The first term is `(1+o(1))/J_*=N^(-F+o(1))`.  A whole-radial theorem must
-therefore prove the second term `o(N^(-F))`.  The ledger controls `g_L` in
-the metric `D_L`; it controls neither `S_L` nor the bulk-induced term
+The first term is `(1+o(1))/J_*`.  The existing trial gives only
+`J_*<=N^(F+o(1))`, so this bulk dual is at least `N^(-F-o(1))`; equality is
+not needed below.  The ledger controls `g_L` in the metric `D_L`, but by
+itself it controls neither `S_L` nor the bulk-induced term
 `A_LB*A_BB^(-1)*g_B`.
 
 This is a real algebraic distinction.  For `0<epsilon<1`, take
@@ -11311,17 +11312,236 @@ r_L^2/S_L -> 1/2,
 whereas the bulk dual value is only `epsilon`.  Thus a signal-free light
 coordinate can improve the optimum by acting as a signed control variate.
 This example is not a modular counterexample.  It proves that small expected
-light mass and raw leverage do not replace a probabilistic Schur bound such
-as `S_L>=c*D_L` together with control of the bulk-induced cross signal.
-Occupied light cells remain open precisely at that interface.
+light mass and raw leverage do not replace a probabilistic Schur bound.  The
+actual modular Gram supplies exactly that missing bound.
+
+Continue with the bulk cutoff `kappa=1/10`.  Let `O_r(Y)` contain one
+representative of every retained `{z,-z}` orbit in cell `r`, put
+`N_r=|O_r(Y)|`, and use the full post-quotient features
+
+```text
+Phi_r = 2*P_r^(-1/2)*sum_(z in O_r(Y)) chi_(T_z),
+D_r = 4*N_r/P_r.
+```
+
+This `D_r` is twice the one-copy diagonal used in the preceding ledger, so
+all of its leverage estimates are unchanged up to an absolute factor.
+Then `A_(r,s)=<Phi_r,Phi_s>_avg` and `g_r=<B,Phi_r>_avg` have the same
+normalization used in the bulk theorem, whose deterministic targets are
+`A_0=4*q_0^2*calM` and `g_0=2*q_0*ell`.  Empty cells are removed from the
+quotient.  For two retained orbit representatives define
+
+```text
+Gamma_(z,u)
+  = <chi_(T_z),chi_(T_u)>_avg
+  = 2^(-|T_z triangle T_u|)*R_(T_z triangle T_u)(0)
+  >= 0.
+```
+
+The ordered off-cell square-correlation energy touching the light set is
+
+```text
+Xi(Y)=sum_(z,u retained:
+               cell(z)!=cell(u),
+               cell(z) in L or cell(u) in L)
+        Gamma_(z,u)^2.
+```
+
+It is polynomially small with room beyond the bulk spectral exponent.  Put
+
+```text
+F_16 = 12*max_(0<=xi<=p) [
+         p*H_2(xi/p)
+         +(1-p)*H_2((p-xi)/(1-p))
+         -H_2(p)+4*xi]
+     = 0.088461022045....
+```
+
+Then
+
+```text
+E_Y[Xi] <= N^(-(kappa-F_16)+o(1))
+        = N^(-0.011538977955...+o(1)).
+```
+
+In particular, taking `delta=0.009`, Markov gives
+
+```text
+Xi <= N^(-0.009+o(1))
+```
+
+outside an event of probability at most
+`N^(-0.002538977955...+o(1))`.  Notice that `delta>F`.
+
+Here is the square-atom proof.  Fix different-cell templates `z,u`, let
+`W=T_z triangle T_u`, `d=|W|`, and put
+`J_(z,u)=Pr[Ret(z),Ret(u)]`.  Conditional on the two retention systems, their
+full-modulus and low-filter row directions have rational span of dimension at
+most four.  Indeed, for each template one half-low row is generated by the
+total row and the other half-low row because `H=0 mod K`.  The inhomogeneous
+right side does not change the homogeneous subgroup of the conditional
+fibre.  Such a span meets `{+1,-1}^W` in at most `16` points; after one new
+sign row is adjoined, the enlarged span meets the cube in at most `32` points.
+For a nonexceptional sign row, the conditional annihilator is generated by
+the full rows and by `(N/K)` times the low rows.  A nonzero bounded minor
+`d_0` forces `N` to divide `m*d_0` for the conditional character order `m`.
+Hence `m>=N/O(1)`, and the conditional atom is at most `O(K/N)`.  Adding two
+random sign rows sequentially yields
+
+```text
+E_Y[1_(Ret(z))*1_(Ret(u))*Gamma_(z,u)^2]
+  <= N^o(1)*J_(z,u)*[
+       4^(-d)+2^(-d)*K/N+(K/N)^2].
+```
+
+The sequential step is essential: an exceptional first row still leaves a
+second zero equation, so the bound is quadratic in `2^(-d)+K/N`.
+
+Use the earlier exact `G/E/L` pair table.  If neither half is type `L`, then
+`J_(z,u)<=4*q_0^2`; if exactly one half is type `L`, then
+`J_(z,u)<=2*K*q_0^2`.  Two `L` halves force the same four-degree cell and are
+absent from `Xi`.  Write `P_L=sum_(r in L)P_r` and
+`P_all=sum_r P_r`.  Then
+
+```text
+sum_(r in L) ell_r^2 <= H_deg*N^(-kappa+o(1)),
+P_L <= N^(4*a-kappa+o(1)),
+P_all = N^(4*a+o(1)),
+```
+
+where `1+a+2*beta=4*a`.  Monotonicity of the hypergeometric overlap gives
+
+```text
+sum_(z in L,u all) 4^(-|T_z triangle T_u|)
+  <= H_deg^2*N^(F_16-kappa+o(1)).
+```
+
+Cauchy controls the corresponding `2^(-|triangle|)` sum by the geometric
+mean of this display and `P_L*P_all`.  For pairs with no `L` half, the three
+terms in the square-atom bracket have exponents
+
+```text
+theta_(G,2) = F_16-kappa
+            = -0.011538977955...,
+theta_(G,1) = 4*a-2+F_16/2-kappa
+            = -0.057915684649...,
+theta_(G,0) = 8*a-4-kappa
+            = -0.104292391344....
+```
+
+For exactly one `L` half, the common half costs at most `N^beta` times its
+reference mass.  With `H_half=N^((1+a)/2+o(1))`,
+
+```text
+sum 4^(-|triangle|)
+  <= N^(beta+3*(1+a)/2+F_16/2-kappa+o(1)),
+#pairs <= N^(6*a-kappa+o(1)).
+```
+
+The corresponding three exponents are
+
+```text
+theta_(L,2) = beta+(a-1)/2+F_16/2-kappa
+            = -0.056842586819...,
+theta_(L,1) = -9/4+15*a/4+beta/2+F_16/4-kappa
+            = -0.330299214622...,
+theta_(L,0) = 7*a-4-kappa
+            = -0.603755842426....
+```
+
+Finite `G/E` constants and the two choices of half are `N^o(1)`.  The first
+no-`L` exponent is the unique worst term, proving the expectation bound.
+
+It remains to convert `Xi` into a Schur estimate.  Since every `Gamma` is
+nonnegative, `A_(r,r)>=D_r`.  For different cells,
+
+```text
+A_(r,s)^2/(D_r*D_s)
+  <= sum_(z in O_r,u in O_s) Gamma_(z,u)^2.
+```
+
+Consequently
+
+```text
+A_LL >= (1-sqrt(Xi))*D_L.
+```
+
+The bulk theorem gives
+
+```text
+A_BB >= (2-o(1))*q_0*I,
+||A_BB||_op <= q_0*N^(F+o(1)).
+```
+
+Moreover `D_u<=A_(u,u)`.  Two applications of Cauchy therefore give
+
+```text
+||D_L^(-1/2)*A_LB*A_BB^(-1/2)||_op^2
+  <= N^(F+o(1))*Xi
+  = o(1).
+```
+
+Thus
+
+```text
+S_L >= (1-o(1))*D_L.
+```
+
+Let `Q_B=g_B^T*A_BB^(-1)*g_B=(1+o(1))/J_*`.  The bulk-induced light signal
+has `D_L^(-1)` norm squared at most
+
+```text
+N^(F+o(1))*Xi*Q_B=o(Q_B).
+```
+
+The preceding raw and extra light-signal ledger gives
+
+```text
+g_L^T*D_L^(-1)*g_L
+  <= N^(-(0.052146195686...-tau)+o(1))
+  = o(Q_B)
+```
+
+for any fixed `0<tau<0.052146195686...-F`; the comparison uses
+`J_*<=N^(F+o(1))`.  The triangle inequality and inverse order now imply
+
+```text
+r_L^T*S_L^(-1)*r_L=o(Q_B).
+```
+
+Block elimination therefore yields
+
+```text
+g_Y^T*A_Y^dagger*g_Y=(1+o(1))/J_*,
+
+min_(g_Y^T*x!=0) x^T*A_Y*x/(g_Y^T*x)^2
+  = (1+o_p(1))*J_*
+  = (2+o_p(1))*R_(sur,min).
+```
+
+The minimum ranges over arbitrary real radial weights chosen after all public
+labels are known, on the entire occupied-cell quotient.  More generally, the
+same proof works whenever the existing bulk cutoff satisfies
+
+```text
+F+F_16 < kappa < 0.176993488056....
+```
+
+The concrete `kappa=1/10` lies in this interval.  Empty cells still destroy
+whole-space inverse and coefficient-norm stability, but they have zero signal
+and do not change the quotient optimum.  The result is for visibility one and
+the original retention rule; the exponent bounds persist for
+`lambda=1-o(1)`.  It does not cover nonradial weights, nonlinear statistics,
+or a changed retention rule.
 
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
 not prove that `sign(Z)` fails, and it does not exclude clipping or different
 nonlinear aggregation.  The theorem rules out fixed data-independent linear
-weighting and public-label-adaptive signed radial weighting inside the bulk as
-repairs of this Wagner SNR calculation.  It is not a lower bound on
-unrestricted adaptive or nonlinear generalized-birthday decoding.
+weighting and arbitrary public-label-adaptive signed radial weighting on the
+entire occupied quotient as repairs of this Wagner SNR calculation.  It is
+not a lower bound on nonradial adaptive or nonlinear generalized-birthday
+decoding.
 
 Directly Fourier transforming a polynomial-size classical sample table has
 the same limitation.  Any normalized amplitude state supported on `M` known
@@ -11760,11 +11980,11 @@ deterministic resolvent has conditional
 Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  On the
 deterministic reference-mass bulk `p_r^(0)>=N^(-1/10)`, uniform matrix and
 signal concentration gives the same ratio for the fully `Y`-adaptive signed
-radial optimizer.  The raw light-cell signal has exponentially small
-occupancy-diagonal leverage, but an abstract Gram example shows that a light
-coordinate can still act as a signed control variate through the Schur
-complement.  Whole-space optimization and nonlinear sign performance remain
-open.
+radial optimizer.  A square-correlation bound
+`E[Xi]<=N^(-0.011538...+o(1))` supplies the missing Schur floor, so the same
+ratio holds on the entire occupied-cell quotient.  Empty cells still defeat
+whole-space inverse and coefficient-norm stability; nonradial weights and
+nonlinear sign performance remain open.
 Bucket-sum-only rehash medians are only margin transforms of the same path
 sum, while a positive three-character likelihood
 model shows that fixed
@@ -11790,11 +12010,11 @@ that regression scale.  A separate automatic order-three family yields
 sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
 exponential lower bound for `||E[R|Z]||_2` and for at least one available
 degree-two-or-three orthogonal coefficient.  Small regression is therefore
-false.  More sharply, at every fixed cutoff two valid nonnegative-Walsh
-likelihood completions have the same exact symmetric base law, positive linear
-signal, and all residual projections against polynomials through the cutoff,
-but opposite full and residual Wagner correlations.  These completions are
-abstract rather than
+false.  More sharply, two valid nonnegative-Walsh likelihood completions have
+the same exact symmetric base law, positive linear signal, and every residual
+projection against polynomials of degree at most `M-1`.  Their conditional
+laws also agree on every proper coordinate subset, but their full and residual
+Wagner correlations have opposite signs.  These abstract completions are not
 random modular laws; the all-degree signed projection remains open.
 These are information-sufficiency obstructions; the modular example is
 highly atypical, so the random-instance Wagner sign remains uncontrolled.

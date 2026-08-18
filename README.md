@@ -346,10 +346,11 @@ signal is `o_p(q_0)`.  Thus that fixed deterministic resolvent has conditional
 Rayleigh ratio `(2+o_p(1))*R_(sur,min)` with high probability.  On the
 deterministic reference-mass bulk `p_r^(0)>=N^(-1/10)`, uniform matrix and
 signal concentration gives the same ratio for the fully `Y`-adaptive signed
-radial optimizer.  The raw light-cell signal has exponentially small
-occupancy-diagonal leverage, but an abstract Gram example shows that a light
-coordinate can still act as a signed control variate through the Schur
-complement.  Whole-space optimization and nonlinear performance remain open.
+radial optimizer.  A square-correlation bound
+`E[Xi]<=N^(-0.011538...+o(1))` supplies the missing Schur floor, so the same
+ratio holds on the entire occupied-cell quotient.  Empty cells still defeat
+whole-space inverse and coefficient-norm stability; nonradial weights and
+nonlinear performance remain open.
 Bucket-sum-only random rehash medians contain no information beyond the
 original path sum;
 a fixed positive pair-overlap law can still give either sign of prediction
@@ -374,11 +375,11 @@ that scale.  A separate automatic order-three family gives
 sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
 exponential lower bound for `||E[R|Z]||_2` and for at least one available
 degree-two-or-three orthogonal coefficient.  Small regression is therefore
-false.  More sharply, at every fixed cutoff two valid nonnegative-Walsh
-likelihood completions have the same exact symmetric base law, positive linear
-signal, and all residual projections against polynomials through the cutoff,
-but opposite full and residual Wagner correlations.  These completions are
-abstract rather than
+false.  More sharply, two valid nonnegative-Walsh likelihood completions have
+the same exact symmetric base law, positive linear signal, and every residual
+projection against polynomials of degree at most `M-1`.  Their conditional
+laws also agree on every proper coordinate subset, but their full and residual
+Wagner correlations have opposite signs.  These abstract completions are not
 random modular laws; the all-degree signed projection remains open.
 These are information-sufficiency obstructions and do not settle the random
 modular sign.  A
