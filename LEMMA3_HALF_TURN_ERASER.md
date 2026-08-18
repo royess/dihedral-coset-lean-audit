@@ -150,8 +150,11 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   whole-space inverse and coefficient-norm stability.  An augmented-PSD
   same-cell algebraic witness with `Xi=0` shows that these inputs do not imply
   an unrestricted nonradial theorem; it is not a modular counterexample.
-  Unrestricted same-cell nonradial weights and nonlinear statistics remain
-  open.
+  A multiplicity-corrected centered-Schur interface shows that the full
+  linear extension would follow from a centered spectral floor with exponent
+  below `0.044828...` and normalized within-cell row regularity.  Those inputs
+  remain unproved; unrestricted same-cell nonradial weights and nonlinear
+  statistics remain open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -183,9 +186,12 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   closure expansion makes the cubic formal-level contribution at most
   `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
   closure levels at least five to contribute at least
-  `N^(0.021392...+o(1))`.  This proves necessary high-order cancellation, not
-  the final Wagner sign.  More sharply, two valid nonnegative-Walsh likelihood
-  completions
+  `N^(0.021392...+o(1))`.  The actual automatic quintic alone contributes at
+  least `N^(0.0679559...+o(1))`, so the absolute formal-level mass and its
+  triangle-inequality condition number are exponentially larger still.  This
+  is not an algorithm lower bound and does not determine the level-at-least-
+  seven tail or final Wagner sign.  More sharply, two valid nonnegative-Walsh
+  likelihood completions
   have the same exact symmetric base law, positive linear signal, and every
   residual projection against polynomials of degree at most `M-1`.  Their
   conditional laws also agree on every proper coordinate subset, but their
@@ -270,8 +276,12 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   explicit Cayley-transform/Sturm and Markov--Lukacs/SOS conversions have
   `Omega(N)`
   size, while the threshold sequence along every dyadic stride `s<=M` has
-  exact minimal recurrence order `2*q+1` with high probability.  Custom
-  sparse/circuit and random approximate real-root locators remain open.
+  exact minimal recurrence order `2*q+1` with high probability.  An
+  adversarial short-arc reduction from Plaisted makes coefficient-uniform
+  exact counting NP-hard already for `M=N^(1/9)` and at most `q=12*log_2(N)`
+  rational Laurent terms.  It leaves the iid-Gaussian and simple-root promise
+  open.  Custom sparse/circuit and random approximate real-root locators
+  remain open.
   Rejection-based quantum tilting
   cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
   only
@@ -3870,6 +3880,86 @@ SOS
 routes.  It is not a lower bound for a sparse or factored arithmetic-circuit
 root counter, a custom SOS encoding, or a random approximate locator;
 `(1+x^2)^(D_*)` itself has a compact circuit.
+
+There is, however, a coefficient-uniform exact barrier for adversarial sparse
+Laurent inputs even on the short-arc scale.  Plaisted's
+[unit-circle theorem](https://doi.org/10.1016/0304-3975(84)90130-0) makes it
+NP-hard, given a sparse integer polynomial
+
+```text
+P(z)=sum_(j=1)^s c_j*z^(d_j),       D=max_j d_j,
+```
+
+to decide whether `P` has a zero of modulus one.  Combine duplicate exponents
+and handle the zero or constant polynomial directly.  Choose `ell=3*r^2`
+large enough that
+
+```text
+M=2^ell>=4*D,       ell>=s^2/108,
+N=M^9,              K=N/M=M^8.
+```
+
+Thus `n=log_2(N)=9*ell` and
+
+```text
+q=12*n=108*ell=(18*r)^2.
+```
+
+For `0<=t<M`, define
+
+```text
+H(t)
+  = P(exp(2*pi*i*t/M))*P(exp(-2*pi*i*t/M))
+  = sum_(j,l)c_j*c_l
+      *exp(2*pi*i*K*(d_j-d_l)*t/N)
+  = |P(exp(2*pi*i*t/M))|^2.                         (PL)
+```
+
+After collecting equal differences, `H` is a real nonnegative Laurent
+polynomial with at most `s^2<=q` nonzero terms.  Its centered frequencies are
+admissible because
+
+```text
+|K*(d_j-d_l)|<=K*D<=N/4.
+```
+
+The map `t |-> exp(2*pi*i*t/M)` sends `[0,M)` bijectively onto the unit circle.
+Consequently,
+
+```text
+#{t in [0,M):H(t)=0}>0
+  iff P has a zero of modulus one.                  (PR)
+```
+
+The zero-frequency coefficient of `H` is
+
+```text
+h_0=sum_j c_j^2>0.
+```
+
+Set `X(t)=h_0-H(t)` and `v=h_0`.  Then `X` has zero DC coefficient,
+`v>0`, and `X-v=-H`.  Multiplying both by any positive rational factor sets
+any desired positive rational threshold without changing the roots.  Since
+`sqrt(q)=18*r` is integral, the outside `q^(-1/2)` convention can be absorbed
+into rational slot amplitudes; unused slots are padded by zero coefficients.
+
+All exponents, coefficients, and the threshold have polynomial encoding
+length.  A degree-`D` polynomial has at most `D` distinct roots, while a root
+of multiplicity `mu` becomes a real root of `(PL)` of multiplicity `2*mu`.
+Thus either the distinct or multiplicity-weighted binary count has
+`O(log D)=O(log N)` bits.  If a closed arc is required, test `P(1)` first;
+when it is nonzero the two endpoints are safe.  Hence a counter running in
+
+```text
+poly(q,log(N),coefficient bits,output bits)
+```
+
+for every rational sparse-Laurent input would imply `P=NP`.
+
+This is an adversarial exact-counting reduction whose roots are even-order
+tangencies.  It does not touch the iid-Gaussian or simple-root promise and
+does not rule out a locator charged for explicitly printing every root.  In
+particular, it leaves the random-promise direct root counter above open.
 
 The phase-averaged coefficient energy is not uniform across residues, so one
 cannot strengthen this observation by simply assigning `1/N` of the energy
@@ -9374,6 +9464,178 @@ necessary high-order cancellation, not the final Wagner sign, the sign of
 any individual higher level, or failure of every fixed cutoff beyond level
 three.
 
+The actual quintic closure is itself even more macroscopic.  Work at
+visibility one on the same event.  For `k=0,...,5`, the numbers of signed
+five-row coordinate columns with `k` nonzero entries and ternary row sum are
+
+```text
+g=(1,10,20,60,30,20).
+```
+
+After the factor `1/2` attached to an odd-size resultant, put
+
+```text
+b=(1,5,20,30,30,10),
+
+Q_5(z)=1+5*z+20*z^2+30*z^3+30*z^4+10*z^5,
+
+z*Q_5'(z)/Q_5(z)=5*p.
+```
+
+The positive saddle is
+
+```text
+z=0.0197261487215...,
+
+x_k=b_k*z^k/Q_5(z)
+  =(0.903629691184...,
+    0.089125668387...,
+    0.007032424758...,
+    0.000208083985...,
+    0.000004104696...,
+    0.0000000269899455...).
+```
+
+Thus
+
+```text
+delta_5=x_1+x_3+x_5=0.089333779362...,
+
+h_5=-sum_(k=0)^5 x_k*log_2(x_k)
+      +sum_(k>=1)x_k*log_2(g_k)
+   =0.823604533523...,
+
+phi_5=h_5-delta_5=0.734270754161....
+```
+
+Fix the rounded type in every block, and let `X_5` count retained ordered
+oriented quintuples.  The first moment is
+
+```text
+E_Y[X_5]
+  =N^(12*h_5-5*(a+1)+o(1))
+  =N^(2.385937146884...+o(1)).                        (Q51)
+```
+
+Each of the ten signed singleton atoms has mass
+
+```text
+s_5=x_1/10=0.008912566839....
+```
+
+If a second-moment relation has left and right rational deficiencies `h,g`
+and common dimension `c_rel`, the shared image in the two halves separates
+`2*h` and `2*g` atoms of mass at least `s_5`.  Its entropy losses are
+
+```text
+e_h=-(1-2*h*s_5)*log_2(1-2*h*s_5)
+      -2*h*s_5*log_2(s_5),
+
+(e_1,...,e_5)
+  =(0.146873809776...,
+    0.293280879406...,
+    0.439212580648...,
+    0.584659960224...,
+    0.729613721099...).
+```
+
+Exhausting `0<=h,g<=5` and `0<=c_rel<=min(h,g)`, apart from the independent
+class, gives
+
+```text
+a*(h+g-c_rel)+c_rel-6*(e_h+e_g)
+  <=-0.263022266229....                              (Q52)
+```
+
+The worst class is `(h,g,c_rel)=(1,1,1)`.  Odd-target-incompatible classes
+are empty.  Full-rational-rank but mod-two-singular stacks need one extra
+ledger.  The binary support column has zero atom `x_0` and five singleton
+atoms of mass `2*s_5` each.  A rank-`d` nonzero binary relation image
+separates `d` of those singleton atoms from zero, and hence loses at least
+
+```text
+f_d=-(1-2*d*s_5)*log_2(1-2*d*s_5)
+      -d*(2*s_5)*log_2(2*s_5).
+```
+
+Here `f_1=0.129048676098...`, so a defect in either `6*n`-coordinate half
+costs at least
+
+```text
+6*f_1=0.774292056589...
+```
+
+in the base-`N` pair exponent.  Its fixed Smith-index gain is only `O(1)`,
+so these classes are negligible.  The second moment therefore gives
+
+```text
+X_5=N^(2.385937146884...+o(1))                       (Q53)
+```
+
+with high probability.
+
+Every counted quintuple has a ternary resultant `w` with
+
+```text
+|supp(w)|=(12*delta_5+o(1))*n,       w dot Y=5*H=H mod N.
+```
+
+On `Good`, an unordered formal five-subset has at most `2^5*5!` oriented
+orderings, while the two signs of `w` give
+`h_(triangle A)>=2^(1-|supp(w)|)`.  Consequently,
+
+```text
+C_5
+  >=X_5*2^(1-|supp(w)|)/(2^5*5!)
+  =N^(12*phi_5-5*(a+1)+o(1))
+  =N^(1.313931794536...+o(1)).                        (Q54)
+```
+
+The exact majority coefficient in `(AC)` is
+
+```text
+a_5=3*alpha_V/
+      [(M_V-2+epsilon_V)*(M_V-4+epsilon_V)]
+    =N^(-5*m/2+o(1)).
+```
+
+It follows that the actual positive quintic term obeys
+
+```text
+a_5*C_5>=N^(gamma_5+o(1)),
+
+gamma_5
+  =1.313931794536...-5*m/2
+  =0.067955911449....                                 (Q55)
+```
+
+This also exposes a termwise conditioning lower bound.  Write
+
+```text
+P_+=sum_(j=1 mod 4)a_j*C_j,
+
+N_-=sum_(j=3 mod 4)|a_j|*C_j.
+```
+
+Then `P_+>=a_5*C_5`, `rho_Y=P_+-N_-`, and `|rho_Y|<=1`.  Hence
+
+```text
+N_->=a_5*C_5-1,
+
+sum_(j odd)|a_j|*C_j
+  =P_++N_-
+  >=2*a_5*C_5-1
+  >=N^(0.067955911449...+o(1)).                       (Q56)
+```
+
+Thus a black-box triangle-inequality analysis based on independent relative
+control of the formal levels needs relative precision
+`N^(-0.067955911449...+o(1))` even for `O(1)` absolute accuracy.  This is not
+an algorithm lower bound: a symbolic or correlated calculation may preserve
+the cancellation.  Nor does `(Q55)` determine the sign of the level-at-least-
+seven tail.  There is no matching upper bound on `C_3`, so the adverse cubic
+mass may itself supply all the negative compensation required by `(Q56)`.
+
 There is an exact same-`P_3` obstruction, even under symmetry and
 nonnegative Walsh likelihood coefficients.  Let odd `M>=11`, take independent
 uniform signs `x_1,...,x_M`, and put
@@ -10906,6 +11168,145 @@ sharp up to constants.  This matrix is not an actual modular counterexample.
 It proves only that coherence, entrywise nonnegativity, PSD/range, and the
 off-cell `Xi` estimate do not imply a full nonradial theorem.  Such an
 extension needs a new within-cell centered spectral or row-regularity input.
+
+There is an exact multiplicity-corrected interface for that missing input.
+For a retained support `T`, let `m_T` be the number of retained `{z,-z}`
+orbits having support `T`.  If `I_r` is one occupied four-degree cell, put
+
+```text
+n_r=sum_(T in I_r)m_T,
+
+bar(Gamma)_(T,W)=sqrt(m_T*m_W)*Gamma_(T,W),
+bar(h)_T=sqrt(m_T)*h_T,
+
+Q_(T,r)=1_(T in I_r)*sqrt(m_T/n_r).
+```
+
+This is the exact quotient of duplicate character directions.  The columns
+of `Q` are orthonormal and correspond to the already analyzed cell-constant
+orbit weights.  Let `U_c` be an isometry onto their Euclidean orthogonal
+complement, and write
+
+```text
+A_r=Q^T*bar(Gamma)*Q,
+B_rc=Q^T*bar(Gamma)*U_c,
+C_c=U_c^T*bar(Gamma)*U_c,
+
+a_r=Q^T*bar(h),                 c_c=U_c^T*bar(h).
+```
+
+At visibility one the two selected orientations give
+
+```text
+h_T^(0)=2^(1-|T|).
+```
+
+This depends only on the cell, so
+
+```text
+U_c^T*bar(h)^(0)=0,
+c_c=U_c^T*bar(e),       bar(e)_T=sqrt(m_T)*(h_T-h_T^(0)).
+```
+
+The existing extra-orientation ledger applies before this quotient and gives
+
+```text
+E_Y[1_(E_short)*||bar(e)||_2^2]
+  <=N^(-delta_extra+o(1)),
+
+delta_extra=0.052146195686....
+```
+
+Indeed, `sum_T m_T*e_T^2` is no larger than the corresponding oriented-orbit
+square sum, up to the fixed convention for simultaneously counting `z` and
+`-z`.  Thus, on `E_short` and outside an additional event of probability
+`N^(-tau+o(1))`, for every fixed `tau>0`,
+
+```text
+||c_c||_2^2<=N^(-(delta_extra-tau)+o(1)).            (CES)
+```
+
+The following two conditions would close the unrestricted linear nonradial
+problem:
+
+```text
+C_c >= N^(-sigma+o(1))*I,                            (CS1)
+
+eta_N
+  :=||A_r^(-1/2)*B_rc*C_c^(-1/2)||_op=o(1).          (CS2)
+```
+
+Here `(CS1)` is a centered spectral floor and `(CS2)` is a normalized
+approximate-equitability condition.  To see their effect, put
+
+```text
+x=A_r^(-1/2)*a_r,       y=C_c^(-1/2)*c_c,
+K_c=A_r^(-1/2)*B_rc*C_c^(-1/2).
+```
+
+The exact Schur identity is
+
+```text
+bar(h)^T*bar(Gamma)^(-1)*bar(h)
+  = ||x||_2^2
+    +(y-K_c^T*x)^T*(I-K_c^T*K_c)^(-1)*(y-K_c^T*x).
+                                                               (CS)
+```
+
+The radial theorem gives
+
+```text
+Q_rad:=||x||_2^2=(1+o_p(1))/J_*,
+J_*<=N^(F+o(1)),       F=0.00731732816...,
+```
+
+and hence `Q_rad>=N^(-F-o(1))`.  By `(CES)` and `(CS1)`,
+
+```text
+||y||_2^2
+  <=N^(sigma-delta_extra+tau+o(1))=o(Q_rad)
+```
+
+whenever `tau>0` is fixed sufficiently small and
+
+```text
+sigma < delta_extra-F = 0.044828867526....            (CST)
+```
+
+Together with `(CS2)`, formula `(CS)` then makes the full nonradial dual
+`(1+o(1))*Q_rad`; equivalently, the unrestricted linear nonradial and radial
+optimal Rayleigh ratios agree to `1+o(1)`.
+
+Condition `(CS2)` has a direct row-regularity formulation.  A sufficient
+condition is
+
+```text
+||B_rc||_F^2
+  =o(lambda_min(A_r)*lambda_min(C_c)).                (RR)
+```
+
+For `T in I_r`, define
+
+```text
+d_(T,s)=sum_(W in I_s)m_W*Gamma_(T,W),
+
+bar(d)_(r,s)
+  =n_r^(-1)*sum_(T in I_r)m_T*d_(T,s).
+```
+
+Then the exact identity
+
+```text
+||B_rc||_F^2
+  =sum_s n_s^(-1)*sum_r sum_(T in I_r)
+       m_T*(d_(T,s)-bar(d)_(r,s))^2                 (RRI)
+```
+
+makes `(RR)` a square-average within-cell row-sum theorem.  The leading
+centered-signal identity, `(CES)`, and the implication
+`(CS1)+(CS2)=>(CS)` are proved.  What remains open is to prove `(CS1)` and
+`(CS2)`, or `(RR)`, for the actual random retained buckets.  The off-cell
+`Xi` estimate and coherence alone do not imply either condition.
 
 For the one deterministic degree-symmetric resolvent optimizer, the missing
 quenched statement is narrower.  Put into `E_ng(Y)` the entire actual
@@ -12523,8 +12924,11 @@ ratio holds on the entire occupied-cell quotient.  Empty cells still defeat
 whole-space inverse and coefficient-norm stability.  An augmented-PSD
 same-cell algebraic witness with `Xi=0` shows that these inputs do not imply
 an unrestricted nonradial theorem; it is not a modular counterexample.
-Unrestricted same-cell nonradial weights and nonlinear sign performance
-remain open.
+A multiplicity-corrected centered-Schur interface shows that the full linear
+extension would follow from a centered spectral floor with exponent below
+`0.044828...` and normalized within-cell row regularity.  Those inputs remain
+unproved; unrestricted same-cell nonradial weights and nonlinear sign
+performance remain open.
 Bucket-sum-only rehash medians are only margin transforms of the same path
 sum, while a positive three-character likelihood
 model shows that fixed
@@ -12554,8 +12958,11 @@ false.  For the actual modular law at visibility one, the exact alternating
 closure expansion makes the cubic formal-level contribution at most
 `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
 closure levels at least five to contribute at least
-`N^(0.021392...+o(1))`.  This proves necessary high-order cancellation, not
-the final Wagner sign.  More sharply, two valid nonnegative-Walsh likelihood
+`N^(0.021392...+o(1))`.  The actual automatic quintic alone contributes at
+least `N^(0.0679559...+o(1))`, so the absolute formal-level mass and its
+inequality condition number are exponentially larger still.  This is not an
+algorithm lower bound and does not determine the level-at-least-seven tail or
+final Wagner sign.  More sharply, two valid nonnegative-Walsh likelihood
 completions have
 the same exact symmetric base law, positive linear signal, and every residual
 projection against polynomials of degree at most `M-1`.  Their conditional
@@ -12628,8 +13035,11 @@ polynomially many bits.  Standard coefficient-explicit Cayley-transform/Sturm
 and
 Markov--Lukacs/SOS conversions have `Omega(N)` size, while the threshold
 sequence along every dyadic stride `s<=M` has exact minimal recurrence order
-`2*q+1` with high probability.  Custom sparse/circuit and random approximate
-real-root locators remain open.
+`2*q+1` with high probability.  An adversarial short-arc reduction from
+Plaisted makes coefficient-uniform exact counting NP-hard already for
+`M=N^(1/9)` and at most `q=12*log_2(N)` rational Laurent terms.  It leaves the
+iid-Gaussian and simple-root promise open.  Custom sparse/circuit and random
+approximate real-root locators remain open.
 Rejection-based quantum tilting
 returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
 only `M^o(1)` expected rare-cap crossings and accepted indices, so the

@@ -167,8 +167,11 @@ polynomially many bits.  Standard coefficient-explicit Cayley-transform/Sturm
 and
 Markov--Lukacs/SOS conversions have `Omega(N)` size, while the threshold
 sequence along every dyadic stride `s<=M` has exact minimal recurrence order
-`2*q+1` with high probability.  Custom sparse/circuit and random approximate
-real-root locators remain open.
+`2*q+1` with high probability.  An adversarial short-arc reduction from
+Plaisted makes coefficient-uniform exact counting NP-hard already for
+`M=N^(1/9)` and at most `q=12*log_2(N)` rational Laurent terms.  It leaves the
+iid-Gaussian and simple-root promise open.  Custom sparse/circuit and random
+approximate real-root locators remain open.
 Rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives
 only
 `M^o(1)` expected crossings and accepted indices, leaving the implicit
@@ -305,8 +308,11 @@ ratio holds on the entire occupied-cell quotient.  Empty cells still defeat
 whole-space inverse and coefficient-norm stability.  An augmented-PSD
 same-cell algebraic witness with `Xi=0` shows that these inputs do not imply
 an unrestricted nonradial theorem; it is not a modular counterexample.
-Unrestricted same-cell nonradial weights and nonlinear performance remain
-open.
+A multiplicity-corrected centered-Schur interface shows that the full linear
+extension would follow from a centered spectral floor with exponent below
+`0.044828...` and normalized within-cell row regularity.  Those inputs remain
+unproved; unrestricted same-cell nonradial weights and nonlinear performance
+remain open.
 Bucket-sum-only random rehash medians contain only the original path-sum
 information, while a fixed
 positive pair-overlap law can yield either sign of prediction correlation.
@@ -335,8 +341,11 @@ false.  For the actual modular law at visibility one, the exact alternating
 closure expansion makes the cubic formal-level contribution at most
 `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
 closure levels at least five to contribute at least
-`N^(0.021392...+o(1))`.  This proves necessary high-order cancellation, not
-the final Wagner sign.  More sharply, two valid nonnegative-Walsh likelihood
+`N^(0.021392...+o(1))`.  The actual automatic quintic alone contributes at
+least `N^(0.0679559...+o(1))`, so the absolute formal-level mass and its
+inequality condition number are exponentially larger still.  This is not an
+algorithm lower bound and does not determine the level-at-least-seven tail or
+final Wagner sign.  More sharply, two valid nonnegative-Walsh likelihood
 completions have
 the same exact symmetric base law, positive linear signal, and every residual
 projection against polynomials of degree at most `M-1`.  Their conditional
