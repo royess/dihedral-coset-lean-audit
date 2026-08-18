@@ -152,10 +152,11 @@ positive formula fixed before the query needs at least
 `|I|` exponential leaves for any global finite-factor approximation.
 Conversely, a typical rare-cap row has an `N^o(1)` near-cap support whose
 sparse prefix sums approximate every interval additively within
-`exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  The continuous
-term-separable interval envelope still forces `Omega(M)` terminal cells, and
-enumerating all critical points costs `Omega(M)` with constant probability.
-Root conditioning
+`exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  Even the sum of exact
+discrete per-frequency maxima exceeds `u` on every nonsingleton cell with high
+probability, forcing a frequency-separable tree to expose all `Theta(M)`
+singletons.  Enumerating all critical points also costs `Omega(M)` with
+constant probability.  Root conditioning
 needs only polynomially many bits; output-sensitive structured threshold-root
 counting and query-adaptive cancellation remain open.
 Rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives
@@ -313,9 +314,11 @@ scale.  A separate automatic order-three family gives
 sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
 exponential lower bound for `||E[R|Z]||_2` and for at least one available
 degree-two-or-three orthogonal coefficient.  Small regression is therefore
-false.  More sharply, two valid nonnegative-Walsh likelihood completions have
-the same exact symmetric base law, `P_2/P_3` data, and positive raw cubic, but
-opposite Wagner correlations.  These completions are abstract rather than
+false.  More sharply, at every fixed cutoff two valid nonnegative-Walsh
+likelihood completions have the same exact symmetric base law, positive linear
+signal, and all residual projections against polynomials through the cutoff,
+but opposite full and residual Wagner correlations.  These completions are
+abstract rather than
 random modular laws; the all-degree signed projection remains open.  These are
 information-sufficiency obstructions and do not settle the random modular
 sign.

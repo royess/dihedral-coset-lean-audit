@@ -170,11 +170,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
   exponential lower bound for `||E[R|Z]||_2` and for at least one available
   degree-two-or-three orthogonal coefficient.  Small regression is therefore
-  false.  More sharply, two valid nonnegative-Walsh likelihood completions
-  have the same exact symmetric base law, `P_2/P_3` data, and positive raw
-  cubic,
-  but opposite Wagner correlations.  These completions are abstract rather
-  than random modular laws; the all-degree signed projection remains open.
+  false.  More sharply, at every fixed cutoff two valid nonnegative-Walsh
+  likelihood completions have the same exact symmetric base law, positive
+  linear signal, and all residual projections against polynomials through the
+  cutoff, but
+  opposite full and residual Wagner correlations.  These completions are
+  abstract rather than random modular laws; the all-degree signed projection
+  remains open.
   These are information-sufficiency obstructions: the modular example is
   highly
   atypical, and the random-instance outside signed spectrum remains open.
@@ -239,10 +241,11 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `|I|` exponential leaves for any global finite-factor approximation.
   Conversely, a typical rare-cap row has an `N^o(1)` near-cap support whose
   sparse prefix sums approximate every interval additively within
-  `exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  The continuous
-  term-separable interval envelope still forces `Omega(M)` terminal cells,
-  and enumerating all critical points costs `Omega(M)` with constant
-  probability.  Root
+  `exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  Even the sum of exact
+  discrete per-frequency maxima exceeds `u` on every nonsingleton cell with
+  high probability, forcing a frequency-separable tree to expose all
+  `Theta(M)` singletons.  Enumerating all critical points also costs
+  `Omega(M)` with constant probability.  Root
   conditioning needs only polynomially many bits; output-sensitive structured
   threshold-root counting and query-adaptive cancellation remain open.
   Rejection-based quantum tilting
@@ -3386,59 +3389,119 @@ in `q,log(N)` and their actual number.  This is an output-sensitive near-cap
 reduction, not a completed table-free enumerator and not a multiplicative
 approximation when `Z_I` is small.
 
-Three scoped facts sharpen the remaining near-cap location primitive.  Take
-iid uniform public labels, an independent Gaussian filter row, and centered
-representatives `nu_i in [-1/2,1/2)` of `Y_i/N`.  Write
+Three scoped facts sharpen the remaining near-cap location primitive.  The
+first is an exact discrete barrier, stronger than the continuous interval
+envelope.  Put `m=floor(M)`, `q=12*n`, `N=2^n`, and `M=N^gamma` with fixed
+`0<gamma<=1/9`.  Let `Y_i` be iid uniform on `Z_N`, independently of standard
+Gaussian pairs `G_i=(C_i,D_i)`.  Write
 
 ```text
-X(t)=q^(-1/2)*sum_i R_i*cos(2*pi*nu_i*t-phi_i),
+e(theta)=(cos(theta),sin(theta)),
+theta_(i,a)=2*pi*Y_i*a/N,
+T_i(a)=<G_i,e(theta_(i,a))>,
+
+U_disc(A)=q^(-1/2)*sum_i max_(a in A) T_i(a).
 ```
 
-where the `R_i` are iid Rayleigh variables.  Put `v=u-L`, take `q=12*n`,
-and suppose `0<gamma<=1/9`.  For a real interval `J`, define the continuous
-term-separable envelope
+If `barPhi(u)=1/M` and `v=u-L<u`, then with probability
+`1-exp(-Omega(n))`, simultaneously for every
+`A subset {0,...,m-1}` with `|A|>=2`,
 
 ```text
-U_sep(J)=q^(-1/2)*sum_i sup_(t in J)
-           R_i*cos(2*pi*nu_i*t-phi_i).
+U_disc(A)>u>v.
 ```
 
-With probability `1-exp(-Omega(q))`, simultaneously for every interval of
-length at least six,
+Fix distinct `a,b`, put `d=a-b`, and let `K=N/gcd(d,N)`.  Since
+`0<|d|<M`, one has `K>N/M=N^(1-gamma)`, and hence `K>=4` for large `n`.
+For one frequency,
 
 ```text
-U_sep(J)>v.
+max{T_i(a),T_i(b)}
+  =[T_i(a)+T_i(b)+|T_i(a)-T_i(b)|]/2,
+
+E_G[max{T_i(a),T_i(b)} | Y_i]
+  =sqrt(2/pi)*|sin(pi*d*Y_i/N)|.
 ```
 
-Indeed, every term with `|nu_i|>=1/6` completes a full period and has
-supremum `R_i`; every remaining supremum is at least `-R_i`.  Hence
+Multiplication by `d/gcd(d,N)` permutes `Z_K`, so
 
 ```text
-U_sep(J)>=q^(-1/2)*[
-  sum_(|nu_i|>=1/6) R_i-sum_(|nu_i|<1/6) R_i].
+E_Y[|sin(pi*d*Y_i/N)|]
+  = K^(-1)*sum_(r=0)^(K-1) sin(pi*r/K)
+  = K^(-1)*cot(pi/(2*K))
+  >= (1+sqrt(2))/4
+  > 3/5.
 ```
 
-The signed Rayleigh summands are iid subexponential and have mean
+Therefore, for
 
 ```text
-[(2/3)-(1/3)]*E[R_i]+O(1/N)
-  = sqrt(pi/2)/3+o(1).
+S_d=q^(-1)*sum_i |sin(pi*d*Y_i/N)|,
 ```
 
-Bernstein concentration makes the lower bound at least
-`sqrt(pi/2)*sqrt(q)/6`, while Mills gives
+Hoeffding gives
 
 ```text
-u/sqrt(q) -> sqrt(gamma*ln(2)/6)
-           <= sqrt(ln(2)/54)
-           < sqrt(pi/2)/6.
+Pr_Y[S_d<1/2] <= exp(-q/50).
 ```
 
-Thus recursive interval pruning whose empty-cell certificate is no stronger
-than this canonical continuous sum of exact term ranges must refine the whole
-row to intervals shorter than six.  It processes `Omega(M)` terminal
-intervals, independently of the actual near-cap output size.  This statement
-does not cover exact discrete term maxima or a joint cancellation certificate.
+For fixed labels, `F_ab=U_disc({a,b})` is one-Lipschitz in the `2*q`
+Gaussian coordinates.  On `S_d>=1/2`,
+
+```text
+E_G[F_ab | Y]
+  =sqrt(2/pi)*sqrt(q)*S_d
+  >=[sqrt(2/pi)/2]*sqrt(q).
+```
+
+Also
+
+```text
+u/sqrt(q) <= sqrt(2*ln(M)/q)
+           <= sqrt(ln(2)/54).
+```
+
+With
+
+```text
+c_0=sqrt(2/pi)/2-sqrt(ln(2)/54)
+   =0.2856459481...,
+```
+
+Gaussian concentration gives
+
+```text
+Pr_G[F_ab<=u | Y,S_d>=1/2]
+  <= exp(-c_0^2*q/2).
+```
+
+A union bound over fewer than `M^2/2` pairs has the two exponent margins
+
+```text
+6/25-2*ln(2)/9=0.0859672932...,
+6*c_0^2-2*ln(2)/9=0.3355289394...
+```
+
+at the worst split `gamma=1/9`.  This proves the simultaneous pair claim.
+Every nonsingleton `A` contains a pair, and termwise monotonicity gives
+`U_disc(A)>=U_disc({a,b})`.
+
+Consequently any recursive enumerator--contiguous dyadic, low-bit or
+`2`-adic, or adaptively shaped--whose pruning certificate is the sum of the
+exact discrete per-frequency maxima cannot prune a nonsingleton cell.  It
+must expose all `Theta(M)` singleton leaves although the true near-cap support
+has size `N^o(1)` with high probability.  This does not cover a joint
+certificate or root counter that preserves cancellation among frequencies.
+
+For the next two continuous-route statements, let
+`nu_i in [-1/2,1/2)` be the centered representative of `Y_i/N` and write
+`G_i=R_i*(cos(phi_i),sin(phi_i))`.  Define
+
+```text
+X(t)=q^(-1/2)*sum_i R_i*cos(2*pi*nu_i*t-phi_i).
+```
+
+At integer `t=a`, this agrees with `q^(-1/2)*sum_i T_i(a)`.
 
 Enumerating every critical point before checking its height is also not
 output-sensitive.  Conditional on the labels, the adjacent derivative
@@ -9024,6 +9087,126 @@ without changing any polynomial datum through degree three.  This is an
 abstract likelihood completion on the same Boolean space, not a claim that
 random modular relation counts realize either completion.
 
+The obstruction persists through every fixed finite cutoff.  Fix
+
+```text
+D=2*ell+1>=3
+```
+
+and an odd `M>=2*D+1`.  Continue with the same independent signs, and for
+`0<=r<=(M-1)/2` put
+
+```text
+theta_0=1,
+theta_r=(2*r-1)!!/product_(j=1)^r (M-2*j).
+```
+
+The exact majority coefficients satisfy
+
+```text
+hat(f)_(2*r+1)=(-1)^r*alpha_M*theta_r,
+hat(f)_(2*r)=0,
+
+hat(f)_(k+2)=-[k/(M-k-1)]*hat(f)_k
+```
+
+for odd `k<M`.  Write
+
+```text
+s=(-1)^ell,
+c=theta_(ell+1)/(32*M),
+u=D/[16*(M-D-1)],
+v=1/8,
+a_D=u/choose(M,D),
+b_D=v/choose(M,D+2).
+```
+
+Because
+
+```text
+theta_(ell+1)/theta_ell=D/(M-D-1),
+```
+
+one also has
+
+```text
+u=2*c*M/theta_ell,       v=4*c*M/theta_(ell+1).
+```
+
+Define
+
+```text
+H_0=c*E_1+a_D*E_D,
+H_1=c*E_1+a_D*E_D+b_D*E_(D+2),
+R_i=H_i-c*Z.
+```
+
+Every displayed Walsh coefficient is nonnegative.  Their coefficient masses
+are
+
+```text
+||hat(H_0)||_1
+  =theta_(ell+1)/32+D/[16*(M-D-1)],
+
+||hat(H_1)||_1
+  =theta_(ell+1)/32+D/[16*(M-D-1)]+1/8
+  <=7/32.
+```
+
+Here `theta_(ell+1)<=1`, and `M-D-1>=D`.  Thus `H_0,H_1` define valid balanced
+likelihood deviations with the same uniform base law.
+
+The symmetric Walsh polynomials `E_k` are mutually orthogonal and are exact
+degree-`k` polynomials in `Z`.  Therefore
+
+```text
+Proj_(degree<=D) H_0=Proj_(degree<=D) H_1=c*E_1+a_D*E_D,
+
+Proj_(degree<=D) R_0=Proj_(degree<=D) R_1=a_D*E_D.
+```
+
+Equivalently, for every `0<=m<=D`,
+
+```text
+<H_0,Z^m>_U=<H_1,Z^m>_U,
+<R_0,Z^m>_U=<R_1,Z^m>_U.
+```
+
+Their common selected-path and top residual moments are strictly positive:
+
+```text
+<H_0,Z>_U=<H_1,Z>_U=c*M>0,
+<R_0,Z^D>_U=<R_1,Z^D>_U=u*D!>0.
+```
+
+Nevertheless both the full and residual majority correlations reverse.  Put
+`h=alpha_M*c*M>0`.  The singleton, degree-`D`, and degree-`D+2`
+contributions are respectively
+
+```text
+h,       2*s*h,       -4*s*h.
+```
+
+Hence
+
+```text
+<H_0,f>_U=h*(1+2*s),
+<H_1,f>_U=h*(1-2*s),
+
+<R_0,f>_U= 2*s*h,
+<R_1,f>_U=-2*s*h.
+```
+
+The full pair is `(3*h,-h)` when `s=1` and `(-h,3*h)` when `s=-1`.
+Given any fixed polynomial or orthogonal cutoff `K`, choose an odd
+`D>=max(3,K)`.  The two nonnegative-Walsh likelihoods then have the same base
+law, the same positive linear signal, and identical residual projections
+against polynomials through degree `K`, but opposite full and residual
+majority signs.  This is again an
+abstract completion.  Its degree-`D+2` mass is spread across all
+`choose(M,D+2)` characters and is not asserted to arise from the random
+modular coefficient counts.
+
 For orientation only, the generic full-rank scale `M^(j/2)/N` has exponents
 
 ```text
@@ -11607,9 +11790,11 @@ that regression scale.  A separate automatic order-three family yields
 sixth-Wick theorem, `E_U[Z^6]=(15+o(1))*sigma^6`, converts this into the same
 exponential lower bound for `||E[R|Z]||_2` and for at least one available
 degree-two-or-three orthogonal coefficient.  Small regression is therefore
-false.  More sharply, two valid nonnegative-Walsh likelihood completions have
-the same exact symmetric base law, `P_2/P_3` data, and positive raw cubic, but
-opposite Wagner correlations.  These completions are abstract rather than
+false.  More sharply, at every fixed cutoff two valid nonnegative-Walsh
+likelihood completions have the same exact symmetric base law, positive linear
+signal, and all residual projections against polynomials through the cutoff,
+but opposite full and residual Wagner correlations.  These completions are
+abstract rather than
 random modular laws; the all-degree signed projection remains open.
 These are information-sufficiency obstructions; the modular example is
 highly atypical, so the random-instance Wagner sign remains uncontrolled.
@@ -11662,10 +11847,11 @@ subtraction-free positive formula fixed before the query needs at least
 `|I|` exponential leaves for any global finite-factor approximation.
 Conversely, a typical rare-cap row has an `N^o(1)` near-cap support whose
 sparse prefix sums approximate every interval additively within
-`exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  The continuous
-term-separable interval envelope still forces `Omega(M)` terminal cells, and
-enumerating all critical points costs `Omega(M)` with constant probability.
-Root conditioning
+`exp(u^2)*n^(-A-5/2+o(1))` for every fixed `A>0`.  Even the sum of exact
+discrete per-frequency maxima exceeds `u` on every nonsingleton cell with high
+probability, forcing a frequency-separable tree to expose all `Theta(M)`
+singletons.  Enumerating all critical points also costs `Omega(M)` with
+constant probability.  Root conditioning
 needs only polynomially many bits; output-sensitive structured threshold-root
 counting and query-adaptive cancellation remain open.
 Rejection-based quantum tilting
