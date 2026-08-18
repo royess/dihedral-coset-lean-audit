@@ -156,9 +156,18 @@ sparse prefix sums approximate every interval additively within
 discrete per-frequency maxima exceeds `u` on every nonsingleton cell with high
 probability, forcing a frequency-separable tree to expose all `Theta(M)`
 singletons.  Enumerating all critical points also costs `Omega(M)` with
-constant probability.  Root conditioning
-needs only polynomially many bits; output-sensitive structured threshold-root
-counting and query-adaptive cancellation remain open.
+constant probability.  A cancellation-aware thick-strip argument count gives
+`2*rho_freq*ell+O(q)` complex zeros over width `ell`, where
+`rho_freq=max_i|nu_i|`, so thick-strip complex-zero-free pruning
+needs `Omega(M/q)` cells; a thin contour still has `Omega(M)` explicit
+denominator crossings with probability `1/2-o(1)`.  These facts do not block
+direct real root counting or aggregate winding.  Root conditioning needs only
+polynomially many bits.  Standard coefficient-explicit Cayley-transform/Sturm
+and
+Markov--Lukacs/SOS conversions have `Omega(N)` size, while the threshold
+sequence along every dyadic stride `s<=M` has exact minimal recurrence order
+`2*q+1` with high probability.  Custom sparse/circuit and random approximate
+real-root locators remain open.
 Rejection-based quantum tilting returns to `sqrt(M/k)`.  Kac--Rice gives
 only
 `M^o(1)` expected crossings and accepted indices, leaving the implicit

@@ -246,9 +246,18 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   discrete per-frequency maxima exceeds `u` on every nonsingleton cell with
   high probability, forcing a frequency-separable tree to expose all
   `Theta(M)` singletons.  Enumerating all critical points also costs
-  `Omega(M)` with constant probability.  Root
-  conditioning needs only polynomially many bits; output-sensitive structured
-  threshold-root counting and query-adaptive cancellation remain open.
+  `Omega(M)` with constant probability.  A cancellation-aware thick-strip
+  argument count gives `2*rho_freq*ell+O(q)` complex zeros over width `ell`,
+  where `rho_freq=max_i|nu_i|`, so thick-strip complex-zero-free pruning needs
+  `Omega(M/q)` cells; a thin contour still has
+  `Omega(M)` explicit denominator crossings with probability `1/2-o(1)`.
+  These facts do not block direct real root counting or aggregate winding.
+  Root conditioning needs only polynomially many bits.  Standard coefficient-
+  explicit Cayley-transform/Sturm and Markov--Lukacs/SOS conversions have
+  `Omega(N)`
+  size, while the threshold sequence along every dyadic stride `s<=M` has
+  exact minimal recurrence order `2*q+1` with high probability.  Custom
+  sparse/circuit and random approximate real-root locators remain open.
   Rejection-based quantum tilting
   cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
   only
@@ -3390,7 +3399,7 @@ in `q,log(N)` and their actual number.  This is an output-sensitive near-cap
 reduction, not a completed table-free enumerator and not a multiplicative
 approximation when `Z_I` is small.
 
-Three scoped facts sharpen the remaining near-cap location primitive.  The
+Several scoped facts sharpen the remaining near-cap location primitive.  The
 first is an exact discrete barrier, stronger than the continuous interval
 envelope.  Put `m=floor(M)`, `q=12*n`, `N=2^n`, and `M=N^gamma` with fixed
 `0<gamma<=1/9`.  Let `Y_i` be iid uniform on `Z_N`, independently of standard
@@ -3491,10 +3500,11 @@ Consequently any recursive enumerator--contiguous dyadic, low-bit or
 `2`-adic, or adaptively shaped--whose pruning certificate is the sum of the
 exact discrete per-frequency maxima cannot prune a nonsingleton cell.  It
 must expose all `Theta(M)` singleton leaves although the true near-cap support
-has size `N^o(1)` with high probability.  This does not cover a joint
-certificate or root counter that preserves cancellation among frequencies.
+has size `N^o(1)` with high probability.  This does not cover a general joint
+certificate or a direct real root counter.  The next statement treats only a
+thick-strip, complex-zero-free joint route.
 
-For the next two continuous-route statements, let
+For the following continuous-route statements, let
 `nu_i in [-1/2,1/2)` be the centered representative of `Y_i/N` and write
 `G_i=R_i*(cos(phi_i),sin(phi_i))`.  Define
 
@@ -3503,6 +3513,116 @@ X(t)=q^(-1/2)*sum_i R_i*cos(2*pi*nu_i*t-phi_i).
 ```
 
 At integer `t=a`, this agrees with `q^(-1/2)*sum_i T_i(a)`.
+
+There is a cancellation-aware barrier for full thick-strip zero tests.  Extend
+the real trigonometric polynomial to the entire function
+
+```text
+F(z)=X(z)-v
+    =q^(-1/2)*sum_i R_i*cos(2*pi*nu_i*z-phi_i)-v.
+```
+
+Write
+
+```text
+rho_freq=max_i |nu_i|,
+rho_next=the second largest value among the |nu_i|,
+Delta=rho_freq-rho_next,
+H_n=2*n^4*ln(n).
+```
+
+With probability `1-O(n^(-2))`,
+
+```text
+rho_freq>=1/4,         Delta>=n^(-4),
+R_ext>=n^(-3),
+```
+
+where `R_ext` is the Rayleigh amplitude at the unique extreme absolute
+frequency.  Indeed, for `i!=j`,
+
+```text
+Pr[||nu_i|-|nu_j||<n^(-4)] <= 4*n^(-4)+2/N,
+Pr[rho_freq<1/4] <= (1/2+2/N)^q,
+Pr[R_ext<n^(-3)] <= n^(-6)/2.
+```
+
+A Rayleigh Chernoff bound also gives `sum_i R_i<=3*q` with exponentially high
+probability.  Since `|v|<=n` here, the total coefficient mass `B` and the
+extreme coefficient magnitude `A` obey `B/A<=n^5`.  Thus, uniformly for all
+real `x` and `h>=H_n`,
+
+```text
+F(x+i*h)
+ =a_(-rho_freq)
+    *exp(-2*pi*i*rho_freq*x+2*pi*rho_freq*h)*(1+eta_+),
+
+F(x-i*h)
+ =a_(rho_freq)
+    *exp(2*pi*i*rho_freq*x+2*pi*rho_freq*h)*(1+eta_-),
+
+|eta_+|,|eta_-|
+ <=n^5*exp(-2*pi*Delta*h)
+ <=n^(5-4*pi)<1/4.
+```
+
+Let `Z_F(a,b;h)` count zeros with multiplicity in the interior of
+
+```text
+{z:a<=Re(z)<=b, |Im(z)|<=h}.
+```
+
+If the two vertical sides contain no zero of `F`, then
+
+```text
+|Z_F(a,b;h)-2*rho_freq*(b-a)| <= 2*q+2.            (CZ)
+```
+
+The horizontal contribution is the main term: the lower edge traverses the
+`+rho_freq` mode from left to right, while the upper edge traverses the
+`-rho_freq` mode from right to left.  To bound a vertical edge, collect equal
+exponents and write
+
+```text
+F(x_0+i*y)=sum_(j=1)^s c_j*exp(mu_j*y),       s<=2*q+1,
+```
+
+with distinct real `mu_j`.  After a generic phase rotation, its imaginary
+part is a nonzero real exponential polynomial.  The Chebyshev-system/Rolle
+argument gives at most `s-1` real zeros.  Every net unwrapped advance of `pi`
+in the argument forces another such zero, so the net argument change on one
+vertical edge is at most `pi*(2*q+1)`.  The qualifier `net` is essential; no
+total-variation bound is asserted.  Combining both vertical edges with the
+horizontal dominance and applying the argument principle proves `(CZ)`.
+
+Every fixed, or countable predetermined family of, vertical lines is almost
+surely zero-free.  One can condition on all Gaussian coordinates except the
+extreme pair: away from the real axis its contribution has a nonsingular
+real two-dimensional coefficient map.  On each compact subset of
+`R\{0}`, solving `F(x_0+i*y)=0` expresses that coefficient pair as a `C^1`
+function of `y`, whose image is a planar null set.  A countable exhaustion,
+together with the nontrivial affine null set at `y=0`, proves the claim.
+Boundary lines can therefore be perturbed when needed.
+
+A zero-free thick-strip cell consequently has
+
+```text
+b-a <= (q+1)/rho_freq <= 4*(q+1).
+```
+
+Any partition of `[0,floor(M)]` whose pruning rule requires the whole box of
+half-height at least `H_n` to be complex-zero-free needs `Omega(M/q)` cells.
+The full strip itself contains
+
+```text
+Z_F(0,floor(M);h)=2*rho_freq*floor(M)+O(q)=Theta(M)
+```
+
+complex zeros.  This retains cancellation across frequencies, but it is only
+a barrier to full-strip zero-free box pruning and to explicitly isolating all
+complex zeros.  It does not rule out a thinner or adaptive contour, a direct
+real-axis level-root counter, or an aggregate winding oracle that does not
+isolate the counted zeros.
 
 Enumerating every critical point before checking its height is also not
 output-sensitive.  Conditional on the labels, the adjacent derivative
@@ -3545,6 +3665,34 @@ unit interval.  Thus, with probability `1/2-o(1)`, a method that first
 isolates every derivative root emits and processes `Omega(M)` critical
 points.  This is not a lower bound for a root counter applied directly to
 `X-v`.
+
+A thin-contour Cauchy-index implementation has a related, narrower problem.
+Set `h=M^(-2)` and
+
+```text
+A_h(t)=Re(F(t+i*h)),
+B_h(t)=Im(F(t+i*h)).
+```
+
+Termwise Taylor expansion and `sum_i R_i=O(q)` give, with exponentially high
+probability,
+
+```text
+max_(0<=a<=M, a integer)
+  |B_h(a)/h-X'(a)|
+    = O(h^2*sqrt(q))
+    = O(M^(-4)*sqrt(q)).
+```
+
+On the typical label event `Var(X'|Y)=Theta(1)`.  Gaussian
+anti-concentration over the integer points therefore makes all these signs
+agree with those of `X'` outside an `o(1)` event.  The preceding adjacent-
+derivative bound then gives `Omega(M)` distinct unit-interval zeros of `B_h`
+with probability at least `1/2-o(1)`.  Thus a thin-horizontal-contour routine
+that forms `A_h/B_h` and explicitly isolates every denominator zero
+still processes `Omega(M)` crossings.  This does not block the reciprocal
+quotient, direct winding integration, a thicker or adaptive contour, or a
+compact root-count oracle.
 
 Numerical conditioning is not the obstruction.  Put
 
@@ -3598,8 +3746,60 @@ Therefore, with failure at most `O(n^(-(B+3)))+exp(-Omega(q))`, polynomially
 many bits suffice to classify every integer point and isolate every
 continuous crossing.  If one had a polynomial-time interval root-count oracle
 for the compact trigonometric representation of `X-v`, ordinary bisection
-would be output-sensitive.  The missing primitive is this structured root
-counter, not precision or root separation.
+would be output-sensitive.  The missing primitive is this structured direct
+real root counter, not precision or root separation.
+
+The standard coefficient-explicit Cayley-transform route is nevertheless
+large.  For all sufficiently large `n`, one has `v=u-L>0`.  Let
+`k_i in [-N/2,N/2)` be the centered integer representative of `Y_i`, and put
+
+```text
+f(theta)=q^(-1/2)*sum_i [
+  C_i*cos(k_i*theta)+D_i*sin(k_i*theta)]-v,
+
+X(t)-v=f(2*pi*t/N),
+D_*=max_i |k_i|.
+```
+
+For `0<=t<=M<N/2`, set `x=tan(pi*t/N)`.  The Cayley numerator
+
+```text
+P(x)=(1+x^2)^(D_*)*f(2*atan(x))
+```
+
+is a real polynomial.  Conditional on the labels, every coefficient is
+affine in the Gaussian amplitudes, and
+
+```text
+[x^(2*j)]P=-v*choose(D_*,j)+L_j(G),       0<=j<=D_*,
+```
+
+where `L_j` is a homogeneous Gaussian linear form.  If `L_j` vanishes
+identically, the coefficient is deterministically nonzero; otherwise exact
+cancellation has probability zero.  Hence all `D_*+1` even coefficients are
+nonzero and `deg(P)=2*D_*` almost surely.  Moreover,
+
+```text
+Pr[D_*<N/4]=((N/2-1)/N)^q<2^(-q).
+```
+
+A Sturm route that first materializes the monomial coefficient list already
+has `Omega(N)` size.  On a real interval `[a,b]`, for either sign
+`sigma in {+1,-1}`, the canonical degree-complete Markov--Lukacs
+representation of `sigma*P>=0`
+
+```text
+sigma*P
+  = z_(D_*)^T*Q_0*z_(D_*)
+    +(x-a)*(b-x)*z_(D_*-1)^T*Q_1*z_(D_*-1)
+```
+
+uses PSD blocks of orders `D_*+1` and `D_*`.  This is an `Omega(N)` barrier
+for the standard coefficient-explicit Cayley-transform/Sturm and monomial-Gram
+SOS
+routes.  It is not a lower bound for a sparse or factored arithmetic-circuit
+root counter, a custom SOS encoding, or a random approximate locator;
+`(1+x^2)^(D_*)` itself has a compact circuit.
 
 The phase-averaged coefficient energy is not uniform across residues, so one
 cannot strengthen this observation by simply assigning `1/N` of the energy
@@ -3694,16 +3894,29 @@ such a sparse, output-sensitive guarantee; the exact algorithm of
 degree-dependent complexity.  The small output count alone does not locate
 the excursions.
 
-Finally, the integer score sequence is a linear recurrence of order at most
-`2*q`; subtracting the threshold adds the root `1`.  Under every dyadic
-stride `2^t` with `2^t<=M`, its roots remain distinct with failure
-probability `O(q^2*M/N)`.  Prony reconstruction therefore recovers only the
-already known public frequencies and does not lower the recurrence order.
+Finally, fix a dyadic stride `s=2^t<=M`.  The characteristic roots of
+`j -> X(a+s*j)-v` are
+
+```text
+1, exp(2*pi*i*s*Y_i/N), exp(-2*pi*i*s*Y_i/N),     1<=i<=q.
+```
+
+For fixed `s`, a collision or a signed root equal to `1` has probability
+`O(q^2*s/N)`.  Summing over all dyadic `s<=M` gives failure
+`O(q^2*M/N)`.  Off this event the roots are pairwise distinct; `v!=0` and
+every Gaussian mode amplitude is nonzero almost surely.  Vandermonde
+independence therefore makes the minimal constant-coefficient recurrence
+order exactly `2*q+1` simultaneously for every such stride.  Prony
+reconstruction only recovers the already known public frequencies and does
+not lower this order.
+
 The recent [bounded-Skolem algorithm](https://arxiv.org/abs/2507.11234) has
 exponential dependence on recurrence order and concerns integer recurrences,
-not this growing-order Gaussian threshold problem.  This places the open
-primitive precisely: output-sensitive threshold-root location for a random
-trigonometric recurrence.
+not this growing-order Gaussian threshold problem.  The exact-order statement
+concerns the infinite sampled subsequence; it is not an exponential state-
+space lower bound and does not force a scan of a finite window.  This places
+the open primitive precisely: output-sensitive threshold-root location for a
+random trigonometric recurrence.
 
 There is, however, a rigorous barrier for the broad subclass of algorithms
 that access these examples only through statistical queries.  Let
@@ -12071,9 +12284,18 @@ sparse prefix sums approximate every interval additively within
 discrete per-frequency maxima exceeds `u` on every nonsingleton cell with high
 probability, forcing a frequency-separable tree to expose all `Theta(M)`
 singletons.  Enumerating all critical points also costs `Omega(M)` with
-constant probability.  Root conditioning
-needs only polynomially many bits; output-sensitive structured threshold-root
-counting and query-adaptive cancellation remain open.
+constant probability.  A cancellation-aware thick-strip argument count gives
+`2*rho_freq*ell+O(q)` complex zeros over width `ell`, where
+`rho_freq=max_i|nu_i|`, so thick-strip complex-zero-free pruning
+needs `Omega(M/q)` cells; a thin contour still has `Omega(M)` explicit
+denominator crossings with probability `1/2-o(1)`.  These facts do not block
+direct real root counting or aggregate winding.  Root conditioning needs only
+polynomially many bits.  Standard coefficient-explicit Cayley-transform/Sturm
+and
+Markov--Lukacs/SOS conversions have `Omega(N)` size, while the threshold
+sequence along every dyadic stride `s<=M` has exact minimal recurrence order
+`2*q+1` with high probability.  Custom sparse/circuit and random approximate
+real-root locators remain open.
 Rejection-based quantum tilting
 returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives
 only `M^o(1)` expected rare-cap crossings and accepted indices, so the
