@@ -153,13 +153,14 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   A multiplicity-corrected centered-Schur interface shows that the full
   linear extension would follow from a centered spectral floor with exponent
   below `0.044828...` and normalized within-cell row regularity.  Inside one
-  fixed `Good` exact-degree cell, the PSD orbit-feature Gram `K_orb` has exact
-  level weights `4^(-t)*choose(t,j)*(3^j+(-1)^j)`.  Three explicit hypotheses
-  reduce the missing inputs to central signed-subword occupancy, a centered
-  nonautomatic spectral bound, and normalized row sums.  The displayed
-  `F_8,F_16` diagnostics and fourth-cycle target are not proofs.  Those inputs
-  remain unproved; unrestricted same-cell nonradial weights, mixed cutoffs,
-  and nonlinear statistics remain open.
+  balanced cusp `Good` cell, the PSD orbit-feature Gram `K_orb` has exact level
+  weights `4^(-t)*choose(t,j)*(3^j+(-1)^j)`.  A finite joint trace-four
+  certificate proves central automatic occupancy `(MO1)`, with operator error
+  at most `N^(-0.0430009...+o(1))`.  The remaining inputs are the centered
+  nonautomatic spectral bound `(MO2)` and normalized row sums `(MO3)`.  The
+  displayed `F_8,F_16` diagnostics and nonautomatic fourth-cycle target do not
+  prove them.  Unrestricted same-cell nonradial weights, mixed cutoffs, and
+  nonlinear statistics remain open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -192,15 +193,16 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
   closure levels at least five to contribute at least
   `N^(0.021392...+o(1))`.  With high probability, the actual automatic
-  quintic, septic, nonic, and level-eleven contributions have signed
-  magnitudes at least
-  `N^(0.0679559...+o(1))`,
-  `N^(0.1365318...+o(1))`, `N^(0.2246470...+o(1))`, and
-  `N^(0.3303074...+o(1))`, with signs `+,-,+,-`.
+  contributions from quintic through level fifteen have signed magnitudes at
+  least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
+  `N^(0.2246470...+o(1))`, `N^(0.3303074...+o(1))`,
+  `N^(0.4518674...+o(1))`, and `N^(0.5879439...+o(1))`, with signs
+  `+,-,+,-,+,-`.
   Thus the absolute formal-level mass and its triangle-inequality condition
-  number are at least `N^(0.3303074...+o(1))`.  The strengthened projection
-  ledger first fails at level thirteen.  This is not an algorithm lower bound
-  and determines neither any fixed-cutoff tail nor the final Wagner sign.
+  number are at least `N^(0.5879439...+o(1))`.  The strengthened low-weight
+  ledger closes the displayed fixed odd levels through fifteen; higher fixed
+  levels need new audited projection bounds.  This is not an algorithm lower
+  bound and determines neither any fixed-cutoff tail nor the final Wagner sign.
   More sharply, two
   valid nonnegative-Walsh
   likelihood completions
@@ -10605,16 +10607,279 @@ eleven, not original Walsh degree.  It is a cancellation and conditioning
 barrier, not an algorithm lower bound or a fixed-cutoff tail-sign theorem;
 earlier and later positive levels still lack matching upper bounds.
 
-The same singleton-plus-weight-two entropy bound does not automatically close
-level thirteen: its `(1,1,1)` exponent is
+Sharper low-rank projection bounds close formal levels thirteen and fifteen.
+For `j=13`, direct evaluation of `(JN0)`--`(JN1)` gives
 
 ```text
-+0.0685762060234....
+z_13=0.0178270485548006...,
+Q_13(z_13)=1.28664759827969...,
+
+delta_13=0.183916589643882...,
+h_13=2.11595238413418...,
+phi_13=1.93203579449030....                             (J131)
 ```
 
-A sharper rank-one projection entropy bound is required there.  This is a
-proof-method obstruction, not evidence that the actual level fails to
-concentrate.
+The low-weight per-pattern masses are
+
+```text
+q_zero=0.777213590836411...,
+s_13   =0.00692771221064581...,
+q_two  =0.000247001323905736...,
+q_three=0.00000220165229718379....                      (J132)
+```
+
+Rank one needs a separate argument.  Let `r` be the number of coordinate
+columns with nonzero image under a rank-one rational projection.  If `r=1`,
+the image is exactly one row marginal, with law
+
+```text
+(1-p,p/2,p/2).
+```
+
+Its entropy is
+
+```text
+e_1^(13)=H_2(p)+p=a/3=0.166487817026127....             (J133)
+```
+
+If `r>=2`, the singleton atoms give nonzero image mass at least
+`4*s_13>p`.  Central symmetry gives at least one conditional bit once the
+image is nonzero.  Thus its entropy is at least `H_2(t)+t` for some `t>=p`.
+The function `H_2(t)+t` is concave on `[p,1]`, and its smaller endpoint value
+is `H_2(p)+p`; hence `(J133)` remains valid.
+
+For rank two, first suppose that exactly two coordinate images are nonzero.
+They are independent; call them `u,v`.  The other eleven images vanish.  In
+addition to the singleton and balanced weight-two atoms, every output
+`+/-u,+/-v` receives the guaranteed weight-three mass
+
+```text
+t_three=3*choose(11,2)*q_three
+       =0.000363272629035325....
+```
+
+Pooling every unlisted atom into zero therefore gives the entropy lower bound
+of the vector
+
+```text
+(R_2, (s_13+t_three) repeated 4 times,
+      q_two repeated 2 times),
+
+R_2=1-4*(s_13+t_three)-2*q_two,
+
+e_2^(13)=0.255120597680327....                          (J134)
+```
+
+If at least three coordinate images are nonzero, an extra singleton pair can
+at worst coalesce with one existing singleton pair.  The pooled vector with
+two masses `2*s_13`, two masses `s_13`, and two masses `q_two` has entropy
+`0.335766367142977...`, which is larger than `(J134)`.
+
+For rank `d>=3`, the weight-one and balanced weight-two atoms alone give the
+same pooled bound as `(J11E)`, with the new `s_13,q_two`.  The resulting
+entropy bounds, including `(J133)`--`(J134)`, are
+
+```text
+(e_0^(13),...,e_13^(13))
+ =(0,
+   0.166487817026127, 0.255120597680327,
+   0.376680080126022, 0.514805154546799,
+   0.659147449497904, 0.809664127265743,
+   0.966309673058577, 1.12903569762558,
+   1.29779071679814,  1.47251990454352,
+   1.65316481548610,  1.83966307207318,
+   2.03194801060394).                                  (J135)
+```
+
+The pooled zero bin is always the largest: even at `d=13` it has mass
+`0.781347275993914...>q_zero`.  Thus the same transfer/majorization argument
+as in `(J11E)` proves every entry in `(J135)`.  The relation-space projections
+are injective for the same reason as before: a kernel vector would be a
+one-sided relation, while the singleton atoms give each tuple full row rank.
+
+Substituting `(J135)` into the rational ledger gives
+
+```text
+Theta_13(d_L,d_R,c_rel)
+ =a*(d_L+d_R-c_rel)+c_rel
+    -6*(e_(d_L)^(13)+e_(d_R)^(13)).                    (J136)
+```
+
+Exhausting the 1014 nontrivial triples gives
+
+```text
+Theta_13<=-0.0217706082771176...,
+```
+
+uniquely worst at `(3,3,3)`; the next class `(2,2,2)` is
+`-0.0625202700071550...`.  The binary singleton ledger gives
+`6*f_1=0.632311075999718...`, so fixed Smith factors remain harmless.
+Consequently,
+
+```text
+X_13=N^(5.89840374559116...+o(1)),
+
+C_13>=N^(3.69140466986458...+o(1))                     (J137)
+```
+
+with high probability.  Since
+
+```text
+a_13=10395*alpha_V/
+  product_(r=1)^6(M_V-2*r+epsilon_V)
+    =N^(-13*m/2+o(1)),
+```
+
+the actual positive level-thirteen contribution satisfies
+
+```text
+a_13*C_13>=N^(0.451867373836136...+o(1)).              (J138)
+```
+
+Level fifteen requires one more low-weight layer.  Here `(JN0)`--`(JN1)` give
+
+```text
+z_15=0.0174783602896178...,
+Q_15(z_15)=1.33443368777742...,
+
+delta_15=0.201968030218176...,
+h_15=2.43678664095801...,
+phi_15=2.23481861073983....                             (J151)
+```
+
+Write its per-pattern masses as
+
+```text
+q_zero =0.749381561001779...,
+s_15   =0.00654898045879263...,
+q_two  =0.000228930879976888...,
+q_three=0.00000200066820082764...,
+q_four =0.0000000699367992680938....                    (J152)
+```
+
+The rank-one bound is again `e_1^(15)=H_2(p)+p`.  For rank two with exactly
+two nonzero coordinate images `u,v`, put `r_zero=13` and
+
+```text
+S=s_15+3*choose(r_zero,2)*q_three
+       +3*choose(r_zero,3)*q_four
+  =0.00707714259155833...,
+
+D=q_two+2*r_zero*q_three
+       +2*choose(r_zero,2)*q_four
+  =0.000291858393884229...,
+
+P=r_zero*q_three+choose(r_zero,2)*q_four
+  =0.0000314637569536707....                           (J153)
+```
+
+The four outputs `+/-u,+/-v` have mass at least `S`, the two outputs
+`+/-(u-v)` have mass at least `D`, and the two outputs `+/-(u+v)` have mass
+at least `P`.  They are distinct because `u,v` are independent.  Pooling the
+rest into zero gives
+
+```text
+R=1-4*S-2*D-2*P=0.971044785332091...,
+
+e_2^(15)=H(R,S,S,S,S,D,D,P,P)
+        =0.251155527110614....                          (J154)
+```
+
+If at least three coordinate images are nonzero, the extra singleton pair can
+again be merged into one existing singleton pair in the worst pooled vector;
+the resulting entropy `0.320593...` is larger than `(J154)`.
+
+For `d>=3`, choose independent images `u_1,...,u_d`.  The distinct listed
+outputs comprise `2*d` signed singletons, `d*(d-1)` ordered differences, and
+`6*choose(d,3)` allowed signed weight-three combinations.  Put
+
+```text
+T_d=3*choose(15-d,2)*q_three.
+```
+
+If exactly `d` coordinate images are nonzero, the first pooled vector is
+
+```text
+(R_exact, (s_15+T_d) repeated 2*d times,
+      q_two repeated d*(d-1) times,
+      q_three repeated 6*choose(d,3) times),
+
+R_exact=1-2*d*(s_15+T_d)-d*(d-1)*q_two
+      -6*choose(d,3)*q_three.                          (J15A)
+```
+
+If more coordinate images are nonzero, retain one extra singleton pair and,
+for the worst pooling, merge it into one existing singleton pair.  This gives
+
+```text
+(R_more, 2*s_15 repeated 2 times,
+      s_15 repeated 2*d-2 times,
+      q_two repeated d*(d-1) times,
+      q_three repeated 6*choose(d,3) times),
+
+R_more=1-(2*d+2)*s_15-d*(d-1)*q_two
+      -6*choose(d,3)*q_three.                          (J15B)
+```
+
+The second branch is needed only for `d<=14`.  Taking the smaller entropy of
+`(J15A)` and `(J15B)` gives
+
+```text
+(e_1^(15),...,e_15^(15))
+ =(0.166487817026127, 0.251155527110614,
+   0.376367762059691, 0.510429136583552,
+   0.649583427610271, 0.794299276294701,
+   0.945040741771570, 1.10226651447143,
+   1.26642902699176,  1.43797345016347,
+   1.61733655919088,  1.80494545119896,
+   2.00121609095468,  2.20655165561306,
+   2.42134064162250).                                  (J155)
+```
+
+Again `q_zero>1/2`, so transferring pooled zero mass to the actual outputs can
+only increase entropy.  The 1495 nontrivial rational classes now obey
+
+```text
+Theta_15<=-0.0149394231705986...,                      (J156)
+```
+
+with worst class `(2,2,2)` and next class `(3,3,3)` at
+`-0.0180227914811422...`.  The binary loss is
+`6*f_1=0.604160681206230...`.  Hence
+
+```text
+X_15=N^(6.74948792532034...+o(1)),
+
+C_15>=N^(4.32587156270223...+o(1))                     (J157)
+```
+
+with high probability.  The exact majority coefficient has sign minus and
+magnitude
+
+```text
+-a_15=135135*alpha_V/
+  product_(r=1)^7(M_V-2*r+epsilon_V)
+     =N^(-15*m/2+o(1)).
+```
+
+Therefore
+
+```text
+-a_15*C_15>=N^(0.587943913438641...+o(1)).             (J158)
+```
+
+In particular, the absolute formal mass satisfies
+
+```text
+S_formal>=2*(-a_15*C_15)-1
+        >=N^(0.587943913438641...+o(1)).                (J159)
+```
+
+The strengthened finite ledger therefore closes all displayed fixed odd
+levels through fifteen.  This remains an actual-modular, visibility-one,
+high-probability conditioning theorem about formal retained-character level,
+not original Walsh degree.  It gives neither a fixed-cutoff tail sign nor the
+final Wagner sign; higher fixed levels require new audited projection ledgers.
 
 There is an exact same-`P_3` obstruction, even under symmetry and
 nonnegative Walsh likelihood coefficients.  Let odd `M>=11`, take independent
@@ -12513,8 +12778,194 @@ Combining the last display with `(CS1-0)` proves
 Thus `(MO1)`--`(MO3)` imply the centered spectral floor and normalized row
 regularity required by the multiplicity-corrected Schur interface.
 
-These hypotheses are not yet proved for the actual retained buckets.  Two
-overlap exponents only diagnose their plausibility.  For `A_overlap>1`, put
+The first hypothesis is now a theorem for the balanced cusp cell.  Take
+exact block weight `r=3*p*n`, so `t=12*p*n=beta*n`, and put
+
+```text
+A_J=sum_(j in J_t)w_j*L_j-w_J*I_(m_cell).
+```
+
+The proof is a finite trace-four certificate.  Since `A_J` has zero diagonal,
+an ordered term in `Tr(A_J^4)` has one of only three orbit patterns:
+
+```text
+d=2: (1,2,1,2),
+d=3: (1,2,3,2),
+d=4: (1,2,3,4).
+```
+
+Here `d` is the number of distinct retained orbits.  Fix an orbit-sign choice
+`tau in {+1,-1}^4`.  In one coordinate write the row column as
+
+```text
+s=(s_1,...,s_d) in {0,+1,-1}^d.
+```
+
+For cycle edge `e=(i,j)`, a selected level coordinate has local weight
+
+```text
+a_e(s;tau)=3,   if s_i=tau_e*s_j,
+             =1,   otherwise,
+```
+
+and can be selected only when both endpoints are active.  If a rational
+column mask is `D subset {0,+1,-1}^d`, define
+
+```text
+Z_(D,tau)(x,y)
+ =sum_(s in D) product_i x_i^1[s_i!=0]
+      *product_(e:endpoints active)(1+y_e*a_e(s;tau)).       (MZ)
+```
+
+The two `6*n`-coordinate halves share the four edge fugacities.  For masks
+`D_L,D_R`, the method-of-types dual is
+
+```text
+Phi(D_L,D_R;tau)
+ =inf_(x_L,x_R,y>0) {
+    6*log_2 Z_(D_L,tau)(x_L,y)
+   +6*log_2 Z_(D_R,tau)(x_R,y)
+
+   -6*p*sum_i[log_2 x_(L,i)+log_2 x_(R,i)]
+   -9*p*sum_e log_2 y_e }.                           (MD)
+```
+
+The shared `y` is essential: each edge has only a joint left-plus-right
+selection constraint.  Fixing the edge rate separately in each half gives a
+strictly smaller, invalid upper bound.
+
+Let `h,g` be the rational deficiencies of the two masks, and let
+
+```text
+c_rel=d-rank_Q(span(D_L union D_R)).
+```
+
+The joint retention bound is
+
+```text
+Pr[all d rows retained]
+ <=O_d(q_0^d)*K^(h+g-c_rel)*N^c_rel.
+```
+
+Consequently the relative trace exponent is at most
+
+```text
+Lambda_d
+ =Phi-8*beta-d*(1+a)+a*(h+g-c_rel)+c_rel.           (ML)
+```
+
+The term `-8*beta` is the exact `4^(-4*t)` contribution of the four
+feature edges.
+
+The rational masks are completely enumerable.  For every deficiency `h`,
+enumerate independent `(d-h)`-tuples in the ternary cube, intersect their
+rational span with the cube, and deduplicate the incidence masks.  Discard a
+mask if it forces a row to zero or prevents one cycle edge from ever having
+both endpoints active.  The exact raw/admissible counts are
+
+```text
+        h=1       h=2       h=3
+d=3     25/22      13/4       -
+d=4    680/676    362/236     40/8.                 (MC)
+```
+
+If `h=g=d-1`, both masks are lines.  Equal nonzero exact degrees force every
+row in each half to have the same support.  All `d` full supports are then
+equal, contradicting `Good`, which has only one retained orbit per support.
+Thus every such class vanishes exactly.
+
+The only sharp admissible classes are
+
+```text
+d=3: (h,g,c_rel)=(1,2,1),
+d=4: (h,g,c_rel)=(2,3,2).
+```
+
+There are respectively `24*16=384` and `200*16=3200` ordered mask/sign
+instances.  Complete evaluation gives the same maximum in both cases:
+
+```text
+Phi_max   =4.3210211316587819733...,
+Lambda_max=-0.1720037323601868305....                (MX)
+```
+
+For example, a `d=4` maximizer is represented by
+
+```text
+D_L=span_Q{(1,0,0,-1),(0,1,1,0)},
+D_R=span_Q{(1,1,1,-1)},
+tau=(+,+,-,-).
+```
+
+In natural-log dual variables one feasible rounded point is
+
+```text
+log x_L=(-3.418490021058317,...,-3.418490021058317),
+log x_R=(-3.259991804722471,...,-3.259991804722471),
+log y=(1.702833048774571,-1.23064e-10,
+       1.702833048774571,-1.23064e-10).
+```
+
+Ninety-digit direct evaluation, rounded outward, gives
+
+```text
+Phi_max<4.321021131659,
+Lambda_max<-0.172003732360.                          (MO)
+```
+
+All other classes admit simpler common-edge-fugacity duals.  For fixed
+`h,g`, set all four `y_e` equal, minimize the row fugacities separately for
+each mask, and then take the finite maximum over masks.  Every substituted
+point is itself a valid upper bound; no claim that the numerical optimizer
+found the infimum is needed.  The closest noncritical bounds, including an
+outward `10^(-6)` allowance, are
+
+```text
+d=4, (h,g,c_rel)=(2,2,2): Lambda<-0.341860,
+d=3, noncritical classes: Lambda<-0.532463,
+d=2, worst GL class:      Lambda<-0.37428.
+```
+
+Vertex-sign gauge reduces the sixteen `tau` choices to `2`, `4`, and `8`
+classes for the `d=4`, `d=3`, and `d=2` orbit patterns, respectively;
+simultaneous sign changes of both masks preserve `h,g,c_rel`.  Every gauge
+class was checked, and the sharp classes above were also checked directly for
+all sixteen choices.
+
+Full-rational-rank but mod-two-singular masks introduce no omitted exponent.
+Their raw/admissible counts by binary deficiency are
+
+```text
+d=3: 7/4,  7/1,
+d=4: 15/11, 35/13, 15/1.
+```
+
+Any nonzero fixed-order minor is `O_d(1)` by Hadamard, so every Smith-index
+gain is constant.  The unrestricted dual has much more than the required
+margin.
+
+Combining the finite classes gives
+
+```text
+E_Y[1_Good*Tr(A_J^4)]
+ <=N^(-0.172003732360...+o(1)).                      (MT)
+```
+
+Since `A_J` is symmetric,
+
+```text
+||A_J||_op^4<=Tr(A_J^4),
+
+||A_J||_op<=N^(-0.0430009...+o(1))                  (MO1*)
+```
+
+with high probability.  This proves `(MO1)` for the balanced cell.  Notice
+that `(MX)` is not a global bound on the raw `Phi`: the no-deficiency `d=4`
+class has `Phi=5.540365...`, but its probability penalties give
+`Lambda=-2.451049...`.  The global statement is the bound on `Lambda`.
+
+Two overlap exponents help diagnose the remaining hypotheses.  For
+`A_overlap>1`, put
 
 ```text
 F_(A_overlap)(p)=12*max_(0<=xi<=p) [
@@ -12552,9 +13003,10 @@ Dropping sign compatibility gives the weaker diagnostic
 m_exp-4*beta+F_16=-0.409929331191....
 ```
 
-These negative exponents do not prove `(MO1)`: actual occupancy is filter-
-correlated, and an operator statement requires more than an independent-pair
-average.
+These pair exponents alone would not prove `(MO1)`: actual occupancy is
+filter-correlated, and an operator statement requires a joint cycle ledger.
+That missing ledger is exactly `(MT)`.  The pair exponents still do not
+control the centered nonautomatic remainder or normalized row sums.
 
 The ideal centered fourth-cycle arithmetic would be
 
@@ -12580,10 +13032,11 @@ This trace estimate is only a target.  `F_16` controls a two-row unsigned
 square-overlap sum; it does not classify four jointly retained rows or prove
 cancellation after centering.  Likewise, `Good` controls the half-turn
 representations of individual retained supports, not these nonautomatic
-zero-relation cycles.  The entire interface is restricted to visibility one,
-one fixed exact-degree cell, and its occupied quotient.  It neither proves
-`(MO1)`--`(MO3)` in the random model nor extends to a mixed cutoff, the full
-`Y`-adaptive nonradial space, or nonlinear statistics.
+zero-relation cycles.  The theorem `(MO1*)` covers only the central automatic
+levels of the balanced cusp cell on `Good`.  The interface still requires
+`(MO2)` and `(MO3)` for the actual retained bucket.  It does not extend to an
+unbalanced or mixed cutoff, the full `Y`-adaptive nonradial space, or nonlinear
+statistics.
 
 For the one deterministic degree-symmetric resolvent optimizer, the missing
 quenched statement is narrower.  Put into `E_ng(Y)` the entire actual
@@ -14204,14 +14657,14 @@ an unrestricted nonradial theorem; it is not a modular counterexample.
 A multiplicity-corrected centered-Schur interface shows that the full linear
 extension would follow from a centered spectral floor with exponent below
 `0.044828...` and normalized within-cell row regularity.  Inside one fixed
-`Good` exact-degree cell, the PSD orbit-feature Gram `K_orb` has exact level
-weights `4^(-t)*choose(t,j)*(3^j+(-1)^j)`.  Three explicit hypotheses reduce
-the missing inputs to central signed-subword occupancy, a centered
-nonautomatic
-spectral bound, and normalized row sums.  The displayed `F_8,F_16` diagnostics
-and fourth-cycle target are not proofs.  Those inputs remain unproved;
-unrestricted same-cell nonradial weights, mixed cutoffs, and nonlinear sign
-performance remain open.
+balanced cusp `Good` cell, the PSD orbit-feature Gram `K_orb` has exact level
+weights `4^(-t)*choose(t,j)*(3^j+(-1)^j)`.  A finite joint trace-four
+certificate proves central automatic occupancy `(MO1)`, with operator error
+at most `N^(-0.0430009...+o(1))`.  The remaining inputs are the centered
+nonautomatic spectral bound `(MO2)` and normalized row sums `(MO3)`.  The
+displayed `F_8,F_16` diagnostics and nonautomatic fourth-cycle target do not
+prove them.  Unrestricted same-cell nonradial weights, mixed cutoffs, and
+nonlinear sign performance remain open.
 Bucket-sum-only rehash medians are only margin transforms of the same path
 sum, while a positive three-character likelihood
 model shows that fixed
@@ -14241,15 +14694,18 @@ false.  For the actual modular law at visibility one, the exact alternating
 closure expansion makes the cubic formal-level contribution at most
 `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
 closure levels at least five to contribute at least
-`N^(0.021392...+o(1))`.  With high probability, the actual automatic quintic,
-septic, nonic, and level-eleven contributions have signed magnitudes at least
-`N^(0.0679559...+o(1))`,
-`N^(0.1365318...+o(1))`, `N^(0.2246470...+o(1))`, and
-`N^(0.3303074...+o(1))`, with signs `+,-,+,-`.
+`N^(0.021392...+o(1))`.  With high probability, the actual automatic
+contributions from quintic through level fifteen have signed magnitudes at
+least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
+`N^(0.2246470...+o(1))`, `N^(0.3303074...+o(1))`,
+`N^(0.4518674...+o(1))`, and `N^(0.5879439...+o(1))`, with signs
+`+,-,+,-,+,-`.
 Thus the absolute formal-level mass and its triangle-inequality condition
-number are at least `N^(0.3303074...+o(1))`.  The strengthened projection
-ledger first fails at level thirteen.  This is not an algorithm lower bound
-and determines neither any fixed-cutoff tail nor the final Wagner sign.  More
+number are at least `N^(0.5879439...+o(1))`.  The strengthened low-weight
+ledger closes the displayed fixed odd levels through fifteen; higher fixed
+levels need new audited projection bounds.  This is not an algorithm lower
+bound and determines neither any fixed-cutoff tail nor the final Wagner sign.
+More
 sharply, two valid
 nonnegative-Walsh likelihood
 completions have

@@ -326,14 +326,14 @@ an unrestricted nonradial theorem; it is not a modular counterexample.
 A multiplicity-corrected centered-Schur interface shows that the full linear
 extension would follow from a centered spectral floor with exponent below
 `0.044828...` and normalized within-cell row regularity.  Inside one fixed
-`Good` exact-degree cell, the PSD orbit-feature Gram `K_orb` has exact level
-weights `4^(-t)*choose(t,j)*(3^j+(-1)^j)`.  Three explicit hypotheses reduce
-the missing inputs to central signed-subword occupancy, a centered
-nonautomatic
-spectral bound, and normalized row sums.  The displayed `F_8,F_16` diagnostics
-and fourth-cycle target are not proofs.  Those inputs remain unproved;
-unrestricted same-cell nonradial weights, mixed cutoffs, and nonlinear
-performance remain open.
+balanced cusp `Good` cell, the PSD orbit-feature Gram `K_orb` has exact level
+weights `4^(-t)*choose(t,j)*(3^j+(-1)^j)`.  A finite joint trace-four
+certificate proves central automatic occupancy `(MO1)`, with operator error
+at most `N^(-0.0430009...+o(1))`.  The remaining inputs are the centered
+nonautomatic spectral bound `(MO2)` and normalized row sums `(MO3)`.  The
+displayed `F_8,F_16` diagnostics and nonautomatic fourth-cycle target do not
+prove them.  Unrestricted same-cell nonradial weights, mixed cutoffs, and
+nonlinear performance remain open.
 Bucket-sum-only random rehash medians contain only the original path-sum
 information, while a fixed
 positive pair-overlap law can yield either sign of prediction correlation.
@@ -362,15 +362,18 @@ false.  For the actual modular law at visibility one, the exact alternating
 closure expansion makes the cubic formal-level contribution at most
 `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
 closure levels at least five to contribute at least
-`N^(0.021392...+o(1))`.  With high probability, the actual automatic quintic,
-septic, nonic, and level-eleven contributions have signed magnitudes at least
-`N^(0.0679559...+o(1))`,
-`N^(0.1365318...+o(1))`, `N^(0.2246470...+o(1))`, and
-`N^(0.3303074...+o(1))`, with signs `+,-,+,-`.
+`N^(0.021392...+o(1))`.  With high probability, the actual automatic
+contributions from quintic through level fifteen have signed magnitudes at
+least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
+`N^(0.2246470...+o(1))`, `N^(0.3303074...+o(1))`,
+`N^(0.4518674...+o(1))`, and `N^(0.5879439...+o(1))`, with signs
+`+,-,+,-,+,-`.
 Thus the absolute formal-level mass and its triangle-inequality condition
-number are at least `N^(0.3303074...+o(1))`.  The strengthened projection
-ledger first fails at level thirteen.  This is not an algorithm lower bound
-and determines neither any fixed-cutoff tail nor the final Wagner sign.  More
+number are at least `N^(0.5879439...+o(1))`.  The strengthened low-weight
+ledger closes the displayed fixed odd levels through fifteen; higher fixed
+levels need new audited projection bounds.  This is not an algorithm lower
+bound and determines neither any fixed-cutoff tail nor the final Wagner sign.
+More
 sharply, two valid
 nonnegative-Walsh likelihood
 completions have
