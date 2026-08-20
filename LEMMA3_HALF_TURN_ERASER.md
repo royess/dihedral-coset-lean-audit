@@ -163,9 +163,18 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   certificate proves
   `E[1_Good*Tr(E_rem^4)]<=N^(-.0032192935...+o(1))`, implying `(MO2)` and the
   remaining part of `(MO3)`.  Thus the centered-Schur/equitability interface
-  closes for that cell.  These results do not cover unbalanced or mixed
-  cutoffs, simultaneous whole occupied-cell nonradial optimization,
-  `Y`-adaptive cell selection, or nonlinear statistics.
+  closes for that cell.  More generally, every deterministic cell layer with
+  fixed expected-occupancy exponent `s<1/20` can, with high probability, be
+  adjoined to any core with spectral-loss exponent below `.009` and dual mass
+  at least `N^(-.0073173282...-o(1))`, without changing that value.
+  An exact eight-cell swap cube gives eigenvalue `-5/32` for the union of the
+  automatic subkernels despite unit one-cell floors; in a dissociated paired-
+  label realization, cross-cell nonautomatic relations repair the full Gram.
+  Hence automatic per-cell certificates cannot simply be summed.  The
+  intermediate- and high-occupancy
+  mixed core, unbalanced cutoffs, simultaneous whole occupied-cell nonradial
+  optimization, `Y`-adaptive cell selection, and nonlinear statistics remain
+  open.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -198,20 +207,20 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
   closure levels at least five to contribute at least
   `N^(0.021392...+o(1))`.  With high probability, the actual automatic
-  contributions from quintic through level twenty-one have signed magnitudes at
+  contributions from quintic through level twenty-three have signed magnitudes
+  at
   least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
   `N^(0.2246470...+o(1))`, `N^(0.3303074...+o(1))`,
   `N^(0.4518674...+o(1))`, `N^(0.5879439...+o(1))`,
-  `N^(0.7373572...+o(1))`, `N^(0.8990879...+o(1))`, and
-  `N^(1.0722463...+o(1))`, with signs `+,-,+,-,+,-,+,-,+`.
+  `N^(0.7373572...+o(1))`, `N^(0.8990879...+o(1))`,
+  `N^(1.0722463...+o(1))`, and `N^(1.2560485...+o(1))`, with signs
+  `+,-,+,-,+,-,+,-,+,-`.
   Thus the absolute formal-level mass and its triangle-inequality condition
-  number are at least `N^(1.0722463...+o(1))`.  The combined low-weight and
-  exact-marginal ledger closes the displayed fixed odd levels through
-  twenty-one.  It first fails at level twenty-three in the rational
-  more-than-rank branch: `(3,3,3)` is the first positive diagonal class and
-  `(6,6,6)` is globally worst.  This is a certificate failure, not an
-  algorithm lower bound, and determines neither a fixed-cutoff tail nor the
-  final Wagner sign.
+  number are at least `N^(1.2560485...+o(1))`.  An exact conditional-entropy
+  projection bound removes the extra-coordinate pooling obstruction and
+  closes the displayed fixed odd levels through twenty-three.  Level
+  twenty-five is not claimed.  This is not an algorithm lower bound and
+  determines neither a fixed-cutoff tail nor the final Wagner sign.
   More sharply, two
   valid nonnegative-Walsh
   likelihood completions
@@ -308,19 +317,28 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   size-biased cap experiment, with high probability over the labels, a fixed
   rank-`r` linear sketch with a vanishing-error candidate list needs list size
   `m^(1-r/(2*q)-o(1))`, so an `m^o(1)` list retains almost all `2*q`
-  coordinates.  Annealed over iid labels, the cap count satisfies
-  `E[(H_v)_2]/E[H_v]^2=N^(kappa_2(gamma)+o(1))`, with
-  `kappa_2(1/9)=0.0007041260269...`; the averaged size-biased row sees the same
-  exponential number of additional caps.  This rejects the naive matching-
-  factorial-moment Poisson heuristic, but is not a quenched claim.  Yet, for
-  every fixed `0<gamma<=1/9`, with high probability
+  coordinates.  With high probability over the iid labels,
+  `E_G[(H_v)_2|Y]/(m*p_cap)^2=N^(kappa_2(gamma)+o(1))`, where
+  `kappa_2(1/9)=0.00070412602694...`; the label-conditional size-biased row
+  sees the same exponential expected number of additional caps.  This rejects
+  the naive matching-factorial-moment Poisson heuristic but remains a
+  conditional-moment statement, not typical-`G` or ordinary-hit clustering.
+  Under the ordinary hit law, even nonlinear Gaussian-adaptive windows chosen
+  through a summary `S_info` obey an information bound.  If their pointwise
+  component count plus total length is `N^(eta+o(1))`, success probability
+  `alpha` costs at least
+  `[alpha*(gamma-eta-r_gamma)-o(1)]*ln(N)-h_nat(alpha)` nats.  At
+  `gamma=1/9`, `gamma-r_gamma=.111021964613784...`; a finite `B`-bit
+  transcript obeys the corresponding range bound.  This is an information or
+  description obstruction, not a time lower bound.  Yet, for every fixed
+  `0<gamma<=1/9`, with high probability
   over the labels the size-biased cap row and the ordinary Gaussian row
   conditioned on a nonempty cap are
   asymptotically singular: their squared radii are separated at
   `s_cut=(s_0+1+a_gamma)/2`, where `a_gamma=gamma*ln(2)/12` and
   `s_0=a_gamma/(1-exp(-a_gamma))`.  Thus the sketch theorem does not transfer
-  by a Poisson or contiguity argument.  These results do not cover
-  amplitude-adaptive or nonlinear global processing.  The adversarial
+  by a Poisson or contiguity argument.  These results do not cover unrestricted
+  full-amplitude global processing.  The adversarial
   reduction leaves the iid-Gaussian and simple-root promise open.  Custom
   sparse/circuit and random approximate real-root locators remain open.
   Rejection-based quantum tilting
@@ -3873,6 +3891,96 @@ a direct analysis of the ordinary nonempty-cap law, adaptive nonlinear use of
 all amplitudes, or a global root counter.  The assertion is for each fixed
 positive `gamma`; it is not uniform when `gamma=gamma_n` tends to zero.
 
+There is nevertheless a direct information bound for adaptive windows under
+the ordinary hit law.  Keep the labels fixed and let `S_info` be any possibly
+randomized, nonlinear summary of `G`; any external randomness used to choose
+the windows is included in `S_info`.  For every summary value `s`, let
+`U_s subset [0,m]` be a union of at most `J_ad` compact intervals with total
+length at most `W_ad`.  These are pointwise, not average, bounds.  Put
+
+```text
+p_0=J_ad*barPhi(v)+(W_ad/2)*exp(-v^2/2),
+
+alpha=P_(hit,Y)[sup_(t in U_(S_info))X(t)>=v].
+```
+
+Whenever `p_0<pi_Y`,
+
+```text
+I_(hit,Y)(S_info;G)
+ >=alpha*ln(pi_Y/p_0)-h_nat(alpha).                  (AIW1)
+```
+
+Indeed, let `P_joint` be the actual joint law of `(S_info,G)` under
+`P_(hit,Y)`, and let `Q_prod=P_(S_info) tensor P_(hit,Y)`.  For fixed `s`,
+`(PW)` gives
+
+```text
+P_(hit,Y)[sup_(t in U_s)X(t)>=v]
+ <=P_G[sup_(t in U_s)X(t)>=v]/pi_Y
+ <=p_0/pi_Y.
+```
+
+Thus `Q_prod(E)<=p_0/pi_Y` for the success event `E`.  Data processing of
+relative entropy to `1_E` yields
+
+```text
+I_(hit,Y)(S_info;G)
+ =D(P_joint || Q_prod)
+ >=kl(alpha || Q_prod(E))
+ >=alpha*ln(pi_Y/p_0)-h_nat(alpha),
+```
+
+which proves `(AIW1)`.  Define
+
+```text
+r_gamma=(24/ln(2))*{
+  I_rad(s_0)+D(a_gamma/s_0)}.                        (AIW2)
+```
+
+By `(NR7)`, with high probability over the labels,
+
+```text
+pi_Y>=N^(-r_gamma-o(1)).
+```
+
+If `J_ad+W_ad<=N^(eta+o(1))` and `eta<gamma-r_gamma`, then
+
+```text
+I_(hit,Y)(S_info;G)
+ >={alpha*(gamma-eta-r_gamma)-o(1)}*ln(N)
+    -h_nat(alpha).                                   (AIW3)
+```
+
+At `gamma=1/9`,
+
+```text
+r_gamma=.0000891464973269...,
+
+gamma-r_gamma=.111021964613784....                   (AIW4)
+```
+
+There is a pointwise finite-range corollary.  If
+`|range(S_info)|<=K_info`, then the success event is contained in the union
+of the `K_info` fixed-window events, so
+
+```text
+alpha<=K_info*p_0/pi_Y.
+```
+
+If the transcript has at most `B_info` bits, `K_info<=2^B_info`, and
+`alpha>0`, then
+
+```text
+B_info>=log_2(pi_Y/p_0)+log_2(alpha).                (AIW5)
+```
+
+This covers nonlinear, Gaussian-adaptive window selection through a limited
+summary under the ordinary nonempty-cap law.  It is an information or
+description bound, not a time or arithmetic-query lower bound.  An exact
+continuous copy of the full amplitude vector can have infinite mutual
+information, so unrestricted full-amplitude global root counters remain open.
+
 There is also an exact annealed obstruction to the naive Poisson
 factorial-moment heuristic.  Keep fixed `0<gamma<=1/9`, put
 
@@ -3937,10 +4045,11 @@ the derivative of the variational objective at zero is `t_gamma>0`; hence
 
 ```text
 t_gamma =.012836058899258247...,
-rho_*   =.006337319590378501...,
+theta_* =.012674899990561514...,
+rho_*   =.006337322732322909...,
 
-supremum per q=.00004067191419447218...,
-kappa_2(1/9)  =.0007041260269419176....               (FM4)
+supremum per q=.00004067191419429172...,
+kappa_2(1/9)  =.0007041260269387933....                (FM4)
 ```
 
 The same identity quantifies clustering under size bias.  For every fixed
@@ -3952,10 +4061,155 @@ E_(sb,Y)[H_v-1]
 ```
 
 Averaging over `Y` and using `m*p_cap=N^o(1)` makes this expectation
-`N^(kappa_2(gamma)+o(1))`.  This is an annealed iid-label statement.  It
-invalidates a matching-second-factorial-moment Poisson heuristic but does not
-give a quenched high-probability bound, ordinary-hit-law clustering, or total
-variation separation.  No conditioning on `Good` is asserted.
+`N^(kappa_2(gamma)+o(1))`.  The exponent is in fact quenched in the public
+labels.  Define
+
+```text
+g_gamma(rho)=t_gamma*rho/(1+rho),
+
+A_Y=E_G[(H_v)_2 |Y]/(m*p_cap)^2.
+```
+
+The strictly concave function `g_gamma-I_cos` has a unique maximizer
+`rho_gamma in (0,1)`.  Put
+
+```text
+theta_gamma=I_cos'(rho_gamma)
+           =t_gamma/(1+rho_gamma)^2.
+```
+
+For every fixed `epsilon>0`,
+
+```text
+Pr_Y[N^(kappa_2(gamma)-epsilon)
+       <=A_Y<=N^(kappa_2(gamma)+epsilon)] ->1.        (QFM1)
+```
+
+Consequently, with high probability over the labels,
+
+```text
+E_(sb,Y)[H_v-1]=N^(kappa_2(gamma)+o(1)).              (QFM2)
+```
+
+Here is a quenched proof requiring no prime-number input.  Set `R_cut=q^3`
+and let `V_lag` be the odd integers in `[m/2,3*m/4]`.  Join distinct
+`h,k in V_lag` when
+
+```text
+b_1*h+b_2*k=0
+```
+
+for integers `b_1,b_2` with `0<|b_1|+|b_2|<=R_cut`.  The graph has degree
+`O(R_cut^2)`, so a greedy independent set `calP_lag` satisfies
+
+```text
+|calP_lag|>=m/poly(q)=N^(gamma-o(1)).                 (QFM3)
+```
+
+Every member is invertible modulo `N=2^n`.  Since `R_cut*m<N`, any
+congruence
+
+```text
+b_1*h+b_2*k=0 mod N,
+```
+
+with coefficient `l_1` norm at most `R_cut` is an equality over the integers
+and is excluded by construction.
+
+For `theta,psi` in a fixed compact real interval, Fourier--Bessel expansion
+therefore gives, uniformly for distinct `h,k in calP_lag`,
+
+```text
+E_y exp(theta*cos(2*pi*h*y/N))
+ =I_0(theta)+exp(-Omega(N*log(N))),
+
+E_y exp(theta*cos(2*pi*h*y/N)
+       +psi*cos(2*pi*k*y/N))
+ =I_0(theta)*I_0(psi)+exp(-Omega(R_cut*log(R_cut))).  (QFM4)
+```
+
+Indeed, every nonzero Fourier pair in the second expectation has coefficient
+`l_1` norm greater than `R_cut`, and fixed-argument Bessel tails are
+factorially small.  Define
+
+```text
+rho_h=q^(-1)*sum_i cos(2*pi*h*Y_i/N),
+
+Z_Y(theta)=sum_(h in calP_lag)exp(theta*q*rho_h),
+
+Lambda(theta)=ln(I_0(theta)).
+```
+
+The off-diagonal terms in the second moment of `Z_Y(theta)` factorize up to
+`exp(-Omega(R_cut*log(R_cut)))`.  Its normalized diagonal term is
+
+```text
+|calP_lag|^(-1)
+  *[I_0(2*theta)/I_0(theta)^2]^q.                    (QFM5)
+```
+
+Since `theta_gamma<=t_gamma`, eventually every value used below has absolute
+value at most `2*t_gamma`.  The bound `ln(I_0(x))<=x^2/4` makes the base-`N`
+exponent in `(QFM5)` at most
+
+```text
+-gamma+(12/ln(2))*4*t_gamma^2
+ =-gamma+(4/3)*gamma^2*ln(2)<0.                     (QFM6)
+```
+
+Thus `Z_Y(theta)/E Z_Y(theta)->1` in probability at all three nearby values
+used next.  Take
+
+```text
+delta_loc=q^(-1/8),       s_loc=q^(-1/4).
+```
+
+The exponential Markov bounds
+
+```text
+sum_(rho_h>=rho_gamma+delta_loc)
+  exp(theta_gamma*q*rho_h)
+ <=exp(-q*s_loc*(rho_gamma+delta_loc))
+      *Z_Y(theta_gamma+s_loc),
+
+sum_(rho_h<=rho_gamma-delta_loc)
+  exp(theta_gamma*q*rho_h)
+ <=exp(q*s_loc*(rho_gamma-delta_loc))
+      *Z_Y(theta_gamma-s_loc)
+```
+
+and `Lambda'(theta_gamma)=rho_gamma` show that both tails contain only
+`exp(-Omega(q^(5/8)))` of the tilted mass.  The Taylor remainder is
+`O(q*s_loc^2)=O(q^(1/2))`, below
+`q*s_loc*delta_loc=q^(5/8)`.
+
+Uniformly on the resulting shrinking window, the bivariate Gaussian tail
+obeys
+
+```text
+ln {Pr[X_0>=v,X_h>=v |Y]/p_cap^2}
+  =q*g_gamma(rho_h)+o(q).                            (QFM7)
+```
+
+Also `2*(m-h)/m^2>=1/(2*m)` on `calP_lag`.  Comparing `(QFM7)` with the
+localized tilted mass yields
+
+```text
+A_Y
+ >=(1/(2*m))*sum_(h in calP_lag)
+      Pr[X_0>=v,X_h>=v |Y]/p_cap^2
+ >=N^(kappa_2(gamma)-o(1)).                          (QFM8)
+```
+
+Here `|calP_lag|/m=N^(-o(1))`, while the Legendre identity at the maximizer
+gives the exponent in `(FM1)`.  The matching upper bound follows from the
+annealed identity `(FM2)` and Markov.  This proves `(QFM1)` for each fixed
+`0<gamma<=1/9`; it is not uniform for `gamma=gamma_n->0`.
+
+The result is a typical-label, Gaussian-conditional factorial-moment theorem.
+It does not prove typical clustering over `G`, ordinary-hit-law clustering,
+total-variation behavior, or a running-time lower bound.  No conditioning on
+`Good` is asserted.
 
 Several scoped facts sharpen the remaining near-cap location primitive.  The
 first is an exact discrete barrier, stronger than the continuous interval
@@ -11175,55 +11429,145 @@ S_formal>=2*a_21*C_21-1
         >=N^(1.07224625437883...+o(1)).                (JXM7)
 ```
 
-This certificate first fails at formal level twenty-three.  Its type data are
+A conditional-entropy projection bound removes the apparent obstruction at
+formal level twenty-three.  Let `V_j` be one signed `j`-row coordinate column
+with the Gibbs law in `(JN1)`, and let `A_proj` be any rational rank-`d` map on
+its row coordinates.  Choose `d` coordinate columns `B` whose images form a
+basis, and put `R=[j]\B`.  Conditional on `(V_j)_R`,
+
+```text
+A_proj*V_j=(A_proj)_B*(V_j)_B+constant,
+```
+
+where `(A_proj)_B` is invertible.  Therefore
+
+```text
+H(A_proj*V_j)
+ >=H(A_proj*V_j | (V_j)_R)
+  =H((V_j)_B | (V_j)_R)
+  =h_j-M_(j,j-d).                                    (JCE1)
+```
+
+This bound is insensitive to the number and collisions of the remaining
+coordinate images.  In the fixed-type pair ledger, every supported coupling
+therefore loses at least this entropy on each injective tuple projection;
+incompatible pushforwards give an empty class.  Rounding the Gibbs law to a
+fixed type changes all finitely many marginal entropies uniformly by `o(1)`.
+
+At level twenty-three, keep the stronger rank-one bound and define
+
+```text
+hat(e)_0=0,                 hat(e)_1=H_2(p)+p=a/3,
+hat(e)_d=h_23-M_(23,23-d),                    2<=d<=23. (JCE2)
+```
+
+The type data are
 
 ```text
 z_23=.01637510732186815,       Q_23(z_23)=1.53989531259886,
 delta_23=.259988556870971,     h_23=3.71625496621180,
-phi_23=3.45626640934083,
-
-(q_zero,s_23,q_two,q_three)
- =(.649394794450222, .00531695472669245,
-   .000174131408550206, .00000142571025155885).
+phi_23=3.45626640934083,       s_23=.00531695472669245.
 ```
 
-Even after using exact marginals for every `d=2,...,10`, one has
-`M_(23,d)>B_(23,d)` throughout.  The first positive diagonal class by rank is
+Direct finite evaluation of `(JXM1)`, with the displayed decimals rounded
+outward, gives
 
 ```text
-Theta_23(3,3,3)=.000737569263436377...,
+d       1                 2                 3
+hat(e) .166487817026127  .307074273979329  .463136310739460
+
+d       4                 5                 6                 7
+hat(e) .620252060849463  .778268700559986  .937083448073963
+       1.096619800173614
+
+d       8                 9                 10                11
+hat(e) 1.256817217867845 1.417625817342103 1.579003312035750
+       1.740913103358273
+
+d       12                13                14                15
+hat(e) 1.903323013538875 2.066204403333335 2.229531533449306
+       2.393281087379592
+
+d       16                17                18                19
+hat(e) 2.557431805184469 2.721964195976548 2.886860307761106
+       3.052103540065431
+
+d       20                21                22                23
+hat(e) 3.217678489151965 3.383570818497907 3.549767149185673
+       3.716254966211800.
 ```
 
-while the global maximum among the 4899 nontrivial classes is
+Substitution in the rational relation ledger gives
 
 ```text
-Theta_23(6,6,6)=.355270632746086....
+hat(Theta)_23(d_L,d_R,c_rel)
+ =a*(d_L+d_R-c_rel)+c_rel
+    -6*(hat(e)_(d_L)+hat(e)_(d_R)).                   (JCE3)
 ```
 
-The next two are `(7,7,7)` at `.345192008050732...` and `(5,5,5)` at
-`.300003240077769...`.  The binary loss is still positive,
-`6*f_1=.509801171689058...`; the obstruction is purely the rational
-more-than-`d` branch.  Additional exact-coordinate marginals cannot repair
-it.  Closing level twenty-three requires weight-two or weight-three
-interactions involving the extra nonzero coordinate images, or a finer
-classification of their collisions.
-
-The candidate first-moment exponents at level twenty-three are
+An outward finite enumeration of all `4899` nontrivial triples gives
 
 ```text
-X_23: 10.1074002197388...,
-C_23:  6.98753753728717...,
-formal coefficient: 1.25604847508300....
+max hat(Theta)_23
+ =1-3*a
+ =-m
+ =-.498390353235145...,
 ```
 
-They are not high-probability conclusions because the second-moment ledger is
-open.  The strengthened finite ledger therefore closes all displayed fixed
-odd levels through twenty-one.  This remains an actual-modular,
-visibility-one, high-probability conditioning theorem about formal retained-
-character level, not original Walsh degree.  Its first failure at level
-twenty-three is a failure of this projection certificate, not a proof that the
-count does not concentrate.  It gives neither a fixed-cutoff tail sign nor the
-final Wagner sign.
+uniquely at `(d_L,d_R,c_rel)=(1,1,1)`.  The next value is
+`-a=-.499463451078382...`, at the two ordered one-sided classes
+`(0,1,0)` and `(1,0,0)`.  Thus the old positive values at `(3,3,3)` and
+`(6,6,6)` were artifacts of pooling all unlisted extra-coordinate mass into
+one bin.
+
+The mod-two ledger is unchanged.  One binary defect loses
+
+```text
+6*f_1=.509801171689058...,
+
+f_1=-(1-2*s_23)*log_2(1-2*s_23)
+      -2*s_23*log_2(2*s_23).                         (JCE4)
+```
+
+All nonzero Smith invariants remain `O_23(1)`.  Combining `(JCE3)` and
+`(JCE4)` with the first-moment ledger proves
+
+```text
+Var_Y(X_23)/E_Y[X_23]^2
+ <=N^(-.498390353235145...+o(1)),
+
+X_23=N^(10.1074002197388...+o(1))                     (JCE5)
+```
+
+with high probability.  Intersecting with `Good` and applying the same
+resultant and multiplicity argument gives
+
+```text
+C_23>=N^(6.98753753728717...+o(1)).                   (JCE6)
+```
+
+The exact majority coefficient is negative:
+
+```text
+-a_23=13749310575*alpha_V/
+  product_(r=1)^11(M_V-2*r+epsilon_V)
+  =N^(-23*m/2+o(1)).                                 (JCE7)
+```
+
+Consequently,
+
+```text
+-a_23*C_23>=N^(1.25604847508300...+o(1)),
+
+S_formal>=2*(-a_23*C_23)-1
+        >=N^(1.25604847508300...+o(1)).               (JCE8)
+```
+
+The actual-modular fixed-type argument now closes every displayed odd formal
+level through twenty-three.  This is a visibility-one, high-probability
+conditioning theorem for formal retained-character level, not original
+Walsh degree.  It gives neither a fixed-cutoff tail sign nor the final Wagner
+sign.  Level twenty-five is not claimed here.
 
 There is an exact same-`P_3` obstruction, even under symmetry and
 nonnegative Walsh likelihood coefficients.  Let odd `M>=11`, take independent
@@ -13808,6 +14152,278 @@ do not extend to unbalanced or mixed cutoffs, simultaneous whole occupied-
 cell nonradial optimization, `Y`-adaptive cell selection, or nonlinear
 statistics.
 
+At visibility one, there is nevertheless a uniform way to adjoin all
+sufficiently low-occupancy cells to any controlled core.  Work on the
+deduplicated distinct-support
+occupied quotient, with empty cells removed.  For a nonempty cell `r`, let
+`O_r` be its support set, put
+
+```text
+n_r=|O_r|,       q_r=n_r^(-1/2)*1,
+
+P_r=I_(n_r)-q_r*q_r^T,
+```
+
+and write `Gamma_(r,s)` for the rectangular conditional-Gram block.  If
+
+```text
+d_u^(r->s)=sum_(z in O_r)Gamma_(z,u),
+
+bar(d)^(r->s)=n_s^(-1)*sum_(u in O_s)d_u^(r->s),
+```
+
+then exactly
+
+```text
+||q_r^T*Gamma_(r,s)*P_s||_2^2
+ =n_r^(-1)*sum_(u in O_s)
+    (d_u^(r->s)-bar(d)^(r->s))^2.                   (LCX1)
+```
+
+Likewise, the entries of `P_r*Gamma_(r,s)*P_s` are
+
+```text
+Gamma_(z,u)
+ -n_s^(-1)*sum_v Gamma_(z,v)
+ -n_r^(-1)*sum_w Gamma_(w,u)
+ +(n_r*n_s)^(-1)*sum_(w,v)Gamma_(w,v).              (LCX2)
+```
+
+Thus orthogonal projection contracts the Frobenius norm.  If `Xi_A` is the
+ordered square-correlation energy over different-cell pairs touching a cell
+set `A`, then
+
+```text
+sum_(r!=s; r in A or s in A)
+  ||P_r*Gamma_(r,s)*P_s||_F^2<=Xi_A,
+
+sum_(r!=s; r in A or s in A)
+  ||q_r^T*Gamma_(r,s)*P_s||_2^2<=Xi_A.              (LCX3)
+```
+
+There is no extra factor because both sides use ordered blocks.
+
+For a degree cell `r`, put `x_j=r_j/(3*n)` and define its expected-occupancy
+and reference-mass exponents by
+
+```text
+m_occ(r)=3*sum_j[H_2(x_j)+x_j]-(1+a),
+
+kappa_ref(r)=(1+a)-3*sum_j[H_2(x_j)-x_j],
+
+E|O_r|=N^(m_occ(r)+o(1)),
+
+p_r^(0)=N^(-kappa_ref(r)+o(1)).                     (LCO1)
+```
+
+They satisfy
+
+```text
+m_occ(r)+kappa_ref(r)=6*sum_j x_j.
+```
+
+Fix `0<=s<1/20` and let `L_s={r:m_occ(r)<=s}`.  If `x_s` is the unique root
+of
+
+```text
+12*[H_2(x_s)+x_s]=1+a+s,
+```
+
+put `f(x)=H_2(x)+x` and `g(x)=H_2(x)-x`.  The composition
+`g o f^(-1)` is increasing and concave on the cutoff range, so Jensen gives
+
+```text
+kappa_ref(r)>=kappa_*(s):=24*x_s-s.                 (LCO2)
+```
+
+The right side decreases on this interval, while
+
+```text
+x_(1/20)=.01525071392695827...,
+
+kappa_*(1/20)=.316017134246999...>.1.               (LCO3)
+```
+
+Hence every cell in `L_s` lies in the reference-light region used by the
+existing cutoff `kappa=.1`.
+
+Choose fixed `tau>0` with `s+tau<1/20`, put
+`L=union_(r in L_s)O_r`, and let `M_L=|L|`.  There are only `N^o(1)` cells,
+so the occupancy envelope and Markov give
+
+```text
+M_L<=N^(s+tau+o(1))                                 (LCO4)
+```
+
+except with probability `N^(-tau+o(1))`.  On `E_short`, distinct supports
+obey
+
+```text
+Gamma_(T,T)=1,
+
+0<=Gamma_(T,U)<=delta_n,       0<=h_T<=delta_n,
+
+delta_n=N^(-1/20+o(1)).
+```
+
+Gershgorin and `(LCO4)` therefore give
+
+```text
+Gamma_(L,L)
+ >=[1-N^(-(1/20-s-tau)+o(1))]*I,
+
+||h_L||_2^2<=N^(-(1/10-s-tau)+o(1)).                (LCO5)
+```
+
+Because `L_s` is reference-light, the existing square-atom theorem and
+Markov, with `delta_X=.009`, give for the full `kappa=1/10`
+reference-light energy `Xi_(.1)(Y):=Xi(Y)`
+
+```text
+Xi_(.1)(Y)<=N^(-.009+o(1))                          (LCO6)
+```
+
+except with probability
+
+```text
+N^(-(.1-F_16-.009)+o(1))
+ =N^(-.002538977955...+o(1)).
+```
+
+Let `C` be any occupied core disjoint from `L` on the same quotient and write
+`B_cross=Gamma_(C,L)`.  The event `(LCO6)` is global, so it gives uniformly
+
+```text
+||B_cross||_op^2<=||B_cross||_F^2<=N^(-.009+o(1)).  (LCO7)
+```
+
+Assume the core event supplies
+
+```text
+Gamma_(C,C)>=N^(-sigma+o(1))*I,       sigma<.009,
+
+Q_C=h_C^T*Gamma_(C,C)^(-1)*h_C>=N^(-F-o(1)),
+
+F=.00731732816....                                  (LCO8)
+```
+
+Put
+
+```text
+rho_cross
+ =||Gamma_(C,C)^(-1/2)*B_cross*Gamma_(L,L)^(-1/2)||_op.
+```
+
+Then `(LCO5)`--`(LCO8)` imply
+
+```text
+rho_cross^2<=N^(-(0.009-sigma)+o(1))=o(1).
+```
+
+The normalized two-block matrix has floor `1-rho_cross`, and hence
+
+```text
+Gamma_(C union L)>=N^(-sigma+o(1))*I.               (LCO9)
+```
+
+For the dual, define
+
+```text
+S_L=Gamma_(L,L)
+    -B_cross^T*Gamma_(C,C)^(-1)*B_cross,
+
+r_L=h_L-B_cross^T*Gamma_(C,C)^(-1)*h_C.
+```
+
+One has `S_L>=(1-o(1))*I` and
+
+```text
+||B_cross^T*Gamma_(C,C)^(-1)*h_C||_2^2
+ <=N^(-(0.009-sigma)+o(1))*Q_C=o(Q_C).
+```
+
+Also `(LCO5)` gives `||h_L||_2^2=o(Q_C)`, because
+`1/10-s-tau>1/20>F`.  Exact block elimination now yields
+
+```text
+Q_(C union L)
+ =Q_C+r_L^T*S_L^(-1)*r_L
+ =(1+o(1))*Q_C.                                     (LCO10)
+```
+
+Thus, for every fixed `s<1/20`, the occupied support set `L` of the
+deterministic cell layer `L_s` can be adjoined to a controlled core without
+changing its fully `Y`-adaptive real linear optimum.  The joint event is the
+intersection of `E_short`, the events `(LCO4)` and `(LCO6)`, and the core
+event.  No global `Good` event is used unless it is already part of the core
+theorem.
+
+An exact orbit-feature example explains why the remaining mixed-cell core
+does not follow by simply summing automatic fixed-cell floors.  Take four
+coordinate blocks, a nonempty common base `C_i` in each block, donor
+coordinates `a_1,a_2,a_3` in block four, and a recipient `b_i` in block `i`
+for `i=1,2,3`.  For `S subset {1,2,3}`, let the all-positive row `z_S` have
+support
+
+```text
+T_S=C_1 union C_2 union C_3 union C_4
+    union {b_i:i in S} union {a_i:i notin S}.
+```
+
+The eight rows occupy eight different exact-degree cells, and each singleton
+cell has automatic restriction `[1]`.  Common base coordinates give
+`K_+(z_S,-z_T)=0`, while
+
+```text
+K_orb(S,T)=4^(-|S triangle T|)
+ =[[1,1/4],[1/4,1]]^(tensor 3)_(S,T).               (SW1)
+```
+
+For `w_S=(-1)^|S|`,
+
+```text
+K_orb*w=(27/64)*w,
+
+(2*K_orb-I)*w=-(5/32)*w.                            (SW2)
+```
+
+Thus the union of the automatic subkernels has an order-one negative
+direction even though every one-cell automatic restriction has floor one.
+This is not a counterexample for the complete conditional Gram.  Suppose the
+rows are retained in a paired-label realization with
+`Y_(a_i)=Y_(b_i)` and with no other signed zero relation on any displayed
+symmetric difference.  Then, for `d=|S triangle T|`, the nonautomatic
+relations give
+
+```text
+Gamma_(S,T)=2^(-d),
+
+Gamma=[[1,1/2],[1/2,1]]^(tensor 3),
+
+lambda_min(Gamma)=1/8.                              (SW3)
+```
+
+The cross-cell nonautomatic remainder exactly repairs the automatic negative
+direction.  Such a paired construction also violates `E_short` through the
+two-term relations `e_(a_i)-e_(b_i)`.  The example proves only that
+automatic per-cell certificates cannot be assembled without a separate
+cross-cell remainder theorem; it is not a typical random modular obstruction
+and does not refute a mixed-cell theorem.
+
+The intermediate- and high-occupancy mixed core therefore remains the sharp
+gap.  Removing the light cutoff from the current square-energy method gives
+only
+
+```text
+E[Xi_all]<=N^(F_16+o(1))=N^(.088461...+o(1)),
+```
+
+while the automatic square mass in the balanced region already has total
+exponent `F_8=.046133...`.  A Frobenius perturbation argument is therefore
+exponentially divergent there.  Closing the remaining core requires a global
+centered trace-four or representation-theoretic certificate; the fixed-cell
+mask deletions cannot simply be union-bounded over mixed degrees.
+
 For the one deterministic degree-symmetric resolvent optimizer, the missing
 quenched statement is narrower.  Put into `E_ng(Y)` the entire actual
 contribution of every non-generic pair class
@@ -15436,9 +16052,18 @@ automatic normalized row energy with any exponent below `.239292...`; a
 nonautomatic joint-rank certificate proves
 `E[1_Good*Tr(E_rem^4)]<=N^(-.0032192935...+o(1))`, implying `(MO2)` and the
 remaining part of `(MO3)`.  Thus the centered-Schur/equitability interface
-closes for that cell.  These results do not cover unbalanced or mixed
-cutoffs, simultaneous whole occupied-cell nonradial optimization,
-`Y`-adaptive cell selection, or nonlinear statistics.
+closes for that cell.  More generally, every deterministic cell layer with
+fixed expected-occupancy exponent `s<1/20` can, with high probability, be
+adjoined to any core with spectral-loss exponent below `.009` and dual mass
+at least
+`N^(-.0073173282...-o(1))`, without changing that value.
+An exact eight-cell swap cube gives eigenvalue `-5/32` for the union of the
+automatic subkernels despite unit one-cell floors; in a dissociated paired-
+label realization, cross-cell nonautomatic relations repair the full Gram.
+Hence automatic per-cell certificates cannot simply be summed.  The
+intermediate- and high-occupancy mixed core,
+unbalanced cutoffs, simultaneous whole occupied-cell nonradial optimization,
+`Y`-adaptive cell selection, and nonlinear statistics remain open.
 Bucket-sum-only rehash medians are only margin transforms of the same path
 sum, while a positive three-character likelihood
 model shows that fixed
@@ -15469,20 +16094,19 @@ closure expansion makes the cubic formal-level contribution at most
 `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
 closure levels at least five to contribute at least
 `N^(0.021392...+o(1))`.  With high probability, the actual automatic
-contributions from quintic through level twenty-one have signed magnitudes at
-least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
+contributions from quintic through level twenty-three have signed magnitudes
+at least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
 `N^(0.2246470...+o(1))`, `N^(0.3303074...+o(1))`,
 `N^(0.4518674...+o(1))`, `N^(0.5879439...+o(1))`,
-`N^(0.7373572...+o(1))`, `N^(0.8990879...+o(1))`, and
-`N^(1.0722463...+o(1))`, with signs `+,-,+,-,+,-,+,-,+`.
+`N^(0.7373572...+o(1))`, `N^(0.8990879...+o(1))`,
+`N^(1.0722463...+o(1))`, and `N^(1.2560485...+o(1))`, with signs
+`+,-,+,-,+,-,+,-,+,-`.
 Thus the absolute formal-level mass and its triangle-inequality condition
-number are at least `N^(1.0722463...+o(1))`.  The combined low-weight and
-exact-marginal ledger closes the displayed fixed odd levels through
-twenty-one.  It first fails at level twenty-three in the rational
-more-than-rank branch: `(3,3,3)` is the first positive diagonal class and
-`(6,6,6)` is globally worst.  This is a certificate failure, not an algorithm
-lower bound, and determines neither a fixed-cutoff tail nor the final Wagner
-sign.
+number are at least `N^(1.2560485...+o(1))`.  An exact conditional-entropy
+projection bound removes the extra-coordinate pooling obstruction and closes
+the displayed fixed odd levels through twenty-three.  Level twenty-five is
+not claimed.  This is not an algorithm lower bound and determines neither a
+fixed-cutoff tail nor the final Wagner sign.
 More
 sharply, two valid
 nonnegative-Walsh likelihood
@@ -15566,18 +16190,26 @@ near-cap only with probability `N^(-gamma+o(1))`; constant success needs
 `N^(gamma-o(1))` coverage.  In the size-biased cap experiment, with high
 probability over the labels, a fixed rank-`r` linear sketch with a vanishing-
 error candidate list needs list size `m^(1-r/(2*q)-o(1))`, so an `m^o(1)`
-list retains almost all `2*q` coordinates.  Annealed over iid labels, the cap
-count satisfies `E[(H_v)_2]/E[H_v]^2=N^(kappa_2(gamma)+o(1))`, with
-`kappa_2(1/9)=0.0007041260269...`; the averaged size-biased row sees the same
-exponential number of additional caps.  This rejects the naive matching-
-factorial-moment Poisson heuristic, but is not a quenched claim.  Yet, for every fixed
+list retains almost all `2*q` coordinates.  With high probability over the
+iid labels, `E_G[(H_v)_2|Y]/(m*p_cap)^2=N^(kappa_2(gamma)+o(1))`, where
+`kappa_2(1/9)=0.00070412602694...`; the label-conditional size-biased row sees
+the same exponential expected number of additional caps.  This rejects the
+naive matching-factorial-moment Poisson heuristic but remains a conditional-
+moment statement, not typical-`G` or ordinary-hit clustering.  Under the
+ordinary hit law, even nonlinear Gaussian-adaptive windows chosen through a
+summary `S_info` obey an information bound.  If their pointwise component
+count plus total length is `N^(eta+o(1))`, success probability `alpha` costs
+at least `[alpha*(gamma-eta-r_gamma)-o(1)]*ln(N)-h_nat(alpha)` nats.  At
+`gamma=1/9`, `gamma-r_gamma=.111021964613784...`; a finite `B`-bit transcript
+obeys the corresponding range bound.  This is an information or description
+obstruction, not a time lower bound.  Yet, for every fixed
 `0<gamma<=1/9`, with high probability over the labels the size-biased cap row
 and the ordinary Gaussian row conditioned on a nonempty cap are
 asymptotically singular: their squared
 radii are separated at `s_cut=(s_0+1+a_gamma)/2`, where
 `a_gamma=gamma*ln(2)/12` and `s_0=a_gamma/(1-exp(-a_gamma))`.  Thus the sketch
 theorem does not transfer by a Poisson or contiguity argument.  These results
-do not cover amplitude-adaptive or nonlinear global processing.  The
+do not cover unrestricted full-amplitude global processing.  The
 adversarial
 reduction leaves the iid-Gaussian and
 simple-root promise open.  Custom sparse/circuit and random approximate
