@@ -161,9 +161,15 @@ probability.  A cancellation-aware thick-strip argument count gives
 `rho_freq=max_i|nu_i|`, so thick-strip complex-zero-free pruning
 needs `Omega(M/q)` cells; every data-adaptive continuous ultra-thin graph
 contour still has `Omega(M)` explicit denominator crossings with high
-probability.  These facts do not block
-direct real root counting or aggregate winding.  Root conditioning needs only
-polynomially many bits.  Standard coefficient-explicit Cayley-transform/Sturm
+probability.  These facts do not block direct real root counting.  For
+aggregate winding, the sparse curve `Psi_w=F+i*N^-10*F'` stays `N^-11` from
+zero with high probability; its straight-chord closure has winding `-R_v/2`
+and total phase variation `pi*R_v+o(1)`, while retaining at most `2*q+1`
+exponential slots.
+A predetermined dyadic endpoint grid gives an output-sensitive locator
+conditional on a polynomial-cost sparse-circuit winding evaluator; constructing
+that evaluator remains open.  Root conditioning needs only polynomially many
+bits.  Standard coefficient-explicit Cayley-transform/Sturm
 and
 Markov--Lukacs/SOS conversions have `Omega(N)` size, while the threshold
 sequence along every dyadic stride `s<=M` has exact minimal recurrence order
@@ -352,11 +358,17 @@ fixed expected-occupancy exponent `s<1/20` can, with high probability, be
 adjoined to any core with spectral-loss exponent below `.009` and dual mass
 at least
 `N^(-.0073173282...-o(1))`, without changing that value.
+There is also a fixed `delta_0>0` such that every fixed visibility-one cusp
+collar `p-delta<=r_j/(3*n)<=p`, `0<delta<=delta_0`, simultaneously has
+conditional-Gram floor `1-o(1)` and radial-centered norm `o(1)`.  On the CES
+event, if that same collar's radial quotient is at least
+`N^(-.0073173282...-o(1))`, its unrestricted real linear dual is
+`1+o(1)` times its radial dual.
 An exact eight-cell swap cube gives eigenvalue `-5/32` for the union of the
 automatic subkernels despite unit one-cell floors; in a dissociated paired-
 label realization, cross-cell nonautomatic relations repair the full Gram.
-Hence automatic per-cell certificates cannot simply be summed.  The
-intermediate- and high-occupancy mixed core,
+Hence automatic per-cell certificates cannot simply be summed.  The mixed
+core outside this collar,
 unbalanced cutoffs, simultaneous whole occupied-cell nonradial optimization,
 `Y`-adaptive cell selection, and nonlinear statistics remain open.
 Bucket-sum-only random rehash medians contain only the original path-sum
@@ -388,17 +400,18 @@ closure expansion makes the cubic formal-level contribution at most
 `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
 closure levels at least five to contribute at least
 `N^(0.021392...+o(1))`.  With high probability, the actual automatic
-contributions from quintic through level twenty-three have signed magnitudes
+contributions from quintic through level twenty-five have signed magnitudes
 at least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
 `N^(0.2246470...+o(1))`, `N^(0.3303074...+o(1))`,
 `N^(0.4518674...+o(1))`, `N^(0.5879439...+o(1))`,
 `N^(0.7373572...+o(1))`, `N^(0.8990879...+o(1))`,
-`N^(1.0722463...+o(1))`, and `N^(1.2560485...+o(1))`, with signs
-`+,-,+,-,+,-,+,-,+,-`.
+`N^(1.0722463...+o(1))`, `N^(1.2560485...+o(1))`, and
+`N^(1.4497986...+o(1))`, with signs `+,-,+,-,+,-,+,-,+,-,+`.
 Thus the absolute formal-level mass and its triangle-inequality condition
-number are at least `N^(1.2560485...+o(1))`.  An exact conditional-entropy
-projection bound removes the extra-coordinate pooling obstruction and closes
-the displayed fixed odd levels through twenty-three.  Level twenty-five is
+number are at least `N^(1.4497986...+o(1))`.  An exact conditional-entropy
+projection bound, together with a rank-one low-weight check, removes the
+extra-coordinate pooling obstruction and closes the displayed fixed odd
+levels through twenty-five.  Level twenty-seven is
 not claimed.  This is not an algorithm lower bound and determines neither a
 fixed-cutoff tail nor the final Wagner sign.
 More

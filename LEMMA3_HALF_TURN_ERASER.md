@@ -167,12 +167,19 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   fixed expected-occupancy exponent `s<1/20` can, with high probability, be
   adjoined to any core with spectral-loss exponent below `.009` and dual mass
   at least `N^(-.0073173282...-o(1))`, without changing that value.
+  There is also a fixed `delta_0>0` such that every fixed visibility-one cusp
+  collar `p-delta<=r_j/(3*n)<=p`, `0<delta<=delta_0`, simultaneously has
+  conditional-Gram floor `1-o(1)` and radial-centered norm `o(1)`.  On the
+  CES event, if that same collar's radial quotient is at least
+  `N^(-.0073173282...-o(1))`, its unrestricted real linear dual is `1+o(1)`
+  times its radial dual.
   An exact eight-cell swap cube gives eigenvalue `-5/32` for the union of the
-  automatic subkernels despite unit one-cell floors; in a dissociated paired-
-  label realization, cross-cell nonautomatic relations repair the full Gram.
-  Hence automatic per-cell certificates cannot simply be summed.  The
-  intermediate- and high-occupancy
-  mixed core, unbalanced cutoffs, simultaneous whole occupied-cell nonradial
+  automatic subkernels despite unit one-cell floors; in a dissociated
+  paired-label realization, cross-cell nonautomatic relations repair the
+  full Gram.
+  Hence automatic per-cell certificates cannot simply be summed.  The mixed
+  core outside this collar, unbalanced cutoffs, simultaneous whole
+  occupied-cell nonradial
   optimization, `Y`-adaptive cell selection, and nonlinear statistics remain
   open.
   Bucket-sum-only random rehash medians contain no information beyond the
@@ -207,19 +214,20 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
   closure levels at least five to contribute at least
   `N^(0.021392...+o(1))`.  With high probability, the actual automatic
-  contributions from quintic through level twenty-three have signed magnitudes
+  contributions from quintic through level twenty-five have signed magnitudes
   at
   least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
   `N^(0.2246470...+o(1))`, `N^(0.3303074...+o(1))`,
   `N^(0.4518674...+o(1))`, `N^(0.5879439...+o(1))`,
   `N^(0.7373572...+o(1))`, `N^(0.8990879...+o(1))`,
-  `N^(1.0722463...+o(1))`, and `N^(1.2560485...+o(1))`, with signs
-  `+,-,+,-,+,-,+,-,+,-`.
+  `N^(1.0722463...+o(1))`, `N^(1.2560485...+o(1))`, and
+  `N^(1.4497986...+o(1))`, with signs `+,-,+,-,+,-,+,-,+,-,+`.
   Thus the absolute formal-level mass and its triangle-inequality condition
-  number are at least `N^(1.2560485...+o(1))`.  An exact conditional-entropy
-  projection bound removes the extra-coordinate pooling obstruction and
-  closes the displayed fixed odd levels through twenty-three.  Level
-  twenty-five is not claimed.  This is not an algorithm lower bound and
+  number are at least `N^(1.4497986...+o(1))`.  An exact conditional-entropy
+  projection bound, together with a rank-one low-weight check, removes the
+  extra-coordinate pooling obstruction and closes the displayed fixed odd
+  levels through twenty-five.  Level twenty-seven is not claimed.  This is
+  not an algorithm lower bound and
   determines neither a fixed-cutoff tail nor the final Wagner sign.
   More sharply, two
   valid nonnegative-Walsh
@@ -303,9 +311,16 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   where `rho_freq=max_i|nu_i|`, so thick-strip complex-zero-free pruning needs
   `Omega(M/q)` cells; every data-adaptive continuous ultra-thin graph contour
   still has `Omega(M)` explicit denominator crossings with high probability.
-  These facts do not block direct real root counting or aggregate winding.
-  Root conditioning needs only polynomially many bits.  Standard coefficient-
-  explicit Cayley-transform/Sturm and Markov--Lukacs/SOS conversions have
+  These facts do not block direct real root counting.  For aggregate winding,
+  the sparse curve `Psi_w=F+i*N^-10*F'` stays `N^-11` from zero with high
+  probability; its straight-chord closure has winding `-R_v/2` and total
+  phase variation `pi*R_v+o(1)`, while retaining at most `2*q+1` exponential
+  slots.  A
+  predetermined dyadic endpoint grid gives an output-sensitive locator
+  conditional on a polynomial-cost sparse-circuit winding evaluator;
+  constructing that evaluator remains open.  Root conditioning needs only
+  polynomially many bits.  Standard coefficient-explicit Cayley-transform/
+  Sturm and Markov--Lukacs/SOS conversions have
   `Omega(N)`
   size, while the threshold sequence along every dyadic stride `s<=M` has
   exact minimal recurrence order `2*q+1` with high probability.  An
@@ -4561,6 +4576,178 @@ zero still
 processes `Omega(M)` crossings, even when its graph is data-adaptive.  This
 does not block aggregate winding, a non-graph or thicker contour, or a direct
 real-root oracle.
+
+Aggregate winding does have a Gaussian-promise normal form which avoids those
+derivative crossings.  Keep fixed `0<gamma<=1/9`, put `m=floor(N^gamma)`,
+and let `F=X-v`, where
+
+```text
+v=O(sqrt(n)),        m*phi(v)=N^o(1),
+barPhi(v)=N^(-gamma+o(1)).
+```
+
+Both `v=u` and the near-cap value `v=u-L` satisfy these assumptions.  On the
+typical label event, write
+
+```text
+sigma_1^2=Var(X')=Theta(1),
+sigma_2^2=Var(X'')=Theta(1),
+d_gap=N^-3,          s_gap=N^-1,          eps_w=N^-10.
+```
+
+Conditional Kac--Rice gives
+
+```text
+E[#{F=0, |F'|<=2*s_gap} |Y]
+ <=C*m*phi(v)*s_gap^2=N^(-2+o(1)),
+
+E[#{F'=0, |F|<=2*d_gap} |Y]
+ <=C*m*d_gap*(v+1)*phi(v-2*d_gap)=N^(-3+o(1)).       (GW1)
+```
+
+For the second line, `X'` is independent of `(X,X'')`, and conditioning
+`X''` on `X` costs only the displayed `v+1` factor.  Moreover,
+
+```text
+Pr[F(0)>=-d_gap or F(m)>=-d_gap]
+ =O(N^(-gamma+o(1))),
+
+B_j:=sup_(0<=t<=m)|F^(j)(t)|=O(sqrt(q)),       j=1,2,
+```
+
+with high probability.  Hence both endpoints are negative, every root has
+`|F'|>2*s_gap`, and there is no critical point where `|F|<=d_gap`.  Every
+component of `{|F|<d_gap}` is monotone and contains exactly one root.  If
+`|F'|` fell from more than `2*s_gap` at that root to `s_gap`, the mean-value
+theorem would force an `F`-change at least `s_gap^2/B_2>d_gap`, because
+
+```text
+d_gap*B_2/s_gap^2=N^(-1+o(1))<1.
+```
+
+Thus `|F'|>=s_gap` throughout every such component.  Define the sparse
+complex curve
+
+```text
+Psi_w(t)=F(t)+i*eps_w*F'(t).
+```
+
+On the same event,
+
+```text
+inf_(0<=t<=m)|Psi_w(t)|
+ >=min(d_gap,eps_w*s_gap)>=N^-11.                    (GW2)
+```
+
+Close `Psi_w(0->m)` by the straight chord between its endpoints.  The chord
+stays in the left half-plane.  If `R_v` is the number of level-`v` roots in
+`[0,m]`, with positive winding counterclockwise, then
+
+```text
+Wind(Psi_w closed)=-R_v/2.                           (GW3)
+```
+
+Indeed, at every simple root the local curve is a nonzero real multiple of
+`(t-r)+i*eps_w`, so its continuous phase decreases by `pi`.  The two endpoint
+signs are negative, and consequently `R_v` is even and the left-half-plane
+return chord supplies no additional winding.
+
+This curve is also output-sensitive in total phase variation.  If `theta_w`
+is a continuous phase, then
+
+```text
+theta_w'
+ =eps_w*(F*F''-(F')^2)/(F^2+eps_w^2*(F')^2).         (GW4)
+```
+
+Inside every root band, `d_gap*B_2=o(s_gap^2)`, so `theta_w'<0` and the
+variation is `pi+O(eps_w*B_1/d_gap)`.  Outside those bands,
+
+```text
+integral |theta_w'|
+ <=eps_w*m*(B_2/d_gap+B_1^2/d_gap^2)
+ =N^(-35/9+o(1)).
+```
+
+The full-period degree bound gives `R_v<=N`.  The accumulated band error is
+therefore `N*O(eps_w*B_1/d_gap)=N^(-6+o(1))`, and the return-chord error is
+`O(N^(-7+o(1)))`.  Thus
+
+```text
+TV(arg(Psi_w closed))=pi*R_v+o(1).                   (GW5)
+```
+
+The representation remains sparse.  If
+
+```text
+X(t)=q^(-1/2)*sum_i[
+ alpha_i*exp(i*omega_i*t)+conj(alpha_i)*exp(-i*omega_i*t)],
+```
+
+then
+
+```text
+Psi_w(t)=-v+q^(-1/2)*sum_i[
+ (1-eps_w*omega_i)*alpha_i*exp(i*omega_i*t)
+ +(1+eps_w*omega_i)*conj(alpha_i)*exp(-i*omega_i*t)].
+```
+
+It has at most `2*q+1` exponential terms, and its frequency indices need
+only `O(log(N))` bits.  The gap in `(GW2)` needs only `O(n)` bits of numerical
+precision.  Kac--Rice also gives the exact conditional mean
+
+```text
+E[R_v|Y]=m*sigma_1/pi*exp(-v^2/2)
+        =O(m*phi(v))=N^o(1),                         (GW6)
+```
+
+which is `Theta(u)` when `v=u`.
+
+There is an exact subinterval version.  If `F(a)*F(b)!=0`, follow
+`Psi_w(a->b)`, move vertically to `F(b)`, and put
+`r_end=min(|F(a)|,|F(b)|)`.  On each endpoint's real ray, move to radius
+`r_end`; if the signs differ, join those points by the upper semicircle of
+radius `r_end`, and otherwise join them on the same real ray.  Finally move
+vertically back to `Psi_w(a)`.  This canonical connector has modulus at
+least `r_end` and makes no extra circuit around zero.  Then
+
+```text
+R_[a,b]=-2*Wind
+        +1[F(b)>0]-1[F(a)>0].                        (GW7)
+```
+
+Endpoint conditioning can be supplied on a predetermined dyadic tree.  Fix
+a constant `C` for which `B_2<=C*sqrt(q)` on the preceding event and take
+
+```text
+D_w=ceil(log_2(C*m*sqrt(q)/s_gap)).
+```
+
+The full depth-`D_w` grid contains `N^(1+gamma+o(1))` points.  Since every
+fixed-time marginal is exactly standard normal, a union bound gives
+
+```text
+Pr[min_(t in full dyadic grid)|F(t)|<=d_gap]
+ <=N^(1+gamma+o(1))*d_gap*phi(v-d_gap)
+ =N^(-2+o(1)).                                      (GW8)
+```
+
+The terminal mesh is smaller than the root-separation scale.  Therefore a
+count-guided bisection uses only `O((R_v+1)*D_w)` subinterval calls, all of
+whose endpoint connectors have gap at least `d_gap`; the global sparse curve
+still supplies the smaller uniform gap `N^-11`.
+
+Consequently, an evaluator for winding of a `2*q+1`-slot sparse-exponential
+circuit with cost polynomial in `q`, `log(N)`, the logarithmic inverse gap,
+and the absolute winding would give an output-sensitive approximate locator
+under the iid-Gaussian promise.  The evaluator itself remains open.  The
+`eps_w=N^-10` phase jumps occur in intervals of comparable microscopic
+width, so ordinary sampling or Lipschitz subdivision need not find them;
+explicit Cayley/Sturm methods can still pay for the ambient degree.  The
+ultra-thin graph theorem does not obstruct this curve, whose nonnegligible
+phase motion occurs only near actual roots.  Conversely, the adversarial
+Plaisted tangency reduction does not rule out this simple-root Gaussian
+promise.
 
 Numerical conditioning is not the obstruction.  Put
 
@@ -11563,11 +11750,141 @@ S_formal>=2*(-a_23*C_23)-1
         >=N^(1.25604847508300...+o(1)).               (JCE8)
 ```
 
+The same conditional-entropy certificate closes the next formal level, but
+the rank-one branch needs one additional low-weight check.  If a rank-one
+projection has exactly one nonzero coordinate image, its output is the exact
+single-coordinate marginal and has entropy `H_2(p)+p`.  If it has at least
+three nonzero images, its singleton atoms alone have total nonzero mass at
+least
+
+```text
+6*s_25=.0303768918762546...>p.
+```
+
+If it has exactly two nonzero coordinate images, the other 23 images vanish.
+Besides the four signed singleton atoms, the 92 ordered active--zero
+weight-two atoms all have nonzero output.  Since
+
+```text
+q_(25,2)=z_25^2/Q_25(z_25)=.00016356325648928...,
+
+4*s_25+92*q_(25,2)=.035299080847850...>p,           (JCE9)
+```
+
+the total nonzero output mass is again at least `p`.  The column law is
+centrally symmetric, so if this mass is `t`, its output entropy is at least
+`H_2(t)+t`.  Concavity on `[p,1]`, together with
+`H_2(p)+p<1`, gives `H_2(t)+t>=H_2(p)+p`.  Thus the old rank-one entropy bound
+remains valid at level 25.
+
+Define
+
+```text
+hat(e)_0=0,                 hat(e)_1=H_2(p)+p=a/3,
+hat(e)_d=h_25-M_(25,25-d),                   2<=d<=25. (JCE10)
+```
+
+The type data are
+
+```text
+z_25=.016153389605057314,      Q_25(z_25)=1.59529714272884,
+delta_25=.271740584067904,     h_25=4.03559594087789,
+phi_25=3.76385535680999,       s_25=.00506281531270910.
+```
+
+Direct evaluation of `(JXM1)`, again rounded outward, gives
+
+```text
+d       1                 2                 3
+hat(e) .166487817026127  .305580320875175  .461008978863206
+
+d       4                 5                 6                 7
+hat(e) .617515769583717  .774939064090136  .933171185437371
+       1.092132597955196
+
+d       8                 9                 10                11
+hat(e) 1.251760754317887 1.412004379247791 1.572820190564107
+       1.734170860100783
+
+d       12                13                14                15
+hat(e) 1.896023665711692 2.058349556277212 2.221122477509513
+       2.384318869993652
+
+d       16                17                18                19
+hat(e) 2.547917285292336 2.711898085569957 2.876243203916680
+       3.040935949834532
+
+d       20                21                22                23
+hat(e) 3.205960849022654 3.371303509689056 3.536950509712014
+       3.702889300427940
+
+d       24                25
+hat(e) 3.869108123851764 4.035595940877891.
+```
+
+Substitution in
+
+```text
+hat(Theta)_25(d_L,d_R,c_rel)
+ =a*(d_L+d_R-c_rel)+c_rel
+    -6*(hat(e)_(d_L)+hat(e)_(d_R))                   (JCE11)
+```
+
+and an outward enumeration of all `6200` nontrivial triples gives the unique
+maximum
+
+```text
+max hat(Theta)_25
+ =1-3*a
+ =-m
+ =-.498390353235145...,
+```
+
+at `(d_L,d_R,c_rel)=(1,1,1)`.  The next value is
+`-a=-.499463451078382...` at the two one-sided classes; the next diagonal
+class is `(2,2,2)`, at `-.668036948345...`.  The mod-two ledger is now the
+limiting part of the second moment.  One binary defect loses
+
+```text
+6*f_1=.489749045069722...,
+
+f_1=-(1-2*s_25)*log_2(1-2*s_25)
+      -2*s_25*log_2(2*s_25).                         (JCE12)
+```
+
+All nonzero Smith invariants remain `O_25(1)`.  It follows that
+
+```text
+Var_Y(X_25)/E_Y[X_25]^2
+ <=N^(-.489749045069722...+o(1)),
+
+X_25=N^(10.9405650135752...+o(1)),
+C_25>=N^(7.67967800476034...+o(1))                   (JCE13)
+```
+
+with high probability after the same intersection with `Good`.  The exact
+majority coefficient is positive:
+
+```text
+a_25=316234143225*alpha_V/
+  product_(r=1)^12(M_V-2*r+epsilon_V)
+  =N^(-25*m/2+o(1)).
+```
+
+Consequently,
+
+```text
+a_25*C_25>=N^(1.44979858932108...+o(1)),
+
+S_formal>=2*a_25*C_25-1
+        >=N^(1.44979858932108...+o(1)).               (JCE14)
+```
+
 The actual-modular fixed-type argument now closes every displayed odd formal
-level through twenty-three.  This is a visibility-one, high-probability
+level through twenty-five.  This is a visibility-one, high-probability
 conditioning theorem for formal retained-character level, not original
 Walsh degree.  It gives neither a fixed-cutoff tail sign nor the final Wagner
-sign.  Level twenty-five is not claimed here.
+sign.  Level twenty-seven is not claimed here.
 
 There is an exact same-`P_3` obstruction, even under symmetry and
 nonnegative Walsh likelihood coefficients.  Let odd `M>=11`, take independent
@@ -14148,9 +14465,9 @@ certificate is instead `(NAT4)`, whose narrow bottleneck is
 `epsilon_rem=.0032192935...`.  Together, `(MO1*)`, `(MO3-auto)`, and
 `(NATop)` establish `(MO1)`--`(MO3)` and close the centered-Schur/equitability
 interface inside this one fixed balanced-cusp `Good` exact-degree cell.  They
-do not extend to unbalanced or mixed cutoffs, simultaneous whole occupied-
-cell nonradial optimization, `Y`-adaptive cell selection, or nonlinear
-statistics.
+do not by themselves extend to arbitrary unbalanced or mixed cutoffs,
+simultaneous whole occupied-cell nonradial optimization, `Y`-adaptive cell
+selection, or nonlinear statistics.
 
 At visibility one, there is nevertheless a uniform way to adjoin all
 sufficiently low-occupancy cells to any controlled core.  Work on the
@@ -14358,6 +14675,176 @@ intersection of `E_short`, the events `(LCO4)` and `(LCO6)`, and the core
 event.  No global `Good` event is used unless it is already part of the core
 theorem.
 
+The fixed-cell joint certificates also extend simultaneously to a small
+deterministic cusp collar.  For `delta>0`, let
+
+```text
+C_delta={r:p-delta<=r_j/(3*n)<=p for j=1,2,3,4},
+
+O_delta=union_(r in C_delta)O_r,
+```
+
+where only occupied distinct-support orbit cells are included.  Let
+`Q_delta` have the cell-constant columns `q_r`, and put
+
+```text
+P_delta=I-Q_delta*Q_delta^T.
+```
+
+Let
+
+```text
+Good_delta=intersection_(r in C_delta)Good_r,
+```
+
+where `Good_r` is the usual no-duplicate and no-extra-orientation event for
+one exact-degree family.
+
+There is a fixed `delta_0>0` such that, for every fixed
+`0<delta<=delta_0`, at visibility one,
+
+```text
+Gamma_(O_delta)>=[1-o(1)]*I,
+
+||Q_delta^T*Gamma_(O_delta)*P_delta||_op=o(1)        (MCC1)
+```
+
+with high probability.
+
+The first ingredient is an unequal-degree version of the exact orbit-feature
+expansion.  For arbitrary orbit rows `z,u`,
+
+```text
+K_orb(z,u)
+ =2*sum_(A cap B=empty, |B| even,
+         A union B subset T_z cap T_u)
+    2^(-|T_z|-|T_u|+|B|)*chi_B(z)*chi_B(u),          (MCC2)
+
+Gamma_auto=2*K_orb-I
+```
+
+on the distinct-support orbit quotient, including its diagonal.  This is a
+single PSD Gram on the whole unequal-degree universe.  Use the
+global, row-independent feature-level window
+
+```text
+J_delta={j:9*(p-delta)*n-n^(2/3)
+             <=j<=9*p*n+n^(2/3)}                    (MCC3)
+```
+
+and let `K_cen` retain exactly those feature coordinates.  Because this is a
+common orthogonal coordinate projection,
+
+```text
+K_orb-K_cen>=0.                                     (MCC4)
+```
+
+For a row of total degree `t`, its exact diagonal level weights are
+
+```text
+w_j(t)=4^(-t)*choose(t,j)*(3^j+(-1)^j).
+```
+
+Every collar row has `12*(p-delta)*n<=t<=12*p*n`, so `(MCC3)` contains
+`[3*t/4-n^(2/3),3*t/4+n^(2/3)]`.  A binomial tail bound, together with the
+`2^(-t)` total parity correction, gives uniformly
+
+```text
+D_cen:=diag(K_cen)=[1-o(1)]*I.                      (MCC5)
+```
+
+It remains to make the fixed-cell finite certificates uniform.  Each MT,
+AM, or NAT4 term belongs to one of finitely many incidence-mask, sign,
+rational-rank, and fixed-Smith classes.  After normalization by `n`, its
+primal column type lies in a compact finite-alphabet polytope; equivalently,
+any fixed feasible entropy dual is a continuous upper bound in the row-block
+marginals and, for MT, in the edge feature-level rates.  At `delta=0`, the
+largest legal exponents are respectively
+
+```text
+-.172003732360...,       -.239292282224...,
+-.0032192935....                                      (MCC6)
+```
+
+Suppose no uniform negative collar margin existed.  Along a sequence
+`delta_k->0`, pass to a constant finite class and a convergent subsequence of
+normalized primal types.  The limit is a feasible balanced-cusp type and
+would contradict `(MCC6)`.  This compactness step concerns the finite primal
+type sets or explicit dual upper bounds, not continuity of a numerical
+optimizer.
+
+The classes deleted only by marginal feasibility remain separated as well.
+They are finite closed activity polytopes whose normalized sections have
+positive distance from the equal-positive cusp ray.  In particular, the 32
+deficiency-two planes omitted from NAT4 have, up to permutation, marginals
+
+```text
+(lambda+mu,lambda+mu,lambda,mu),
+```
+
+whose minimum `L_infinity` distance from `(p,p,p,p)` is `p/3`.  Shrinking
+`delta_0` keeps every such class infeasible.  The equal-row, repeated-support,
+and automatic deletions are incidence-level identities and remain pointwise
+zero on `Good_delta`.
+
+The two orientation-count ledgers defining `Good_r` have strictly negative
+balanced-cusp exponents `m_exp+beta-1` and `4*a-2`.  The same finite-type
+compactness argument makes them uniformly negative after shrinking
+`delta_0`.  A union bound over `O(n^4)=N^o(1)` cells therefore gives
+
+```text
+Pr[not Good_delta]=o(1).                             (MCC7)
+```
+
+Write `K_(r,s)` for the full `K_orb` block and `E_rem` for the
+nonautomatic remainder restricted to `O_delta`.  Consequently there are
+fixed positive `epsilon_cen,epsilon_nat` for which
+
+```text
+E[1_(Good_delta)*Tr((K_cen-D_cen)^4)]
+ <=N^(-epsilon_cen+o(1)),
+
+E[1_(Good_delta)*Tr(E_rem^4)]
+ <=N^(-epsilon_nat+o(1)).                            (MCC8)
+```
+
+There is also a fixed `epsilon_row>0` such that, with high probability,
+
+```text
+sum_(r,s in C_delta)||q_r^T*K_(r,s)*P_s||_2^2
+ <=N^(-epsilon_row+o(1)).                            (MCC9)
+```
+
+Summing over at most `O(n^16)` MT/NAT cell tuples and `O(n^8)` AM cell tuples
+costs only `N^o(1)`.
+
+Equations `(MCC4)`, `(MCC5)`, `(MCC7)`, and `(MCC8)` imply
+
+```text
+Gamma_(O_delta)
+ =2*K_orb-I+E_rem
+ >=[1-o(1)]*I.
+```
+
+Equation `(MCC9)` and `||E_rem||_op=o(1)` give the second part of `(MCC1)`.
+The leading signal is cell-radial.  Thus, on the existing CES signal event
+and whenever the radial quotient of this same collar satisfies
+
+```text
+Q_(rad,delta)>=N^(-F-o(1)),       F=.00731732816...,
+```
+
+the exact centered-Schur identity gives
+
+```text
+Q_(full,delta)=[1+o(1)]*Q_(rad,delta).               (MCC10)
+```
+
+This theorem uses a fixed visibility-one collar and the original
+deterministic cutoff.  It does not allow `delta` to depend on the realized
+labels, and it does not cover the rest of the intermediate/high-occupancy
+mixed core, unbalanced cutoffs, or nonlinear statistics.
+
 An exact orbit-feature example explains why the remaining mixed-cell core
 does not follow by simply summing automatic fixed-cell floors.  Take four
 coordinate blocks, a nonempty common base `C_i` in each block, donor
@@ -14410,8 +14897,8 @@ automatic per-cell certificates cannot be assembled without a separate
 cross-cell remainder theorem; it is not a typical random modular obstruction
 and does not refute a mixed-cell theorem.
 
-The intermediate- and high-occupancy mixed core therefore remains the sharp
-gap.  Removing the light cutoff from the current square-energy method gives
+The mixed core outside the fixed cusp collar therefore remains the sharp gap.
+Removing the light cutoff from the current square-energy method gives
 only
 
 ```text
@@ -16057,11 +16544,17 @@ fixed expected-occupancy exponent `s<1/20` can, with high probability, be
 adjoined to any core with spectral-loss exponent below `.009` and dual mass
 at least
 `N^(-.0073173282...-o(1))`, without changing that value.
+There is also a fixed `delta_0>0` such that every fixed visibility-one cusp
+collar `p-delta<=r_j/(3*n)<=p`, `0<delta<=delta_0`, simultaneously has
+conditional-Gram floor `1-o(1)` and radial-centered norm `o(1)`.  On the CES
+event, if that same collar's radial quotient is at least
+`N^(-.0073173282...-o(1))`, its unrestricted real linear dual is
+`1+o(1)` times its radial dual.
 An exact eight-cell swap cube gives eigenvalue `-5/32` for the union of the
 automatic subkernels despite unit one-cell floors; in a dissociated paired-
 label realization, cross-cell nonautomatic relations repair the full Gram.
-Hence automatic per-cell certificates cannot simply be summed.  The
-intermediate- and high-occupancy mixed core,
+Hence automatic per-cell certificates cannot simply be summed.  The mixed
+core outside this collar,
 unbalanced cutoffs, simultaneous whole occupied-cell nonradial optimization,
 `Y`-adaptive cell selection, and nonlinear statistics remain open.
 Bucket-sum-only rehash medians are only margin transforms of the same path
@@ -16094,17 +16587,18 @@ closure expansion makes the cubic formal-level contribution at most
 `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
 closure levels at least five to contribute at least
 `N^(0.021392...+o(1))`.  With high probability, the actual automatic
-contributions from quintic through level twenty-three have signed magnitudes
+contributions from quintic through level twenty-five have signed magnitudes
 at least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
 `N^(0.2246470...+o(1))`, `N^(0.3303074...+o(1))`,
 `N^(0.4518674...+o(1))`, `N^(0.5879439...+o(1))`,
 `N^(0.7373572...+o(1))`, `N^(0.8990879...+o(1))`,
-`N^(1.0722463...+o(1))`, and `N^(1.2560485...+o(1))`, with signs
-`+,-,+,-,+,-,+,-,+,-`.
+`N^(1.0722463...+o(1))`, `N^(1.2560485...+o(1))`, and
+`N^(1.4497986...+o(1))`, with signs `+,-,+,-,+,-,+,-,+,-,+`.
 Thus the absolute formal-level mass and its triangle-inequality condition
-number are at least `N^(1.2560485...+o(1))`.  An exact conditional-entropy
-projection bound removes the extra-coordinate pooling obstruction and closes
-the displayed fixed odd levels through twenty-three.  Level twenty-five is
+number are at least `N^(1.4497986...+o(1))`.  An exact conditional-entropy
+projection bound, together with a rank-one low-weight check, removes the
+extra-coordinate pooling obstruction and closes the displayed fixed odd
+levels through twenty-five.  Level twenty-seven is
 not claimed.  This is not an algorithm lower bound and determines neither a
 fixed-cutoff tail nor the final Wagner sign.
 More
@@ -16176,9 +16670,15 @@ probability.  A cancellation-aware thick-strip argument count gives
 `rho_freq=max_i|nu_i|`, so thick-strip complex-zero-free pruning
 needs `Omega(M/q)` cells; every data-adaptive continuous ultra-thin graph
 contour still has `Omega(M)` explicit denominator crossings with high
-probability.  These facts do not block
-direct real root counting or aggregate winding.  Root conditioning needs only
-polynomially many bits.  Standard coefficient-explicit Cayley-transform/Sturm
+probability.  These facts do not block direct real root counting.  For
+aggregate winding, the sparse curve `Psi_w=F+i*N^-10*F'` stays `N^-11` from
+zero with high probability; its straight-chord closure has winding `-R_v/2`
+and total phase variation `pi*R_v+o(1)`, while retaining at most `2*q+1`
+exponential slots.
+A predetermined dyadic endpoint grid gives an output-sensitive locator
+conditional on a polynomial-cost sparse-circuit winding evaluator; constructing
+that evaluator remains open.  Root conditioning needs only polynomially many
+bits.  Standard coefficient-explicit Cayley-transform/Sturm
 and
 Markov--Lukacs/SOS conversions have `Omega(N)` size, while the threshold
 sequence along every dyadic stride `s<=M` has exact minimal recurrence order
