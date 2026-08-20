@@ -175,7 +175,12 @@ near-cap only with probability `N^(-gamma+o(1))`; constant success needs
 `N^(gamma-o(1))` coverage.  In the size-biased cap experiment, with high
 probability over the labels, a fixed rank-`r` linear sketch with a vanishing-
 error candidate list needs list size `m^(1-r/(2*q)-o(1))`, so an `m^o(1)`
-list retains almost all `2*q` coordinates.  Yet, for every fixed
+list retains almost all `2*q` coordinates.  Annealed over iid labels, the cap
+count satisfies `E[(H_v)_2]/E[H_v]^2=N^(kappa_2(gamma)+o(1))`, with
+`kappa_2(1/9)=0.0007041260269...`; the averaged size-biased row sees the same
+exponential number of additional caps.  This rejects the naive matching-
+factorial-moment Poisson heuristic, but is not a quenched claim.  Yet, for
+every fixed
 `0<gamma<=1/9`, with high probability over the labels the size-biased cap row
 and the ordinary Gaussian row conditioned on a nonempty cap are
 asymptotically singular: their squared
@@ -325,15 +330,19 @@ same-cell algebraic witness with `Xi=0` shows that these inputs do not imply
 an unrestricted nonradial theorem; it is not a modular counterexample.
 A multiplicity-corrected centered-Schur interface shows that the full linear
 extension would follow from a centered spectral floor with exponent below
-`0.044828...` and normalized within-cell row regularity.  Inside one fixed
-balanced cusp `Good` cell, the PSD orbit-feature Gram `K_orb` has exact level
-weights `4^(-t)*choose(t,j)*(3^j+(-1)^j)`.  A finite joint trace-four
-certificate proves central automatic occupancy `(MO1)`, with operator error
-at most `N^(-0.0430009...+o(1))`.  The remaining inputs are the centered
-nonautomatic spectral bound `(MO2)` and normalized row sums `(MO3)`.  The
-displayed `F_8,F_16` diagnostics and nonautomatic fourth-cycle target do not
-prove them.  Unrestricted same-cell nonradial weights, mixed cutoffs, and
-nonlinear performance remain open.
+`0.044828...` and normalized within-cell row regularity.  At visibility one,
+inside one fixed balanced-cusp `Good` exact-degree cell, the PSD orbit-feature
+Gram `K_orb` has
+exact level weights `4^(-t)*choose(t,j)*(3^j+(-1)^j)`.  A finite joint
+trace-four certificate proves central automatic occupancy `(MO1)`, with
+operator error at most `N^(-0.0430009...+o(1))`.  A centered-row ledger gives
+automatic normalized row energy with any exponent below `.239292...`; a
+nonautomatic joint-rank certificate proves
+`E[1_Good*Tr(E_rem^4)]<=N^(-.0032192935...+o(1))`, implying `(MO2)` and the
+remaining part of `(MO3)`.  Thus the centered-Schur/equitability interface
+closes for that cell.  These results do not cover unbalanced or mixed
+cutoffs, simultaneous whole occupied-cell nonradial optimization,
+`Y`-adaptive cell selection, or nonlinear statistics.
 Bucket-sum-only random rehash medians contain only the original path-sum
 information, while a fixed
 positive pair-overlap law can yield either sign of prediction correlation.
@@ -363,16 +372,20 @@ closure expansion makes the cubic formal-level contribution at most
 `-N^(0.021392...+o(1))`; bounded total correlation forces the net formal
 closure levels at least five to contribute at least
 `N^(0.021392...+o(1))`.  With high probability, the actual automatic
-contributions from quintic through level fifteen have signed magnitudes at
+contributions from quintic through level twenty-one have signed magnitudes at
 least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
 `N^(0.2246470...+o(1))`, `N^(0.3303074...+o(1))`,
-`N^(0.4518674...+o(1))`, and `N^(0.5879439...+o(1))`, with signs
-`+,-,+,-,+,-`.
+`N^(0.4518674...+o(1))`, `N^(0.5879439...+o(1))`,
+`N^(0.7373572...+o(1))`, `N^(0.8990879...+o(1))`, and
+`N^(1.0722463...+o(1))`, with signs `+,-,+,-,+,-,+,-,+`.
 Thus the absolute formal-level mass and its triangle-inequality condition
-number are at least `N^(0.5879439...+o(1))`.  The strengthened low-weight
-ledger closes the displayed fixed odd levels through fifteen; higher fixed
-levels need new audited projection bounds.  This is not an algorithm lower
-bound and determines neither any fixed-cutoff tail nor the final Wagner sign.
+number are at least `N^(1.0722463...+o(1))`.  The combined low-weight and
+exact-marginal ledger closes the displayed fixed odd levels through
+twenty-one.  It first fails at level twenty-three in the rational
+more-than-rank branch: `(3,3,3)` is the first positive diagonal class and
+`(6,6,6)` is globally worst.  This is a certificate failure, not an algorithm
+lower bound, and determines neither a fixed-cutoff tail nor the final Wagner
+sign.
 More
 sharply, two valid
 nonnegative-Walsh likelihood
