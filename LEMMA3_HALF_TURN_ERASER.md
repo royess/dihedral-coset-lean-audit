@@ -222,13 +222,16 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `N^(0.7373572...+o(1))`, `N^(0.8990879...+o(1))`,
   `N^(1.0722463...+o(1))`, `N^(1.2560485...+o(1))`, and
   `N^(1.4497986...+o(1))`, with signs `+,-,+,-,+,-,+,-,+,-,+`.
-  Thus the absolute formal-level mass and its triangle-inequality condition
-  number are at least `N^(1.4497986...+o(1))`.  An exact conditional-entropy
-  projection bound, together with a rank-one low-weight check, removes the
-  extra-coordinate pooling obstruction and closes the displayed fixed odd
-  levels through twenty-five.  Level twenty-seven is not claimed.  This is
-  not an algorithm lower bound and
-  determines neither a fixed-cutoff tail nor the final Wagner sign.
+  Those terms already give absolute formal mass and triangle-inequality
+  condition number `N^(1.4497986...+o(1))`.  A directed finite-convolution
+  certificate further closes every displayed odd level through 51; the
+  negative level-51 term raises both lower bounds to
+  `N^(4.6555...+o(1))`.  Separately, a finite collision stratification and a
+  local central limit theorem close every preselected fixed odd level above a
+  non-effective threshold `J_0`.  A finite unchecked interval may remain
+  between 51 and `J_0`, and there is no claim for `j=j(n)`.  These are
+  visibility-one formal-level results, not an algorithm lower bound; they
+  determine neither a fixed-cutoff tail nor the final Wagner sign.
   More sharply, two
   valid nonnegative-Walsh
   likelihood completions
@@ -315,10 +318,14 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   the sparse curve `Psi_w=F+i*N^-10*F'` stays `N^-11` from zero with high
   probability; its straight-chord closure has winding `-R_v/2` and total
   phase variation `pi*R_v+o(1)`, while retaining at most `2*q+1` exponential
-  slots.  A
-  predetermined dyadic endpoint grid gives an output-sensitive locator
-  conditional on a polynomial-cost sparse-circuit winding evaluator;
-  constructing that evaluator remains open.  Root conditioning needs only
+  slots.  A predetermined dyadic endpoint grid gives an output-sensitive
+  locator conditional on a polynomial-cost winding evaluator specialized to
+  this iid-Gaussian family; constructing that distribution-specific evaluator
+  remains open.  Unless `NP subseteq RP`, no exact or one-sided-certified
+  evaluator with the same guarantee exists uniformly for general adversarial
+  sparse inputs: an exact-power-of-two
+  centered-band Unique-SAT construction preserves an `N^-11` gap,
+  `|Wind|<=1`, and `TV(arg)=2*pi*|Wind|+o(1)`.  Root conditioning needs only
   polynomially many bits.  Standard coefficient-explicit Cayley-transform/
   Sturm and Markov--Lukacs/SOS conversions have
   `Omega(N)`
@@ -354,7 +361,7 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   `s_0=a_gamma/(1-exp(-a_gamma))`.  Thus the sketch theorem does not transfer
   by a Poisson or contiguity argument.  These results do not cover unrestricted
   full-amplitude global processing.  The adversarial
-  reduction leaves the iid-Gaussian and simple-root promise open.  Custom
+  reduction leaves the iid-Gaussian simple-root promise open.  Custom
   sparse/circuit and random approximate real-root locators remain open.
   Rejection-based quantum tilting
   cancels back to `sqrt(M/k)`.  Kac--Rice nevertheless gives
@@ -4748,6 +4755,225 @@ ultra-thin graph theorem does not obstruct this curve, whose nonnegligible
 phase motion occurs only near actual roots.  Conversely, the adversarial
 Plaisted tangency reduction does not rule out this simple-root Gaussian
 promise.
+
+There is, however, a sharp complexity obstruction to making the preceding
+evaluator uniform over arbitrary sparse-exponential inputs.  The obstruction
+already has an exact power-of-two denominator, uses the full period as its
+path, and preserves both the inverse-polynomial gap and the low-variation
+promise.
+
+Start with a 3-CNF formula `Phi_0` promised to have either zero or one
+satisfying assignment.  Add `|Phi_0|` fresh variables, each with its
+forced-true clause `(z or z or z)`.  Call the resulting formula `Phi`, with
+`n` variables and `c` clauses.  Then `c<=2*n`, the number of satisfying
+assignments is unchanged, and the all-zero assignment is not satisfying.
+Choose distinct primes
+
+```text
+n^3 <= p_i <= 2*n^3,       D=product_i p_i,       P=max_i p_i.
+```
+
+Finitely many small `n` may be handled by fixed padding.  There are enough
+such primes, they can be found in polynomial time, and
+`log(D)=Theta(n*log(n))`.  Let `m=2^h` be the least power of two at least
+`4*D`, put
+
+```text
+L=m/D in [4,8),             N=m^9=2^(9*h),
+w_i(t)=exp(2*pi*i*(D/p_i)*t/m),
+xi_i=exp(2*pi*i/p_i),       0<=t<=m.
+                                                        (GWB1)
+```
+
+Thus `[0,m]` is one full period.  For a positive literal `y_i` and a
+negative literal `not y_i`, respectively, define
+
+```text
+d_i=(w_i-1)*(w_i-xi_i),
+h_(y_i)=w_i-xi_i,           h_(not y_i)=w_i-1,
+g_C=product_(lambda in C) h_lambda,
+Q=sum_i |d_i|^2 + sum_C |g_C|^2 + 1-cos(2*pi*D*t/m).
+```
+
+At the lock grid `t=L*k`, one has `w_i=xi_i^k`.  Hence `d_i=0` exactly
+when `k mod p_i` is zero or one.  Interpret residue one as true.  At a
+Boolean grid point, `g_C=0` exactly when clause `C` is satisfied, while the
+last summand vanishes exactly on the lock grid.  The Chinese remainder
+theorem therefore gives the exact equivalence
+
+```text
+Q(t)=0  iff  t=L*k and k encodes a satisfying assignment of Phi.
+                                                        (GWB2)
+```
+
+This construction is sparse even after it is expanded.  Each `d_i` has
+three exponential terms and `|d_i|^2` has at most nine Laurent terms; each
+three-literal `g_C` has at most eight terms and `|g_C|^2` at most 64; the
+lock has three.  After equal frequencies are merged, the real sum has
+`K<=9*n+64*c+3=O(log(N))` slots.  Relative to denominator `N`, its
+basic frequency indices are
+
+```text
+Y_i=(D/p_i)*m^8,            Y_0=D*m^8.
+```
+
+All indices are integers with `O(log(N))` bits.  The lock frequency is
+`1/L<=1/4`; a term from `|d_i|^2` has absolute physical frequency at most
+`2/(L*p_i)`; and a term from `|g_C|^2` has frequency at most
+`sum_(lambda in C) 1/(L*p_lambda)<=3/(7*L)`.  Thus the entire support lies
+strictly in the centered band `|r|<N/2`.                    (GWB3)
+
+The zero equivalence has an explicit quantitative margin.  Set
+`beta=P^-3`.  At an invalid grid point some `d_i` has modulus at least
+`(4/P)^2>=beta`; at a Boolean but unsatisfying grid point some false-clause
+`g_C` has modulus at least `(4/P)^3>=beta`.  In the cell about `L*k`, use
+the local coordinate
+
+```text
+x=2*pi*(t-L*k)/L in [-pi,pi].
+```
+
+Every such witness `W` satisfies `|dW/dx|<=16`.  If
+`|x|<=beta/32`, then `|W(t)|>=beta/2`; otherwise
+`1-cos(x)>=2*x^2/pi^2`.  Consequently every cell whose centre does not
+encode a satisfying assignment satisfies
+
+```text
+Q(t)>=kappa:=beta^2/6000.                         (GWB4)
+```
+
+Write `J=n+c`.  Direct differentiation of the fixed-size products gives
+the convenient global bounds, in the local `x` coordinate,
+
+```text
+|Q_x|<=B_1:=256*J+1,
+|Q_xx|<=B_2:=1024*J+1,
+|Q_xxx|<=B_3:=4096*J+1.
+```
+
+Choose
+
+```text
+rho=min(beta/32,1/(2*B_3),1/4),       delta=rho^2/100,
+F=delta-Q.
+```
+
+At a satisfying centre all the witnesses vanish, and
+
+```text
+Q(0)=Q_x(0)=0,
+Q_xx(0)=1+2*sum_W |W_x(0)|^2 >=1.
+```
+
+Hence `Q_xx>=1/2` for `|x|<=rho`.  Strict convexity gives exactly one
+root of `F` on either side of that centre.  Outside this neighbourhood the
+lock exceeds `delta`, and (GWB4) handles every nonsatisfying cell because
+`delta<kappa`.  Thus `F` is negative everywhere in the unsatisfiable case,
+while every satisfying assignment creates one positive bump and exactly two
+simple roots.  At either root,
+
+```text
+|F'(t)|>=s:=(2*pi/L)*sqrt(delta/(2*B_2)).
+```
+
+If `A=(2*pi/L)^2*B_2` and
+
+```text
+d_0=min(delta/2,(kappa-delta)/2,s^2/(16*A)),
+```
+
+Taylor's theorem also gives the uniform interface
+
+```text
+|F(t)|<d_0  implies  |F'(t)|>=s/2.                (GWB5)
+```
+
+The roots of unity in the coefficients are not needed in the final input.
+Approximate the real and imaginary parts of every `xi_i` by rationals to
+absolute error at most `N^-20`, and continue to form every summand as the
+explicit squared modulus of the corresponding product.  The resulting
+Laurent sum is still real and nonnegative before subtraction from `delta`,
+has rational coefficients of polynomial bit length, and differs from the
+exact construction by `O(J*N^-20)` in `C^3`.  This is smaller than all the
+inverse-polylogarithmic margins above.  After harmless constant degradation,
+the bump count, simplicity, (GWB5), and negativity at the endpoints persist;
+rename the rationalized real function `F`.
+
+Now put
+
+```text
+eps=1/(2*pi*N^10),                 Psi(t)=F(t)+i*eps*F'(t).
+```
+
+If `F=sum_r a_r*exp(2*pi*i*r*t/N)`, then, without adding a slot,
+
+```text
+Psi=sum_r a_r*(1-r/N^11)*exp(2*pi*i*r*t/N).
+```
+
+Thus `Psi` has rational coefficients and the same exact power-of-two
+frequency indices.  The degraded interface yields, for all sufficiently
+large `N`,
+
+```text
+inf_(0<=t<=m)|Psi(t)|
+ >=min(d_0/2,s/(4*pi*N^10))
+ =N^-10*(log(N))^-O(1) >=N^-11.                  (GWB6)
+```
+
+The forced-true variable makes `F(0)=F(m)<0`, and exact periodicity makes
+`Psi(0)=Psi(m)`, so the return chord is degenerate.  Each simple root of
+`F` produces a clockwise phase drop of `pi`.  If `R` is the number of real
+roots on the full period, then
+
+```text
+R=2*#SAT(Phi),
+Wind(Psi)=-R/2=-#SAT(Phi).                        (GWB7)
+```
+
+This curve also satisfies the advertised variation promise.  With
+`theta=arg(Psi)`,
+
+```text
+theta'=eps*(F*F''-(F')^2)/(F^2+eps^2*(F')^2).
+```
+
+Take the constant degradation in (GWB5) so that
+`d_0*||F''||_infty<s^2/4`.  On each root band `|F|<d_0`, the displayed
+derivative has one sign, and the phase variation is
+`pi+O(eps*||F'||_infty/d_0)`.  Off the root bands its integral is at most
+
+```text
+eps*m*(||F''||_infty/d_0+||F'||_infty^2/d_0^2)
+ =N^(-10+1/9+o(1))=o(1).
+```
+
+The same bound absorbs the errors over all root bands, even without the
+unique-satisfiability promise.  Therefore
+
+```text
+TV(arg(Psi))=pi*R+o(1)=2*pi*#SAT(Phi)+o(1).       (GWB8)
+```
+
+It follows that an exact or one-sided-certified evaluator for arbitrary
+adversarial
+`K`-slot sparse-exponential curves, with running time polynomial in `K`, the
+coefficient bit length, `log(N)`, `log(gap^-1)`, and `|Wind|`, would solve
+the zero-versus-one satisfiability promise in polynomial time even on
+centered, exact-power-of-two, `N^-11`-gapped inputs with
+`TV(arg(Psi))=2*pi*|Wind|+o(1)`.  Applying the Valiant--Vazirani isolation
+reduction, with a polynomial timeout calibrated to `|Wind|<=1`, would put
+SAT in RP and hence imply `NP subseteq RP`.  Unsatisfiable and uniquely
+satisfiable trials always finish within that timeout.  A multiple-solution
+trial may be discarded on timeout; if it returns a nonzero winding early,
+accepting is safe.
+
+Accordingly, unless `NP subseteq RP`, the desired evaluator cannot be
+uniform over general adversarial sparse inputs.  This construction has
+highly structured coefficients and labels, not iid-Gaussian amplitudes and
+iid-uniform frequencies.  It therefore does not obstruct an evaluator that
+essentially uses the actual iid-Gaussian promise; that distribution-specific
+evaluator remains open.
 
 Numerical conditioning is not the obstruction.  Put
 
@@ -11880,11 +12106,311 @@ S_formal>=2*a_25*C_25-1
         >=N^(1.44979858932108...+o(1)).               (JCE14)
 ```
 
-The actual-modular fixed-type argument now closes every displayed odd formal
-level through twenty-five.  This is a visibility-one, high-probability
-conditioning theorem for formal retained-character level, not original
-Walsh degree.  It gives neither a fixed-cutoff tail sign nor the final Wagner
-sign.  Level twenty-seven is not claimed here.
+The finite-level argument extends farther, and there is a separate
+large-fixed-level theorem.  The two conclusions have different quantifiers.
+First consider the finite block
+
+```text
+j in {27,29,...,51}.
+```
+
+For an integer `ell>=0` and an integer `r`, define
+
+```text
+A_ell(r;z)
+ =sum_(k=|r|, k=r mod 2)^ell
+   choose(ell,k)*choose(k,(k+r)/2)*z^k,
+
+Q_j(z)=A_j(0;z)+A_j(1;z).                            (JCU1)
+```
+
+The saddle `z_j` is the unique positive zero of
+
+```text
+F_j(z)=z*Q_j'(z)-j*p*Q_j(z).
+```
+
+Indeed, the derivative of `z*Q_j'/Q_j` with respect to `log(z)` is the
+variance of the support size and is strictly positive.  The cusp saddle is
+first enclosed by
+
+```text
+.020766264718130<p<.020766264718132.
+```
+
+The following centres, each with radius `10^(-11)`, then give rational
+brackets for the thirteen roots:
+
+```text
+j    centre z_j^0
+27   .015948087643218145
+29   .015757338624004955
+31   .015579567541071423
+33   .015413431469364459
+35   .015257776641043441
+37   .015111604956512460
+39   .014974047552958347
+41   .014844343722765059
+43   .014721823936845471
+45   .014605896052774459
+47   .014496034019140597
+49   .014391768554849315
+51   .014292679404569398.                            (JCU2)
+```
+
+Outward integer-polynomial evaluation gives
+`F_j(z_j^0-10^(-11))<0<F_j(z_j^0+10^(-11))` in every row.  For
+`d=2,3`, put
+
+```text
+G_d(r;z)
+ =sum_(b in {0,+1,-1}^d; |r+sum_i b_i|<=1)
+   2^(-1[r+sum_i b_i!=0])*z^|supp(b)|.
+```
+
+The conditional-entropy quantity in `(JCE1)` has the exact finite-convolution
+form
+
+```text
+e_(j,d)
+ =sum_(r:G_d(r;z_j)>0)
+   A_(j-d)(r;z_j)*G_d(r;z_j)/Q_j(z_j)
+   *H((2^(-1[r+sum_i b_i!=0])*z_j^|supp(b)|
+       /G_d(r;z_j))_(b:|r+sum_i b_i|<=1)).            (JCU3)
+```
+
+A 45-decimal outward evaluation of `(JCU1)`--`(JCU3)` first extracts an exact
+power of two so that each logarithm argument lies in `[1,2)`.  It then uses
+the 110-term `atanh` series, where the transformed argument is at most `1/3`,
+and adds the remainder bound `2*t^221/[221*(1-t^2)]`.  It gives, uniformly
+over the thirteen displayed levels,
+
+```text
+e_(j,2)>.2914,                 e_(j,3)>.4410.         (JCU4)
+```
+
+This calculation uses only integer binomial convolutions, rational root
+brackets, directed arithmetic, and the displayed elementary logarithm
+remainder.  Exchangeability and entropy submodularity make the increments
+
+```text
+M_(j,k)-M_(j,k-1)
+```
+
+nonincreasing in `k`.  Consequently,
+
+```text
+e_(j,d)/d>=e_(j,3)/3,                  d>=3.          (JCU5)
+```
+
+Rank one needs a separate bound because `(JCE1)` is deliberately lossy there.
+Suppose exactly `r` coordinate images are nonzero.  For `r>=2`, the signed
+singletons and the active--zero weight-two atoms give nonzero output mass
+
+```text
+t_r>=2*r*s_j+2*r*(j-r)*q_(j,2).
+```
+
+The rational bounds `.014<z_j<.016` and direct integer-polynomial evaluation
+of `Q_j(.016)` give `t_2>.0232>p`.  For `r>=3`, the displayed lower bound is
+concave in `r`, so its minimum is at `r=3` or `r=j`; both endpoint bounds are
+larger than `.0245>p`.  This covers every level in `(JCU2)`.  For `r=1`, the
+output is the exact one-coordinate marginal.  Central symmetry and the same
+concavity argument as at level 25 therefore give the universal rank-one
+entropy `H_2(p)+p=a/3`.
+
+Substitute the conservative bounds
+
+```text
+E_0=0,        E_1=H_2(p)+p,        E_2=.2914,
+E_d=.4410*d/3 for d>=3
+```
+
+in the rational relation ledger.  Its maximum is
+
+```text
+a*(d_L+d_R-c_rel)+c_rel-6*(E_(d_L)+E_(d_R))
+ <=-.4978730978432...,                               (JCU6)
+```
+
+at `(d_L,d_R,c_rel)=(2,2,2)` for this coarse certificate.  The binary
+singleton ledger is smallest at level 51 and gives `6*f_1>.3036` throughout
+the finite block.  Fixed Smith gains are still `O_j(1)`.  Hence, for every
+displayed `j`,
+
+```text
+Var_Y(X_j)/E_Y[X_j]^2<=N^(-.3036+o(1)).              (JCU7)
+```
+
+Because there are only thirteen levels, these concentration events may be
+intersected.  Thus the actual-modular fixed-type argument closes every odd
+formal level through 51.  At the last level, outward evaluation gives the
+safe values
+
+```text
+z_51=.0142926794045694...,
+Q_51(z_51)=2.51248611332747...,
+h_51=8.18826847750159...,
+phi_51=7.81976884639295...,
+
+X_51=N^(21.7865...+o(1)),
+C_51>=N^(17.3645...+o(1)).                           (JCU8)
+```
+
+Since `51=3 mod 4`, the majority coefficient is negative and
+
+```text
+-a_51*C_51>=N^(4.6555...+o(1)),
+
+S_formal>=2*(-a_51*C_51)-1
+        >=N^(4.6555...+o(1)).                        (JCU9)
+```
+
+There is also a non-effective theorem for large fixed formal level.  Put
+
+```text
+c_0=H_2(p)+p=a/3,
+nu(0)=1-p,             nu(+1)=nu(-1)=p/2.
+```
+
+Let `B_1,B_2,B_3` be iid with law `nu`; independently let
+
+```text
+Pr[T=0]=1/2,            Pr[T=+1]=Pr[T=-1]=1/4,
+R=T-B_1-B_2-B_3.                                    (JCU10)
+```
+
+The saddle and fixed-coordinate bridge obey
+
+```text
+z_j->z_infty=p/[2*(1-p)]=.0106033237877336...,
+
+(V_(j,1),V_(j,2),V_(j,3),sum_(i>3)V_(j,i))
+ ->(B_1,B_2,B_3,R)                                  (JCU11)
+```
+
+as `j->infinity` through odd integers.  This follows from the lattice local
+central limit theorem; the convergence also holds for every entropy below.
+The collision analysis is finite.  For two nonzero rank-one coefficients,
+there is one generic class and six collision ratios
+
+```text
+c_2/c_1 in {+/-1/2,+/-1,+/-2}.
+```
+
+For three coefficients, let `calD` be the 46 primitive vectors in
+`{-2,-1,0,1,2}^3`, modulo sign, having support at least two.  Rank-one maps
+split into the generic stratum, the 46 single-hyperplane strata
+`c in d^perp`, and 328 nonzero-coordinate projective rays obtained by
+intersecting at least two such hyperplanes.  A rank-two map is generic when
+its kernel contains no ternary-cube difference; otherwise its kernel is one
+of the same 46 directions.  These cases are exhaustive because every
+collision is the difference of two points of `{0,+1,-1}^3`.
+
+Finite evaluation of these limiting laws gives
+
+```text
+case                                  limiting lower entropy
+rank 1, one active coordinate         c_0=.166487817026127...
+rank 1, exactly two active             .289165838003017...
+rank 1, at least three active          .278632107322381...
+rank 2, exactly two active             2*c_0=.332975634052253...
+rank 2, at least three active          .339841399227652...
+
+e_infty,3
+ =H(B_1,B_2,B_3|R)
+ =3*c_0+3/2-H(R)
+ =.383651195276889...                                (JCU12)
+```
+
+With exactly two active images, use the unconditional two-coordinate
+marginal: a rank-two map is invertible, while rank one is covered by the
+generic class and the six displayed ratios.  For rank one with at least three
+active images, choose any three of them and condition on all unselected
+coordinates.  For rank two, first choose two images forming a basis and then
+one further nonzero image before conditioning.  For rational rank `d>=3`, use
+`(JCE1)`.  The same entropy-increment argument as in `(JCU5)` gives
+
+```text
+e_(j,d)/d>=e_(j,3)/3.
+```
+
+Because the collision partition list is finite, `(JCU11)`--`(JCU12)` imply
+that there is an odd integer `J_0` such that, for each fixed odd `j>=J_0`,
+all rational projections admit the bounds
+
+```text
+E_0=0,       E_1=c_0,       E_2=.30,
+E_d=.38*d/3 for d>=3.                               (JCU13)
+```
+
+The resulting rational relation exponent is at most
+
+```text
+3*(a+1)-12*.38=-.06160964676485...<-.0616.           (JCU14)
+```
+
+with the maximum of this conservative ledger at `(3,3,3)`.  For every fixed
+`j`, the binary loss
+
+```text
+6*f_j=6*H_2(2*s_j)>0
+```
+
+also remains an honest exponent.  Thus, with
+
+```text
+eta_j=min(.0616,6*f_j)>0,
+```
+
+the second moment gives
+
+```text
+Var_Y(X_j)/E_Y[X_j]^2<=N^(-eta_j+o_n(1))             (JCU15)
+```
+
+for every preselected fixed odd `j>=J_0`.  The order of quantifiers matters:
+`j` is fixed before `n` tends to infinity.  The constants in the Smith,
+fixed-type, and `o_n(1)` bounds depend on `j`, and `eta_j` tends to zero.
+There is no simultaneous statement over infinitely many levels and no result
+for a growing `j=j(n)`.
+
+Finally, the same local central limit calculation gives, as fixed formal
+level tends to infinity,
+
+```text
+h_j=j*c_0-.5*log_2(j)+3/2-.5*log_2(2*pi*p)+o_j(1),
+
+phi_j=j*c_0-.5*log_2(j)+1-.5*log_2(2*pi*p)+o_j(1).
+```
+
+For each such fixed level, intersecting with `Good` and applying the same
+resultant/multiplicity ledger gives
+
+```text
+C_j>=N^(12*phi_j-j*(a+1)+o_n(1)).
+```
+
+Since `|a_j|=N^(-j*m/2+o_n(1))`, the signed term has exponent
+
+```text
+gamma_j
+ =(m/2)*j-6*log_2(j)+12-6*log_2(2*pi*p)+o_j(1),      (JCU16)
+```
+
+which is positive for all sufficiently large fixed odd `j`.  Its sign is
+`(-1)^((j-1)/2)`, and
+
+```text
+S_formal>=2*|a_j|*C_j-1>=N^(gamma_j+o_n(1)).         (JCU17)
+```
+
+The finite result through 51 and the non-effective large-fixed-level theorem
+are separate.  They do not prove that every odd level above 51 closes: a
+finite unverified interval may remain before `J_0`.  All statements are at
+visibility one and concern formal retained-character level, not original
+Walsh degree.  They give neither a fixed-cutoff tail sign nor the final Wagner
+sign.
 
 There is an exact same-`P_3` obstruction, even under symmetry and
 nonnegative Walsh likelihood coefficients.  Let odd `M>=11`, take independent
@@ -16594,13 +17120,16 @@ at least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
 `N^(0.7373572...+o(1))`, `N^(0.8990879...+o(1))`,
 `N^(1.0722463...+o(1))`, `N^(1.2560485...+o(1))`, and
 `N^(1.4497986...+o(1))`, with signs `+,-,+,-,+,-,+,-,+,-,+`.
-Thus the absolute formal-level mass and its triangle-inequality condition
-number are at least `N^(1.4497986...+o(1))`.  An exact conditional-entropy
-projection bound, together with a rank-one low-weight check, removes the
-extra-coordinate pooling obstruction and closes the displayed fixed odd
-levels through twenty-five.  Level twenty-seven is
-not claimed.  This is not an algorithm lower bound and determines neither a
-fixed-cutoff tail nor the final Wagner sign.
+Those terms already give absolute formal mass and triangle-inequality
+condition number `N^(1.4497986...+o(1))`.  A directed finite-convolution
+certificate further closes every displayed odd level through 51; the negative
+level-51 term raises both lower bounds to `N^(4.6555...+o(1))`.  Separately,
+a finite collision stratification and a local central limit theorem close
+every preselected fixed odd level above a non-effective threshold `J_0`.  A
+finite unchecked interval may remain between 51 and `J_0`, and there is no
+claim for `j=j(n)`.  These are visibility-one formal-level results, not an
+algorithm lower bound; they determine neither a fixed-cutoff tail nor the
+final Wagner sign.
 More
 sharply, two valid
 nonnegative-Walsh likelihood
@@ -16676,9 +17205,14 @@ zero with high probability; its straight-chord closure has winding `-R_v/2`
 and total phase variation `pi*R_v+o(1)`, while retaining at most `2*q+1`
 exponential slots.
 A predetermined dyadic endpoint grid gives an output-sensitive locator
-conditional on a polynomial-cost sparse-circuit winding evaluator; constructing
-that evaluator remains open.  Root conditioning needs only polynomially many
-bits.  Standard coefficient-explicit Cayley-transform/Sturm
+conditional on a polynomial-cost winding evaluator specialized to this
+iid-Gaussian family; constructing that distribution-specific evaluator remains
+open.  Unless `NP subseteq RP`, no exact or one-sided-certified evaluator with
+the same guarantee exists uniformly for general adversarial sparse inputs: an
+exact-power-of-two
+centered-band Unique-SAT construction preserves an `N^-11` gap,
+`|Wind|<=1`, and `TV(arg)=2*pi*|Wind|+o(1)`.  Root conditioning needs only
+polynomially many bits.  Standard coefficient-explicit Cayley-transform/Sturm
 and
 Markov--Lukacs/SOS conversions have `Omega(N)` size, while the threshold
 sequence along every dyadic stride `s<=M` has exact minimal recurrence order
@@ -16711,8 +17245,8 @@ radii are separated at `s_cut=(s_0+1+a_gamma)/2`, where
 theorem does not transfer by a Poisson or contiguity argument.  These results
 do not cover unrestricted full-amplitude global processing.  The
 adversarial
-reduction leaves the iid-Gaussian and
-simple-root promise open.  Custom sparse/circuit and random approximate
+reduction leaves the iid-Gaussian simple-root promise open.  Custom
+sparse/circuit and random approximate
 real-root locators remain open.
 Rejection-based quantum tilting
 returns to `sqrt(M/k)`.  On the other hand, Kac--Rice gives

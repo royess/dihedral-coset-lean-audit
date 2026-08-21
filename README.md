@@ -214,9 +214,14 @@ zero with high probability; its straight-chord closure has winding `-R_v/2`
 and total phase variation `pi*R_v+o(1)`, while retaining at most `2*q+1`
 exponential slots.
 A predetermined dyadic endpoint grid gives an output-sensitive locator
-conditional on a polynomial-cost sparse-circuit winding evaluator; constructing
-that evaluator remains open.  Root conditioning needs only polynomially many
-bits.  Standard coefficient-explicit Cayley-transform/Sturm
+conditional on a polynomial-cost winding evaluator specialized to this
+iid-Gaussian family; constructing that distribution-specific evaluator remains
+open.  Unless `NP subseteq RP`, no exact or one-sided-certified evaluator with
+the same guarantee exists uniformly for general adversarial sparse inputs: an
+exact-power-of-two
+centered-band Unique-SAT construction preserves an `N^-11` gap,
+`|Wind|<=1`, and `TV(arg)=2*pi*|Wind|+o(1)`.  Root conditioning needs only
+polynomially many bits.  Standard coefficient-explicit Cayley-transform/Sturm
 and
 Markov--Lukacs/SOS conversions have `Omega(N)` size, while the threshold
 sequence along every dyadic stride `s<=M` has exact minimal recurrence order
@@ -249,8 +254,8 @@ radii are separated at `s_cut=(s_0+1+a_gamma)/2`, where
 theorem does not transfer by a Poisson or contiguity argument.  These results
 do not cover unrestricted full-amplitude global processing.  The
 adversarial
-reduction leaves the iid-Gaussian and
-simple-root promise open.  Custom sparse/circuit and random approximate
+reduction leaves the iid-Gaussian simple-root promise open.  Custom
+sparse/circuit and random approximate
 real-root locators remain open.
 Rejection-based quantum
 tilting returns to `sqrt(M/k)`.
@@ -467,13 +472,16 @@ at least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
 `N^(0.7373572...+o(1))`, `N^(0.8990879...+o(1))`,
 `N^(1.0722463...+o(1))`, `N^(1.2560485...+o(1))`, and
 `N^(1.4497986...+o(1))`, with signs `+,-,+,-,+,-,+,-,+,-,+`.
-Thus the absolute formal-level mass and its triangle-inequality condition
-number are at least `N^(1.4497986...+o(1))`.  An exact conditional-entropy
-projection bound, together with a rank-one low-weight check, removes the
-extra-coordinate pooling obstruction and closes the displayed fixed odd
-levels through twenty-five.  Level twenty-seven is
-not claimed.  This is not an algorithm lower bound and determines neither a
-fixed-cutoff tail nor the final Wagner sign.
+Those terms already give absolute formal mass and triangle-inequality
+condition number `N^(1.4497986...+o(1))`.  A directed finite-convolution
+certificate further closes every displayed odd level through 51; the negative
+level-51 term raises both lower bounds to `N^(4.6555...+o(1))`.  Separately,
+a finite collision stratification and a local central limit theorem close
+every preselected fixed odd level above a non-effective threshold `J_0`.  A
+finite unchecked interval may remain between 51 and `J_0`, and there is no
+claim for `j=j(n)`.  These are visibility-one formal-level results, not an
+algorithm lower bound; they determine neither a fixed-cutoff tail nor the
+final Wagner sign.
 More
 sharply, two valid
 nonnegative-Walsh likelihood
