@@ -216,7 +216,10 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   the unresolved Wagner projection depends only on `r(z)=E[R|Z=z]`.
   Nonpositive signed-margin covariance would imply positive correlation but
   remains unproved; the sixth-moment result refutes the small-regression
-  sufficient condition.
+  sufficient condition.  The same positive cubic moment refutes the proposed
+  nonincreasing-regression/MLR shortcut and reduces any remaining covariance
+  route to a one-sided code-shell variation bound.  An abstract endpoint
+  family also shows that its Abel sign can flip inside a `1/M` boundary layer.
   The entire known clean-cluster residual sector is exponentially negligible
   at this regression scale.  A different automatic order-three family gives
   `<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  A new
@@ -353,8 +356,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   remains open.  Since the continuous hit event is exponentially rare,
   unconditional iid-Gaussian correctness is vacuous: the meaningful interface
   is correctness under the continuous law conditional on `R_v>0`, with
-  separate no-root false-positive control, or all-input certification.  Unless
-  `NP subseteq RP`, no exact or
+  separate no-root false-positive control, or all-input certification.  On the
+  same GW event, the root count is the nearest integer to a nonnegative
+  delta-kernel occupation integral with `O(log(N))` parameter bits.  A
+  constant-additive certified fast-forward oracle for that integral would
+  locate all roots in `poly(q,log(N),R_v)` time; its signed analogue telescopes
+  to endpoint values, so absolute variation, not the scalar exponential-gate
+  ODE, is the missing primitive.  Unless `NP subseteq RP`, no exact or
   one-sided-certified
   evaluator with the same guarantee exists uniformly for general adversarial
   sparse inputs: an exact-power-of-two
@@ -5227,6 +5235,140 @@ or superpolynomial flat support; and the exponential gate has a compact
 nonlinear description but no known certified long-time phase fast-forward.
 None of these statements is a distributional lower bound for the iid
 Gaussian problem.
+
+There is nevertheless a precise positive fast-forward interface.  For an
+interval `I=[a,b]`, put
+
+```text
+K_Lambda(t)=sqrt(Lambda/pi)*exp(-Lambda*F(t)^2)*|F'(t)|,
+
+M_Lambda(I)=integral_I K_Lambda(t) dt.              (GKF1)
+```
+
+Work on the GW good event, and assume the two endpoints satisfy
+`|F(a)|,|F(b)|>d_gap`.  Every connected component of `{|F|<d_gap}` inside
+`I` is then monotone and contains exactly one root.  The change of variables
+`y=F(t)` gives exactly
+
+```text
+integral_(root band) K_Lambda(t) dt
+ =erf(d_gap*sqrt(Lambda)).
+```
+
+If `R_I` is the root count in `I`, the complement of the root bands obeys
+
+```text
+|M_Lambda(I)-R_I|
+ <=R_I*erfc(d_gap*sqrt(Lambda))
+   +|I|*B_1*sqrt(Lambda/pi)*exp(-Lambda*d_gap^2).   (GKF2)
+```
+
+Here the factor `|F'|dt=|dF|` removes any slow-root loss.  Put
+`ell_N=ceil(log_2(N))` and take the integer parameter
+
+```text
+Lambda=8*d_gap^(-2)*ell_N=8*N^6*ell_N.             (GKF3)
+```
+
+Then `Lambda*d_gap^2=8*ell_N>=8*ln(N)` and hence
+`erfc(d_gap*sqrt(Lambda))<=N^-8`.  Since `R_I<=N`,
+`|I|<=m<=N^(1/9)`, and `B_1=N^o(1)`, `(GKF2)` becomes
+
+```text
+|M_Lambda(I)-R_I|
+ <=N^-7+N^(-44/9+o(1))=o(1).                      (GKF4)
+```
+
+The bit length of `Lambda` is only `O(log(N))`.
+
+Suppose there is a certified oracle `Occ(I,Lambda)` with additive error at
+most `1/8` and cost polynomial in `q`, `log(N)`, `log(Lambda)`, and the
+endpoint bit lengths.  For all sufficiently large `N`,
+
+```text
+R_I=round(Occ(I,Lambda)).                           (GKF5)
+```
+
+Apply this to the predetermined depth-`D_w` dyadic grid from `(GW8)`.  Its
+endpoints all satisfy the required gap.  Query the root, descend only through
+nonempty children, and infer one child count by subtracting the other from
+its parent.  The number of calls is
+
+```text
+O(1+(R_v+1)*D_w)=O((R_v+1)*log(N)).                (GKF6)
+```
+
+Terminal intervals are shorter than the root-separation scale and contain at
+most one root; ordinary sign bisection then refines it.  Thus a constant-error
+occupation fast-forward would give a certified
+`poly(q,log(N),R_v)` locator.
+
+The occupation mass has exactly the right Gaussian first moment.  Conditional
+on typical labels, `F(t)` and `F'(t)` are independent, with
+`Var(F')=sigma_1^2`, and hence
+
+```text
+E_G[M_Lambda([0,m]) |Y]
+ =m*sigma_1/pi*sqrt(2*Lambda/(1+2*Lambda))
+    *exp[-Lambda*v^2/(1+2*Lambda)].                (GKF7)
+```
+
+Dividing by the Kac--Rice mean
+`E_G[R_v|Y]=m*sigma_1*pi^(-1)*exp(-v^2/2)` gives
+
+```text
+sqrt(2*Lambda/(1+2*Lambda))
+ *exp[v^2/(2*(1+2*Lambda))]=1+o(1).                (GKF8)
+```
+
+At `v=u-L` this expectation can be superpolynomial in `q`, but it then
+matches the expected output rather than an additional gate background.
+This is only a first-moment statement, not an ordinary-hit running-time
+bound.
+
+The interface remains meaningful under the correct conditional law.  On
+typical labels, the discrete cap lower bound `(NR7)`, after subtracting the
+smaller endpoint-bad event, is also a lower bound for the continuous event
+`H={R_v>0}` and has exponent `r_gamma<gamma`.  Dividing
+the GW and dyadic-grid failure probabilities by `Pr_G[H|Y]` therefore still
+gives `o(1)` under `G | H`; under `G | H^c` it is immediate.  A randomized
+oracle must itself have failure `o(1)` under both `G | H` and `G | H^c`;
+the stronger unconditional bound `o(Pr_G[H|Y])` is sufficient for both.
+Neither an unconditional first moment nor the size-biased law supplies that
+guarantee.
+
+Finally, the missing primitive is genuinely unsigned.  The scalar gate ODE
+already fast-forwards exactly:
+
+```text
+a_exp(b)=a_exp(a)
+ *exp{-Lambda*[F(b)^2-F(a)^2]}.
+```
+
+Likewise the signed integral telescopes,
+
+```text
+integral_a^b exp(-Lambda*F^2)*F' dt
+ =sqrt(pi)/(2*sqrt(Lambda))
+   *[erf(sqrt(Lambda)*F(b))-erf(sqrt(Lambda)*F(a))]. (GKF9)
+```
+
+It cancels upcrossings against downcrossings.  In contrast,
+
+```text
+M_Lambda(I)
+ =1/2*TV(erf(sqrt(Lambda)*F);I).                   (GKF10)
+```
+
+Thus endpoint ODE fast-forward and this single-valued signed exact primitive
+lose the root count; total variation, unwrapped phase, or the absolute
+occupation is the required object.  The analytic square roots of `(F')^2`
+are simply `+F'` and `-F'`; matching `|F'|` on the real axis instead requires
+switching between them at the `Omega(m)` ordinary critical points from `(DS)`.
+It therefore does not improve the existing explicit critical-point trace.
+This excludes only that local sign-tracking route, not an aggregate contour
+or cohomological evaluator.  Equations `(GKF1)`--`(GKF10)` are a conditional
+algorithmic equivalence, not a lower bound.
 
 Numerical conditioning is not the obstruction.  Put
 
@@ -10434,9 +10576,11 @@ brackets
 ```
 
 whose exponent at the cusp is `0.249195176618...`.  These energy, covariance,
-and monotonicity statements are exact sufficient interfaces.  The sixth-
-moment theorem below refutes the small-energy interface; covariance and
-monotonicity remain unproved for the random modular law.
+and monotonicity statements are exact sufficient interfaces.  The positive
+cubic theorem below refutes the proposed nonincreasing-regression shortcut
+and, together with the sixth-moment theorem, refutes the small-energy
+interface.  The one-sided covariance bound remains unproved for the random
+modular law and is sharpened in `(WCV3)` below.
 
 The actual clean anti-majority sector is too small even at this sharper
 regression scale.  At visibility one, let `R_cl` be the part of the residual
@@ -10628,6 +10772,82 @@ with high probability.  Since `sigma^2=4*M`,
 <R,(Z/sigma)^3>_U
   >= N^(0.021392315733...+o(1)).
 ```
+
+This positive cubic moment also rules out the proposed monotone-regression
+shortcut.  Put
+
+```text
+m_W(w)=E_U[q | W=w],
+d nu_sharp=(W/mu)*d nu,       mu=E_U[W].
+```
+
+The law `nu_sharp` is the `W`-size-biased law and has no mass at zero.  The
+orthogonality `E_U[W*q]=E_U[Z*r]=0` gives exactly
+
+```text
+E_sharp[m_W(W)]=0,
+
+Cov_sharp(W^2,m_W(W))
+  =E_U[W^3*q]/mu
+  =<R,Z^3>_U/mu.                                  (WCV1)
+```
+
+Since `mu<=sigma=2*sqrt(M_V)`, the actual random modular theorem above gives,
+with high probability,
+
+```text
+Cov_sharp(W^2,m_W(W))
+ >=N^(0.519782668968...+o(1))>0.                   (WCV2)
+```
+
+If `m_W` were nonincreasing, reversed Chebyshev under `nu_sharp` would make
+this covariance nonpositive.  Thus the proposed MLR condition is false for
+the actual random modular law: with high probability there are
+`0<w_1<w_2` in the support such that `m_W(w_1)<m_W(w_2)`.
+
+The remaining covariance target has a sharper shell formulation.  Let
+`p_w=Pr_U[W=w]`.  For
+
+```text
+V_+=sum_(w>w') p_w*p_(w')*(w-w')
+       *max(m_W(w)-m_W(w'),0),
+
+V_-=sum_(w>w') p_w*p_(w')*(w-w')
+       *max(m_W(w')-m_W(w),0),
+```
+
+one has the exact identity
+
+```text
+Cov_U(W,q)=V_+-V_-.                               (WCV3)
+```
+
+Consequently `V_+<=(1-delta)*c*mu^2` is sufficient for
+`rho_Y>=delta*s_Y`.  Monotone regression was the overly strong special case
+`V_+=0`.
+
+There is also an exact code-shell description of the missing function.  Let
+`L_bin:F_2^q->F_2^V` send an orientation word to its selected-character
+incidence vector, put `C_code=im(L_bin)`, and define
+
+```text
+C_z={y in C_code:2*sum_(T in V)(-1)^(y_T)=z}.
+```
+
+For every Walsh mask `D`, and every `z` with `C_z` nonempty,
+
+```text
+E_U[chi_D | Z=z]=0,                       D notin im(L_bin^T),
+
+E_U[chi_D | Z=z]
+ =|C_z|^(-1)*sum_(y in C_z)(-1)^(alpha dot y),
+                                              D=L_bin^T*alpha. (WCV4)
+```
+
+Thus `m_W` is a half-turn-coefficient-weighted discrepancy across the shells
+of the binary image code.  Ordinary random-residue uniformity is not enough:
+the open all-degree input is precisely a one-sided bound such as `(WCV3)`
+over every relevant shell.
 
 This is a raw cubic moment, not `<R,P_3(Z)>`.  The exact orthogonal polynomial
 `P_3` has law-dependent lower powers and normalization.  Cauchy gives only
@@ -12831,8 +13051,48 @@ prescribed signs are opposite, can be assigned nonnegative magnitudes so
 that the bounded total is either `+1` or `-1`.  Fixed/proper-level
 consistency alone therefore cannot determine a fixed-cutoff tail or the
 final Wagner sign.  A successful bridge must add genuinely all-degree
-information, such as a modular code/coset identity, an MLR/covariance
-theorem, or a signed Tauberian estimate.
+information, such as a one-sided code-shell covariance theorem or a signed
+Tauberian estimate.
+
+Abel damping does not remove this all-degree boundary.  For
+
+```text
+rho_Y(theta)=sum_(j odd) a_j*C_j*theta^j,
+```
+
+and every deterministic `0<theta_n<=1` with `theta_n=N^(-o(1))`, the
+fixed-level certificates
+still imply, for every fixed `A>0` and fixed odd cutoff `J`,
+
+```text
+Pr[sum_(j>=J, j=1 mod 4)u_j*theta_n^j>=N^A
+   and sum_(j>=J, j=3 mod 4)u_j*theta_n^j>=N^A]
+ ->1.                                                 (JCT6)
+```
+
+So Abel damping in this range still leaves superpolynomial positive and
+negative variation.  More sharply, take the valid endpoint construction
+below with `D=M-2`, `M=1 mod 4`, and its first likelihood `H_0`.  Its singleton
+and degree-`M-2` contributions give exactly
+
+```text
+rho_M(theta)=h*(theta-2*theta^(M-2)),
+rho_M(1)=-h<0.                                      (JCT7)
+```
+
+For every fixed `theta<1`, `rho_M(theta)>0` for all sufficiently large `M`.
+The unique sign change on `0<theta<=1` satisfies
+
+```text
+theta_M=2^(-1/(M-3)),
+1-theta_M=log(2)/(M-3)+O(M^-2).                    (JCT8)
+```
+
+This is an abstract likelihood completion, not an actual-modular instance.
+It proves that any signed Tauberian bridge must control a boundary layer of
+width `O(1/M)`; at the actual selected-character scale this means
+`O(1/M_V)=N^(-.498390...+o(1))`, or an equivalent all-degree signed
+regularity theorem.
 
 The order of quantifiers remains essential: a displayed `j` is selected
 before `n` tends to infinity.  The Smith constants, `eta_j`, and `o_n(1)`
@@ -18128,7 +18388,11 @@ completions with the exact Rademacher-sum `Z` law and `o(M)` local reversals
 realize either sign.  Exactly, the remaining Wagner projection depends only
 on `r(z)=E[R|Z=z]`.  Nonpositive signed-margin covariance would ensure
 positive correlation but remains unproved; the sixth-moment result refutes
-the small-regression sufficient condition.
+the small-regression sufficient condition.  The same positive cubic moment
+refutes the proposed nonincreasing-regression/MLR shortcut and reduces any
+remaining covariance route to a one-sided code-shell variation bound.  An
+abstract endpoint family also shows that its Abel sign can flip inside a
+`1/M` boundary layer.
 The certified clean-cluster residual sector is exponentially negligible at
 that regression scale.  A separate automatic order-three family yields
 `<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  A new
@@ -18251,7 +18515,12 @@ almost surely, and certified nonlinear-ODE fast-forward remains open.  Since
 the continuous hit event is exponentially rare, unconditional iid-Gaussian
 correctness is vacuous: the meaningful interface is correctness under the
 continuous law conditional on `R_v>0`, with separate no-root false-positive
-control, or all-input certification.
+control, or all-input certification.  On the same GW event, the root count is
+the nearest integer to a nonnegative delta-kernel occupation integral with
+`O(log(N))` parameter bits.  A constant-additive certified fast-forward oracle
+for that integral would locate all roots in `poly(q,log(N),R_v)` time; its
+signed analogue telescopes to endpoint values, so absolute variation, not the
+scalar exponential-gate ODE, is the missing primitive.
 Unless `NP subseteq RP`, no exact or one-sided-certified evaluator with
 the same guarantee exists uniformly for general adversarial sparse inputs: an
 exact-power-of-two

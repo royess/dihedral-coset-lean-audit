@@ -730,7 +730,12 @@ almost surely, and certified nonlinear-ODE fast-forward remains open.  Since
 the continuous hit event is exponentially rare, unconditional iid-Gaussian
 correctness is vacuous: the meaningful interface is correctness under the
 continuous law conditional on `R_v>0`, with separate no-root false-positive
-control, or all-input certification.
+control, or all-input certification.  On the same GW event, the root count is
+the nearest integer to a nonnegative delta-kernel occupation integral with
+`O(log(N))` parameter bits.  A constant-additive certified fast-forward oracle
+for that integral would locate all roots in `poly(q,log(N),R_v)` time; its
+signed analogue telescopes to endpoint values, so absolute variation, not the
+scalar exponential-gate ODE, is the missing primitive.
 Unless `NP subseteq RP`, no exact or one-sided-certified evaluator with
 the same guarantee exists uniformly for general adversarial sparse inputs: an
 exact-power-of-two
@@ -968,7 +973,11 @@ completions with the exact Rademacher-sum `Z` law and `o(M)` local reversals
 realize either sign.  The exact remaining Wagner projection depends only on
 `r(z)=E[R|Z=z]`.  Nonpositive signed-margin covariance would imply positive
 correlation but remains unproved; the sixth-moment result refutes the small-
-regression sufficient condition.  The
+regression sufficient condition.  The same positive cubic moment refutes the
+proposed nonincreasing-regression/MLR shortcut and reduces any remaining
+covariance route to a one-sided code-shell variation bound.  An abstract
+endpoint family also shows that its Abel sign can flip inside a `1/M`
+boundary layer.  The
 certified clean-cluster residual sector is exponentially negligible at that
 scale.  A separate automatic order-three family gives
 `<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  A new

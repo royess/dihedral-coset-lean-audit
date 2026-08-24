@@ -201,6 +201,8 @@ open SimonDCP.Quantum.Step2Phase
 #print axioms d4_binary_pair_partition
 #print axioms d3_binary_signed_lifts_pass_rank_checker
 #print axioms d4_binary_signed_lifts_pass_rank_checker
+#print axioms d3_proper_binary_signed_lifts_span_top
+#print axioms d4_proper_binary_signed_lifts_span_top
 #print axioms stepSix_topBit_eq_fullSum
 #print axioms highBlockTopBit_eq_fullWordTopBit
 #print axioms floorLogPaperFlag_false_not_carryVulnerable

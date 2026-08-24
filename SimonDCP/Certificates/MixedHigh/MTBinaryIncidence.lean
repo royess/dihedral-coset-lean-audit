@@ -12,10 +12,12 @@ ternary lifts.
 
 The last computation records the important separation between the two
 ledgers: every enumerated proper binary activity subspace passes the signed
-lift rank checker at width `d`.  The corresponding mathematical statement
-that these rows span `Q^d` is true, but a later module must still connect the
-custom checker to Mathlib's linear-algebraic rank.  Thus the theorems below do
-not by themselves expose that semantic bridge.
+lift rank checker at width `d`.  We also give a checker-independent semantic
+bridge: row activity supplies a support through every coordinate, and two
+signed lifts of that same support differ by twice the corresponding standard
+basis vector.  Hence the public row enumeration spans `Q^d`.  The custom
+fraction-free checker is still not proved equivalent to Mathlib's general
+matrix rank; its output is an independent executable cross-check.
 
 The exhaustive equalities use `native_decide`, following the existing
 finite-certificate convention in this repository.  This trusts Lean's native
@@ -179,6 +181,142 @@ def signedLiftRows (d : Nat) (space : Finset Nat) : List (List Int) :=
       (List.range (2 ^ d)).map fun signs => signedLiftRow d support signs
     else
       []
+
+/-! ## Semantic rational-span bridge -/
+
+/-- Interpret an integer row as a vector in `Q^d`, padding short rows by zero. -/
+def rowAsQVector (d : Nat) (row : List Int) : Fin d → ℚ := fun i =>
+  (row.getD i.1 0 : ℚ)
+
+/-- Direct semantic interpretation of one signed lift. -/
+def signedLiftVector (d support signs : Nat) : Fin d → ℚ := fun i =>
+  if Nat.testBit support i.1 then
+    if Nat.testBit signs i.1 then 1 else -1
+  else
+    0
+
+/-- The rational vectors represented by the public `signedLiftRows` list. -/
+def signedLiftGenerators (d : Nat) (space : Finset Nat) : Set (Fin d → ℚ) :=
+  { vector | ∃ row ∈ signedLiftRows d space, rowAsQVector d row = vector }
+
+/-- The mathematical rational span of the public signed-lift enumeration. -/
+def signedLiftSpan (d : Nat) (space : Finset Nat) : Submodule ℚ (Fin d → ℚ) :=
+  Submodule.span ℚ (signedLiftGenerators d space)
+
+theorem signedLiftRow_mem_signedLiftRows {d support signs : Nat}
+    {space : Finset Nat} (hsupport_lt : support < 2 ^ d)
+    (hsupport_mem : support ∈ space) (hsigns_lt : signs < 2 ^ d) :
+    signedLiftRow d support signs ∈ signedLiftRows d space := by
+  simp only [signedLiftRows, List.mem_flatMap]
+  refine ⟨support, List.mem_range.mpr hsupport_lt, ?_⟩
+  rw [if_pos hsupport_mem]
+  exact List.mem_map.mpr ⟨signs, List.mem_range.mpr hsigns_lt, rfl⟩
+
+@[simp]
+theorem rowAsQVector_signedLiftRow (d support signs : Nat) :
+    rowAsQVector d (signedLiftRow d support signs) =
+      signedLiftVector d support signs := by
+  funext i
+  change ((signedLiftRow d support signs).getD i.1 0 : ℚ) = _
+  rw [List.getD_eq_getElem _ 0 (by simpa [signedLiftRow] using i.isLt)]
+  simp [signedLiftRow, signedLiftVector]
+
+theorem coordinateActive_eq_true_iff_exists (d : Nat) (space : Finset Nat)
+    (i : Nat) :
+    coordinateActive d space i = true ↔
+      ∃ support ∈ List.range (2 ^ d),
+        support ∈ space ∧ Nat.testBit support i = true := by
+  simp [coordinateActive]
+
+theorem signedLiftVector_mem_signedLiftSpan {d support signs : Nat}
+    {space : Finset Nat} (hsupport_lt : support < 2 ^ d)
+    (hsupport_mem : support ∈ space) (hsigns_lt : signs < 2 ^ d) :
+    signedLiftVector d support signs ∈ signedLiftSpan d space := by
+  rw [← rowAsQVector_signedLiftRow]
+  apply Submodule.subset_span
+  exact ⟨signedLiftRow d support signs,
+    signedLiftRow_mem_signedLiftRows hsupport_lt hsupport_mem hsigns_lt, rfl⟩
+
+theorem signedLiftVector_singleton_difference {d support : Nat} (i : Fin d)
+    (hbit : Nat.testBit support i.1 = true) :
+    signedLiftVector d support (2 ^ i.1) - signedLiftVector d support 0 =
+      (2 : ℚ) • Pi.basisFun ℚ (Fin d) i := by
+  ext j
+  by_cases hij : i = j
+  · subst j
+    simp [signedLiftVector, hbit, Pi.basisFun_apply]
+  · have hval : i.1 ≠ j.1 := by
+      intro h
+      exact hij (Fin.ext h)
+    simp [signedLiftVector, Pi.basisFun_apply, hij,
+      Nat.testBit_two_pow_of_ne hval]
+
+/-- Row activity alone forces the signed ternary lifts to span `Q^d`. -/
+theorem signedLiftSpan_eq_top_of_coordinateActive {d : Nat}
+    {space : Finset Nat}
+    (hactive : ∀ i : Fin d, coordinateActive d space i.1 = true) :
+    signedLiftSpan d space = ⊤ := by
+  apply top_unique
+  rw [← (Pi.basisFun ℚ (Fin d)).span_eq]
+  refine Submodule.span_le.2 ?_
+  rintro _ ⟨i, rfl⟩
+  obtain ⟨support, hsupport_range, hsupport_mem, hbit⟩ :=
+    (coordinateActive_eq_true_iff_exists d space i.1).mp (hactive i)
+  have hsupport_lt : support < 2 ^ d := List.mem_range.mp hsupport_range
+  have hsigns_lt : 2 ^ i.1 < 2 ^ d :=
+    Nat.pow_lt_pow_right (by decide) i.isLt
+  have hplus :
+      signedLiftVector d support (2 ^ i.1) ∈ signedLiftSpan d space :=
+    signedLiftVector_mem_signedLiftSpan hsupport_lt hsupport_mem hsigns_lt
+  have hminus : signedLiftVector d support 0 ∈ signedLiftSpan d space :=
+    signedLiftVector_mem_signedLiftSpan hsupport_lt hsupport_mem
+      (Nat.two_pow_pos d)
+  have htwo :
+      (2 : ℚ) • Pi.basisFun ℚ (Fin d) i ∈ signedLiftSpan d space := by
+    rw [← signedLiftVector_singleton_difference i hbit]
+    exact (signedLiftSpan d space).sub_mem hplus hminus
+  have hscaled := (signedLiftSpan d space).smul_mem (2⁻¹ : ℚ) htwo
+  have hscale :
+      (2⁻¹ : ℚ) • ((2 : ℚ) • Pi.basisFun ℚ (Fin d) i) =
+        Pi.basisFun ℚ (Fin d) i := by
+    norm_num [smul_smul]
+  rwa [hscale] at hscaled
+
+theorem coordinateActive_of_admissibleBinaryMask {d : Nat}
+    {edges : List (Nat × Nat)} {space : Finset Nat}
+    (hadmissible : admissibleBinaryMask d edges space = true) (i : Fin d) :
+    coordinateActive d space i.1 = true := by
+  simp only [admissibleBinaryMask, Bool.and_eq_true, List.all_eq_true] at hadmissible
+  exact hadmissible.1 i.1 (List.mem_range.mpr i.isLt)
+
+/-- Every row-admissible mask has full rational signed-lift span. -/
+theorem signedLiftSpan_eq_top_of_admissibleBinaryMask {d : Nat}
+    {edges : List (Nat × Nat)} {space : Finset Nat}
+    (hadmissible : admissibleBinaryMask d edges space = true) :
+    signedLiftSpan d space = ⊤ :=
+  signedLiftSpan_eq_top_of_coordinateActive fun i =>
+    coordinateActive_of_admissibleBinaryMask hadmissible i
+
+theorem admissibleBinaryMask_of_mem_properBinaryMasks {d : Nat}
+    {edges : List (Nat × Nat)} {space : Finset Nat}
+    (hspace : space ∈ properBinaryMasks d edges) :
+    admissibleBinaryMask d edges space = true := by
+  obtain ⟨offset, _, hmask⟩ := Finset.mem_biUnion.mp hspace
+  exact (Finset.mem_filter.mp hmask).2
+
+/-- In particular, every proper `d=3` certificate mask spans `Q^3`. -/
+theorem d3_proper_binary_signed_lifts_span_top :
+    ∀ space ∈ properBinaryMasks 3 d3Edges, signedLiftSpan 3 space = ⊤ := by
+  intro space hspace
+  exact signedLiftSpan_eq_top_of_admissibleBinaryMask
+    (admissibleBinaryMask_of_mem_properBinaryMasks hspace)
+
+/-- In particular, every proper `d=4` certificate mask spans `Q^4`. -/
+theorem d4_proper_binary_signed_lifts_span_top :
+    ∀ space ∈ properBinaryMasks 4 d4Edges, signedLiftSpan 4 space = ⊤ := by
+  intro space hspace
+  exact signedLiftSpan_eq_top_of_admissibleBinaryMask
+    (admissibleBinaryMask_of_mem_properBinaryMasks hspace)
 
 /-- Result of the local rank checker on the signed ternary lifts. -/
 private def signedLiftRank (d : Nat) (space : Finset Nat) : Nat :=
