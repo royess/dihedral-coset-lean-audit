@@ -964,13 +964,14 @@ at least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
 Those terms already give absolute formal mass and triangle-inequality
 condition number `N^(1.4497986...+o(1))`.  A directed finite-convolution
 certificate further closes every displayed odd level through 51; the negative
-level-51 term raises both lower bounds to `N^(4.6555...+o(1))`.  Separately,
-a finite collision stratification and a local central limit theorem close
-every preselected fixed odd level above a non-effective threshold `J_0`.  A
-finite unchecked interval may remain between 51 and `J_0`, and there is no
-claim for `j=j(n)`.  These are visibility-one formal-level results, not an
-algorithm lower bound; they determine neither a fixed-cutoff tail nor the
-final Wagner sign.
+level-51 term raises both lower bounds to `N^(4.6555...+o(1))`.  An effective
+collision certificate then exhausts `53<=j<2401` and supplies an explicit
+Fourier--Legendre tail, removing the former finite gap: every preselected fixed
+odd formal level `j>=27` closes.  The signed exponent is greater than
+`4.9431600...` on the new finite block and remains positive by an explicit
+tail bound.  There is no claim for `j=j(n)`.  These are visibility-one
+formal-level results, not an algorithm lower bound; they determine neither a
+fixed-cutoff tail nor the final Wagner sign.
 More
 sharply, two valid
 nonnegative-Walsh likelihood

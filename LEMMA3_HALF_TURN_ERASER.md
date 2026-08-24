@@ -226,12 +226,14 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   condition number `N^(1.4497986...+o(1))`.  A directed finite-convolution
   certificate further closes every displayed odd level through 51; the
   negative level-51 term raises both lower bounds to
-  `N^(4.6555...+o(1))`.  Separately, a finite collision stratification and a
-  local central limit theorem close every preselected fixed odd level above a
-  non-effective threshold `J_0`.  A finite unchecked interval may remain
-  between 51 and `J_0`, and there is no claim for `j=j(n)`.  These are
-  visibility-one formal-level results, not an algorithm lower bound; they
-  determine neither a fixed-cutoff tail nor the final Wagner sign.
+  `N^(4.6555...+o(1))`.  An effective collision certificate then exhausts
+  `53<=j<2401` and supplies an explicit Fourier--Legendre tail, removing the
+  former finite gap: every preselected fixed odd formal level `j>=27` closes.
+  The signed exponent is greater than `4.9431600...` on the new finite block
+  and remains positive by an explicit tail bound.  There is no claim for
+  `j=j(n)`.  These are visibility-one formal-level results, not an algorithm
+  lower bound; they determine neither a fixed-cutoff tail nor the final
+  Wagner sign.
   More sharply, two
   valid nonnegative-Walsh
   likelihood completions
@@ -12106,9 +12108,9 @@ S_formal>=2*a_25*C_25-1
         >=N^(1.44979858932108...+o(1)).               (JCE14)
 ```
 
-The finite-level argument extends farther, and there is a separate
-large-fixed-level theorem.  The two conclusions have different quantifiers.
-First consider the finite block
+The finite-level argument extends to every fixed odd level.  We first give a
+directed finite block and then an effective tail certificate; all conclusions
+retain the fixed-level order of quantifiers.  First consider the block
 
 ```text
 j in {27,29,...,51}.
@@ -12266,7 +12268,8 @@ S_formal>=2*(-a_51*C_51)-1
         >=N^(4.6555...+o(1)).                        (JCU9)
 ```
 
-There is also a non-effective theorem for large fixed formal level.  Put
+The effective tail certificate is organized around the following limiting
+law.  Put
 
 ```text
 c_0=H_2(p)+p=a/3,
@@ -12335,82 +12338,162 @@ one further nonzero image before conditioning.  For rational rank `d>=3`, use
 e_(j,d)/d>=e_(j,3)/3.
 ```
 
-Because the collision partition list is finite, `(JCU11)`--`(JCU12)` imply
-that there is an odd integer `J_0` such that, for each fixed odd `j>=J_0`,
-all rational projections admit the bounds
+The preceding limiting argument can be made effective.  Put `J_1=2401`.
+Exact polynomial majorization on the whole saddle interval shows that the
+rank-one coefficient `(1,1,1)` and the rank-two kernel `(1,0,-1)` minimize
+the relevant conditional triple entropies.  A directed-interval computation
+exhausting every odd `53<=j<J_1` gives
+
+```text
+branch                              lower entropy
+rank one, exactly two active          .2870435
+rank one, at least three active        .2794921
+rank two, exactly two active           .3328619
+rank two, at least three active         .3405661
+e_(j,3)                                .3842706.
+```
+
+For the tail, put `q_j=2*z_j/(1+2*z_j)`.  Discrete integration by parts
+gives
+
+```text
+0<=j*(q_j-p)
+  =A_j(1;z_j)/[(1+2*z_j)*Q_j(z_j)]
+  <=(1-q_j)/2.
+```
+
+Consequently, for `j>=J_1`,
+
+```text
+.0106033237877336...<=z_j<=.0107119332048901....
+```
+
+Write `a_(ell,r)=A_ell(r;z)/A_ell(0;z)`.  Its Fourier representation gives
+
+```text
+1-a_(ell,r)<=r^2*[1-a_(ell,1)].
+```
+
+If `f_ell=(ell+1)*[1-a_(ell,1)]`, the exact coefficient recurrence is
+
+```text
+f_ell
+ =1+{(1-4*z^2)/[(1+2*z)*(1+2*z*a_(ell-1,1))]}
+      *f_(ell-1).
+```
+
+Since the multiplier equals
+`(1-2*z)/(1+2*z*a_(ell-1,1))<=1-2*z`, the recurrence and `f_0=1` first give
+`f_ell<=1/(2*z)` by induction.  Hence
+
+```text
+1+2*z*a_(ell-1,1)>=1+2*z-1/ell.
+```
+
+For `ell>=1000`, this makes the multiplier smaller than `.95941` on the
+permanent saddle interval.  Starting from `f_999<47.16` and iterating 102
+times gives `f_ell<25` for `ell>=1101`; the inequality
+`1+.95941*25<25` preserves the bound thereafter.  The triple branch has
+`ell=j-3`, while the pair branch has `ell=j-2` and therefore satisfies the
+same or a stronger estimate.  Thus
+
+```text
+a_(j-3,r)>=1-25*r^2/2399.
+```
+
+Directed evaluation on the resulting permanent interval gives
+
+```text
+branch                              lower entropy
+rank one, exactly two active          .2770252
+rank one, at least three active        .2767554
+rank two, exactly two active           .3201825
+rank two, at least three active         .3370399
+e_(j,3)                                .3801814.       (JCU13)
+```
+
+Thus, for every fixed odd `j>=53`, every rational projection admits
 
 ```text
 E_0=0,       E_1=c_0,       E_2=.30,
-E_d=.38*d/3 for d>=3.                               (JCU13)
+E_d=.38*d/3 for d>=3.
 ```
 
-The resulting rational relation exponent is at most
+The rational-relation exponent is therefore at most
 
 ```text
-3*(a+1)-12*.38=-.06160964676485...<-.0616.           (JCU14)
+3*(a+1)-12*.38
+ =-.06160964676485...<-.0616.                        (JCU14)
 ```
 
-with the maximum of this conservative ledger at `(3,3,3)`.  For every fixed
-`j`, the binary loss
+The binary singleton loss remains strictly positive for every fixed `j`.
+With
 
 ```text
-6*f_j=6*H_2(2*s_j)>0
-```
-
-also remains an honest exponent.  Thus, with
-
-```text
-eta_j=min(.0616,6*f_j)>0,
+eta_j=min(.0616,6*H_2(2*s_j))>0,
 ```
 
 the second moment gives
 
 ```text
-Var_Y(X_j)/E_Y[X_j]^2<=N^(-eta_j+o_n(1))             (JCU15)
+Var_Y(X_j)/E_Y[X_j]^2
+ <=N^(-eta_j+o_n(1))                                 (JCU15)
 ```
 
-for every preselected fixed odd `j>=J_0`.  The order of quantifiers matters:
-`j` is fixed before `n` tends to infinity.  The constants in the Smith,
-fixed-type, and `o_n(1)` bounds depend on `j`, and `eta_j` tends to zero.
-There is no simultaneous statement over infinitely many levels and no result
-for a growing `j=j(n)`.
+for every preselected fixed odd `j>=53`.  Combined with the directed
+certificate for `27<=j<=51`, this closes every preselected fixed odd formal
+level `j>=27`.
 
-Finally, the same local central limit calculation gives, as fixed formal
-level tends to infinity,
+The signed exponent is positive at every new level as well.  Put
 
 ```text
-h_j=j*c_0-.5*log_2(j)+3/2-.5*log_2(2*pi*p)+o_j(1),
-
-phi_j=j*c_0-.5*log_2(j)+1-.5*log_2(2*pi*p)+o_j(1).
+gamma_j=12*phi_j-j*(a+1)-j*m/2.
 ```
 
-For each such fixed level, intersecting with `Good` and applying the same
-resultant/multiplicity ledger gives
+A directed scan over `53<=j<2401` gives
 
 ```text
-C_j>=N^(12*phi_j-j*(a+1)+o_n(1)).
+min_j gamma_j>4.943160016528384...,
 ```
 
-Since `|a_j|=N^(-j*m/2+o_n(1))`, the signed term has exponent
+with the minimum at `j=53`.  For `j>=2401`, take `k=floor(j*p)` in `Q_j`.
+The standard type lower bounds for the two binomial coefficients, together
+with `d[H_2(x)+x]/dx<7` on the required interval, give
+
+```text
+phi_j>=j*c_0-7-2*log_2(j+1),
+
+gamma_j>=j*m/2-24*log_2(j+1)-84>0.                   (JCU16)
+```
+
+The last lower bound is already greater than `244.797128601858...` at
+`j=2401`, and its derivative is positive thereafter.  The sharper local
+central limit expansion remains
 
 ```text
 gamma_j
- =(m/2)*j-6*log_2(j)+12-6*log_2(2*pi*p)+o_j(1),      (JCU16)
+ =(m/2)*j-6*log_2(j)+12-6*log_2(2*pi*p)+o_j(1).
 ```
 
-which is positive for all sufficiently large fixed odd `j`.  Its sign is
-`(-1)^((j-1)/2)`, and
+Intersecting with `Good` and using the same resultant/multiplicity ledger
+therefore gives, for every preselected fixed odd `j>=53`,
 
 ```text
-S_formal>=2*|a_j|*C_j-1>=N^(gamma_j+o_n(1)).         (JCU17)
+|a_j|*C_j>=N^(gamma_j+o_n(1)),
+
+sign(a_j*C_j)=(-1)^((j-1)/2),
+
+S_formal>=2*|a_j|*C_j-1
+        >=N^(gamma_j+o_n(1)).                         (JCU17)
 ```
 
-The finite result through 51 and the non-effective large-fixed-level theorem
-are separate.  They do not prove that every odd level above 51 closes: a
-finite unverified interval may remain before `J_0`.  All statements are at
+The order of quantifiers remains essential: `j` is selected before `n`
+tends to infinity.  The Smith constants, `eta_j`, and `o_n(1)` may depend on
+`j`, and `eta_j` tends to zero.  There is no simultaneous assertion over
+infinitely many levels and no result for `j=j(n)`.  All statements are at
 visibility one and concern formal retained-character level, not original
-Walsh degree.  They give neither a fixed-cutoff tail sign nor the final Wagner
-sign.
+Walsh degree.  They give neither a fixed-cutoff tail sign nor the final
+Wagner sign.
 
 There is an exact same-`P_3` obstruction, even under symmetry and
 nonnegative Walsh likelihood coefficients.  Let odd `M>=11`, take independent
@@ -17123,13 +17206,14 @@ at least `N^(0.0679559...+o(1))`, `N^(0.1365318...+o(1))`,
 Those terms already give absolute formal mass and triangle-inequality
 condition number `N^(1.4497986...+o(1))`.  A directed finite-convolution
 certificate further closes every displayed odd level through 51; the negative
-level-51 term raises both lower bounds to `N^(4.6555...+o(1))`.  Separately,
-a finite collision stratification and a local central limit theorem close
-every preselected fixed odd level above a non-effective threshold `J_0`.  A
-finite unchecked interval may remain between 51 and `J_0`, and there is no
-claim for `j=j(n)`.  These are visibility-one formal-level results, not an
-algorithm lower bound; they determine neither a fixed-cutoff tail nor the
-final Wagner sign.
+level-51 term raises both lower bounds to `N^(4.6555...+o(1))`.  An effective
+collision certificate then exhausts `53<=j<2401` and supplies an explicit
+Fourier--Legendre tail, removing the former finite gap: every preselected fixed
+odd formal level `j>=27` closes.  The signed exponent is greater than
+`4.9431600...` on the new finite block and remains positive by an explicit
+tail bound.  There is no claim for `j=j(n)`.  These are visibility-one
+formal-level results, not an algorithm lower bound; they determine neither a
+fixed-cutoff tail nor the final Wagner sign.
 More
 sharply, two valid
 nonnegative-Walsh likelihood
