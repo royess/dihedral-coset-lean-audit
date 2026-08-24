@@ -218,8 +218,12 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   remains unproved; the sixth-moment result refutes the small-regression
   sufficient condition.  The same positive cubic moment refutes the proposed
   nonincreasing-regression/MLR shortcut and reduces any remaining covariance
-  route to a one-sided code-shell variation bound.  An abstract endpoint
-  family also shows that its Abel sign can flip inside a `1/M` boundary layer.
+  route to weighted dual-code Krawtchouk shell cancellation.  The actual
+  `N=16` modular example already violates the naive one-sided `V_+` bound; if
+  the positive cubic is carried by central shells, it forces the same failure
+  asymptotically.  Residual-weighted rare shells or signed cross-level
+  cancellation are therefore essential.  An abstract endpoint family also
+  shows that its Abel sign can flip inside a `1/M` boundary layer.
   The entire known clean-cluster residual sector is exponentially negligible
   at this regression scale.  A different automatic order-three family gives
   `<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  A new
@@ -362,7 +366,13 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   constant-additive certified fast-forward oracle for that integral would
   locate all roots in `poly(q,log(N),R_v)` time; its signed analogue telescopes
   to endpoint values, so absolute variation, not the scalar exponential-gate
-  ODE, is the missing primitive.  Unless `NP subseteq RP`, no exact or
+  ODE, is the missing primitive.  A degree-`O(log(N))` Student rational gate
+  gives the same winding, an `N^-3` gap, and output-sensitive variation in an
+  `O(q+log log(N))` repeated-squaring circuit; its normalized rational kernel
+  still rounds to the root count.  The GWB reduction also rules out a
+  coefficient-uniform certified occupation oracle unless `NP subseteq RP`,
+  while the iid-Gaussian promise remains open.  Unless `NP subseteq RP`, no
+  exact or
   one-sided-certified
   evaluator with the same guarantee exists uniformly for general adversarial
   sparse inputs: an exact-power-of-two
@@ -5369,6 +5379,150 @@ It therefore does not improve the existing explicit critical-point trace.
 This excludes only that local sign-tracking route, not an aggregate contour
 or cohomological evaluator.  Equations `(GKF1)`--`(GKF10)` are a conditional
 algorithmic equivalence, not a lower bound.
+
+The transcendental kernel is not essential.  Continue with the same interval
+`I=[a,b]` and endpoint gap `|F(a)|,|F(b)|>d_gap`.  Set
+
+```text
+h_N=8*ceil(log_2(N)),
+a_h(x)=[1+(x/d_gap)^2]^(-h_N),
+Psi_h(t)=F(t)+i*a_h(F(t))*F'(t).                   (GKR1)
+```
+
+For any deterministic interface
+
+```text
+|F|<d_gap implies |F'|>=s_gap,
+d_gap*B_2<=s_gap^2/2,
+```
+
+splitting at `|F|=d_gap/4` gives
+
+```text
+inf_I |Psi_h|
+ >=min{d_gap/4,s_gap*(17/16)^(-h_N)}.              (GKR2)
+```
+
+The phase derivative is exactly
+
+```text
+theta_h'
+ =a_h(F)*[F*F''
+   -(1+2*h_N*F^2/(d_gap^2+F^2))*(F')^2]
+  /[F^2+a_h(F)^2*(F')^2].                         (GKR3)
+```
+
+It is negative on every root band.  Since `a_h(d_gap)=2^(-h_N)`,
+
+```text
+|TV(arg(Psi_h);I)-pi*R_I|
+ <=2*R_I*2^(-h_N)*B_1/d_gap
+   +|I|*2^(-h_N)
+      *[B_2/d_gap+(1+2*h_N)*B_1^2/d_gap^2].       (GKR4)
+```
+
+At `d_gap=N^-3`, `s_gap=N^-1`, `R_I<=N`, and
+`B_1,B_2=N^o(1)`, the number
+
+```text
+8*log_2(17/16)=.6997...<2
+```
+
+shows that `(GKR2)` is at least `d_gap/4`, while `(GKR4)` is `o(1)`.
+The canonical connector from `(GW7)` therefore gives the exact identity
+
+```text
+R_I=-2*Wind(Psi_h union Gamma)
+    +1[F(b)>0]-1[F(a)>0].                         (GKR5)
+```
+
+This is a compact algebraic normal form.  Multiplication by the positive
+denominator preserves phase and gives
+
+```text
+Phi_h=F*[1+(F/d_gap)^2]^h_N+i*F'.
+```
+
+Binary powering uses `O(log(h_N))=O(log log(N))` multiplications, so a
+`(2*q+1)`-slot input has arithmetic-circuit size `O(q+log log(N))`.
+Its flat expansion nevertheless has degree `2*h_N+1=O(log(N))` and may
+have `q^O(log(N))` slots.  Thus `(GKR1)`--`(GKR5)` give a succinct circuit,
+not a winding evaluator.
+
+There is an equally compact rational occupation kernel.  Put
+
+```text
+kappa_(h,d)(y)=c_(h,d)*[1+(y/d)^2]^(-h),
+
+c_(h,d)=Gamma(h)/[d*sqrt(pi)*Gamma(h-1/2)]
+ =4^(h-1)/[pi*d*binom(2*h-2,h-1)].                (GKR6)
+```
+
+It integrates to one, and its two-sided tail satisfies
+
+```text
+tau_h=integral_(|y|>=d) kappa_(h,d)(y) dy
+ <=C*sqrt(h)*2^(-h).                              (GKR7)
+```
+
+Indeed, after `y=d*tan(theta)`, the tail is bounded by the integral of
+`cos(theta)^(2*h-2)` over `theta>=pi/4`.  Define
+
+```text
+M_(h,d)^rat(I)
+ =integral_I kappa_(h,d)(F(t))*|F'(t)| dt.
+```
+
+Every complete root band contributes `1-tau_h`, while the complement is
+bounded pointwise at `|F|=d`.  Hence
+
+```text
+|M_(h,d)^rat(I)-R_I|
+ <=C*sqrt(h)*2^(-h)*[R_I+|I|*B_1/d].              (GKR8)
+```
+
+For `h=h_N` and `d=d_gap`, this is
+`N^(-7+o(1))+N^(-44/9+o(1))=o(1)`.  The scalar in `(GKR6)` requires only
+`O(log(N))`-bit integers and a certified approximation to `pi`.  Thus the
+Gaussian occupation interface has a degree-`O(log(N))` rational shape and a
+compact repeated-squaring circuit.  Certified fast-forward for that circuit
+remains open.
+
+The new primitive still cannot be uniform over adversarial sparse inputs.
+Apply the rationalized Unique-SAT construction `(GWB1)`--`(GWB8)`.  Its
+explicit margins give, in polynomial time, a rational number
+
+```text
+0<d_*<=d_0,             d_*^(-1)=n^O(1),
+Lambda_*=ceil(8*d_*^(-2)*log_2(N)).                (GKO1)
+```
+
+In the unsatisfiable case `F<=-2*d_*` everywhere, so
+
+```text
+M_(Lambda_*)
+ <=m*n^O(1)*exp(-Lambda_*d_*^2)
+ <=N^(-8+1/9+o(1))<1/8.                           (GKO2)
+```
+
+In the uniquely satisfiable case there are exactly two roots, and coarea on
+their monotone bands gives
+
+```text
+|M_(Lambda_*)-2|
+ <=2*erfc(d_*sqrt(Lambda_*))
+   +m*n^O(1)*exp(-Lambda_*d_*^2)<1/8.             (GKO3)
+```
+
+Therefore an all-input oracle that always returns a certified interval of
+width at most `1/4` for this occupation mass, in time polynomial in the
+sparse input size, `log(N)`, `log(Lambda_*)`, and the output mass, would
+decide the zero-versus-one satisfiability promise by thresholding at one.
+Valiant--Vazirani then gives `NP subseteq RP` for an exact, Las Vegas, or
+one-sided-certified oracle.  A two-sided bounded-error oracle would instead
+give only `NP subseteq BPP`.  This is a coefficient-uniform adversarial
+obstruction.  It does not obstruct an evaluator using the iid-Gaussian and
+iid-uniform-frequency promise under the ordinary hit/no-hit laws.
 
 Numerical conditioning is not the obstruction.  Put
 
@@ -10846,8 +11000,134 @@ E_U[chi_D | Z=z]
 
 Thus `m_W` is a half-turn-coefficient-weighted discrepancy across the shells
 of the binary image code.  Ordinary random-residue uniformity is not enough:
-the open all-degree input is precisely a one-sided bound such as `(WCV3)`
-over every relevant shell.
+the open all-degree input is a signed shell-cancellation estimate, while a
+one-sided bound such as `(WCV3)` is a strong sufficient condition.
+
+MacWilliams duality makes this shell input exact.  Write `M=M_V`, put
+
+```text
+A_k=|{y in C_code:|y|=k}|,
+S_k(alpha)=sum_(y in C_code, |y|=k)(-1)^(alpha dot y),
+
+K_k(j)=sum_(ell=0)^k (-1)^ell*binom(j,ell)*binom(M-j,k-ell).
+```
+
+Then
+
+```text
+S_k(alpha)=|C_code^perp|^(-1)
+ *sum_(beta in C_code^perp) K_k(|alpha+beta|),
+A_k=S_k(0).                                       (WCV5)
+```
+
+For `I_w={k:2*|M-2*k|=w}`, let
+`A_w=sum_(k in I_w)A_k` and `p_w=A_w/|C_code|`.  If `A_w>0` and
+`D=L_bin^T*alpha`, then
+
+```text
+Q_w(D)=A_w^(-1)*sum_(k in I_w)
+ sign(M-2*k)*S_k(alpha)
+ =E_U[sign(Z)*chi_D | W=w].                       (WCV6)
+```
+
+This is independent of the representative `alpha`; it is zero when
+`D` is outside `im(L_bin^T)`.  On the deduplicated two-orientation good
+event write `R=sum_D g_D*chi_D`, where `g_D>=0`.  The selected coefficients
+are exactly removed by `c*Z`, and every other residual coefficient remains
+nonnegative.  Consequently
+
+```text
+m_W(w)=sum_D g_D*Q_w(D),
+
+V_+(m_W)<=sum_D g_D*calV_+(Q_D),                  (WCV7)
+
+calV_+(Q_D)=sum_(w>v)p_w*p_v*(w-v)
+                 *max(Q_w(D)-Q_v(D),0).
+```
+
+Thus the concrete open object is the `g_D`-weighted one-sided variation of
+the dual-code coset weight enumerators.  Bounding each `D` separately can be
+very loose because cancellation between closure levels is the all-degree
+problem.
+
+Fixed moments see only the bottom of those cosets.  Uniformly on `C_code`,
+
+```text
+E_C[chi_alpha*Z^j]
+ =2^j*|{(i_1,...,i_j) in [M]^j:
+        alpha+e_(i_1)+...+e_(i_j) in C_code^perp}|. (WCV8)
+```
+
+Hence all moments through a fixed `J` see only coset vectors of weight at
+most `J`, with the matching parity.  The full shell transform `(WCV5)` is
+not controlled by low dual distance, fixed moments, or fixed closure levels.
+
+The one-sided sufficient condition also fails on an actual finite modular
+instance.  For the example `N=16`, `Y=(1,2,3,5,6,7)` below, at visibility
+one the five selected supports give `M=5`, `c=1/16`, and direct enumeration
+of the 64 orientations gives
+
+```text
+       w          2       6      10
+       p_w       3/4     1/8     1/8
+       m_W(w)   -1/3     -1       1.
+```
+
+Therefore
+
+```text
+mu=7/2,       V_+=9/8,       V_-=1/4,
+Cov_U(W,q)=7/8,              c*mu^2=49/64,
+
+rho_Y=c*mu-Cov_U(W,q)/mu=-1/32.                   (WCV9)
+```
+
+In particular `V_+>c*mu^2`.  This is a finite actual-modular counterexample,
+not an asymptotic random-label counterexample.  It rules out a deterministic
+theorem based only on modularity, nonnegative Walsh coefficients, or low
+moments; a high-probability result must use genuine random typicality.
+
+The positive cubic moment gives a further warning.  Under the size-biased
+law set
+
+```text
+C_sharp=Cov_sharp(W^2,m_W).
+```
+
+For `B>0`, put
+
+```text
+T_B^+=sum_(w>v,w>B) p_w*p_v*[w*v*(w+v)/mu^2]*(w-v)
+                    *max(m_W(w)-m_W(v),0).
+```
+
+The pairwise covariance formula and
+`w*v*(w+v)/mu^2<=2*B^3/mu^2` on `w,v<=B` give
+
+```text
+V_+>=mu^2/(2*B^3)*max(C_sharp-T_B^+,0).           (WCV10)
+```
+
+Here `C_sharp>=N^(0.519782668968...+o(1))` and
+`mu^2=N^(0.498390353235...+o(1))`.  If
+
+```text
+B=N^(0.249195176618...+eta),       T_B^+=o(C_sharp),
+```
+
+then
+
+```text
+V_+>=N^(0.270587492350...-3*eta+o(1)).             (WCV11)
+```
+
+For `eta<.007130771911...`, this exceeds
+`c*mu^2=N^(0.249195176618...+o(1))`.  Thus a Gaussian-central-carriage
+heuristic would refute the one-sided sufficient bound rather than prove it.
+The condition on `T_B^+` is not currently known: unweighted Wick moments and
+`E_U|R|=1+o(1)` do not control residual-weighted rare shells.  The shortest
+remaining test is to prove or disprove that tail condition, or to estimate
+the signed cancellation in `(WCV7)` directly.
 
 This is a raw cubic moment, not `<R,P_3(Z)>`.  The exact orthogonal polynomial
 `P_3` has law-dependent lower powers and normalization.  Cauchy gives only
@@ -18390,9 +18670,13 @@ on `r(z)=E[R|Z=z]`.  Nonpositive signed-margin covariance would ensure
 positive correlation but remains unproved; the sixth-moment result refutes
 the small-regression sufficient condition.  The same positive cubic moment
 refutes the proposed nonincreasing-regression/MLR shortcut and reduces any
-remaining covariance route to a one-sided code-shell variation bound.  An
-abstract endpoint family also shows that its Abel sign can flip inside a
-`1/M` boundary layer.
+remaining covariance route to weighted dual-code Krawtchouk shell
+cancellation.  The actual `N=16` modular example already violates the naive
+one-sided `V_+` bound; if the positive cubic is carried by central shells, it
+forces the same failure asymptotically.  Residual-weighted rare shells or
+signed cross-level cancellation are therefore essential.  An abstract
+endpoint family also shows that its Abel sign can flip inside a `1/M`
+boundary layer.
 The certified clean-cluster residual sector is exponentially negligible at
 that regression scale.  A separate automatic order-three family yields
 `<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  A new
@@ -18520,7 +18804,12 @@ the nearest integer to a nonnegative delta-kernel occupation integral with
 `O(log(N))` parameter bits.  A constant-additive certified fast-forward oracle
 for that integral would locate all roots in `poly(q,log(N),R_v)` time; its
 signed analogue telescopes to endpoint values, so absolute variation, not the
-scalar exponential-gate ODE, is the missing primitive.
+scalar exponential-gate ODE, is the missing primitive.  A degree-`O(log(N))`
+Student rational gate gives the same winding, an `N^-3` gap, and
+output-sensitive variation in an `O(q+log log(N))` repeated-squaring circuit;
+its normalized rational kernel still rounds to the root count.  The GWB
+reduction also rules out a coefficient-uniform certified occupation oracle
+unless `NP subseteq RP`, while the iid-Gaussian promise remains open.
 Unless `NP subseteq RP`, no exact or one-sided-certified evaluator with
 the same guarantee exists uniformly for general adversarial sparse inputs: an
 exact-power-of-two

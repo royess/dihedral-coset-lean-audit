@@ -230,7 +230,12 @@ the nearest integer to a nonnegative delta-kernel occupation integral with
 `O(log(N))` parameter bits.  A constant-additive certified fast-forward oracle
 for that integral would locate all roots in `poly(q,log(N),R_v)` time; its
 signed analogue telescopes to endpoint values, so absolute variation, not the
-scalar exponential-gate ODE, is the missing primitive.
+scalar exponential-gate ODE, is the missing primitive.  A degree-`O(log(N))`
+Student rational gate gives the same winding, an `N^-3` gap, and
+output-sensitive variation in an `O(q+log log(N))` repeated-squaring circuit;
+its normalized rational kernel still rounds to the root count.  The GWB
+reduction also rules out a coefficient-uniform certified occupation oracle
+unless `NP subseteq RP`, while the iid-Gaussian promise remains open.
 Unless `NP subseteq RP`, no exact or one-sided-certified evaluator with
 the same guarantee exists uniformly for general adversarial sparse inputs: an
 exact-power-of-two
@@ -486,9 +491,12 @@ realize either sign.  The exact remaining Wagner projection depends only on
 correlation but remains unproved; the sixth-moment result refutes the small-
 regression sufficient condition.  The same positive cubic moment refutes the
 proposed nonincreasing-regression/MLR shortcut and reduces any remaining
-covariance route to a one-sided code-shell variation bound.  An abstract
-endpoint family also shows that its Abel sign can flip inside a `1/M`
-boundary layer.
+covariance route to weighted dual-code Krawtchouk shell cancellation.  The
+actual `N=16` modular example already violates the naive one-sided `V_+`
+bound; if the positive cubic is carried by central shells, it forces the same
+failure asymptotically.  Residual-weighted rare shells or signed cross-level
+cancellation are therefore essential.  An abstract endpoint family also
+shows that its Abel sign can flip inside a `1/M` boundary layer.
 The certified clean-cluster residual sector is exponentially negligible at
 that scale.  A separate automatic order-three family gives
 `<R,(Z/sigma)^3> >= N^(0.021392...+o(1))` with high probability.  A new
