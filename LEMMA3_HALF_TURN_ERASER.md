@@ -167,21 +167,30 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   fixed expected-occupancy exponent `s<1/20` can, with high probability, be
   adjoined to any core with spectral-loss exponent below `.009` and dual mass
   at least `N^(-.0073173282...-o(1))`, without changing that value.
-  There is also a fixed `delta_0>0` such that every fixed visibility-one cusp
-  collar `p-delta<=r_j/(3*n)<=p`, `0<delta<=delta_0`, simultaneously has
-  conditional-Gram floor `1-o(1)` and radial-centered norm `o(1)`.  On the
-  CES event, if that same collar's radial quotient is at least
-  `N^(-.0073173282...-o(1))`, its unrestricted real linear dual is `1+o(1)`
-  times its radial dual.
-  An exact eight-cell swap cube gives eigenvalue `-5/32` for the union of the
-  automatic subkernels despite unit one-cell floors; in a dissociated
-  paired-label realization, cross-cell nonautomatic relations repair the
-  full Gram.
-  Hence automatic per-cell certificates cannot simply be summed.  The mixed
-  core outside this collar, unbalanced cutoffs, simultaneous whole
-  occupied-cell nonradial
-  optimization, `Y`-adaptive cell selection, and nonlinear statistics remain
-  open.
+  At visibility one, the strict common-band certificate at `s_*=1/20`
+  permits one fixed `epsilon_H>0`, chosen by finite-witness continuity before
+  the labels are sampled, such that every deterministic cell with
+  `m_occ(r)>=s_H:=1/20-epsilon_H` belongs to a single global feature band and
+  has conditional-Gram floor `1-o(1)` and radial-centered norm `o(1)`, even
+  for asymmetric block degrees in `[0,p]`.  The replayed MT, AM, and NAT
+  ledgers have bottleneck margins `.002698120754...`, `.164603786261...`, and
+  `.0032192935...`; AM is normalized by the actual source-cell occupancy and
+  averaged unconditionally before intersecting `Good`, while NAT includes all
+  48 mixed-newborn planes and every row-active edge-incomplete graph map.
+  Choosing `s_L in (s_H,1/20)` and `tau<1/20-s_L` makes the high core overlap
+  the LCO layer.  The resulting Schur sandwich proves
+  `Gamma_all>=[1-o(1)]I` and
+  `Q_(full,all)=[1+o(1)]Q_(rad,all)` on the entire realized occupied
+  distinct-support quotient.  The eight-cell swap cube still shows that
+  automatic one-cell floors cannot be summed by themselves, but it is not an
+  actual-random obstruction because the global nonautomatic trace-four
+  certificate controls the repairing cross-cell remainder.  This theorem is
+  restricted to visibility one, the original deterministic cutoff and
+  retention rule, and fully `Y`-adaptive real linear weights on the occupied
+  quotient; empty-cell inverse/coefficient stability, changed or unbalanced
+  list cutoffs, visibility bounded away from one, changed retention, and
+  nonlinear statistics remain open.  The finite certificates are
+  machine-replayable rather than Lean-formalized.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
   a fixed positive pair-overlap law can nevertheless give either sign of the
@@ -14163,9 +14172,12 @@ Then the exact identity
 
 makes `(RR)` a square-average within-cell row-sum theorem.  The leading
 centered-signal identity, `(CES)`, and the implication
-`(CS1)+(CS2)=>(CS)` are proved.  What remains open is to prove `(CS1)` and
-`(CS2)`, or `(RR)`, for the actual random retained buckets.  The off-cell
-`Xi` estimate and coherence alone do not imply either condition.
+`(CS1)+(CS2)=>(CS)` are proved.  The inputs available at this point do not by
+themselves prove `(CS1)` and `(CS2)`, or `(RR)`, for the actual random
+retained buckets: the off-cell `Xi` estimate and coherence alone do not imply
+either condition.  The common-band theorem below later supplies these inputs
+on the high core, and the overlapping LCO theorem closes the occupied
+quotient.
 
 ### A fixed-cell automatic-orbit feature interface
 
@@ -15451,11 +15463,378 @@ Q_(full,delta)=[1+o(1)]*Q_(rad,delta).               (MCC10)
 
 This theorem uses a fixed visibility-one collar and the original
 deterministic cutoff.  It does not allow `delta` to depend on the realized
-labels, and it does not cover the rest of the intermediate/high-occupancy
-mixed core, unbalanced cutoffs, or nonlinear statistics.
+labels.  By itself it does not cover the rest of the
+intermediate/high-occupancy mixed core.  The next common-band theorem supplies
+that extension for the original cutoff; changed cutoffs and nonlinear
+statistics remain outside its scope.
 
-An exact orbit-feature example explains why the remaining mixed-cell core
-does not follow by simply summing automatic fixed-cell floors.  Take four
+### A common-band high-cell theorem
+
+The finite certificates above can be made uniform on a much larger,
+asymmetric degree region.  Continue at visibility one with the original
+deterministic cutoff and retention rule.  Put `s_*=1/20`; for `s` near
+`s_*`, let `x_s` be the root from `(LCO2)`,
+
+```text
+12*[H_2(x_s)+x_s]=1+a+s.
+```
+
+At `s=s_*`, the rational common-band MT certificate has strict outward
+margin
+
+```text
+eta_*=.002698120754...,
+L_*=9*x_(s_*)=.137256425342...,
+U_*=9*p=.186896382463....                            (MHC1)
+```
+
+There are only finitely many fixed dual witnesses, and each substituted
+upper bound is continuous in the lower edge rate.  Hence one may first fix
+`epsilon_H>0` and `eta_H>0`, depending only on the displayed parameters,
+such that, with
+
+```text
+s_H=s_*-epsilon_H,       x_H=x_(s_H),
+
+x_H>.015,                9*x_H>6*p,
+
+eta_H>=.001,                                      (MHC2)
+```
+
+every common-band MT upper remains at most `-eta_H`.  The value of
+`epsilon_H` is fixed before the labels are sampled.  This is an existence
+consequence of the strict finite margin, not a claim about continuity of a
+numerical optimizer.
+
+Let
+
+```text
+H={r:m_occ(r)>=s_H},       O_H=union_(r in H) O_r,
+```
+
+where `O_r` contains the occupied distinct-support orbits in the deterministic
+degree cell `r`.  If `alpha_(r,b)=r_b/(3*n)` and
+`t_r=3*n*sum_b alpha_(r,b)`, Jensen and `(LCO2)` give
+
+```text
+12*x_H*n<=t_r<=12*p*n.                              (MHC3)
+```
+
+Use the single row-independent feature window
+
+```text
+J_H={j:9*x_H*n-n^(2/3)<=j<=9*p*n+n^(2/3)}.          (MHC4)
+```
+
+For every row, `(MHC4)` contains its binomial central interval
+`[3*t_r/4-n^(2/3),3*t_r/4+n^(2/3)]`.  If `K_H` is the full orbit-feature
+Gram on `O_H` and `K_(H,J)` retains the same global feature coordinates
+`j in J_H` for every row, then uniformly
+
+```text
+0<=K_(H,J)<=K_H,
+
+D_(H,J):=diag K_(H,J)=[1-o(1)]*I.                  (MHC5)
+```
+
+Thus no row-dependent projection, and no invalid cellwise Loewner assembly,
+is used.
+
+Here is the finite MT input.  In each `3*n` block the row rates range
+independently over `[0,p]`; the four shared edge rates range over
+`[9*x_H,9*p]`.  At the endpoint `s_*`, the exact rational replay covers
+`72`, `2916`, and `1,696,482` gauge-labelled instances for `d=2,3,4`.
+The only incidence-level deletions are line--line classes, which force
+repeated complete supports on `Good_H`.  The remaining counts are
+
+```text
+d=2: direct 40;
+d=3: common-half 2804, four-edge exceptional 48;
+d=4: common-half 1695954, four-edge exceptional 400.
+```
+
+The outward maxima are `-.307531127101` for `d=2` and `-.002698120754`
+for both `d=3,4`.  Full-rational-rank, mod-two-singular activity subspaces
+are coefficientwise dominated by the positive full-mask MZ polynomial.  The
+certificate expands every admissible binary support into all signed ternary
+lifts and verifies rational rank `d`, so binary codimension is not charged as
+a rational deficiency.  The fixed full-mask common-band witnesses give
+`-.860087...` and `-1.346981...` for `d=3,4`.  The raw-to-admissible screen is
+still valid in `H`: if one
+`6*n` half forces a row to zero, the other half supplies at most
+`6*p*n<12*x_H*n`; if one half never double-activates a cycle edge, the other
+supplies edge level at most `6*p*n<9*x_H*n`.  Consequently
+
+```text
+E[1_(Good_H)*Tr((K_(H,J)-D_(H,J))^4)]
+ <=N^(-eta_H+o(1)).                                 (MHC6)
+```
+
+All degree-cell and trace-cell tuples contribute only `N^o(1)` multiplicity.
+
+The mixed `Good_H` event and the random cell sizes are uniform as well.  For
+`alpha_b in [0,p]`, an ordinary extra orientation in one cell has first-moment
+exponent
+
+```text
+m_occ(alpha)+3*sum_b alpha_b-1
+ <=m_exp+12*p-1=-.252414470147...,
+```
+
+because `H_2(x)+x` is increasing on `[0,p]`.  A dependent entire-half flip
+is a subset of the global four-template ledger and has exponent at most
+
+```text
+4*a-2=-.002146195686....
+```
+
+After the `N^o(1)` cell union,
+
+```text
+Pr[not Good_H]=o(1).                                (MHC7)
+```
+
+If `mu_r=E|O_r|=N^(m_occ(r)+o(1))`, the exact pair table gives uniformly for
+`r in H`
+
+```text
+Var(|O_r|)/mu_r^2<=N^(-s_H+o(1)).
+```
+
+Therefore, for every fixed `zeta<s_H/2`, with high probability
+simultaneously over all high cells,
+
+```text
+|O_r|/mu_r=1+O(N^(-zeta+o(1))).                    (MHC8)
+```
+
+This simultaneous statement is what permits source-cell normalization in
+the AM ledger.
+
+For completeness, form the AM energy with `K_off=K_H-I`.  If the target is
+`u` and the two source leaves are `z,v`, this forces `z!=u` and `v!=u`;
+the case `z=v` is retained and is exactly the repeated-pair branch.  For
+each ordered source/target pair `(r,s)`, first take the unconditional centered
+retention energy `S_(s<-r)` and normalize by the actual source mean `mu_r`,
+equivalently subtracting `m_occ(r)` in the type exponent.  For one block put
+
+```text
+F_D(sigma,rho,rho)
+ =inf_(x>0){log_2 Z_D-sigma*log_2 x_0
+                     -rho*log_2(x_1*x_2)},
+
+G_D=max_(sigma,rho in [0,p])
+       {F_D(sigma,rho,rho)-[H_2(rho)+rho]}.
+```
+
+A fixed conditional dual gives
+
+```text
+G_D<=g_D
+ :=inf_(x>0){log_2 Z_D
+      +p*max(0,-log_2 x_0)
+      +max(0,-p*log_2(x_1*x_2)-[H_2(p)+p])}.
+```
+
+For left/right masks with deficiencies `h,g,c_rel`, the resulting class
+upper is
+
+```text
+6*(g_(D_L)+g_(D_R))-2*(1+a)
+ +a*(h+g-c_rel)+c_rel.
+```
+
+The 729 rational pairs have worst legal upper `-.164603786261954`; six
+common binary masks have worst upper `-1.428645084462708`.  The unit full
+class cancels exactly in the unconditional centered coefficient.  Positive
+equality/line classes force a repeated complete orbit and pass to the
+repeated-pair ledger; they are not deleted merely by inserting
+`1_(Good_H)`.  For `z=v!=u`, put `x=2*p/(1-p)` and
+
+```text
+c_0=log_2[(1+x/2)/(1/4+x)]=1.8041940212....
+```
+
+The exact generic function obeys
+`G_G(sigma,rho)<=g_0-c_0*rho` on `[0,p]^2`, and the opposite class is
+coefficientwise dominated by it.  Equation `(MHC3)` then gives repeated-pair
+upper `-.324754923828055`; generic--line is at most `-.250268274460811`,
+while line--line is the same complete orbit.  Thus unconditional Markov is
+applied first, and only then intersected with `Good_H`.  Using `(MHC8)` to
+replace `mu_r` by `|O_r|` gives, with high probability,
+
+```text
+sum_(r,s in H)||q_r^T*K_(r,s)*P_s||_2^2=o(1).       (MHC9)
+```
+
+In particular, no Good-only cancellation has been inserted inside the AM
+expectation.
+
+Let
+
+```text
+E_(rem,H)=Gamma_(O_H)-(2*K_H-I).
+```
+
+On `Good_H` it has zero diagonal and nonnegative off-diagonal entries.  The
+mixed NAT certificate does not discard a row-active graph merely because one
+`6*n` half fails to activate an edge.  In the graph-determined
+`ell_eta=0` branch, where the global `r_eta` may be positive, the exact
+all-basis counts are
+
+```text
+          raw graph spaces   row-active   edge-complete   row-active polys
+k=1              184              8              8               1
+k=2            12700           5788           1884              49
+k=3           403300         325588         122580             597.
+```
+
+All edge-omitted polynomials enter uniform row-box envelopes and the two-half
+`(h,g,c_rel,r_eta)` partition; no per-half automatic or support label is used
+as a deletion.  Their outward half bounds are `.249275189385884` at
+deficiency two and `.336542401950887` at deficiency one.  The new joint worst
+is the contained deficiency-two plane/line class with upper
+`-.004885412605277`; the same-row-space deficiency-two class is at most
+`-.007624629525154`, full--deficiency-one is at most
+`-.018281690641413`, and full--deficiency-two is at most
+`-.042421514953050`.  Separately, among the 268 row-active rank-two cube
+sections, 220 meet the equal-positive activity cone and all remaining 48
+mixed-newborn sections have exactly two three-active masks; the direct
+concave bound is at most `-.127816...`.  Combining these classes with the
+existing fixed-Smith, `r_eta>ell_eta`, and edge-complete JR partitions leaves
+the original `2*m_exp-1=-.0032192935...` class as the global bottleneck.
+In particular one may fix `eta_nat=.003` and obtain
+
+```text
+E[1_(Good_H)*Tr(E_(rem,H)^4)]
+ <=N^(-eta_nat+o(1)).                               (MHC10)
+```
+
+The `O(n^16)` trace-cell union is `N^o(1)`.  From `(MHC5)`, `(MHC6)`, and
+`(MHC10)`,
+
+```text
+||K_(H,J)-D_(H,J)||_op=o(1),
+||E_(rem,H)||_op=o(1),
+
+Gamma_(O_H)=2*K_H-I+E_(rem,H)>=[1-o(1)]*I.          (MHC11)
+```
+
+Let `Q_H` contain the normalized cell-constant columns and put
+`P_H=I-Q_H*Q_H^T`.  The corrected unconditional AM bound `(MHC9)`, followed
+by `(MHC8)` and Markov, gives `||Q_H^T*K_H*P_H||_op=o(1)`; `(MHC10)` gives
+the same conclusion for the remainder by its operator norm.  Hence
+
+```text
+||Q_H^T*Gamma_(O_H)*P_H||_op=o(1).                 (MHC12)
+```
+
+The same conclusions hold for every deterministic principal union of cells
+contained in `H`: the spectral floor is inherited by principal submatrices,
+while the AM ordered-energy sum and the NAT trace sum only lose nonnegative
+indexed terms.  Thus, on the existing cell-radial signal event, any such high
+core `C` satisfying
+`Q_(rad,C)>=N^(-F-o(1))`, `F=.00731732816...`, obeys
+
+```text
+Q_(full,C)=[1+o(1)]*Q_(rad,C).                     (MHC13)
+```
+
+This closes the remaining intermediate layer by overlap with
+`(LCO1)`--`(LCO10)`.  After `s_H` has been fixed, choose fixed constants
+
+```text
+s_L in (s_H,1/20),       0<tau<1/20-s_L,
+
+L={r:m_occ(r)<=s_L},     C={r:m_occ(r)>s_L}.        (MHC14)
+```
+
+Then `C subset H`.  Let
+
+```text
+B={r:p_r^(0)>=N^(-1/10)}.
+```
+
+The contrapositive of `(LCO2)` gives `B subset C`: indeed,
+`m_occ(r)<=s_L` would imply
+`kappa_ref(r)>=kappa_*(s_L)>.1`.  The existing whole-radial bulk theorem
+therefore gives, on its high-probability event,
+
+```text
+Gamma_(C,C)>=[1-o(1)]*I,
+Q_(rad,C)>=Q_(rad,B)=[1+o(1)]/J_*>=N^(-F-o(1)),
+Q_(full,C)=[1+o(1)]*Q_(rad,C).                     (MHC15)
+```
+
+Here the first radial inequality is the ordinary block-inverse/variational
+monotonicity under adjoining cells.  This bulk bridge uses a previously
+proved uniform radial theorem and does not assume the conclusion of the
+present full-space comparison.  The low layer `L` satisfies
+`(LCO4)`--`(LCO7)` because `s_L+tau<1/20`; in particular
+`kappa_*(s_L)>.1`, its total occupied size is at most
+`N^(s_L+tau+o(1))`, and the global square energy is at most
+`N^(-.009+o(1))` except with probability
+`N^(-.002538977955...+o(1))`.  Applying `(LCO9)`--`(LCO10)` with core
+exponent `sigma=0` yields, for the entire occupied distinct-support quotient
+`O_all=O_C union O_L`,
+
+```text
+Gamma_(O_all)>=[1-o(1)]*I,
+Q_(full,all)=[1+o(1)]*Q_(full,C).                  (MHC16)
+```
+
+Finally positivity of the feasible-set inclusions gives the exact sandwich
+
+```text
+Q_(rad,C)<=Q_(rad,all)<=Q_(full,all)
+ =[1+o(1)]*Q_(full,C)
+ =[1+o(1)]*Q_(rad,C).                              (MHC17)
+```
+
+Thus, with high probability,
+
+```text
+Q_(full,all)=[1+o(1)]*Q_(rad,all).                 (MHC18)
+```
+
+The joint event is the intersection of the whole-radial bulk event,
+`E_short`, the uniform occupancy and `Good_H` events, the three high
+finite-certificate events, and `(LCO4),(LCO6)`; every failure probability is
+`o(1)` after the relevant `N^o(1)` unions.
+
+This theorem is for visibility one, the original deterministic four-block
+cutoff and retention rule, and the realized occupied distinct-support orbit
+quotient.  It permits asymmetric block degrees `alpha_b in [0,p]` and fully
+`Y`-adaptive real linear weights on that quotient.  It does not assert
+inverse or coefficient-norm stability on empty deterministic cells, and it
+does not cover a changed or unbalanced list cutoff, visibility bounded away
+from one, a changed retention law, or nonlinear statistics.  The swap cube
+`(SW1)`--`(SW3)` remains a valid warning against summing automatic one-cell
+floors; it is not an obstruction here because `(MHC10)` controls the actual
+cross-cell nonautomatic remainder.
+
+The finite evidence is machine-replayable but not Lean-formalized.
+`mixed_high_mt_rational_certificate.js` actually replays all rational pairs,
+produces 8148 canonical rows `(mask key, rounded x/y, outward upper)`, and
+checks SHA-256
+`8991c03d336e6cbfbe3e020615da3b5c79f6492ba4df94cb2862bf36cf42a6b7`;
+the older hard-coded `RATIONAL_LEDGER` summary in
+`mixed_high_mt_certificate.js` is not by itself evidence.  The AM verifier
+checks canonical-payload SHA-256
+`1858bded00b2188221ddbd7663a372502cbe11d0fcf2e0ffee15f26782ee211b`.
+The NAT verifier recomputes the 369-letter/all-basis ledger and edge-omitted
+envelopes, with discrete, outward, and full hashes
+`ab58303ca18865ef88f2a71f64d21c330aaaa50322ebdf3a2137950b96033e0d`,
+`ce5e8d0a897b14704d601c88d312f83e715a709a45bb3b15fa8b16e3d9200a09`,
+and `a5fc261f92047c707e94cb03a102c8b3d6af20f36020a7bbd24b44ef7f70c887`.
+Its README distinguishes newly recomputed envelopes from older fixed outward
+witness data whose original byte serialization was not preserved.  Newly
+replayed inequalities use only feasibility of fixed witnesses; imported NAT
+envelopes remain explicitly identified as previously audited outward data.
+No conclusion relies on optimality of a numerical search.
+
+An exact orbit-feature example explains why the mixed-cell theorem does not
+follow by simply summing automatic fixed-cell floors.  Take four
 coordinate blocks, a nonempty common base `C_i` in each block, donor
 coordinates `a_1,a_2,a_3` in block four, and a recipient `b_i` in block `i`
 for `i=1,2,3`.  For `S subset {1,2,3}`, let the all-positive row `z_S` have
@@ -15506,9 +15885,10 @@ automatic per-cell certificates cannot be assembled without a separate
 cross-cell remainder theorem; it is not a typical random modular obstruction
 and does not refute a mixed-cell theorem.
 
-The mixed core outside the fixed cusp collar therefore remains the sharp gap.
-Removing the light cutoff from the current square-energy method gives
-only
+The common-band high theorem and the overlapping LCO theorem now close the
+entire realized occupied mixed quotient at visibility one.  The earlier
+square-energy diagnostic still explains why this conclusion could not be
+obtained by simply removing the light cutoff: that method gives only
 
 ```text
 E[Xi_all]<=N^(F_16+o(1))=N^(.088461...+o(1)),
@@ -15516,9 +15896,9 @@ E[Xi_all]<=N^(F_16+o(1))=N^(.088461...+o(1)),
 
 while the automatic square mass in the balanced region already has total
 exponent `F_8=.046133...`.  A Frobenius perturbation argument is therefore
-exponentially divergent there.  Closing the remaining core requires a global
-centered trace-four or representation-theoretic certificate; the fixed-cell
-mask deletions cannot simply be union-bounded over mixed degrees.
+exponentially divergent there.  The global centered trace-four certificate
+above supplies the missing input; the fixed-cell mask deletions alone still
+cannot simply be union-bounded over mixed degrees.
 
 For the one deterministic degree-symmetric resolvent optimizer, the missing
 quenched statement is narrower.  Put into `E_ng(Y)` the entire actual
@@ -16677,9 +17057,10 @@ The concrete `kappa=1/10` lies in this interval.  Empty cells still destroy
 whole-space inverse and coefficient-norm stability, but they have zero signal
 and do not change the quotient optimum.  The result is for visibility one and
 the original retention rule; the exponent bounds persist for
-`lambda=1-o(1)`.  It does not extend the sharp radial comparison to
-unrestricted same-cell nonradial weights, nonlinear statistics, or a changed
-retention rule.
+`lambda=1-o(1)`.  By itself this radial argument does not control unrestricted
+same-cell nonradial weights.  The common-band theorem above supplies that
+linear comparison on the occupied quotient for the original cutoff;
+nonlinear statistics and changed retention remain outside both results.
 
 The fixed passive dataset does not provide those replicas, and the display is
 not an achieved averaging algorithm.  A large global second moment alone does
@@ -17153,19 +17534,30 @@ fixed expected-occupancy exponent `s<1/20` can, with high probability, be
 adjoined to any core with spectral-loss exponent below `.009` and dual mass
 at least
 `N^(-.0073173282...-o(1))`, without changing that value.
-There is also a fixed `delta_0>0` such that every fixed visibility-one cusp
-collar `p-delta<=r_j/(3*n)<=p`, `0<delta<=delta_0`, simultaneously has
-conditional-Gram floor `1-o(1)` and radial-centered norm `o(1)`.  On the CES
-event, if that same collar's radial quotient is at least
-`N^(-.0073173282...-o(1))`, its unrestricted real linear dual is
-`1+o(1)` times its radial dual.
-An exact eight-cell swap cube gives eigenvalue `-5/32` for the union of the
-automatic subkernels despite unit one-cell floors; in a dissociated paired-
-label realization, cross-cell nonautomatic relations repair the full Gram.
-Hence automatic per-cell certificates cannot simply be summed.  The mixed
-core outside this collar,
-unbalanced cutoffs, simultaneous whole occupied-cell nonradial optimization,
-`Y`-adaptive cell selection, and nonlinear statistics remain open.
+At visibility one, the strict common-band certificate at `s_*=1/20` permits
+one fixed `epsilon_H>0`, chosen by finite-witness continuity before the labels
+are sampled, such that every deterministic cell with
+`m_occ(r)>=s_H:=1/20-epsilon_H` belongs to a single global feature band and
+has conditional-Gram floor `1-o(1)` and radial-centered norm `o(1)`, even for
+asymmetric block degrees in `[0,p]`.  The replayed MT, AM, and NAT ledgers
+have bottleneck margins `.002698120754...`, `.164603786261...`, and
+`.0032192935...`; AM is normalized by the actual source-cell occupancy and
+averaged unconditionally before intersecting `Good`, while NAT includes all
+48 mixed-newborn planes and every row-active edge-incomplete graph map.
+Choosing `s_L in (s_H,1/20)` and `tau<1/20-s_L` makes the high core overlap
+the LCO layer.  The resulting Schur sandwich proves
+`Gamma_all>=[1-o(1)]I` and
+`Q_(full,all)=[1+o(1)]Q_(rad,all)` on the entire realized occupied
+distinct-support quotient.  The eight-cell swap cube still shows that
+automatic one-cell floors cannot be summed by themselves, but it is not an
+actual-random obstruction because the global nonautomatic trace-four
+certificate controls the repairing cross-cell remainder.  This theorem is
+restricted to visibility one, the original deterministic cutoff and
+retention rule, and fully `Y`-adaptive real linear weights on the occupied
+quotient; empty-cell inverse/coefficient stability, changed or unbalanced
+list cutoffs, visibility bounded away from one, changed retention, and
+nonlinear statistics remain open.  The finite certificates are
+machine-replayable rather than Lean-formalized.
 Bucket-sum-only rehash medians are only margin transforms of the same path
 sum, while a positive three-character likelihood
 model shows that fixed

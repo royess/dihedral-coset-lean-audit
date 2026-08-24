@@ -913,19 +913,30 @@ fixed expected-occupancy exponent `s<1/20` can, with high probability, be
 adjoined to any core with spectral-loss exponent below `.009` and dual mass
 at least
 `N^(-.0073173282...-o(1))`, without changing that value.
-There is also a fixed `delta_0>0` such that every fixed visibility-one cusp
-collar `p-delta<=r_j/(3*n)<=p`, `0<delta<=delta_0`, simultaneously has
-conditional-Gram floor `1-o(1)` and radial-centered norm `o(1)`.  On the CES
-event, if that same collar's radial quotient is at least
-`N^(-.0073173282...-o(1))`, its unrestricted real linear dual is
-`1+o(1)` times its radial dual.
-An exact eight-cell swap cube gives eigenvalue `-5/32` for the union of the
-automatic subkernels despite unit one-cell floors; in a dissociated paired-
-label realization, cross-cell nonautomatic relations repair the full Gram.
-Hence automatic per-cell certificates cannot simply be summed.  The mixed
-core outside this collar,
-unbalanced cutoffs, simultaneous whole occupied-cell nonradial optimization,
-`Y`-adaptive cell selection, and nonlinear statistics remain open.
+At visibility one, the strict common-band certificate at `s_*=1/20` permits
+one fixed `epsilon_H>0`, chosen by finite-witness continuity before the labels
+are sampled, such that every deterministic cell with
+`m_occ(r)>=s_H:=1/20-epsilon_H` belongs to a single global feature band and
+has conditional-Gram floor `1-o(1)` and radial-centered norm `o(1)`, even for
+asymmetric block degrees in `[0,p]`.  The replayed MT, AM, and NAT ledgers
+have bottleneck margins `.002698120754...`, `.164603786261...`, and
+`.0032192935...`; AM is normalized by the actual source-cell occupancy and
+averaged unconditionally before intersecting `Good`, while NAT includes all
+48 mixed-newborn planes and every row-active edge-incomplete graph map.
+Choosing `s_L in (s_H,1/20)` and `tau<1/20-s_L` makes the high core overlap
+the LCO layer.  The resulting Schur sandwich proves
+`Gamma_all>=[1-o(1)]I` and
+`Q_(full,all)=[1+o(1)]Q_(rad,all)` on the entire realized occupied
+distinct-support quotient.  The eight-cell swap cube still shows that
+automatic one-cell floors cannot be summed by themselves, but it is not an
+actual-random obstruction because the global nonautomatic trace-four
+certificate controls the repairing cross-cell remainder.  This theorem is
+restricted to visibility one, the original deterministic cutoff and
+retention rule, and fully `Y`-adaptive real linear weights on the occupied
+quotient; empty-cell inverse/coefficient stability, changed or unbalanced
+list cutoffs, visibility bounded away from one, changed retention, and
+nonlinear statistics remain open.  The finite certificates are
+machine-replayable rather than Lean-formalized.
 Bucket-sum-only random rehash medians contain
 only the original path-sum information, while a fixed positive pair-overlap
 law can give either sign of prediction correlation.  A second-moment theorem
