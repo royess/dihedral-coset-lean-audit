@@ -1,4 +1,5 @@
 import SimonDCP.Arithmetic.LemmaOneFiniteSupportPrototype
+import SimonDCP.Certificates.MixedHigh.MTBinaryIncidence
 import SimonDCP.Arithmetic.LemmaThreeStepSixCarry
 import SimonDCP.Arithmetic.LemmaThreeStepSixBitBridge
 import SimonDCP.Arithmetic.SampleRecursion
@@ -94,12 +95,14 @@ import SimonDCP.Quantum.Step2Phase
 The declarations below are the principal machine-checked outputs of the current
 formalization. These commands make their axiom dependencies visible during a
 build.  Analytic results should expose only standard Lean dependencies.  The
-finite exhaustive searches intentionally use `native_decide`, whose generated
-evaluation certificates are also printed here.  No result may depend on
+finite exhaustive searches intentionally use `native_decide`, which trusts
+the native compiler through `Lean.ofReduceBool`; those dependencies are also
+printed here.  No result may depend on
 `sorryAx` or a user-declared mathematical axiom.
 -/
 
 open SimonDCP.Arithmetic.LemmaOneFiniteSupportPrototype
+open SimonDCP.Certificates.MixedHigh.MTBinaryIncidence
 open SimonDCP.Arithmetic.LemmaThreeStepSixCarry
 open SimonDCP.Arithmetic.LemmaThreeStepSixBitBridge
 open SimonDCP.Arithmetic.SampleRecursion
@@ -190,6 +193,14 @@ open SimonDCP.Quantum.PhaseTransfer
 open SimonDCP.Quantum.Step2Phase
 
 #print axioms lowPartBitSwap_delta
+#print axioms d3_binary_mask_counts
+#print axioms d4_binary_mask_counts
+#print axioms d3_proper_binary_mask_count
+#print axioms d4_proper_binary_mask_count
+#print axioms d3_binary_pair_partition
+#print axioms d4_binary_pair_partition
+#print axioms d3_binary_signed_lifts_pass_rank_checker
+#print axioms d4_binary_signed_lifts_pass_rank_checker
 #print axioms stepSix_topBit_eq_fullSum
 #print axioms highBlockTopBit_eq_fullWordTopBit
 #print axioms floorLogPaperFlag_false_not_carryVulnerable

@@ -1,4 +1,5 @@
 import SimonDCP.Basic
+import SimonDCP.Certificates.MixedHigh.MTBinaryIncidence
 import SimonDCP.Arithmetic.LemmaOneFiniteSupportPrototype
 import SimonDCP.Arithmetic.LemmaThreeStepSixCarry
 import SimonDCP.Arithmetic.LemmaThreeStepSixBitBridge

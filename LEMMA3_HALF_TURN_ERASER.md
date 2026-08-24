@@ -184,12 +184,17 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   distinct-support quotient.  The eight-cell swap cube still shows that
   automatic one-cell floors cannot be summed by themselves, but it is not an
   actual-random obstruction because the global nonautomatic trace-four
-  certificate controls the repairing cross-cell remainder.  This theorem is
-  restricted to visibility one, the original deterministic cutoff and
+  certificate controls the repairing cross-cell remainder.  This endpoint
+  theorem uses visibility one, the original deterministic cutoff and
   retention rule, and fully `Y`-adaptive real linear weights on the occupied
-  quotient; empty-cell inverse/coefficient stability, changed or unbalanced
-  list cutoffs, visibility bounded away from one, changed retention, and
-  nonlinear statistics remain open.  The finite certificates are
+  quotient.  After recentering the common feature window and tracking the
+  visibility-dependent row cap and radial signal, its strict finite margins
+  prove the same conclusion for every preselected fixed
+  `lambda in [lambda_0,1]` for some non-effective `lambda_0<1`.  Current
+  machines certify only `lambda=1`, not a numerical `lambda_0`.  Empty-cell
+  inverse/coefficient stability, changed or unbalanced list cutoffs,
+  visibility outside this uncertified near-one collar, changed retention,
+  and nonlinear statistics remain open.  The full finite certificates are
   machine-replayable rather than Lean-formalized.
   Bucket-sum-only random rehash medians contain no information beyond the
   original path sum;
@@ -236,13 +241,20 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   certificate further closes every displayed odd level through 51; the
   negative level-51 term raises both lower bounds to
   `N^(4.6555...+o(1))`.  An effective collision certificate then exhausts
-  `53<=j<2401` and supplies an explicit Fourier--Legendre tail, removing the
-  former finite gap: every preselected fixed odd formal level `j>=27` closes.
-  The signed exponent is greater than `4.9431600...` on the new finite block
-  and remains positive by an explicit tail bound.  There is no claim for
-  `j=j(n)`.  These are visibility-one formal-level results, not an algorithm
-  lower bound; they determine neither a fixed-cutoff tail nor the final
-  Wagner sign.
+  `53<=j<2401` and supplies an explicit Fourier--Legendre tail, so every
+  preselected fixed odd formal level `j>=27` closes.  The signed exponent
+  exceeds `4.9431600...` on the finite block and remains positive by an
+  explicit tail bound.  Consequently each alternating sign class, and hence
+  the absolute formal mass, is `N^(omega(1))` in the fixed-power sense,
+  ruling out Tonelli or absolute-dominance passage to the all-level sum.  A
+  diagonal argument yields some deterministic non-effective
+  `J(n)->infinity` on which the fixed-level events hold simultaneously, but
+  no prescribed or effective growing level.  An exact cutoff identity
+  recovers the positive level-at-least-five tail and reduces every later
+  fixed cutoff to signed dominance of its finite prefix; the missing upper
+  bounds prevent that step from level seven onward.  These are
+  visibility-one formal-level results, not an algorithm lower bound, and
+  they do not determine the final Wagner sign.
   More sharply, two
   valid nonnegative-Walsh
   likelihood completions
@@ -332,7 +344,18 @@ The conclusion is therefore a research boundary, not a repaired theorem:
   slots.  A predetermined dyadic endpoint grid gives an output-sensitive
   locator conditional on a polynomial-cost winding evaluator specialized to
   this iid-Gaussian family; constructing that distribution-specific evaluator
-  remains open.  Unless `NP subseteq RP`, no exact or one-sided-certified
+  remains open.  For this Gaussian family, finite algebraic gates with
+  inverse-polynomial parameters and polynomial unconditional expected phase
+  variation on a fixed `q^O(1)` budget require degree `Omega(q/log(q))`; their
+  explicit flat Fourier support is superpolynomial.  An exponential gate
+  escapes that finite-degree bound, but its full-period samples have full
+  DFT/LTI support almost surely, and certified nonlinear-ODE fast-forward
+  remains open.  Since the continuous hit event is exponentially rare,
+  unconditional iid-Gaussian correctness is vacuous: the meaningful interface
+  is correctness under the continuous law conditional on `R_v>0`, with
+  separate no-root false-positive control, or all-input certification.  Unless
+  `NP subseteq RP`, no exact or
+  one-sided-certified
   evaluator with the same guarantee exists uniformly for general adversarial
   sparse inputs: an exact-power-of-two
   centered-band Unique-SAT construction preserves an `N^-11` gap,
@@ -4985,6 +5008,225 @@ highly structured coefficients and labels, not iid-Gaussian amplitudes and
 iid-uniform frequencies.  It therefore does not obstruct an evaluator that
 essentially uses the actual iid-Gaussian promise; that distribution-specific
 evaluator remains open.
+
+The Gaussian promise itself exhibits a useful gate/representation trilemma.
+It sharpens the remaining interface without giving a distributional
+hardness result.  First, the microscopic scale in `(GW2)` is genuine.  If
+`r` is a real root on the event of `(GW1)`, the holomorphic extension
+
+```text
+g_eps(z)=F(z)+i*eps_w*F'(z)
+```
+
+has a distinct complex root
+
+```text
+z_r=r-i*eps_w+O(eps_w^2*sqrt(q)/s_gap)
+   =r-i*N^-10+O(N^(-19+o(1))).                      (GGT1)
+```
+
+Indeed, `sum_i R_i<=3*q` and `|omega_i|<=pi` imply that the Rayleigh
+bound controls `F''` by `O(sqrt(q))` in the `2*eps_w` complex
+neighbourhood.  Rouche's theorem,
+or one Newton step followed by contraction, applies because
+`eps_w*sqrt(q)=o(s_gap)`.  The real-root separation from `(GW8)` makes these
+complex roots distinct.  Thus they are roots of `g_eps`, not of `F`, and an
+analytic integrator for this particular flat curve sees only an
+`N^-10`-scale zero-free strip.
+
+One can widen the gate algebraically.  For an integer `k>=1` and
+`0<w,delta<=1`, set
+
+```text
+D_k(F)=F^(2*k)+delta^(2*k),
+
+Psi_k=F+i*[w*delta^(2*k)/D_k(F)]*F',
+
+Phi_k=D_k(F)*Psi_k
+     =F*(F^(2*k)+delta^(2*k))+i*c_k*F',
+
+c_k=w*delta^(2*k).                                  (GGT2)
+```
+
+The multiplier `D_k(F)` is positive on the real path, so `Psi_k` and
+`Phi_k` have exactly the same phase, winding, and total phase variation.
+The interface in `(GW1)` gives the deterministic gap
+
+```text
+inf |Phi_k|
+ >=delta^(2*k)*min(d_gap,w*s_gap).                  (GGT3)
+```
+
+If `d_k=2*k+1`, direct flat expansion uses at most
+`(2*q+1)^d_k+O(q)=q^O(d_k)` slots and has ordinary physical bandwidth at
+most `d_k/2`.  A linear time rescaling can restore the centered band, but it
+does not reduce the slot count.
+
+There is an opposing Gaussian background cost.  Assume
+`v=Theta(sqrt(q))` and the same nondegenerate spectral moments as in the GW
+theorem.  The phase derivative is
+
+```text
+theta_k'
+ =c_k*[h_k(F)*F''-h_k'(F)*(F')^2]
+   /[h_k(F)^2+c_k^2*(F')^2],
+
+h_k(x)=x*(x^(2*k)+delta^(2*k)).
+```
+
+On the constant-probability event
+
+```text
+|X|<=1/2,       1/2<=|X'|<=1,       X''>=0,
+```
+
+the two numerator terms have the same sign because `F=-v+O(1)`.  Hence
+there are absolute constants `p_0,C>0` such that
+
+```text
+E_G[TV(arg(Phi_k);[0,m])]
+ >=p_0*m*c_k*(C*q)^(-(k+1)).                        (GGT4)
+```
+
+Let `Q_gate>=q` be a deterministic scale.  If the fixed parameters satisfy
+`w,delta>=Q_gate^(-A)` and the representation has unconditional expected
+variation at most `Q_gate^B`, `(GGT4)` forces
+
+```text
+k=Omega(log(m)/log(Q_gate)).                        (GGT5)
+```
+
+Taking `Q_gate=q^C` for a fixed `C` and using `log(m)=Theta(q)` gives
+`k=Omega(q/log(q))`.  This is a deterministic polynomial-budget statement;
+it does not derive an output-sensitive conditional expectation from the
+random variable `R_v`.  Conversely, choosing `c_k` exponentially small at a
+fixed `k` suppresses the background but makes the local analytic phase scale
+superpolynomially small.  This observation rules out ordinary sampling at
+that scale; it does not rule out a symbolic or specialized evaluator.
+
+The flat support really is large in the relevant range.  Suppose `v>0`, and
+fix any integer `ell` with `2<=ell<=min(d_k,q)` and
+
+```text
+choose(q,ell)^2/N=o(1).
+```
+
+For iid-uniform labels, with probability `1-o(1)` all positive-frequency
+square-free `ell`-subset sums are distinct modulo `N`.  In the
+`F^d_k` term, the coefficient at each such frequency contains the nonzero
+monomial
+
+```text
+[d_k!/(d_k-ell)!]*(-v)^(d_k-ell)*q^(-ell/2)
+    *product_(i in S)alpha_i.
+```
+
+No lower-degree gate term contains this monomial, and other contributions
+cannot cancel it as a polynomial identity.  Continuous Gaussian amplitudes
+therefore make every displayed coefficient nonzero almost surely.  Thus
+
+```text
+#supp(Phi_k)>=choose(q,ell).                         (GGT6)
+```
+
+Whenever `d_k>=c*q/log(q)` for a fixed `c>0`, take
+`ell=floor(c'*q/log(q))` for any fixed `0<c'<c`; the collision condition
+holds and the right side is
+`exp(Omega(q*log(log(q))/log(q)))`.  Equations `(GGT3)`--`(GGT6)` are a
+tradeoff for an explicitly expanded flat Fourier representation.  They do
+not lower-bound a compact rational or arithmetic circuit and do not prove
+Gaussian hardness.
+
+A transcendental gate escapes the finite-degree tradeoff.  Put
+
+```text
+a_exp(F)=w*exp(-Lambda*F^2).
+```
+
+For a standard normal `X`, one has exactly
+
+```text
+E[a_exp(X-v)]
+ =w*(1+2*Lambda)^(-1/2)
+    *exp[-Lambda*v^2/(1+2*Lambda)],
+
+m*E[a_exp]
+ =w*m*exp(-v^2/2)/sqrt(1+2*Lambda)
+    *exp[v^2/(2*(1+2*Lambda))].                     (GGT7)
+```
+
+At the exact cap threshold `v=u`, Mills' ratio gives
+`m*exp(-u^2/2)=Theta(u)`.  Thus, for example,
+`Lambda>=q/log(q)` makes the expected background activation polynomial while
+the root gate has inverse-polynomial level width `Lambda^(-1/2)`.  At the
+near-cap threshold `v=u-L`, however, the factor
+`m*exp(-v^2/2)=Theta(u*exp(u*L-L^2/2))` may be superpolynomial in `q`; a
+fixed `Lambda=q^C` does not generally remove it.  Moreover, `(GGT7)` controls
+activation mass, not total phase variation.
+
+The exponential gate satisfies the scalar nonlinear ODE
+
+```text
+a_exp'=-2*Lambda*F*F'*a_exp.
+```
+
+After multiplication by the positive factor `exp(Lambda*F^2)`, its phase is
+that of
+
+```text
+F*exp(Lambda*F^2)+i*w*F'.
+```
+
+This is no longer a finite Fourier sum.  If one frequency label is odd and
+`v>0`, then, conditional on the labels, for almost every Gaussian amplitude
+vector all `N` coefficients of its full-period discrete Fourier transform
+are nonzero.  Each coefficient is a real-analytic function of the
+amplitudes.  Keeping only the odd-frequency cosine and sending its amplitude
+to infinity gives a nonzero witness for every coefficient, because the
+opposite sample is uniquely exponentially dominant.  Consequently any
+exact scalar constant-coefficient recurrence, or exact LTI realization of
+the full-period sequence, has order `N`.  This statement is only about the
+flat full-period/LTI representation.  It does not lower-bound an algorithm
+on the prefix `[0,m]`; certified fast-forward of the compact nonlinear ODE
+remains open.
+
+Finally, the Gaussian success promise must be stated nonvacuously.  Extend
+the cap calculation `(NR3)` from integer samples to the continuous curve.
+The unit feature curve `A(t)` has `||A'(t)||<=pi`.  Choose a fixed `S>s_0`
+large enough that `I_rad(S)>I_rad(s_0)`, and first restrict to radial shells
+`||G||^2=s*d_G` with `s<=S`; an
+`O(m*sqrt(d_G))` grid then reduces the supremum to spherical caps at
+threshold `v-1`.  The extra `sqrt(d_G)` factor changes no exponent.  The
+region `s>S` is handled by the radial tail, after which the same radial
+optimization at
+
+```text
+s_0=a_gamma/(1-exp(-a_gamma))
+```
+
+gives
+
+```text
+Pr_G[sup_(0<=t<=m)X(t)>=v |Y]
+ <=exp[-d_G*I_rad(s_0)+o(d_G)].                     (GGT8)
+```
+
+Since `R_v>0` implies this continuous cap event, an evaluator required to be
+correct merely with unconditional iid-Gaussian probability `1-o(1)` can
+vacuously output zero.  A meaningful target must instead be correct under
+the continuous ordinary-hit law `G | {R_v>0}`, with separate false-positive
+control under `{R_v=0}`, or be zero-error/certified on every input while only
+its running time is averaged under those two laws.  Even for the discrete
+ordinary-cap-hit law, `(NR9)` shows that its size-biased counterpart is not a
+substitute; no identification with the continuous root-hit law is asserted.
+
+Together, `(GGT1)`--`(GGT8)` isolate a representation trilemma: the original
+flat curve has output-sensitive variation but microscopic analytic scale;
+fixed-degree algebraic gates trade that scale against background variation
+or superpolynomial flat support; and the exponential gate has a compact
+nonlinear description but no known certified long-time phase fast-forward.
+None of these statements is a distributional lower bound for the iid
+Gaussian problem.
 
 Numerical conditioning is not the obstruction.  Put
 
@@ -12496,13 +12738,107 @@ S_formal>=2*|a_j|*C_j-1
         >=N^(gamma_j+o_n(1)).                         (JCU17)
 ```
 
-The order of quantifiers remains essential: `j` is selected before `n`
-tends to infinity.  The Smith constants, `eta_j`, and `o_n(1)` may depend on
-`j`, and `eta_j` tends to zero.  There is no simultaneous assertion over
-infinitely many levels and no result for `j=j(n)`.  All statements are at
+There is an exact fixed-cutoff lemma, and it isolates the missing input.  Put
+
+```text
+u_j=|a_j|*C_j,       epsilon_j=(-1)^((j-1)/2),
+
+P_(<J)=sum_(j<J, j odd)epsilon_j*u_j,
+T_(>=J)=sum_(j>=J, j odd)epsilon_j*u_j
+```
+
+for a preselected fixed odd `J>=3`.  Since `|rho_Y|<=1`, one has exactly
+
+```text
+T_(>=J)=rho_Y-P_(<J).                                (JCT1)
+```
+
+Consequently, if some fixed `delta>0` and `sigma in {+1,-1}` satisfy
+
+```text
+Pr[sigma*P_(<J)>=N^delta] -> 1,
+```
+
+then
+
+```text
+Pr[-sigma*T_(>=J)>=N^delta-1] -> 1.                 (JCT2)
+```
+
+In particular, the sufficient finite-prefix condition
+
+```text
+sum_(j<J-2, j odd)u_j=o_p(u_(J-2)),
+u_(J-2)->infinity
+```
+
+implies
+
+```text
+T_(>=J)=epsilon_J*u_(J-2)*(1+o_p(1)).
+```
+
+At `J=5` this is supplied by `a_1*C_1=N^o(1)` and `(ADV)`, recovering
+the positive level-at-least-five tail `(COMP)`.  For every fixed `J>=7`,
+the present certificates give lower bounds on the individual `u_j` but no
+upper bound proving this finite-prefix dominance.  Thus the fixed-cutoff
+gap is an earlier-level upper-bound gap, not an interchange of an actually
+convergent series.
+
+The effective tail also makes absolute summation impossible.  For every
+fixed `A>0` and every fixed odd cutoff `J`, apply `(JCU16)`--`(JCU17)` once
+in each congruence class modulo four.  This gives
+
+```text
+Pr[sum_(j>=J, j=1 mod 4)u_j>=N^A
+   and sum_(j>=J, j=3 mod 4)u_j>=N^A] -> 1.          (JCT3)
+```
+
+Thus both sign classes, and hence `S_formal`, are `N^(omega(1))` in the
+precise fixed-power sense.  Positive and negative formal mass cancel beyond
+every polynomial scale.  Tonelli, absolute domination, and total-variation
+tightness therefore cannot justify passage from fixed levels to `rho_Y`.
+
+There is one harmless but important quantifier refinement.  If `E_(n,j)`
+denotes any fixed-level event above with a fixed slack, then
+`Pr[E_(n,j)]->1` for every fixed odd `j`.  A standard diagonal choice gives
+some deterministic, non-effective `J(n)->infinity` such that
+
+```text
+Pr[intersection_(27<=j<=J(n), j odd) E_(n,j)] -> 1. (JCT4)
+```
+
+This gives no prescribed or effective growing level, no uniform Smith or
+variance bound, and no control of levels above `J(n)`.  It therefore does
+not determine a fixed-cutoff tail beyond `(JCT1)`--`(JCT2)`, and it does not
+determine the final Wagner sign.
+
+The obstruction is exact, not merely quantitative.  In the endpoint
+construction below take `D=M-2`.  The two valid nonnegative-Walsh
+likelihoods agree through formal degree `M-1` and on every proper coordinate
+marginal.  Yet, for every fixed odd cutoff `J>=3` and all sufficiently large
+odd `M`, their residual formal tails satisfy
+
+```text
+T_(>=J)(H_0)= 2*(-1)^((M-3)/2)*h,
+T_(>=J)(H_1)=-2*(-1)^((M-3)/2)*h.                  (JCT5)
+```
+
+Their full residual-majority signs are opposite as well.  At the abstract
+ledger level, the same obstruction persists with an arbitrary common prefix
+through any `K_n->infinity`: two consecutive moving odd levels, whose
+prescribed signs are opposite, can be assigned nonnegative magnitudes so
+that the bounded total is either `+1` or `-1`.  Fixed/proper-level
+consistency alone therefore cannot determine a fixed-cutoff tail or the
+final Wagner sign.  A successful bridge must add genuinely all-degree
+information, such as a modular code/coset identity, an MLR/covariance
+theorem, or a signed Tauberian estimate.
+
+The order of quantifiers remains essential: a displayed `j` is selected
+before `n` tends to infinity.  The Smith constants, `eta_j`, and `o_n(1)`
+may depend on `j`, and `eta_j` tends to zero.  All statements are at
 visibility one and concern formal retained-character level, not original
-Walsh degree.  They give neither a fixed-cutoff tail sign nor the final
-Wagner sign.
+Walsh degree.
 
 There is an exact same-`P_3` obstruction, even under symmetry and
 nonnegative Walsh likelihood coefficients.  Let odd `M>=11`, take independent
@@ -15833,6 +16169,217 @@ replayed inequalities use only feasibility of fixed witnesses; imported NAT
 envelopes remain explicitly identified as previously audited outward data.
 No conclusion relies on optimality of a numerical search.
 
+### A fixed near-one visibility extension
+
+The same occupied-quotient conclusion persists for every fixed visibility
+sufficiently close to one, but the old feature window cannot be reused.
+Fix `lambda in (0,1]` before sampling the labels and put
+
+```text
+c_lambda=lambda^2/4,       q_lambda=1-c_lambda.
+```
+
+The one-coordinate feature vectors may be chosen as
+
+```text
+psi_0=e_0,
+
+psi_s=(lambda/2)*e_0
+      +sqrt(1/2-lambda^2/4)*e_1
+      +(s/sqrt(2))*e_2,          s in {+1,-1}.       (MHV1)
+```
+
+Thus `<psi_0,psi_s>=lambda/2` and `<psi_+,psi_->=0`.  If a row has
+support size `t`, the exact orbit-feature diagonal weight at level `j` is
+
+```text
+w_j^(lambda)(t)
+ =choose(t,j)*c_lambda^(t-j)
+   *[q_lambda^j+(-c_lambda)^j].                     (MHV2)
+```
+
+Its main term is `Bin(t,q_lambda)`; the signed correction has total
+variation at most `(2*c_lambda)^t`.  Consequently, for every fixed
+`lambda<1`, the visibility-one window centered at `3*t/4` misses the mass by
+a linear displacement
+
+```text
+(q_lambda-3/4)*t=(1-lambda^2)*t/4.
+```
+
+Indeed its old-window diagonal is at most
+
+```text
+2^(-t*D_2(3/4||q_lambda)+o(t))+(2*c_lambda)^t=o(1).
+```
+
+This is the first point where the visibility-one proof fails literally.
+It is a failure of the old projection, not of the actual conditional Gram.
+
+There is still one global unequal-degree feature Gram.  If
+`j=|A|+|B|`, `A cap B=empty`, and `|B|` is even, put
+
+```text
+phi_(A,B)^(lambda)(z)
+ =sqrt(2)*(lambda/2)^(t_z-j)
+  *(1/2-lambda^2/4)^(|A|/2)*2^(-|B|/2)
+  *1_(A union B subset T_z)*chi_B(z).
+```
+
+Then
+
+```text
+K_(orb,lambda)=sum_(A,B)phi_(A,B)^(lambda)
+                         *phi_(A,B)^(lambda,T),
+
+Gamma_(auto,lambda)=2*K_(orb,lambda)-I.             (MHV3)
+```
+
+Keep the high cell set `H` from `(MHC2)`--`(MHC3)`, and use the shifted,
+row-independent window
+
+```text
+J_H(lambda)
+ ={j:12*q_lambda*x_H*n-n^(2/3)
+       <=j<=12*q_lambda*p*n+n^(2/3)}.               (MHV4)
+```
+
+It contains the `q_lambda*t_r+/-n^(2/3)` central interval for every high
+row.  Because the same feature coordinates are retained for every row,
+
+```text
+0<=K_(H,J(lambda))<=K_(H,lambda),
+
+diag K_(H,J(lambda))=[1-o(1)]*I                     (MHV5)
+```
+
+uniformly over the deterministic high cells.
+
+The finite ledgers vary continuously after this recentering.  In MT, the
+selected local coefficients `3,-1` become
+
+```text
+(4-lambda^2)/lambda^2,       -1
+```
+
+after extracting `c_lambda`; the common edge-rate interval becomes
+`[12*q_lambda*x_H,12*q_lambda*p]`.  The row face also changes:
+`2^(-2*nu)` becomes `c_lambda^nu`, equivalently the row penalty
+`-6*nu` becomes `3*nu*log_2(c_lambda)`.  Every substituted fixed-witness
+upper is a continuous function of these positive parameters.  The finite
+strict margin at `lambda=1` therefore supplies some fixed
+`lambda_MT<1` on which all MT classes remain uniformly negative.  This is
+finite-witness continuity, not continuity of an optimizer.
+
+For AM, only its unconditional positive absolute partition polynomial is
+used.  At every fixed positive fugacity its single-active coefficient
+decreases from `1/2` to `lambda/2`.  In the repeated branch the two factors
+become
+
+```text
+A_lambda=1+lambda^2*x/2,
+B_lambda=lambda^2/4+x,
+```
+
+and are coefficientwise dominated by their visibility-one values.  The
+unit/full centered-independence cancellation is exact and independent of
+`lambda`; Markov is still applied before intersecting `Good`.  No pointwise
+monotonicity of the projected row energy is asserted.
+
+The arithmetic retention law, occupancy, `Good`, relation ranks, Smith
+factors, and all mask/graph classifications are independent of visibility.
+Moreover, for `W=T triangle U`,
+
+```text
+Gamma_lambda(T,U)=lambda^|W|*Gamma_1(T,U),
+
+E_(rem,lambda)(T,U)=lambda^|W|*E_(rem,1)(T,U).      (MHV6)
+```
+
+The remainder has nonnegative entries off the diagonal.  Hence its
+trace-four ledger and the light square energy are no larger than at
+visibility one.  The same NAT and LCO exponents therefore apply.  The old
+dependent-pair terms are likewise `o(1)` and introduce no new exponential
+loss.
+
+It remains to track the radial signal, since
+
+```text
+h_lambda(T)=lambda^|T|*h_1(T).                      (MHV7)
+```
+
+Within an exact-degree cell this is one common scalar, so the signal remains
+cell-radial.  Put `beta=12*p=.249195176618...` and define
+
+```text
+F_aut(lambda)
+ =max_(0<=gamma<=beta){
+    beta*H_2(gamma/beta)
+    +(12-beta)*H_2((beta-gamma)/(12-beta))
+    -12*H_2(p)+gamma*log_2(2/lambda^2)},
+
+D(lambda)=-2*beta*log_2(lambda),
+
+R_top(lambda)=max(F_aut(lambda),D(lambda),0).        (MHV8)
+```
+
+Here `3*a-1=2*beta`, and `R_top(1)=F=.00731732816...`.
+The positive constant trial in the balanced top cell, together with
+occupancy concentration and the automatic, dependent-pair, and NAT bounds,
+gives, for every fixed `theta>0`,
+
+```text
+Q_(rad,C)(lambda)
+ >=N^(-R_top(lambda)-theta+o(1)).                   (MHV9)
+```
+
+The centered extra-orientation exponent from `(CES)` is
+
+```text
+delta_extra=2+1/20-4*a=.052146195686....
+```
+
+Since the corresponding centered signal also acquires the cellwise factor
+`lambda^|T|`, the visibility-one estimate remains valid for
+`0<lambda<=1`.  Choose fixed `s_L,tau` as in `(MHC14)`, and put
+
+```text
+d_L=1/10-s_L-tau.
+```
+
+At `lambda=1`, both `d_L` and `delta_extra` exceed `R_top(1)` by a fixed
+margin.  By continuity, after choosing fixed small Markov slacks, there is
+some `lambda_0 in [lambda_MT,1)` such that
+
+```text
+sup_(lambda_0<=lambda<=1) R_top(lambda)+theta
+ <min(d_L,delta_extra-vartheta).                    (MHV10)
+```
+
+For every `lambda in [lambda_0,1]` fixed before the labels are sampled, the
+high common-band theorem, the centered-signal Schur comparison, and the LCO
+adjoining theorem now give
+
+```text
+Gamma_(lambda,all)>=[1-o(1)]*I,
+
+Q_(full,all)(lambda)
+ =[1+o(1)]*Q_(rad,all)(lambda)                      (MHV11)
+```
+
+with high probability on the entire realized occupied distinct-support
+quotient.  The final sandwich is the same as `(MHC17)`, with the balanced
+top-cell trial supplying the radial lower bound `(MHV9)`.
+
+This is an existence theorem for a fixed near-one interval.  The visibility
+is known and deterministic when `J_H(lambda)` is chosen; it is not
+`Y`-adaptive.  It does not cover arbitrary visibility bounded away from one,
+changed cutoff or retention, empty deterministic cells, or nonlinear
+statistics.  The current machine certificates replay only `lambda=1`.
+Their strict endpoint margins prove that some `lambda_0<1` exists, but they
+do not supply a certified numerical value.  A numerical threshold would
+require a new outward evaluator over a `lambda` interval.
+
 An exact orbit-feature example explains why the mixed-cell theorem does not
 follow by simply summing automatic fixed-cell floors.  Take four
 coordinate blocks, a nonempty common base `C_i` in each block, donor
@@ -17551,13 +18098,18 @@ the LCO layer.  The resulting Schur sandwich proves
 distinct-support quotient.  The eight-cell swap cube still shows that
 automatic one-cell floors cannot be summed by themselves, but it is not an
 actual-random obstruction because the global nonautomatic trace-four
-certificate controls the repairing cross-cell remainder.  This theorem is
-restricted to visibility one, the original deterministic cutoff and
-retention rule, and fully `Y`-adaptive real linear weights on the occupied
-quotient; empty-cell inverse/coefficient stability, changed or unbalanced
-list cutoffs, visibility bounded away from one, changed retention, and
-nonlinear statistics remain open.  The finite certificates are
-machine-replayable rather than Lean-formalized.
+certificate controls the repairing cross-cell remainder.  This endpoint
+theorem uses visibility one, the original deterministic cutoff and retention
+rule, and fully `Y`-adaptive real linear weights on the occupied quotient.
+After recentering the common feature window and tracking the
+visibility-dependent row cap and radial signal, its strict finite margins
+prove the same conclusion for every preselected fixed
+`lambda in [lambda_0,1]` for some non-effective `lambda_0<1`.  Current
+machines certify only `lambda=1`, not a numerical `lambda_0`.  Empty-cell
+inverse/coefficient stability, changed or unbalanced list cutoffs, visibility
+outside this uncertified near-one collar, changed retention, and nonlinear
+statistics remain open.  The full finite certificates are machine-replayable
+rather than Lean-formalized.
 Bucket-sum-only rehash medians are only margin transforms of the same path
 sum, while a positive three-character likelihood
 model shows that fixed
@@ -17600,12 +18152,19 @@ condition number `N^(1.4497986...+o(1))`.  A directed finite-convolution
 certificate further closes every displayed odd level through 51; the negative
 level-51 term raises both lower bounds to `N^(4.6555...+o(1))`.  An effective
 collision certificate then exhausts `53<=j<2401` and supplies an explicit
-Fourier--Legendre tail, removing the former finite gap: every preselected fixed
-odd formal level `j>=27` closes.  The signed exponent is greater than
-`4.9431600...` on the new finite block and remains positive by an explicit
-tail bound.  There is no claim for `j=j(n)`.  These are visibility-one
-formal-level results, not an algorithm lower bound; they determine neither a
-fixed-cutoff tail nor the final Wagner sign.
+Fourier--Legendre tail, so every preselected fixed odd formal level `j>=27`
+closes.  The signed exponent exceeds `4.9431600...` on the finite block and
+remains positive by an explicit tail bound.  Consequently each alternating
+sign class, and hence the absolute formal mass, is `N^(omega(1))` in the
+fixed-power sense, ruling out Tonelli or absolute-dominance passage to the
+all-level sum.  A diagonal argument yields some deterministic non-effective
+`J(n)->infinity` on which the fixed-level events hold simultaneously, but no
+prescribed or effective growing level.  An exact cutoff identity recovers
+the positive level-at-least-five tail and reduces every later fixed cutoff
+to signed dominance of its finite prefix; the missing upper bounds prevent
+that step from level seven onward.  These are visibility-one formal-level
+results, not an algorithm lower bound, and they do not determine the final
+Wagner sign.
 More
 sharply, two valid
 nonnegative-Walsh likelihood
@@ -17683,7 +18242,17 @@ exponential slots.
 A predetermined dyadic endpoint grid gives an output-sensitive locator
 conditional on a polynomial-cost winding evaluator specialized to this
 iid-Gaussian family; constructing that distribution-specific evaluator remains
-open.  Unless `NP subseteq RP`, no exact or one-sided-certified evaluator with
+open.  For this Gaussian family, finite algebraic gates with inverse-polynomial
+parameters and polynomial unconditional expected phase variation on a fixed
+`q^O(1)` budget require degree `Omega(q/log(q))`; their explicit flat
+Fourier support is superpolynomial.  An exponential gate escapes that
+finite-degree bound, but its full-period samples have full DFT/LTI support
+almost surely, and certified nonlinear-ODE fast-forward remains open.  Since
+the continuous hit event is exponentially rare, unconditional iid-Gaussian
+correctness is vacuous: the meaningful interface is correctness under the
+continuous law conditional on `R_v>0`, with separate no-root false-positive
+control, or all-input certification.
+Unless `NP subseteq RP`, no exact or one-sided-certified evaluator with
 the same guarantee exists uniformly for general adversarial sparse inputs: an
 exact-power-of-two
 centered-band Unique-SAT construction preserves an `N^-11` gap,

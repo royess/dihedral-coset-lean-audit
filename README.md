@@ -216,7 +216,17 @@ exponential slots.
 A predetermined dyadic endpoint grid gives an output-sensitive locator
 conditional on a polynomial-cost winding evaluator specialized to this
 iid-Gaussian family; constructing that distribution-specific evaluator remains
-open.  Unless `NP subseteq RP`, no exact or one-sided-certified evaluator with
+open.  For this Gaussian family, finite algebraic gates with inverse-polynomial
+parameters and polynomial unconditional expected phase variation on a fixed
+`q^O(1)` budget require degree `Omega(q/log(q))`; their explicit flat
+Fourier support is superpolynomial.  An exponential gate escapes that
+finite-degree bound, but its full-period samples have full DFT/LTI support
+almost surely, and certified nonlinear-ODE fast-forward remains open.  Since
+the continuous hit event is exponentially rare, unconditional iid-Gaussian
+correctness is vacuous: the meaningful interface is correctness under the
+continuous law conditional on `R_v>0`, with separate no-root false-positive
+control, or all-input certification.
+Unless `NP subseteq RP`, no exact or one-sided-certified evaluator with
 the same guarantee exists uniformly for general adversarial sparse inputs: an
 exact-power-of-two
 centered-band Unique-SAT construction preserves an `N^-11` gap,
@@ -440,13 +450,18 @@ the LCO layer.  The resulting Schur sandwich proves
 distinct-support quotient.  The eight-cell swap cube still shows that
 automatic one-cell floors cannot be summed by themselves, but it is not an
 actual-random obstruction because the global nonautomatic trace-four
-certificate controls the repairing cross-cell remainder.  This theorem is
-restricted to visibility one, the original deterministic cutoff and
-retention rule, and fully `Y`-adaptive real linear weights on the occupied
-quotient; empty-cell inverse/coefficient stability, changed or unbalanced
-list cutoffs, visibility bounded away from one, changed retention, and
-nonlinear statistics remain open.  The finite certificates are
-machine-replayable rather than Lean-formalized.
+certificate controls the repairing cross-cell remainder.  This endpoint
+theorem uses visibility one, the original deterministic cutoff and retention
+rule, and fully `Y`-adaptive real linear weights on the occupied quotient.
+After recentering the common feature window and tracking the
+visibility-dependent row cap and radial signal, its strict finite margins
+prove the same conclusion for every preselected fixed
+`lambda in [lambda_0,1]` for some non-effective `lambda_0<1`.  Current
+machines certify only `lambda=1`, not a numerical `lambda_0`.  Empty-cell
+inverse/coefficient stability, changed or unbalanced list cutoffs, visibility
+outside this uncertified near-one collar, changed retention, and nonlinear
+statistics remain open.  The full finite certificates are machine-replayable
+rather than Lean-formalized.
 Bucket-sum-only random rehash medians contain no information beyond the
 original path sum;
 a fixed positive pair-overlap law can still give either sign of prediction
@@ -488,12 +503,19 @@ condition number `N^(1.4497986...+o(1))`.  A directed finite-convolution
 certificate further closes every displayed odd level through 51; the negative
 level-51 term raises both lower bounds to `N^(4.6555...+o(1))`.  An effective
 collision certificate then exhausts `53<=j<2401` and supplies an explicit
-Fourier--Legendre tail, removing the former finite gap: every preselected fixed
-odd formal level `j>=27` closes.  The signed exponent is greater than
-`4.9431600...` on the new finite block and remains positive by an explicit
-tail bound.  There is no claim for `j=j(n)`.  These are visibility-one
-formal-level results, not an algorithm lower bound; they determine neither a
-fixed-cutoff tail nor the final Wagner sign.
+Fourier--Legendre tail, so every preselected fixed odd formal level `j>=27`
+closes.  The signed exponent exceeds `4.9431600...` on the finite block and
+remains positive by an explicit tail bound.  Consequently each alternating
+sign class, and hence the absolute formal mass, is `N^(omega(1))` in the
+fixed-power sense, ruling out Tonelli or absolute-dominance passage to the
+all-level sum.  A diagonal argument yields some deterministic non-effective
+`J(n)->infinity` on which the fixed-level events hold simultaneously, but no
+prescribed or effective growing level.  An exact cutoff identity recovers
+the positive level-at-least-five tail and reduces every later fixed cutoff
+to signed dominance of its finite prefix; the missing upper bounds prevent
+that step from level seven onward.  These are visibility-one formal-level
+results, not an algorithm lower bound, and they do not determine the final
+Wagner sign.
 More
 sharply, two valid
 nonnegative-Walsh likelihood
